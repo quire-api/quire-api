@@ -1,16 +1,14 @@
 package io.quire.api.model;
 
-import io.swagger.annotations.*;
-import javax.xml.bind.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
-@XmlRootElement(name = "Project")
 public class Project {
-    @XmlElement(name = "id")
+    @ApiModelProperty(example = "Marketing_Project")
     public String getId() {
         return null;
     }
 
-    @XmlElement(name = "name")
+    @ApiModelProperty(example = "Marketing Project")
     public String getName() {
         return null;
     }

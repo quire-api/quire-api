@@ -8,43 +8,97 @@
     <artifactId>quire-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <swagger-maven-plugin.version>3.1.8-SNAPSHOT</swagger-maven-plugin.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>jcentral</id>
+            <name>bintray</name>
+            <url>http://jcenter.bintray.com</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jcenter-snapshots</id>
+            <name>jcenter</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jcenter-snapshots</id>
+            <name>jcenter</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jcenter-releases</id>
+            <name>jcenter</name>
+            <url>http://jcenter.bintray.com</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-core</artifactId>
+            <scope>compile</scope>
+            <version>1.5.21</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jaxrs</artifactId>
+            <version>1.5.21</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>com.github.kongchen</groupId>
                 <artifactId>swagger-maven-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${swagger-maven-plugin.version}</version>
                 <configuration>
                     <apiSources>
                         <apiSource>
                             <springmvc>false</springmvc>
                             <locations>io.quire.api.resource</locations>
-                            <schemes>http,https</schemes>
+                            <schemes>https</schemes>
                             <host>quire.io</host>
                             <basePath>/api</basePath>
-                            <info>
-                                <title>Quire API</title>
-                                <version>v1</version>
-                                <description>The Quire API is a RESTful interface, allowing you to programmatically update and access much of your data on the platform</description>
-                                <termsOfService>
-                                    https://quire.io/terms
-                                </termsOfService>
-                                <contact>
-                                    <email>info@quire.io</email>
-                                    <name>Quire Support</name>
-                                    <url>https://quire.io</url>
-                                </contact>
-                                <license>
-                                    <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-                                    <name>Apache 2.0</name>
-                                </license>
-                            </info>
+                            <descriptionFile>${project.basedir}/src/main/resources/description.md</descriptionFile>
+                            <outputFormats>yaml</outputFormats>
                             <swaggerDirectory>generated</swaggerDirectory>
                             <securityDefinitions>
                                 <securityDefinition>
                                     <json>/securityDefinitions.json</json>
                                 </securityDefinition>
                             </securityDefinitions>
+                            <swaggerExtensions>
+                                <swaggerExtension>io.quire.api.process.CodeSampleSwagger</swaggerExtension>
+                            </swaggerExtensions>
                         </apiSource>
                     </apiSources>
                 </configuration>
@@ -59,11 +113,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
@@ -73,62 +122,5 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-core</artifactId>
-            <scope>compile</scope>
-            <version>1.5.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.ws.rs</groupId>
-                    <artifactId>jsr311-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet-core</artifactId>
-            <version>${jersey2-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-multipart</artifactId>
-            <version>${jersey2-version}</version>
-        </dependency>
-    </dependencies>
-    <properties>
-        <jetty-version>9.0.7.v20131107</jetty-version>
-        <jersey2-version>2.4.1</jersey2-version>
-        <logback-version>1.0.1</logback-version>
-    </properties>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>sonatype-snapshot</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+
 </project>
