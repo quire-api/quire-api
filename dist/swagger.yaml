@@ -1,0 +1,215 @@
+---
+swagger: "2.0"
+info:
+  description: "\n\n# Introduction\nWelcome to the reference for the Quire REST API!\n\
+    \n<a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a>\
+    \ is a web-service protocol that lends itself to rapid development by using everyday\
+    \ HTTP and JSON technology.\n\nThe Quire REST API provides a broad set of operations\
+    \ and resources that:\n\n  * Consistently doing repetitive or tedious tasks.\n\
+    \  * Chaining a process together by responding to changes.\n  * Pulling information\
+    \ from other locations like email or Evernote into Quire.\n  * Customizing Asana\
+    \ for your team’s processes and workflows.\n\nWant to share your opinion on how\
+    \ our API works for you? <a href=\"https://quire.io/w/Quire_Feedbacks\" target=\"\
+    _blank\">Tell us how you feel </a>about using our API and what we can do to make\
+    \ it better.\n\n# API Changelog\nYou can find the <a href=\"https://github.com/quire-api/quire-api\"\
+    \ target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\
+    \n# Authentication\n\n## OAuth v2.0\n\nQuire recommends that you use OAuth v2.0\
+    \ to authenticate to the Quire REST API. \n\nQuire recommends you to create a\
+    \ dedicated API user with API write access on a tenant when authenticating via\
+    \ OAuth, and then create an OAuth client for this user. See <a href=\"https://knowledgecenter.zuora.com/CF_Users_and_Administrators/A_Administrator_Settings/Manage_Users/Create_an_API_User\"\
+    \ target=\"_blank\">Create an API User</a> for how to do this. By creating a dedicated\
+    \ API user, you can control permissions of the API user without affecting other\
+    \ non-API users.\n\nIf a user is deactivated, all of the user's OAuth clients\
+    \ will be automatically deactivated.\n\nAuthenticating via OAuth requires the\
+    \ following steps:\n1. Create a Client\n2. Generate a Token\n3. Make Authenticated\
+    \ Requests\n\n### Create a Client\n\nYou must first [create an OAuth client](https://knowledgecenter.zuora.com/CF_Users_and_Administrators/A_Administrator_Settings/Manage_Users#Create_an_OAuth_Client_for_a_User)\
+    \ in the Zuora UI. To do this, you must be an administrator of your Zuora tenant.\
+    \ This is a one-time operation. You will be provided with a Client ID and a Client\
+    \ Secret. Please note this information down, as it will be required for the next\
+    \ step.\n\n**Note:** The OAuth client will be owned by a Zuora user account. If\
+    \ you want to perform PUT, POST, or DELETE operations using the OAuth client,\
+    \ the owner of the OAuth client must have a Platform role that includes the \"\
+    \\API Write Access\" permission.\n\n### Generate a Token\n\nAfter creating a client,\
+    \ you must make a call to obtain a bearer token using the [Generate an OAuth token](https://www.zuora.com/developer/api-reference/#operation/createToken)\
+    \ operation. This operation requires the following parameters:\n- `client_id`\
+    \ - the Client ID displayed when you created the OAuth client in the previous\
+    \ step\n- `client_secret` - the Client Secret displayed when you created the OAuth\
+    \ client in the previous step\n- `grant_type` - must be set to `client_credentials`\n\
+    \n**Note**: The Client ID and Client Secret mentioned above were displayed when\
+    \ you created the OAuth Client in the prior step. The [Generate an OAuth token](https://www.zuora.com/developer/api-reference/#operation/createToken)\
+    \ response specifies how long the bearer token is valid for. Call [Generate an\
+    \ OAuth token](https://www.zuora.com/developer/api-reference/#operation/createToken)\
+    \ again to generate a new bearer token.\n\n### Make Authenticated Requests\n\n\
+    To authenticate subsequent API requests, you must provide a valid bearer token\
+    \ in an HTTP header:\n\n`Authorization: Bearer {bearer_token}`\n\nIf you have\
+    \ [Zuora Multi-entity](https://www.zuora.com/developer/api-reference/#tag/Entities)\
+    \ enabled, you need to set an additional header to specify the ID of the entity\
+    \ that you want to access. You can use the `scope` field in the [Generate an OAuth\
+    \ token](https://www.zuora.com/developer/api-reference/#operation/createToken)\
+    \ response to determine whether you need to specify an entity ID.\n\nIf the `scope`\
+    \ field contains more than one entity ID, you must specify the ID of the entity\
+    \ that you want to access. For example, if the `scope` field contains `entity.1a2b7a37-3e7d-4cb3-b0e2-883de9e766cc`\
+    \ and `entity.c92ed977-510c-4c48-9b51-8d5e848671e9`, specify one of the following\
+    \ headers:\n- `Zuora-Entity-Ids: 1a2b7a37-3e7d-4cb3-b0e2-883de9e766cc`\n- `Zuora-Entity-Ids:\
+    \ c92ed977-510c-4c48-9b51-8d5e848671e9`\n\n**Note**: For a limited period of time,\
+    \ Zuora will accept the `entityId` header as an alternative to the `Zuora-Entity-Ids`\
+    \ header. If you choose to set the `entityId` header, you must remove all \"-\"\
+    \ characters from the entity ID in the `scope` field.\n\nIf the `scope` field\
+    \ contains a single entity ID, you do not need to specify an entity ID.\n\n##\
+    \ Concurrent Request Limits\n\nQuire enforces tenant-level concurrent request\
+    \ limits. See <a href=\"https://knowledgecenter.zuora.com/BB_Introducing_Z_Business/Policies/Concurrent_Request_Limits\"\
+    \ target=\"_blank\">Concurrent Request Limits</a> for more information.\n\n##\
+    \ Timeout Limit\n\nIf a request does not complete within 120 seconds, the request\
+    \ times out and Quire returns a Gateway Timeout error.\n"
+  version: "1.0.0"
+  title: "Quire"
+  termsOfService: "https://quire.io/terms"
+  contact:
+    name: "Quire"
+    url: "https://quire.io"
+    email: "info@quire.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0"
+  x-logo:
+    url: "https://quire.io/b820/s/img/website/quire_logo.svg"
+host: "quire.io"
+basePath: "/api"
+tags:
+- name: "projects"
+  description: "Operations about projects"
+schemes:
+- "https"
+paths:
+  /projects:
+    post:
+      tags:
+      - "projects"
+      summary: "Create a new project."
+      description: "Creates a new project in an organization."
+      operationId: "create"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Project to create"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateProjectBody"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Invalid ID supplied"
+        403:
+          description: "Not allow"
+      security:
+      - quire_auth:
+        - "write:projects"
+        - "read:projects"
+  /projects/{id}:
+    get:
+      tags:
+      - "projects"
+      summary: "Get a specific project"
+      description: "returns the complete project record for a single project."
+      operationId: "getProject"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of project that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Project not found"
+      security:
+      - quire_auth:
+        - "write:projects"
+        - "read:projects"
+    put:
+      tags:
+      - "projects"
+      summary: "Update a specific project"
+      description: "A specific, existing project can be updated by making a PUT request\
+        \ on the URL for that project.\nReturns the complete updated project record."
+      operationId: "update"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of project that needs to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Project to create"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateProjectBody"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Invalid ID supplied"
+        403:
+          description: "Not allow"
+        404:
+          description: "Project not found"
+      security:
+      - quire_auth:
+        - "write:projects"
+        - "read:projects"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "access_token"
+    in: "header"
+  quire_auth:
+    type: "oauth2"
+    authorizationUrl: "https://quire.io/oauth/authorize"
+    flow: "accessCode"
+    scopes:
+      write:projects: "modify projects in your account"
+      read:projects: "read your projects"
+      basic: "to read a user's profile info and media (granted by default)"
+      comments: "to post and delete comments on a user's behalf"
+definitions:
+  CreateProjectBody:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "New Project"
+      organization:
+        type: "string"
+        example: "Develop_group"
+  Project:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Marketing Project"
+      id:
+        type: "string"
+        example: "Marketing_Project"
+  UpdateProjectBody:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "New name of project"

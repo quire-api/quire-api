@@ -90,7 +90,7 @@
                             <basePath>/api</basePath>
                             <descriptionFile>${project.basedir}/src/main/resources/description.md</descriptionFile>
                             <outputFormats>yaml</outputFormats>
-                            <swaggerDirectory>generated</swaggerDirectory>
+                            <swaggerDirectory>dist</swaggerDirectory>
                             <securityDefinitions>
                                 <securityDefinition>
                                     <json>/securityDefinitions.json</json>
