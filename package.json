@@ -1,0 +1,19 @@
+{
+  "name": "npm-to-maven-adapator",
+  "version": "0.0.1-SNAPSHOT",
+  "description": "Example of node project with maven build scripts",
+  "private": true,
+  "scripts": {
+    "clean": "node node_modules/gulp/bin/gulp.js --no-color clean",
+    "build": "node node_modules/gulp/bin/gulp.js --no-color build",
+    "test": "node node_modules/gulp/bin/gulp.js --no-color test"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "del": "^1.1.1",
+    "mocha": "^5.2.0",
+    "gulp-mocha": "^6.0.0",
+    "chakram": "^1.5.0",
+    "oatts": "1.2.3"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "/projects": {
+    "post": {
+      "200": {
+        "body": {
+          "body": {
+            "name": "New Project",
+            "organization": "Develop_group"
+          }
+        }
+      }
+    }
+  },
+  "/projects/{id}": {
+    "get": {
+      "path": {
+        "id": "Marketing_Project"
+      },
+      "200": {
+        "response": {
+          "name": "Marketing Project",
+          "id": "Marketing_Project"
+        }
+      },
+      "400": {
+        "path": {
+          "id": "999"
+        }
+      },
+      "404": {
+        "path": {
+          "id": "prj123"
+        }
+      }
+    }
+  }
+}
