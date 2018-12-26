@@ -1,0 +1,11 @@
+#!/bin/bash
+#	Purpose:
+#		build api doc/client lib and run test with nodejs
+#	Description:
+#		
+#	History:
+#		Wed Dec 26 11:35:48 CST 2018, Created by jimmyshiau
+#
+# Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+#
+mvn test

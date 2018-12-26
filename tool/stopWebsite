@@ -1,0 +1,12 @@
+#!/bin/bash
+# website
+#
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Fri Dec 15 13:21:48 CST 2018, Created by jimmyshiau
+#
+# Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+docker stop api-website
