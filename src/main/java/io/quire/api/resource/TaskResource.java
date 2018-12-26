@@ -1,6 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.*;
+import io.quire.api.model.task.Task;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.GET;

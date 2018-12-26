@@ -1,4 +1,4 @@
-package io.quire.api.model;
+package io.quire.api.model.project;
 
 import io.swagger.annotations.*;
 

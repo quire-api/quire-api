@@ -76,6 +76,8 @@ info:
 host: "quire.io"
 basePath: "/api"
 tags:
+- name: "organizations"
+  description: "An organization represents a prioritized list of projects in Quire."
 - name: "projects"
   description: "A project represents a prioritized list of tasks in Quire. It exists\
     \ in a single organization and is accessible to a subset of users in that organization,\
@@ -88,13 +90,131 @@ tags:
 schemes:
 - "https"
 paths:
+  /organizations:
+    get:
+      tags:
+      - "organizations"
+      summary: "Get all organizations"
+      description: "Returns the compact organization records for all organizations"
+      operationId: "getOrganizations"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Organization"
+    post:
+      tags:
+      - "organizations"
+      summary: "Create an organization."
+      description: "Creates a new organization."
+      operationId: "createOrganization"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Organization to create"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateOrganizationBody"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Organization"
+  /organizations/{id}:
+    get:
+      tags:
+      - "organizations"
+      summary: "Get an organization"
+      description: "returns the complete organization record."
+      operationId: "getOrganization"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of organization that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Organization"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Organization not found"
+    put:
+      tags:
+      - "organizations"
+      summary: "Update an organization"
+      description: "A specific, existing organization can be updated by making a PUT\
+        \ request on the URL for that organization.\nReturns the complete updated\
+        \ organization record."
+      operationId: "updateOrganization"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of organization that needs to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Organization to update"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateOrganizationBody"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Organization"
+        400:
+          description: "Invalid ID supplied"
+        403:
+          description: "Not allow"
+        404:
+          description: "Organization not found"
+    delete:
+      tags:
+      - "organizations"
+      summary: "Delete an organization"
+      description: "A specific, existing organization can be deleted by making a DELETE\
+        \ request on the URL for that organization."
+      operationId: "deleteOrganization"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of organization that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok"
+        400:
+          description: "Invalid ID supplied"
+        403:
+          description: "Not allow"
+        404:
+          description: "Organization not found"
   /projects:
     post:
       tags:
       - "projects"
       summary: "Create a project."
       description: "Creates a new project in an organization."
-      operationId: "create"
+      operationId: "createProject"
       produces:
       - "application/json"
       parameters:
@@ -143,7 +263,7 @@ paths:
       summary: "Update a project"
       description: "A specific, existing project can be updated by making a PUT request\
         \ on the URL for that project.\nReturns the complete updated project record."
-      operationId: "update"
+      operationId: "updateProject"
       produces:
       - "application/json"
       parameters:
@@ -154,7 +274,7 @@ paths:
         type: "string"
       - in: "body"
         name: "body"
-        description: "Project to create"
+        description: "Project to update"
         required: true
         schema:
           $ref: "#/definitions/UpdateProjectBody"
@@ -175,7 +295,7 @@ paths:
       summary: "Delete a project"
       description: "A specific, existing project can be deleted by making a DELETE\
         \ request on the URL for that project."
-      operationId: "delete"
+      operationId: "deleteProject"
       produces:
       - "application/json"
       parameters:
@@ -259,6 +379,12 @@ securityDefinitions:
       basic: "to read a user's profile info and media (granted by default)"
       comments: "to post and delete comments on a user's behalf"
 definitions:
+  CreateOrganizationBody:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "New Organization"
   CreateProjectBody:
     type: "object"
     properties:
@@ -268,6 +394,28 @@ definitions:
       organization:
         type: "string"
         example: "Develop_group"
+  Organization:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Develop group"
+      id:
+        type: "string"
+        example: "Develop_group"
+      projects:
+        type: "array"
+        items:
+          $ref: "#/definitions/Project"
+      image:
+        type: "string"
+        example: "https://quire.s3.amazonaws.com/oid/image.jpg"
+      initials:
+        type: "string"
+        example: "DG"
+      iconColor:
+        type: "string"
+        example: "#a9cb77"
   Project:
     type: "object"
     properties:
@@ -277,6 +425,15 @@ definitions:
       id:
         type: "string"
         example: "Marketing_Project"
+      image:
+        type: "string"
+        example: "https://quire.s3.amazonaws.com/oid/image.jpg"
+      initials:
+        type: "string"
+        example: "MP"
+      iconColor:
+        type: "string"
+        example: "#a9cb77"
   Task:
     type: "object"
     properties:
@@ -286,9 +443,21 @@ definitions:
       id:
         type: "string"
         example: "12"
+  UpdateOrganizationBody:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "New name of organization"
+      id:
+        type: "string"
+        example: "myId"
   UpdateProjectBody:
     type: "object"
     properties:
       name:
         type: "string"
         example: "New name of project"
+      id:
+        type: "string"
+        example: "myId"
