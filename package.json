@@ -14,6 +14,8 @@
     "mocha": "^5.2.0",
     "gulp-mocha": "^6.0.0",
     "chakram": "^1.5.0",
-    "oatts": "1.2.3"
+    "oatts": "1.2.3",
+    "js-yaml": "3.12.0",
+    "lodash.merge": "4.6.1"
   }
 }

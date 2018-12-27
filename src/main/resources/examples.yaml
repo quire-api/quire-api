@@ -1,0 +1,24 @@
+paths:
+  /organizations:
+    get:
+      responses:
+        200:
+          schema:
+            example:
+            - id: Develop_group
+              name: Develop group
+              image: https://quire.s3.amazonaws.com/oid1/image.jpg
+              initials: DG
+              iconColor: "#a9cb77"
+              projects:
+              - id: Marketing_Project
+                name: Marketing Project
+                image: https://quire.s3.amazonaws.com/oid3/image.jpg
+                initials: MP
+                iconColor: "#a8bf58"
+            - id: Testing_group
+              name: Testing group
+              image: https://quire.s3.amazonaws.com/oid2/image.jpg
+              initials: TG
+              iconColor: "#b3cb60"
+              projects: []

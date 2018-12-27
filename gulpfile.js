@@ -2,6 +2,10 @@ var oatts = require('oatts');
 var gulp = require( 'gulp' );
 var del = require('del');
 var mocha = require('gulp-mocha');
+var jsToYaml = require('js-yaml');
+var fs = require('fs');
+var merge = require('lodash.merge');
+var swaggerYaml = './dist/swagger.yaml';
 
 var options = {
     "scheme": "http",
@@ -15,7 +19,15 @@ gulp.task('clean', function(cb){
 });
 
 gulp.task('build', function () {
-  var tests = oatts.generate('./dist/swagger.yaml', options);
+    var swaggerMain = jsToYaml.safeLoad(
+        fs.readFileSync('./generated/swagger.yaml', 'utf8'));
+    var swaggerExamples = jsToYaml.safeLoad(
+        fs.readFileSync('./src/main/resources/examples.yaml', 'utf8'));
+    merge(swaggerMain, swaggerExamples);
+
+   fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain))
+
+  var tests = oatts.generate(swaggerYaml, options);
   console.log(tests)
 });
 

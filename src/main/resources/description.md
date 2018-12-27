@@ -1,5 +1,3 @@
-
-
 # Introduction
 Welcome to the reference for the Quire REST API!
 

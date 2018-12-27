@@ -161,7 +161,7 @@
                             <basePath>/api</basePath>
                             <descriptionFile>${project.basedir}/src/main/resources/description.md</descriptionFile>
                             <outputFormats>yaml</outputFormats>
-                            <swaggerDirectory>dist</swaggerDirectory>
+                            <swaggerDirectory>generated</swaggerDirectory>
                             <securityDefinitions>
                                 <securityDefinition>
                                     <json>/securityDefinitions.json</json>
@@ -175,6 +175,7 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>swagger</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>generate</goal>
@@ -188,7 +189,7 @@
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <inputSpec>${project.basedir}/dist/swagger.yaml</inputSpec>
+                    <inputSpec>${project.basedir}/generated/swagger.yaml</inputSpec>
                     <apiPackage>${project.groupId}.api</apiPackage>
                     <modelPackage>${project.groupId}.model</modelPackage>
                     <invokerPackage>${project.groupId}</invokerPackage>
@@ -199,6 +200,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <phase>compile</phase>
                         <configuration>
                             <language>java</language>
                             <output>${project.basedir}/generated/java</output>
@@ -210,6 +212,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <phase>compile</phase>
                         <configuration>
                             <language>javascript</language>
                             <output>${project.basedir}/generated/javascript</output>
@@ -220,6 +223,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <phase>compile</phase>
                         <configuration>
                             <language>dart</language>
                             <output>${project.basedir}/generated/dart</output>
@@ -258,13 +262,12 @@
 
                     <execution>
                         <id>gulp build</id>
+                        <phase>compile</phase>
                         <goals>
                             <goal>gulp</goal>
                         </goals>
 
                         <!-- optional: the default phase is "generate-resources" -->
-                        <phase>generate-resources</phase>
-
                         <configuration>
                             <!-- optional: if not specified, it will run gulp's default
                             task (and you can remove this whole <configuration> section.) -->
