@@ -1,5 +1,6 @@
 package io.quire.api.resource;
 
+import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.organization.*;
 import io.quire.api.model.project.Project;
 import io.quire.api.model.project.UpdateProjectBody;
@@ -30,8 +31,10 @@ public class OrganizationResource {
         notes = "returns the complete organization record.",
         response = Organization.class)
     @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 404, message = "Organization not found")})
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Organization not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Organization not found: Develop_group'}")}))})
     public Response getOrganization(
         @ApiParam(value = "ID of organization that needs to be fetched", required = true)
         @PathParam("id") String id) { return null; }
@@ -43,9 +46,11 @@ public class OrganizationResource {
                 "Returns the complete updated organization record.",
         response = Organization.class)
     @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 403, message = "Not allow"),
-        @ApiResponse(code = 404, message = "Organization not found")})
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Organization not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Organization not found: Develop_group'}")}))})
     public Response updateOrganization(
         @ApiParam(value = "ID of organization that needs to be updated", required = true)
         @PathParam("id") String id,
@@ -60,10 +65,14 @@ public class OrganizationResource {
         notes = "A specific, existing organization can be deleted by making a DELETE request " +
                 "on the URL for that organization.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "ok"),
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 403, message = "Not allow"),
-        @ApiResponse(code = 404, message = "Organization not found")})
+        @ApiResponse(code = 200, message = "ok",
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'Success': 'true'}")})),
+        @ApiResponse(code = 400, message = "Invalid ID supplied", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Organization not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Organization not found: Develop_group'}")}))})
     public Response deleteOrganization(
         @ApiParam(value = "ID of organization that needs to be deleted", required = true)
         @PathParam("id") String id) { return null; }
