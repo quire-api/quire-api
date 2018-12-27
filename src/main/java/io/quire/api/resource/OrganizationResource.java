@@ -68,7 +68,7 @@ public class OrganizationResource {
         @ApiResponse(code = 200, message = "ok",
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'Success': 'true'}")})),
-        @ApiResponse(code = 400, message = "Invalid ID supplied", response = ErrorResponse.class),
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
         @ApiResponse(code = 404, message = "Organization not found", response = ErrorResponse.class,
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
@@ -79,6 +79,8 @@ public class OrganizationResource {
 
     @GET
     @ApiOperation(value = "Get all organizations",
-        notes = "Returns the compact organization records for all organizations")
-    public List<Organization> getOrganizations(){ return null; }
+        notes = "Returns the compact organization records for all organizations",
+        response = Organization.class,
+        responseContainer = "List")
+    public Response getOrganizations(){ return null; }
 }

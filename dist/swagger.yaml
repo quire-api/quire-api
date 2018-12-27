@@ -341,7 +341,7 @@ paths:
             application/json:
               Success: 'true'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
           schema:
             $ref: '#/definitions/ErrorResponse'
         '403':
@@ -377,9 +377,13 @@ paths:
           schema:
             $ref: '#/definitions/Project'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '403':
           description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
   '/projects/{id}':
     get:
       tags:
@@ -401,9 +405,16 @@ paths:
           schema:
             $ref: '#/definitions/Project'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '404':
           description: Project not found
+          examples:
+            application/json:
+              message: 'Project not found: Marketing_Project'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
     put:
       tags:
         - projects
@@ -434,11 +445,20 @@ paths:
           schema:
             $ref: '#/definitions/Project'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '403':
           description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '404':
           description: Project not found
+          examples:
+            application/json:
+              message: 'Project not found: Marketing_Project'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
     delete:
       tags:
         - projects
@@ -458,12 +478,24 @@ paths:
       responses:
         '200':
           description: ok
+          examples:
+            application/json:
+              Success: 'true'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '403':
           description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '404':
           description: Project not found
+          examples:
+            application/json:
+              message: 'Project not found: Marketing_Project'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
   '/projects/{id}/tasks':
     get:
       tags:
@@ -487,9 +519,16 @@ paths:
             items:
               $ref: '#/definitions/Task'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '404':
           description: Project not found
+          examples:
+            application/json:
+              message: 'Project not found: Marketing_Project'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
   '/tasks/{id}':
     get:
       tags:
@@ -567,15 +606,15 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Project'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       initials:
         type: string
         example: DG
       iconColor:
         type: string
         example: '#a9cb77'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
   Project:
     type: object
     properties:
@@ -585,15 +624,15 @@ definitions:
       id:
         type: string
         example: Marketing_Project
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       initials:
         type: string
         example: MP
       iconColor:
         type: string
         example: '#a9cb77'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
   Task:
     type: object
     properties:

@@ -1,5 +1,6 @@
 package io.quire.api.resource;
 
+import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
 import io.quire.api.model.task.Task;
@@ -20,67 +21,64 @@ public class ProjectResource {
 
     @POST
     @ApiOperation(value = "Create a project.",
-      notes = "Creates a new project in an organization.",
-      response = Project.class)
+        notes = "Creates a new project in an organization.",
+        response = Project.class)
     @ApiResponses(value = {
-      @ApiResponse(code = 400, message = "Invalid ID supplied"),
-      @ApiResponse(code = 403, message = "Not allow")})
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class)})
     public Response createProject(
         @ApiParam(value = "Project to create", required = true)
-        CreateProjectBody data) {
-        return null;
-    }
+        CreateProjectBody data) { return null; }
 
     @GET
     @Path("/{id}")
     @ApiOperation(value = "Get a project",
-      notes = "returns the complete project record for a single project.",
-      response = Project.class
-    )
+        notes = "returns the complete project record for a single project.",
+        response = Project.class)
     @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 404, message = "Project not found")})
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getProject(
         @ApiParam(value = "ID of project that needs to be fetched", required = true)
-        @PathParam("id") String id) {
-        return null;
-    }
+        @PathParam("id") String id) { return null; }
 
     @PUT
     @Path("/{id}")
     @ApiOperation(value = "Update a project",
-      notes = "A specific, existing project can be updated by making a PUT request on the URL for that project.\n" +
+        notes = "A specific, existing project can be updated by making a PUT request on the URL for that project.\n" +
               "Returns the complete updated project record.",
-      response = Project.class
-    )
+        response = Project.class)
     @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 403, message = "Not allow"),
-        @ApiResponse(code = 404, message = "Project not found")})
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response updateProject(
         @ApiParam(value = "ID of project that needs to be updated", required = true)
         @PathParam("id") String id,
         @ApiParam(value = "Project to update", required = true)
-        UpdateProjectBody data) {
-        return null;
-    }
+        UpdateProjectBody data) { return null; }
 
     @DELETE
     @Path("/{id}")
     @ApiOperation(value = "Delete a project",
         notes = "A specific, existing project can be deleted by making a DELETE request " +
-                "on the URL for that project."
-    )
+                "on the URL for that project.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "ok"),
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 403, message = "Not allow"),
-        @ApiResponse(code = 404, message = "Project not found")})
+        @ApiResponse(code = 200, message = "ok",
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'Success': 'true'}")})),
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response deleteProject(
         @ApiParam(value = "ID of project that needs to be deleted", required = true)
-        @PathParam("id") String id) {
-        return null;
-    }
+        @PathParam("id") String id) { return null; }
 
     @GET
     @Path("/{id}/tasks")
@@ -89,11 +87,11 @@ public class ProjectResource {
         response = Task.class,
         responseContainer = "List")
     @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 404, message = "Project not found")})
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getTasks(
         @ApiParam(value = "ID of the project in which to search for tasks", required = true)
-        @PathParam("id") String id){
-        return null;
-    }
+        @PathParam("id") String id) { return null; }
 }
