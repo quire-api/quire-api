@@ -33,8 +33,4 @@ public class Organization {
         return null;
     }
 
-    public List<Project> getProjects() {
-        return null;
-    }
-
 }

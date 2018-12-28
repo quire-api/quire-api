@@ -2,19 +2,14 @@ package io.quire.api.resource;
 
 import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.organization.*;
-import io.quire.api.model.project.Project;
-import io.quire.api.model.project.UpdateProjectBody;
-import io.quire.api.model.task.Task;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Path("/organizations")
 @Api(value = "organizations", description =
-    "An organization represents a prioritized list of projects in Quire."
-)
+    "An organization represents a prioritized list of projects in Quire.")
 @Produces({"application/json"})
 public class OrganizationResource {
     @POST
@@ -80,7 +75,7 @@ public class OrganizationResource {
     @GET
     @ApiOperation(value = "Get all organizations",
         notes = "Returns the compact organization records for all organizations",
-        response = Organization.class,
+        response = OrganizationWithProjects.class,
         responseContainer = "List")
     public Response getOrganizations(){ return null; }
 }

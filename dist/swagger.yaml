@@ -204,7 +204,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Organization'
+              $ref: '#/definitions/OrganizationWithProjects'
             example:
               - id: Develop_group
                 name: Develop group
@@ -496,17 +496,46 @@ paths:
               message: 'Project not found: Marketing_Project'
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/projects/{id}/tasks':
+  /tasks:
+    post:
+      tags:
+        - tasks
+      summary: Add a task.
+      description: Add a new task in a project.
+      operationId: createTask
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Task to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateTaskBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Task'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '403':
+          description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  '/tasks/{projectId}':
     get:
       tags:
-        - projects
+        - tasks
       summary: Get project tasks
       description: Returns the compact task records for all tasks within the given project
       operationId: getTasks
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: projectId
           in: path
           description: ID of the project in which to search for tasks
           required: true
@@ -517,7 +546,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Task'
+              $ref: '#/definitions/TaskWithChildren'
         '400':
           description: Bad parameter
           schema:
@@ -529,7 +558,7 @@ paths:
               message: 'Project not found: Marketing_Project'
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/tasks/{id}':
+  '/tasks/{projectId}/{id}':
     get:
       tags:
         - tasks
@@ -539,20 +568,124 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: projectId
+          in: path
+          description: ID of project
+          required: true
+          type: string
         - name: id
           in: path
           description: ID of task that needs to be fetched
           required: true
-          type: string
+          type: integer
+          format: int32
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/Task'
         '400':
-          description: Invalid ID supplied
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '404':
           description: Task not found
+          examples:
+            application/json:
+              message: 'Task not found: 12'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    put:
+      tags:
+        - tasks
+      summary: Update a task
+      description: >-
+        A specific, existing task can be updated by making a PUT request on the
+        URL for that taks.
+
+        Returns the complete updated task record.
+      operationId: updateTask
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of project that needs to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Task to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateTaskBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Task'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '403':
+          description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Task not found
+          examples:
+            application/json:
+              message: 'Task not found: 12'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      tags:
+        - tasks
+      summary: Delete a task
+      description: >-
+        A specific, existing task can be deleted by making a DELETE request on
+        the URL for that task.
+      operationId: deleteTask
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of task that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+          examples:
+            application/json:
+              Success: 'true'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '403':
+          description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Task not found
+          examples:
+            application/json:
+              message: 'Task not found: 12'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
 securityDefinitions:
   api_key:
     type: apiKey
@@ -583,6 +716,36 @@ definitions:
       organization:
         type: string
         example: Develop_group
+  CreateTaskBody:
+    type: object
+    required:
+      - project
+    properties:
+      name:
+        type: string
+        example: New Task
+      parent:
+        type: string
+        example: '10'
+        description: (optional) The parent task id
+      project:
+        type: string
+        example: Marketing_Project
+        description: The project id
+      after:
+        type: string
+        example: '13'
+        description: (optional) The previous sibling task id
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
+        description: User id to assign
   ErrorResponse:
     type: object
     required:
@@ -602,19 +765,37 @@ definitions:
       id:
         type: string
         example: Develop_group
-      projects:
-        type: array
-        items:
-          $ref: '#/definitions/Project'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       initials:
         type: string
         example: DG
       iconColor:
         type: string
         example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+  OrganizationWithProjects:
+    type: object
+    properties:
+      projects:
+        type: array
+        items:
+          $ref: '#/definitions/Project'
+      name:
+        type: string
+        example: Develop group
+      id:
+        type: string
+        example: Develop_group
+      initials:
+        type: string
+        example: DG
+      iconColor:
+        type: string
+        example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
   Project:
     type: object
     properties:
@@ -624,15 +805,15 @@ definitions:
       id:
         type: string
         example: Marketing_Project
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       initials:
         type: string
         example: MP
       iconColor:
         type: string
         example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
   Task:
     type: object
     properties:
@@ -640,8 +821,55 @@ definitions:
         type: string
         example: Design new logo
       id:
+        type: integer
+        format: int32
+        example: 12
+      state:
+        type: integer
+        format: int32
+        example: 0
+      description:
         type: string
-        example: '12'
+        example: Detail about this task
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
+  TaskWithChildren:
+    type: object
+    properties:
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/TaskWithChildren'
+      name:
+        type: string
+        example: Design new logo
+      id:
+        type: integer
+        format: int32
+        example: 12
+      state:
+        type: integer
+        format: int32
+        example: 0
+      description:
+        type: string
+        example: Detail about this task
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
   UpdateOrganizationBody:
     type: object
     properties:
@@ -660,3 +888,21 @@ definitions:
       id:
         type: string
         example: myId
+  UpdateTaskBody:
+    type: object
+    properties:
+      name:
+        type: string
+        example: New name of task
+      description:
+        type: string
+        example: Detail about this task
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john

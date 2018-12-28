@@ -7,6 +7,7 @@ public class UpdateProjectBody {
     public String getName() {
         return null;
     }
+
     @ApiModelProperty(example = "myId")
     public String getId() {
         return null;

@@ -3,7 +3,6 @@ package io.quire.api.resource;
 import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
-import io.quire.api.model.task.Task;
 import io.quire.api.model.project.UpdateProjectBody;
 import io.swagger.annotations.*;
 
@@ -14,8 +13,7 @@ import javax.ws.rs.core.Response;
 @Api(value = "projects", description =
     "A project represents a prioritized list of tasks in Quire. " +
     "It exists in a single organization and is accessible to a subset of " +
-    "users in that organization, depending on its permissions."
-)
+    "users in that organization, depending on its permissions.")
 @Produces({"application/json"})
 public class ProjectResource {
 
@@ -78,20 +76,5 @@ public class ProjectResource {
                 "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response deleteProject(
         @ApiParam(value = "ID of project that needs to be deleted", required = true)
-        @PathParam("id") String id) { return null; }
-
-    @GET
-    @Path("/{id}/tasks")
-    @ApiOperation(value = "Get project tasks",
-        notes = "Returns the compact task records for all tasks within the given project",
-        response = Task.class,
-        responseContainer = "List")
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Project not found: Marketing_Project'}")}))})
-    public Response getTasks(
-        @ApiParam(value = "ID of the project in which to search for tasks", required = true)
         @PathParam("id") String id) { return null; }
 }
