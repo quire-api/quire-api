@@ -3,6 +3,5 @@ Quire API project is used to build the Quire API Reference for [Quire](https://q
 
 ### Build
 ```
-mvn compile
+./tool/build 
 ```
-
