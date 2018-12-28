@@ -78,4 +78,15 @@ public class OrganizationResource {
         response = OrganizationWithProjects.class,
         responseContainer = "List")
     public Response getOrganizations(){ return null; }
+
+    @GET
+    @Path("/search")
+    @ApiOperation(value = "Search organizations",
+        notes = "Returns the compact organization records for query organizations",
+        response = Organization.class,
+        responseContainer = "List")
+    public Response searchOrganizations(
+        @ApiParam(value = "Query text for search organization",
+            example = "query=my organization", required = true)
+        @QueryParam(value = "query") String query){ return null; }
 }

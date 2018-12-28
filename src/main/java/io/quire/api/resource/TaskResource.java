@@ -100,4 +100,68 @@ public class TaskResource {
         @ApiParam(value = "ID of the project in which to search for tasks", required = true)
         @PathParam("projectId") String projectId) { return null; }
 
+    @GET
+    @Path("/{projectId}/search")
+    @ApiOperation(value = "Search tasks",
+        notes = "Returns the compact task records for query tasks",
+        response = Task.class,
+        responseContainer = "List")
+    public Response searchTasks(
+        @ApiParam(value = "ID of the project in which to search for tasks", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Query text for search tasks",
+            example = "query=my task")
+        @QueryParam(value = "query") String query,
+        @ApiParam(value = "State of task",
+            defaultValue = "active",
+            allowableValues = "all,active,completed",
+            example = "state=completed")
+        @QueryParam(value = "state") String state,
+
+        @ApiParam(value = "Tasks include all assignee",
+            allowMultiple = true,
+            example = "assignees.all=mary@gmail.com,john")
+        @QueryParam(value = "assignees.all") String assigneesAll,
+        @ApiParam(value = "Tasks contains any of assignees",
+            allowMultiple = true,
+            example = "assignees.any=john")
+        @QueryParam(value = "assignees.any") String assigneesAny,
+        @ApiParam(value = "Tasks not contains any of assignees",
+            allowMultiple = true,
+            example = "assignees.not=mary@gmail.com")
+        @QueryParam(value = "assignees.not") String assigneesNot,
+
+        @ApiParam(value = "Tasks include all tags",
+            allowMultiple = true,
+            example = "tags.all=yellow,red")
+        @QueryParam(value = "tags.all") String tagsAll,
+        @ApiParam(value = "Tasks contains any of tags",
+            allowMultiple = true,
+            example = "tags.any=yellow,red")
+        @QueryParam(value = "tags.any") String tagsAny,
+        @ApiParam(value = "Tasks not contains any of tags",
+            allowMultiple = true,
+            example = "tags.not=black,grey")
+        @QueryParam(value = "tags.not") String tagsNot,
+
+        @ApiParam(value = "Tasks on due",
+            example = "due=2018-12-05")
+        @QueryParam(value = "due") String due,
+        @ApiParam(value = "Tasks before due",
+            example = "due.before=2018-11-05")
+        @QueryParam(value = "due.before") String dueBefore,
+        @ApiParam(value = "Tasks after due",
+            example = "due.after=2018-12-15")
+        @QueryParam(value = "due.after") String dueAfter,
+
+        @ApiParam(value = "Tasks on start",
+                example = "start=2018-12-05")
+        @QueryParam(value = "start") String start,
+        @ApiParam(value = "Tasks before start",
+                example = "start.before=2018-11-05")
+        @QueryParam(value = "start.before") String startBefore,
+        @ApiParam(value = "Tasks after start",
+                example = "start.after=2018-12-15")
+        @QueryParam(value = "start.after") String startAfter) { return null; }
+
 }
