@@ -1,6 +1,7 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.ErrorResponse;
+import io.quire.api.model.comment.Comment;
 import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
 import io.quire.api.model.project.UpdateProjectBody;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.Response;
 public class ProjectResource {
 
     @POST
-    @ApiOperation(value = "Create a project.",
+    @ApiOperation(value = "Create a project",
         notes = "Creates a new project in an organization.",
         response = Project.class)
     @ApiResponses(value = {
@@ -75,6 +76,21 @@ public class ProjectResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response deleteProject(
+        @ApiParam(value = "ID of project that needs to be deleted", required = true)
+        @PathParam("id") String id) { return null; }
+
+    @GET
+    @Path("/{id}/comments")
+    @ApiOperation(value = "Get project comments",
+        notes = "Returns the complete comment record for a single project.",
+        response = Comment.class,
+        responseContainer = "List")
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Task not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Project not found: Marketing_Project'}")}))})
+    public Response getProjectComments(
         @ApiParam(value = "ID of project that needs to be deleted", required = true)
         @PathParam("id") String id) { return null; }
 

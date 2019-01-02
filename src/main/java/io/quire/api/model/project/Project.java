@@ -1,5 +1,6 @@
 package io.quire.api.model.project;
 
+import io.quire.api.model.User;
 import io.swagger.annotations.ApiModelProperty;
 
 public class Project {
@@ -25,4 +26,9 @@ public class Project {
     public String getImage() {
         return null;
     }
+
+    @ApiModelProperty(example = "2018-12-22T02:06:58.158Z")
+    public String getCreatedAt() { return null; }
+
+    public User getCreatedBy() { return null; }
 }

@@ -1,6 +1,7 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.ErrorResponse;
+import io.quire.api.model.comment.Comment;
 import io.quire.api.model.task.CreateTaskBody;
 import io.quire.api.model.task.Task;
 import io.quire.api.model.task.TaskWithChildren;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.Response;
 public class TaskResource {
 
     @POST
-    @ApiOperation(value = "Add a task.",
+    @ApiOperation(value = "Add a task",
         notes = "Add a new task in a project.",
         response = Task.class)
     @ApiResponses(value = {
@@ -99,6 +100,23 @@ public class TaskResource {
     public Response getTasks(
         @ApiParam(value = "ID of the project in which to search for tasks", required = true)
         @PathParam("projectId") String projectId) { return null; }
+
+    @GET
+    @Path("/{projectId}/{id}/comments")
+    @ApiOperation(value = "Get task comments.",
+        notes = "Returns the complete comment record for a single task.",
+        response = Comment.class,
+        responseContainer = "List")
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Task not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Task not found: 12'}")}))})
+    public Response getTaskComments(
+        @ApiParam(value = "ID of project", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "ID of task that needs to be fetched", required = true)
+        @PathParam("id") Integer id) { return null; }
 
     @GET
     @Path("/{projectId}/search")

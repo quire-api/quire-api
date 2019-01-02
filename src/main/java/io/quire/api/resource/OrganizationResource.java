@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class OrganizationResource {
     @POST
-    @ApiOperation(value = "Create an organization.",
+    @ApiOperation(value = "Create an organization",
         notes = "Creates a new organization.",
         response = Organization.class)
     public Response createOrganization(

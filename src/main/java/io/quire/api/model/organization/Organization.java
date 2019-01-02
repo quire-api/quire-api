@@ -1,10 +1,8 @@
 package io.quire.api.model.organization;
 
-import io.quire.api.model.project.Project;
+import io.quire.api.model.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.util.List;
 
 @ApiModel()
 public class Organization {
@@ -33,4 +31,8 @@ public class Organization {
         return null;
     }
 
+    @ApiModelProperty(example = "2018-12-22T02:06:58.158Z")
+    public String getCreatedAt() { return null; }
+
+    public User getCreatedBy() { return null; }
 }

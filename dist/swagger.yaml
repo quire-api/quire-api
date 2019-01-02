@@ -226,7 +226,7 @@ paths:
     post:
       tags:
         - organizations
-      summary: Create an organization.
+      summary: Create an organization
       description: Creates a new organization.
       operationId: createOrganization
       produces:
@@ -382,7 +382,7 @@ paths:
     post:
       tags:
         - projects
-      summary: Create a project.
+      summary: Create a project
       description: Creates a new project in an organization.
       operationId: createProject
       produces:
@@ -553,11 +553,44 @@ paths:
               message: 'Project not found: Marketing_Project'
           schema:
             $ref: '#/definitions/ErrorResponse'
+  '/projects/{id}/comments':
+    get:
+      tags:
+        - projects
+      summary: Get project comments
+      description: Returns the complete comment record for a single project.
+      operationId: getProjectComments
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of project that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Task not found
+          examples:
+            application/json:
+              message: 'Project not found: Marketing_Project'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
   /tasks:
     post:
       tags:
         - tasks
-      summary: Add a task.
+      summary: Add a task
       description: Add a new task in a project.
       operationId: createTask
       produces:
@@ -878,6 +911,45 @@ paths:
               message: 'Task not found: 12'
           schema:
             $ref: '#/definitions/ErrorResponse'
+  '/tasks/{projectId}/{id}/comments':
+    get:
+      tags:
+        - tasks
+      summary: Get task comments.
+      description: Returns the complete comment record for a single task.
+      operationId: getTaskComments
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of task that needs to be fetched
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Task not found
+          examples:
+            application/json:
+              message: 'Task not found: 12'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
 securityDefinitions:
   api_key:
     type: apiKey
@@ -893,6 +965,20 @@ securityDefinitions:
       basic: to read a user's profile info and media (granted by default)
       comments: to post and delete comments on a user's behalf
 definitions:
+  Comment:
+    type: object
+    properties:
+      description:
+        type: string
+        example: Adjust style
+      pinned:
+        type: boolean
+        example: false
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      createdBy:
+        $ref: '#/definitions/User'
   CreateOrganizationBody:
     type: object
     properties:
@@ -920,24 +1006,24 @@ definitions:
         type: string
         example: '10'
         description: (optional) The parent task id
-      after:
-        type: string
-        example: '13'
-        description: (optional) The previous sibling task id
-      assignee:
-        type: string
-        example: john
-        description: User id to assign
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
       project:
         type: string
         example: Marketing_Project
         description: The project id
+      after:
+        type: string
+        example: '13'
+        description: (optional) The previous sibling task id
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
+        description: User id to assign
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
   ErrorResponse:
     type: object
     required:
@@ -966,6 +1052,11 @@ definitions:
       iconColor:
         type: string
         example: '#a9cb77'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      createdBy:
+        $ref: '#/definitions/User'
   OrganizationWithProjects:
     type: object
     properties:
@@ -988,6 +1079,11 @@ definitions:
       iconColor:
         type: string
         example: '#a9cb77'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      createdBy:
+        $ref: '#/definitions/User'
   Project:
     type: object
     properties:
@@ -1006,6 +1102,23 @@ definitions:
       iconColor:
         type: string
         example: '#a9cb77'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      createdBy:
+        $ref: '#/definitions/User'
+  Tag:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Later
+      color:
+        type: string
+        example: '#a9cb77'
+      oid:
+        type: string
+        example: zlneHUB0KueiHY
   Task:
     type: object
     properties:
@@ -1020,18 +1133,28 @@ definitions:
         type: integer
         format: int32
         example: 0
-      assignee:
+      description:
         type: string
-        example: john
+        example: Detail about this task
+      assignees:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/Tag'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      createdBy:
+        $ref: '#/definitions/User'
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-      description:
-        type: string
-        example: Detail about this task
   TaskWithChildren:
     type: object
     properties:
@@ -1050,18 +1173,28 @@ definitions:
         type: integer
         format: int32
         example: 0
-      assignee:
+      description:
         type: string
-        example: john
+        example: Detail about this task
+      assignees:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/Tag'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      createdBy:
+        $ref: '#/definitions/User'
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-      description:
-        type: string
-        example: Detail about this task
   UpdateOrganizationBody:
     type: object
     properties:
@@ -1086,15 +1219,33 @@ definitions:
       name:
         type: string
         example: New name of task
-      assignee:
-        type: string
-        example: john
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
       description:
         type: string
         example: Detail about this task
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+        example: John
+      id:
+        type: string
+        example: john
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      initials:
+        type: string
+        example: MP
+      iconColor:
+        type: string
+        example: '#a9cb77'
