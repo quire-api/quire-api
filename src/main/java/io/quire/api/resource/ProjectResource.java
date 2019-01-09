@@ -2,9 +2,12 @@ package io.quire.api.resource;
 
 import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.comment.Comment;
+import io.quire.api.model.comment.CreateCommentBody;
 import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
 import io.quire.api.model.project.UpdateProjectBody;
+import io.quire.api.model.task.CreateTaskBody;
+import io.quire.api.model.task.Task;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -93,6 +96,18 @@ public class ProjectResource {
     public Response getProjectComments(
         @ApiParam(value = "ID of project that needs to be deleted", required = true)
         @PathParam("id") String id) { return null; }
+
+    @POST
+    @Path("/{id}/comments")
+    @ApiOperation(value = "Add a project comment",
+        notes = "Add a new comment in a project.",
+        response = Comment.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class)})
+    public Response createProjectComment(
+        @ApiParam(value = "Comment to create", required = true)
+        CreateCommentBody data) { return null; }
 
     @GET
     @Path("/search")

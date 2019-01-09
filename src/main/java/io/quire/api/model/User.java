@@ -13,7 +13,7 @@ public class User {
         return null;
     }
 
-    @ApiModelProperty(example = "MP")
+    @ApiModelProperty(example = "J")
     public String getInitials() {
         return null;
     }

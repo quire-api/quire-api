@@ -2,6 +2,7 @@ package io.quire.api.resource;
 
 import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.comment.Comment;
+import io.quire.api.model.comment.CreateCommentBody;
 import io.quire.api.model.task.CreateTaskBody;
 import io.quire.api.model.task.Task;
 import io.quire.api.model.task.TaskWithChildren;
@@ -117,6 +118,18 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
         @ApiParam(value = "ID of task that needs to be fetched", required = true)
         @PathParam("id") Integer id) { return null; }
+
+    @POST
+    @Path("/{projectId}/{id}/comments")
+    @ApiOperation(value = "Add a task comment",
+        notes = "Add a new comment in a task.",
+        response = Comment.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class)})
+    public Response createTaskComment(
+        @ApiParam(value = "Comment to create", required = true)
+        CreateCommentBody data) { return null; }
 
     @GET
     @Path("/{projectId}/search")
