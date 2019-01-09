@@ -108,20 +108,4 @@ public class ProjectResource {
     public Response createProjectComment(
         @ApiParam(value = "Comment to create", required = true)
         CreateCommentBody data) { return null; }
-
-    @GET
-    @Path("/search")
-    @ApiOperation(value = "Search projects",
-        notes = "Returns the compact project records for query projects",
-        response = Project.class,
-        responseContainer = "List")
-    public Response searchProjects(
-        @ApiParam(value = "Query text for search project",
-            example = "query=my project", required = true)
-        @QueryParam(value = "query") String query,
-        @ApiParam(value = "State of project",
-            defaultValue = "active",
-            allowableValues = "all,active,archived",
-            example = "state=all")
-        @QueryParam(value = "state") String state){ return null; }
 }

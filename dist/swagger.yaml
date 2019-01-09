@@ -211,7 +211,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: Comemnt to update
+          description: Comment to update
           required: true
           schema:
             $ref: '#/definitions/UpdateCommentBody'
@@ -232,7 +232,7 @@ paths:
           description: Comment not found
           examples:
             application/json:
-              message: 'Comment not found: Marketing_Project'
+              message: Comment not found
           schema:
             $ref: '#/definitions/ErrorResponse'
     delete:
@@ -327,29 +327,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Organization'
-  /organizations/search:
-    get:
-      tags:
-        - organizations
-      summary: Search organizations
-      description: Returns the compact organization records for query organizations
-      operationId: searchOrganizations
-      produces:
-        - application/json
-      parameters:
-        - name: query
-          in: query
-          description: Query text for search organization
-          required: true
-          type: string
-          x-example: query=my organization
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Organization'
   '/organizations/{id}':
     get:
       tags:
@@ -491,40 +468,6 @@ paths:
           description: Not allow
           schema:
             $ref: '#/definitions/ErrorResponse'
-  /projects/search:
-    get:
-      tags:
-        - projects
-      summary: Search projects
-      description: Returns the compact project records for query projects
-      operationId: searchProjects
-      produces:
-        - application/json
-      parameters:
-        - name: query
-          in: query
-          description: Query text for search project
-          required: true
-          type: string
-          x-example: query=my project
-        - name: state
-          in: query
-          description: State of project
-          required: false
-          type: string
-          default: active
-          x-example: state=all
-          enum:
-            - all
-            - active
-            - archived
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Project'
   '/projects/{id}':
     get:
       tags:
@@ -760,141 +703,6 @@ paths:
               message: 'Project not found: Marketing_Project'
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/tasks/{projectId}/search':
-    get:
-      tags:
-        - tasks
-      summary: Search tasks
-      description: Returns the compact task records for query tasks
-      operationId: searchTasks
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of the project in which to search for tasks
-          required: true
-          type: string
-        - name: query
-          in: query
-          description: Query text for search tasks
-          required: false
-          type: string
-          x-example: query=my task
-        - name: state
-          in: query
-          description: State of task
-          required: false
-          type: string
-          default: active
-          x-example: state=completed
-          enum:
-            - all
-            - active
-            - completed
-        - name: assignees.all
-          in: query
-          description: Tasks include all assignee
-          required: false
-          type: array
-          items:
-            type: string
-            example: 'assignees.all=mary@gmail.com,john'
-          collectionFormat: multi
-          x-example: 'assignees.all=mary@gmail.com,john'
-        - name: assignees.any
-          in: query
-          description: Tasks contains any of assignees
-          required: false
-          type: array
-          items:
-            type: string
-            example: assignees.any=john
-          collectionFormat: multi
-          x-example: assignees.any=john
-        - name: assignees.not
-          in: query
-          description: Tasks not contains any of assignees
-          required: false
-          type: array
-          items:
-            type: string
-            example: assignees.not=mary@gmail.com
-          collectionFormat: multi
-          x-example: assignees.not=mary@gmail.com
-        - name: tags.all
-          in: query
-          description: Tasks include all tags
-          required: false
-          type: array
-          items:
-            type: string
-            example: 'tags.all=yellow,red'
-          collectionFormat: multi
-          x-example: 'tags.all=yellow,red'
-        - name: tags.any
-          in: query
-          description: Tasks contains any of tags
-          required: false
-          type: array
-          items:
-            type: string
-            example: 'tags.any=yellow,red'
-          collectionFormat: multi
-          x-example: 'tags.any=yellow,red'
-        - name: tags.not
-          in: query
-          description: Tasks not contains any of tags
-          required: false
-          type: array
-          items:
-            type: string
-            example: 'tags.not=black,grey'
-          collectionFormat: multi
-          x-example: 'tags.not=black,grey'
-        - name: due
-          in: query
-          description: Tasks on due
-          required: false
-          type: string
-          x-example: due=2018-12-05
-        - name: due.before
-          in: query
-          description: Tasks before due
-          required: false
-          type: string
-          x-example: due.before=2018-11-05
-        - name: due.after
-          in: query
-          description: Tasks after due
-          required: false
-          type: string
-          x-example: due.after=2018-12-15
-        - name: start
-          in: query
-          description: Tasks on start
-          required: false
-          type: string
-          x-example: start=2018-12-05
-        - name: start.before
-          in: query
-          description: Tasks before start
-          required: false
-          type: string
-          x-example: start.before=2018-11-05
-        - name: start.after
-          in: query
-          description: Tasks after start
-          required: false
-          type: string
-          x-example: start.after=2018-12-15
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Task'
   '/tasks/{projectId}/{id}':
     get:
       tags:
@@ -1108,23 +916,23 @@ definitions:
   Comment:
     type: object
     properties:
+      description:
+        type: string
+        example: Adjust style
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
       createdBy:
         $ref: '#/definitions/User'
-      description:
-        type: string
-        example: Adjust style
       pinned:
         type: boolean
         example: false
   CreateCommentBody:
     type: object
     required:
-      - text
+      - description
     properties:
-      text:
+      description:
         type: string
         example: Adjust style
   CreateOrganizationBody:
@@ -1158,20 +966,20 @@ definitions:
         type: string
         example: Marketing_Project
         description: The project id
-      after:
-        type: string
-        example: '13'
-        description: (optional) The previous sibling task id
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       assignee:
         type: string
         example: john
         description: User id to assign
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      after:
+        type: string
+        example: '13'
+        description: (optional) The previous sibling task id
   ErrorResponse:
     type: object
     required:
@@ -1261,12 +1069,12 @@ definitions:
       name:
         type: string
         example: Later
-      color:
-        type: string
-        example: '#a9cb77'
       oid:
         type: string
         example: zlneHUB0KueiHY
+      color:
+        type: string
+        example: '#a9cb77'
   Task:
     type: object
     properties:
@@ -1281,14 +1089,20 @@ definitions:
         type: integer
         format: int32
         example: 0
+      description:
+        type: string
+        example: Detail about this task
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
       createdBy:
         $ref: '#/definitions/User'
-      description:
+      start:
         type: string
-        example: Detail about this task
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
       assignees:
         type: array
         items:
@@ -1297,12 +1111,6 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Tag'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
   TaskWithChildren:
     type: object
     properties:
@@ -1321,14 +1129,20 @@ definitions:
         type: integer
         format: int32
         example: 0
+      description:
+        type: string
+        example: Detail about this task
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
       createdBy:
         $ref: '#/definitions/User'
-      description:
+      start:
         type: string
-        example: Detail about this task
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
       assignees:
         type: array
         items:
@@ -1337,18 +1151,12 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Tag'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
   UpdateCommentBody:
     type: object
     required:
-      - text
+      - description
     properties:
-      text:
+      description:
         type: string
         example: Adjust style
       pinned:
@@ -1381,15 +1189,15 @@ definitions:
       description:
         type: string
         example: Detail about this task
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       assignee:
         type: string
         example: john
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
   User:
     type: object
     properties:
