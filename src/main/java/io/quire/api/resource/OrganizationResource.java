@@ -21,7 +21,7 @@ public class OrganizationResource {
         CreateOrganizationBody data) { return null; }
 
     @GET
-    @Path("/{id}")
+    @Path("/{oid}")
     @ApiOperation(value = "Get an organization",
         notes = "returns the complete organization record.",
         response = Organization.class)
@@ -31,11 +31,11 @@ public class OrganizationResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Organization not found: Develop_group'}")}))})
     public Response getOrganization(
-        @ApiParam(value = "ID of organization that needs to be fetched", required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Oid of organization that needs to be fetched", required = true)
+        @PathParam("oid") String oid) { return null; }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{oid}")
     @ApiOperation(value = "Update an organization",
         notes = "A specific, existing organization can be updated by making a PUT request on the URL for that organization.\n" +
                 "Returns the complete updated organization record.",
@@ -47,15 +47,15 @@ public class OrganizationResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Organization not found: Develop_group'}")}))})
     public Response updateOrganization(
-        @ApiParam(value = "ID of organization that needs to be updated", required = true)
-        @PathParam("id") String id,
+        @ApiParam(value = "Oid of organization that needs to be updated", required = true)
+        @PathParam("oid") String oid,
         @ApiParam(value = "Organization to update", required = true)
         UpdateOrganizationBody data) {
         return null;
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{oid}")
     @ApiOperation(value = "Delete an organization",
         notes = "A specific, existing organization can be deleted by making a DELETE request " +
                 "on the URL for that organization.")
@@ -69,8 +69,8 @@ public class OrganizationResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Organization not found: Develop_group'}")}))})
     public Response deleteOrganization(
-        @ApiParam(value = "ID of organization that needs to be deleted", required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Oid of organization that needs to be deleted", required = true)
+        @PathParam("oid") String oid) { return null; }
 
     @GET
     @ApiOperation(value = "Get all organizations",

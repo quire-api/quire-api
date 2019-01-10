@@ -8,7 +8,8 @@ public class CreateProjectBody {
         return null;
     }
 
-    @ApiModelProperty(example = "Develop_group")
+    @ApiModelProperty(example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", required = true,
+        value = "The organization oid")
     public String getOrganization() {
         return null;
     }

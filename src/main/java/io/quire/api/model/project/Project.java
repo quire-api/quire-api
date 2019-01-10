@@ -1,11 +1,18 @@
 package io.quire.api.model.project;
 
-import io.quire.api.model.User;
+import io.quire.api.model.IconStampedEntity;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-public class Project {
+@ApiModel()
+public class Project extends IconStampedEntity {
     @ApiModelProperty(example = "Marketing_Project")
     public String getId() {
+        return null;
+    }
+
+    @ApiModelProperty(example = "GAUpZARpeOjlHqEux6IdUZI1")
+    public String getOid() {
         return null;
     }
 
@@ -17,18 +24,4 @@ public class Project {
         return null;
     }
 
-    @ApiModelProperty(example = "#a9cb77")
-    public String getIconColor() {
-        return null;
-    }
-
-    @ApiModelProperty(example = "https://quire.s3.amazonaws.com/oid/image.jpg")
-    public String getImage() {
-        return null;
-    }
-
-    @ApiModelProperty(example = "2018-12-22T02:06:58.158Z")
-    public String getCreatedAt() { return null; }
-
-    public User getCreatedBy() { return null; }
 }

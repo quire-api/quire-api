@@ -8,6 +8,7 @@ import java.util.List;
 
 @ApiModel()
 public class OrganizationWithProjects extends Organization {
+
     public List<Project> getProjects() {
         return null;
     }

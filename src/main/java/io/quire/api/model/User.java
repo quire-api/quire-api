@@ -1,10 +1,17 @@
 package io.quire.api.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel()
 public class User {
     @ApiModelProperty(example = "john")
     public String getId() {
+        return null;
+    }
+
+    @ApiModelProperty(example = "ZFrV7UGOI2oMIz48cV5IzvzZ")
+    public String getOid() {
         return null;
     }
 

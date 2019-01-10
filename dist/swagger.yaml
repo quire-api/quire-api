@@ -191,6 +191,36 @@ schemes:
   - https
 paths:
   '/comments/{oid}':
+    get:
+      tags:
+        - comments
+      summary: Get a comment
+      description: returns the complete comment record.
+      operationId: getComment
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of comment that needs to be fetched
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Project not found
+          examples:
+            application/json:
+              message: 'Comment not found: Marketing_Project'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
     put:
       tags:
         - comments
@@ -219,7 +249,7 @@ paths:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/Project'
+            $ref: '#/definitions/Comment'
         '400':
           description: Bad parameter
           schema:
@@ -291,21 +321,30 @@ paths:
               $ref: '#/definitions/OrganizationWithProjects'
             example:
               - id: Develop_group
+                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
                 name: Develop group
-                image: 'https://quire.s3.amazonaws.com/oid1/image.jpg'
                 initials: DG
+                image: 'https://quire.s3.amazonaws.com/oid1/image.jpg'
                 iconColor: '#a9cb77'
+                createdAt: 2018-12-22T02:06:58.158Z
+                createdBy: 6QMKkEPBVWETLWrXqws94ALU
                 projects:
                   - id: Marketing_Project
+                    oid: GAUpZARpeOjlHqEux6IdUZI1
                     name: Marketing Project
-                    image: 'https://quire.s3.amazonaws.com/oid3/image.jpg'
                     initials: MP
+                    image: 'https://quire.s3.amazonaws.com/oid3/image.jpg'
                     iconColor: '#a8bf58'
+                    createdAt: 2018-12-28T02:06:58.158Z
+                    createdBy: 6QMKkEPBVWETLWrXqws94ALU
               - id: Testing_group
+                oid: meEXBLRaHFiBTbQd1mJqgPIG
                 name: Testing group
-                image: 'https://quire.s3.amazonaws.com/oid2/image.jpg'
                 initials: TG
+                image: 'https://quire.s3.amazonaws.com/oid2/image.jpg'
                 iconColor: '#b3cb60'
+                createdAt: 2018-12-27T02:06:58.158Z
+                createdBy: 6QMKkEPBVWETLWrXqws94ALU
                 projects: []
     post:
       tags:
@@ -327,7 +366,17 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Organization'
-  '/organizations/{id}':
+          examples:
+            application/json:
+              - id: New_Organization
+                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
+                name: New Organization
+                initials: 'NO'
+                image: null
+                iconColor: '#a9cb77'
+                createdAt: 2018-12-27T12:06:58.158Z
+                createdBy: 6QMKkEPBVWETLWrXqws94ALU
+  '/organizations/{oid}':
     get:
       tags:
         - organizations
@@ -337,9 +386,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of organization that needs to be fetched
+          description: Oid of organization that needs to be fetched
           required: true
           type: string
       responses:
@@ -371,9 +420,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of organization that needs to be updated
+          description: Oid of organization that needs to be updated
           required: true
           type: string
         - in: body
@@ -387,6 +436,16 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Organization'
+          examples:
+            application/json:
+              - id: myId
+                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
+                name: New name of organization
+                initials: 'NO'
+                image: null
+                iconColor: '#a9cb77'
+                createdAt: 2018-12-27T12:06:58.158Z
+                createdBy: 6QMKkEPBVWETLWrXqws94ALU
         '400':
           description: Bad parameter
           schema:
@@ -413,9 +472,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of organization that needs to be deleted
+          description: Oid of organization that needs to be deleted
           required: true
           type: string
       responses:
@@ -468,7 +527,7 @@ paths:
           description: Not allow
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/projects/{id}':
+  '/projects/{oid}':
     get:
       tags:
         - projects
@@ -478,9 +537,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of project that needs to be fetched
+          description: Oid of project that needs to be fetched
           required: true
           type: string
       responses:
@@ -512,9 +571,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of project that needs to be updated
+          description: Oid of project that needs to be updated
           required: true
           type: string
         - in: body
@@ -554,9 +613,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of project that needs to be deleted
+          description: Oid of project that needs to be deleted
           required: true
           type: string
       responses:
@@ -580,7 +639,7 @@ paths:
               message: 'Project not found: Marketing_Project'
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/projects/{id}/comments':
+  '/projects/{oid}/comments':
     get:
       tags:
         - projects
@@ -590,9 +649,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: oid
           in: path
-          description: ID of project that needs to be deleted
+          description: Oid of project that needs to be deleted
           required: true
           type: string
       responses:
@@ -607,7 +666,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
         '404':
-          description: Task not found
+          description: Project not found
           examples:
             application/json:
               message: 'Project not found: Marketing_Project'
@@ -622,6 +681,11 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: oid
+          in: path
+          description: Oid of project that comment to
+          required: true
+          type: string
         - in: body
           name: body
           description: Comment to create
@@ -639,6 +703,39 @@ paths:
             $ref: '#/definitions/ErrorResponse'
         '403':
           description: Not allow
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  '/projects/{oid}/tasks':
+    get:
+      tags:
+        - projects
+      summary: Get project tasks
+      description: Returns the compact task records for all tasks within the given project
+      operationId: getTasks
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of the project in which to search for tasks
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TaskWithChildren'
+        '400':
+          description: Bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Project not found
+          examples:
+            application/json:
+              message: 'Project not found: Marketing_Project'
           schema:
             $ref: '#/definitions/ErrorResponse'
   /tasks:
@@ -670,40 +767,7 @@ paths:
           description: Not allow
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/tasks/{projectId}':
-    get:
-      tags:
-        - tasks
-      summary: Get project tasks
-      description: Returns the compact task records for all tasks within the given project
-      operationId: getTasks
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of the project in which to search for tasks
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/TaskWithChildren'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Project not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-  '/tasks/{projectId}/{id}':
+  '/tasks/{oid}':
     get:
       tags:
         - tasks
@@ -713,17 +777,11 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: oid
           in: path
-          description: ID of project
+          description: Oid of task that needs to be fetched
           required: true
           type: string
-        - name: id
-          in: path
-          description: ID of task that needs to be fetched
-          required: true
-          type: integer
-          format: int32
       responses:
         '200':
           description: successful operation
@@ -753,14 +811,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: oid
           in: path
-          description: ID of project
-          required: true
-          type: string
-        - name: id
-          in: path
-          description: ID of project that needs to be updated
+          description: Oid of task that needs to be updated
           required: true
           type: string
         - in: body
@@ -800,14 +853,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: oid
           in: path
-          description: ID of project
-          required: true
-          type: string
-        - name: id
-          in: path
-          description: ID of task that needs to be deleted
+          description: Oid of task that needs to be deleted
           required: true
           type: string
       responses:
@@ -831,7 +879,7 @@ paths:
               message: 'Task not found: 12'
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/tasks/{projectId}/{id}/comments':
+  '/tasks/{oid}/comments':
     get:
       tags:
         - tasks
@@ -841,17 +889,11 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: oid
           in: path
-          description: ID of project
+          description: Oid of task that needs to be fetched
           required: true
           type: string
-        - name: id
-          in: path
-          description: ID of task that needs to be fetched
-          required: true
-          type: integer
-          format: int32
       responses:
         '200':
           description: successful operation
@@ -879,6 +921,11 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: oid
+          in: path
+          description: Oid of task that comment to
+          required: true
+          type: string
         - in: body
           name: body
           description: Comment to create
@@ -919,14 +966,20 @@ definitions:
       description:
         type: string
         example: Adjust style
-      createdAt:
+      oid:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
-      createdBy:
-        $ref: '#/definitions/User'
+        example: tvax2wFqqiUDqiVF7YSUlQ8n
       pinned:
         type: boolean
         example: false
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   CreateCommentBody:
     type: object
     required:
@@ -943,13 +996,16 @@ definitions:
         example: New Organization
   CreateProjectBody:
     type: object
+    required:
+      - organization
     properties:
       name:
         type: string
         example: New Project
       organization:
         type: string
-        example: Develop_group
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: The organization oid
   CreateTaskBody:
     type: object
     required:
@@ -964,22 +1020,22 @@ definitions:
         description: (optional) The parent task id
       project:
         type: string
-        example: Marketing_Project
-        description: The project id
+        example: GAUpZARpeOjlHqEux6IdUZI1
+        description: The project oid
+      after:
+        type: string
+        example: '13'
+        description: (optional) The previous sibling task id
       assignee:
         type: string
-        example: john
-        description: User id to assign
+        example: 6QMKkEPBVWETLWrXqws94ALU
+        description: User oid to assign
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-      after:
-        type: string
-        example: '13'
-        description: (optional) The previous sibling task id
   ErrorResponse:
     type: object
     required:
@@ -999,20 +1055,26 @@ definitions:
       id:
         type: string
         example: Develop_group
-      iconColor:
+      oid:
         type: string
-        example: '#a9cb77'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      createdBy:
-        $ref: '#/definitions/User'
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
       initials:
         type: string
         example: DG
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   OrganizationWithProjects:
     type: object
     properties:
@@ -1026,20 +1088,26 @@ definitions:
       id:
         type: string
         example: Develop_group
-      iconColor:
+      oid:
         type: string
-        example: '#a9cb77'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      createdBy:
-        $ref: '#/definitions/User'
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
       initials:
         type: string
         example: DG
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   Project:
     type: object
     properties:
@@ -1049,108 +1117,158 @@ definitions:
       id:
         type: string
         example: Marketing_Project
-      iconColor:
+      oid:
         type: string
-        example: '#a9cb77'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      createdBy:
-        $ref: '#/definitions/User'
+        example: GAUpZARpeOjlHqEux6IdUZI1
       initials:
         type: string
         example: MP
-  Tag:
-    type: object
-    properties:
-      name:
+      image:
         type: string
-        example: Later
-      oid:
-        type: string
-        example: zlneHUB0KueiHY
-      color:
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
         type: string
         example: '#a9cb77'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   Task:
     type: object
     properties:
-      name:
+      oid:
         type: string
-        example: Design new logo
+        example: 7DQI5OVhLyg2eWaQ7oNvClst
       id:
         type: integer
         format: int32
         example: 12
+        position: 1
+      name:
+        type: string
+        example: Design new logo
+        position: 2
       state:
         type: integer
         format: int32
         example: 0
+        position: 2
       description:
         type: string
         example: Detail about this task
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      createdBy:
-        $ref: '#/definitions/User'
+        position: 2
+      tags:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
+        position: 2
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 2
       assignees:
         type: array
+        position: 2
         items:
-          $ref: '#/definitions/User'
-      tags:
-        type: array
-        items:
-          $ref: '#/definitions/Tag'
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   TaskWithChildren:
     type: object
     properties:
-      tasks:
-        type: array
-        items:
-          $ref: '#/definitions/TaskWithChildren'
-      name:
+      oid:
         type: string
-        example: Design new logo
+        example: 7DQI5OVhLyg2eWaQ7oNvClst
       id:
         type: integer
         format: int32
         example: 12
+        position: 1
+      name:
+        type: string
+        example: Design new logo
+        position: 2
       state:
         type: integer
         format: int32
         example: 0
+        position: 2
       description:
         type: string
         example: Detail about this task
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      createdBy:
-        $ref: '#/definitions/User'
+        position: 2
+      tags:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
+        position: 2
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 2
       assignees:
         type: array
+        position: 2
         items:
-          $ref: '#/definitions/User'
-      tags:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      tasks:
         type: array
+        position: 8
         items:
-          $ref: '#/definitions/Tag'
+          $ref: '#/definitions/TaskWithChildren'
+        example:
+          - oid: co7XeV3ZmvPUpGuS4avHfd7e
+            id: '19,'
+            name: Draw new logo
+            state: 10
+            description: Detail about this task
+            tags:
+              - X6nmx9XjEO2wKbqeB1pRT43C
+            assignees:
+              - 6QMKkEPBVWETLWrXqws94ALU
+            start: null
+            due: 2018-12-22T02:06:58.158Z
+            tasks: []
+            createdAt: 2018-12-24T02:06:58.158Z
+            createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   UpdateCommentBody:
     type: object
     required:
@@ -1198,21 +1316,3 @@ definitions:
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-  User:
-    type: object
-    properties:
-      name:
-        type: string
-        example: John
-      id:
-        type: string
-        example: john
-      iconColor:
-        type: string
-        example: '#a9cb77'
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      initials:
-        type: string
-        example: J

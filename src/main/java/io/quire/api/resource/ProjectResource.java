@@ -8,6 +8,7 @@ import io.quire.api.model.project.Project;
 import io.quire.api.model.project.UpdateProjectBody;
 import io.quire.api.model.task.CreateTaskBody;
 import io.quire.api.model.task.Task;
+import io.quire.api.model.task.TaskWithChildren;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -33,7 +34,7 @@ public class ProjectResource {
         CreateProjectBody data) { return null; }
 
     @GET
-    @Path("/{id}")
+    @Path("/{oid}")
     @ApiOperation(value = "Get a project",
         notes = "returns the complete project record for a single project.",
         response = Project.class)
@@ -43,11 +44,11 @@ public class ProjectResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getProject(
-        @ApiParam(value = "ID of project that needs to be fetched", required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Oid of project that needs to be fetched", required = true)
+        @PathParam("oid") String oid) { return null; }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{oid}")
     @ApiOperation(value = "Update a project",
         notes = "A specific, existing project can be updated by making a PUT request on the URL for that project.\n" +
               "Returns the complete updated project record.",
@@ -59,13 +60,13 @@ public class ProjectResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response updateProject(
-        @ApiParam(value = "ID of project that needs to be updated", required = true)
-        @PathParam("id") String id,
+        @ApiParam(value = "Oid of project that needs to be updated", required = true)
+        @PathParam("oid") String oid,
         @ApiParam(value = "Project to update", required = true)
         UpdateProjectBody data) { return null; }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{oid}")
     @ApiOperation(value = "Delete a project",
         notes = "A specific, existing project can be deleted by making a DELETE request " +
                 "on the URL for that project.")
@@ -79,26 +80,26 @@ public class ProjectResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response deleteProject(
-        @ApiParam(value = "ID of project that needs to be deleted", required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Oid of project that needs to be deleted", required = true)
+        @PathParam("oid") String oid) { return null; }
 
     @GET
-    @Path("/{id}/comments")
+    @Path("/{oid}/comments")
     @ApiOperation(value = "Get project comments",
         notes = "Returns the complete comment record for a single project.",
         response = Comment.class,
         responseContainer = "List")
     @ApiResponses(value = {
         @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Task not found", response = ErrorResponse.class,
+        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getProjectComments(
-        @ApiParam(value = "ID of project that needs to be deleted", required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Oid of project that needs to be deleted", required = true)
+        @PathParam("oid") String oid) { return null; }
 
     @POST
-    @Path("/{id}/comments")
+    @Path("/{oid}/comments")
     @ApiOperation(value = "Add a project comment",
         notes = "Add a new comment in a project.",
         response = Comment.class)
@@ -106,6 +107,23 @@ public class ProjectResource {
         @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class)})
     public Response createProjectComment(
+        @ApiParam(value = "Oid of project that comment to", required = true)
+        @PathParam("oid") String oid,
         @ApiParam(value = "Comment to create", required = true)
         CreateCommentBody data) { return null; }
+
+    @GET
+    @Path("/{oid}/tasks")
+    @ApiOperation(value = "Get project tasks",
+        notes = "Returns the compact task records for all tasks within the given project",
+        response = TaskWithChildren.class,
+        responseContainer = "List")
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
+            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
+                "{'message': 'Project not found: Marketing_Project'}")}))})
+    public Response getTasks(
+        @ApiParam(value = "Oid of the project in which to search for tasks", required = true)
+        @PathParam("oid") String oid) { return null; }
 }

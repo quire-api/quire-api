@@ -4,8 +4,8 @@ import io.swagger.annotations.*;
 
 public class CreateTaskBody {
 
-    @ApiModelProperty(example = "Marketing_Project", required = true,
-        value = "The project id")
+    @ApiModelProperty(example = "GAUpZARpeOjlHqEux6IdUZI1", required = true,
+        value = "The project oid")
     public String getProject() { return null; }
 
     @ApiModelProperty(example = "10",
@@ -21,8 +21,8 @@ public class CreateTaskBody {
     @ApiModelProperty(example = "New Task")
     public String getName() { return null; }
 
-    @ApiModelProperty(example = "john",
-        value = "User id to assign")
+    @ApiModelProperty(example = "6QMKkEPBVWETLWrXqws94ALU",
+        value = "User oid to assign")
     public String getAssignee() { return null; }
 
     @ApiModelProperty(example = "2018-12-20T02:06:58.158Z")
