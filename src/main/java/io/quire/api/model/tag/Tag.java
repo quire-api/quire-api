@@ -1,5 +1,6 @@
-package io.quire.api.model;
+package io.quire.api.model.tag;
 
+import io.quire.api.model.TaggingEntity;
 import io.swagger.annotations.ApiModelProperty;
 
 public class Tag extends TaggingEntity {

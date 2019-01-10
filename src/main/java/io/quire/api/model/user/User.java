@@ -1,4 +1,4 @@
-package io.quire.api.model;
+package io.quire.api.model.user;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,6 +17,11 @@ public class User {
 
     @ApiModelProperty(example = "John")
     public String getName() {
+        return null;
+    }
+
+    @ApiModelProperty(example = "john@gmail.com")
+    public String getEmail() {
         return null;
     }
 

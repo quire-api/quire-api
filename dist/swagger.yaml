@@ -223,12 +223,18 @@ tags:
       A project represents a prioritized list of tasks in Quire. It exists in a
       single organization and is accessible to a subset of users in that
       organization, depending on its permissions.
+  - name: tags
+    description: A tag is a label that can be attached to any task in Quire.
   - name: tasks
     description: >-
       The task is the basic object around which many operations in Quire are
       centered. In the Quire application, multiple tasks populate the middle
       pane according to some view parameters, and the set of selected tasks
       determines the more detailed information presented in the details pane.
+  - name: users
+    description: >-
+      A user object represents an account in Quire that can be given access to
+      various organizations, projects, and tasks.
 schemes:
   - https
 paths:
@@ -294,7 +300,7 @@ paths:
       parameters:
         - name: oid
           in: path
-          description: OID of comment that needs to be deleted
+          description: Oid of comment that needs to be deleted
           required: true
           type: string
       responses:
@@ -597,6 +603,32 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
+  '/projects/{oid}/tags':
+    post:
+      tags:
+        - projects
+      summary: Add a project tag
+      description: Add a new tag in a project.
+      operationId: createProjectTag
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of project
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Tag to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateTagBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Tag'
   '/projects/{oid}/tasks':
     get:
       tags:
@@ -619,6 +651,77 @@ paths:
             type: array
             items:
               $ref: '#/definitions/TaskWithChildren'
+  '/tags/{oid}':
+    get:
+      tags:
+        - tags
+      summary: Get a tag
+      description: returns the full tag record.
+      operationId: getTag
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of tag that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Tag'
+    put:
+      tags:
+        - tags
+      summary: Update a tag
+      description: >-
+        A specific, existing tag can be updated by making a PUT request on the
+        URL for that tag.
+
+        Returns the complete updated tag record.
+      operationId: updateTag
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of tag that needs to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: User to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateTagBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Tag'
+    delete:
+      tags:
+        - tags
+      summary: Delete a tag
+      description: >-
+        A specific, existing tag can be deleted by making a DELETE request on
+        the URL for that tag.
+      operationId: deleteTag
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of tag that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+          examples:
+            application/json:
+              Success: 'true'
   /tasks:
     post:
       tags:
@@ -758,6 +861,59 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
+  '/users/{oid}':
+    get:
+      tags:
+        - users
+      summary: Get a user
+      description: returns the full user record.
+      operationId: getUser
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: >-
+            Oid of user that needs to be fetched, can be one of an email
+            address.
+
+            Example: "john@gmail.com","me"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+    put:
+      tags:
+        - users
+      summary: Update a user
+      description: >-
+        A specific, existing user can be updated by making a PUT request on the
+        URL for that user.
+
+        Returns the complete updated user record.
+      operationId: updateUser
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of user that needs to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: User to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateUserBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
 securityDefinitions:
   api_key:
     type: apiKey
@@ -779,19 +935,19 @@ definitions:
       description:
         type: string
         example: Adjust style
-      pinned:
-        type: boolean
-        example: false
       oid:
         type: string
         example: tvax2wFqqiUDqiVF7YSUlQ8n
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
+      pinned:
+        type: boolean
+        example: false
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
         position: 99
   CreateCommentBody:
     type: object
@@ -819,6 +975,14 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: The organization oid
+  CreateTagBody:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        example: Later
   CreateTaskBody:
     type: object
     required:
@@ -839,13 +1003,13 @@ definitions:
         type: string
         example: '13'
         description: (optional) The previous sibling task id
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       assignee:
         type: string
         example: 6QMKkEPBVWETLWrXqws94ALU
         description: User oid to assign
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -864,19 +1028,19 @@ definitions:
       initials:
         type: string
         example: DG
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      createdAt:
+      iconColor:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
+        example: '#a9cb77'
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
         position: 99
   OrganizationWithProjects:
     type: object
@@ -897,19 +1061,19 @@ definitions:
       initials:
         type: string
         example: DG
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      createdAt:
+      iconColor:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
+        example: '#a9cb77'
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
         position: 99
   Project:
     type: object
@@ -926,19 +1090,39 @@ definitions:
       initials:
         type: string
         example: MP
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
+  Tag:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Later
+      oid:
+        type: string
+        example: PxXtvzXGaC0wzm7uIE92g1j1
+      color:
+        type: string
+        example: '#a9cb77'
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
         position: 99
   Task:
     type: object
@@ -972,14 +1156,6 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
       assignees:
         type: array
         position: 2
@@ -988,13 +1164,21 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      createdAt:
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+        position: 2
+      due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-        position: 99
+        position: 2
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
         position: 99
   TaskWithChildren:
     type: object
@@ -1028,14 +1212,6 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
       assignees:
         type: array
         position: 2
@@ -1044,6 +1220,14 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+        position: 2
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 2
       tasks:
         type: array
         position: 8
@@ -1064,13 +1248,13 @@ definitions:
             tasks: []
             createdAt: 2018-12-24T02:06:58.158Z
             createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
         position: 99
   UpdateCommentBody:
     type: object
@@ -1101,6 +1285,14 @@ definitions:
       id:
         type: string
         example: myId
+  UpdateTagBody:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        example: New tag
   UpdateTaskBody:
     type: object
     properties:
@@ -1110,12 +1302,42 @@ definitions:
       description:
         type: string
         example: Detail about this task
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       assignee:
         type: string
         example: john
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+  UpdateUserBody:
+    type: object
+    properties:
+      name:
+        type: string
+        example: John
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+        example: John
+      id:
+        type: string
+        example: john
+      email:
+        type: string
+        example: john@gmail.com
+      oid:
+        type: string
+        example: ZFrV7UGOI2oMIz48cV5IzvzZ
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      initials:
+        type: string
+        example: J
+      iconColor:
+        type: string
+        example: '#a9cb77'

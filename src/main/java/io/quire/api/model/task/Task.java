@@ -1,8 +1,6 @@
 package io.quire.api.model.task;
 
 import io.quire.api.model.StampedEntity;
-import io.quire.api.model.Tag;
-import io.quire.api.model.User;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;

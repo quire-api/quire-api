@@ -39,9 +39,7 @@ public class OrganizationResource {
         @ApiParam(value = "Oid of organization that needs to be updated", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Organization to update", required = true)
-        UpdateOrganizationBody data) {
-        return null;
-    }
+        UpdateOrganizationBody data) { return null; }
 
     @DELETE
     @Path("/{oid}")

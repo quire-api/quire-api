@@ -1,13 +1,12 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.comment.Comment;
 import io.quire.api.model.comment.CreateCommentBody;
 import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
 import io.quire.api.model.project.UpdateProjectBody;
-import io.quire.api.model.task.CreateTaskBody;
-import io.quire.api.model.task.Task;
+import io.quire.api.model.tag.CreateTagBody;
+import io.quire.api.model.tag.Tag;
 import io.quire.api.model.task.TaskWithChildren;
 import io.swagger.annotations.*;
 
@@ -94,4 +93,15 @@ public class ProjectResource {
     public Response getTasks(
         @ApiParam(value = "Oid of the project in which to search for tasks", required = true)
         @PathParam("oid") String oid) { return null; }
+
+    @POST
+    @Path("/{oid}/tags")
+    @ApiOperation(value = "Add a project tag",
+        notes = "Add a new tag in a project.",
+        response = Tag.class)
+    public Response createProjectTag(
+        @ApiParam(value = "Oid of project", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Tag to create", required = true)
+        CreateTagBody data) { return null; }
 }
