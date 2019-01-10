@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: >
+  description: >-
     # Introduction
 
     Welcome to the reference for the Quire REST API!
@@ -30,7 +30,6 @@ info:
 
 
     # Authentication
-
 
     ## OAuth v2.0
 
@@ -144,21 +143,64 @@ info:
     an entity ID.
 
 
-    ## Concurrent Request Limits
+    # Rate limits
 
 
-    Quire enforces tenant-level concurrent request limits. See <a
-    href="https://knowledgecenter.zuora.com/BB_Introducing_Z_Business/Policies/Concurrent_Request_Limits"
-    target="_blank">Concurrent Request Limits</a> for more information.
+    To protect the stability of the API and keep it available to all users,
+    Quire enforces multiple kinds of rate limiting. 
+
+    Requests that hit any of our rate limits will receive a `429 Too Many
+    Requests` response.
+
+    We may change these quotas or add new quotas (such as maximum requests per
+    hour) in the future.
 
 
-    ## Timeout Limit
+    | Plan    | Maximum requests per minute 
+
+    |---------|-----------------------------
+
+    | Free    | 150
+
+    | Premium | 1500
 
 
-    If a request does not complete within 120 seconds, the request times out and
-    Quire returns a Gateway Timeout error.
+    # Status codes
+
+
+    | Code | Meaning               |
+    Description                                                                                                                                  
+
+    |------|-----------------------|--------------------------------------------------------------------------
+
+    | 200  | Success               | Request successful
+
+    | 400  | Bad Request           | Request parameter name or value is invalid
+
+    | 403  | Forbidden             | Not authorized to access the resource.
+
+    | 404  | Not Found             | Requested entity is not found.
+
+    | 429  | Too Many Requests     | Exceeded the [rate
+    limit](#section/Rate-limits) for API calls
+
+    | 500  | Internal Server Error | Error on the internal server
+
+
+    ## Error responses
+
+    The following JSON data is returned in the response body when an error
+    occurs.
+
+    ```json
+
+    {
+      "message": "Not found"
+    }
+
+    ```
   version: 1.0.0
-  title: Quire
+  title: Quire API
   termsOfService: 'https://quire.io/terms'
   contact:
     name: Quire
@@ -210,17 +252,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Comment not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     put:
       tags:
         - comments
@@ -250,21 +281,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Comment not found
-          examples:
-            application/json:
-              message: Comment not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     delete:
       tags:
         - comments
@@ -287,21 +303,6 @@ paths:
           examples:
             application/json:
               Success: 'true'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Comment not found
-          examples:
-            application/json:
-              message: Comment not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   /organizations:
     get:
       tags:
@@ -396,17 +397,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Organization'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Organization not found
-          examples:
-            application/json:
-              message: 'Organization not found: Develop_group'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     put:
       tags:
         - organizations
@@ -446,21 +436,6 @@ paths:
                 iconColor: '#a9cb77'
                 createdAt: 2018-12-27T12:06:58.158Z
                 createdBy: 6QMKkEPBVWETLWrXqws94ALU
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Organization not found
-          examples:
-            application/json:
-              message: 'Organization not found: Develop_group'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     delete:
       tags:
         - organizations
@@ -483,21 +458,6 @@ paths:
           examples:
             application/json:
               Success: 'true'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Organization not found
-          examples:
-            application/json:
-              message: 'Organization not found: Develop_group'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   /projects:
     post:
       tags:
@@ -519,14 +479,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   '/projects/{oid}':
     get:
       tags:
@@ -547,17 +499,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Project not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     put:
       tags:
         - projects
@@ -587,21 +528,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Project not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     delete:
       tags:
         - projects
@@ -624,21 +550,6 @@ paths:
           examples:
             application/json:
               Success: 'true'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Project not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   '/projects/{oid}/comments':
     get:
       tags:
@@ -661,17 +572,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Project not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     post:
       tags:
         - projects
@@ -697,14 +597,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   '/projects/{oid}/tasks':
     get:
       tags:
@@ -727,17 +619,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/TaskWithChildren'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Project not found
-          examples:
-            application/json:
-              message: 'Project not found: Marketing_Project'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   /tasks:
     post:
       tags:
@@ -759,14 +640,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Task'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   '/tasks/{oid}':
     get:
       tags:
@@ -787,17 +660,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Task'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Task not found
-          examples:
-            application/json:
-              message: 'Task not found: 12'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     put:
       tags:
         - tasks
@@ -827,21 +689,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Task'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Task not found
-          examples:
-            application/json:
-              message: 'Task not found: 12'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     delete:
       tags:
         - tasks
@@ -864,21 +711,6 @@ paths:
           examples:
             application/json:
               Success: 'true'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Task not found
-          examples:
-            application/json:
-              message: 'Task not found: 12'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
   '/tasks/{oid}/comments':
     get:
       tags:
@@ -901,17 +733,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Task not found
-          examples:
-            application/json:
-              message: 'Task not found: 12'
-          schema:
-            $ref: '#/definitions/ErrorResponse'
     post:
       tags:
         - tasks
@@ -937,14 +758,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-        '400':
-          description: Bad parameter
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '403':
-          description: Not allow
-          schema:
-            $ref: '#/definitions/ErrorResponse'
 securityDefinitions:
   api_key:
     type: apiKey
@@ -966,12 +779,12 @@ definitions:
       description:
         type: string
         example: Adjust style
-      oid:
-        type: string
-        example: tvax2wFqqiUDqiVF7YSUlQ8n
       pinned:
         type: boolean
         example: false
+      oid:
+        type: string
+        example: tvax2wFqqiUDqiVF7YSUlQ8n
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1026,26 +839,16 @@ definitions:
         type: string
         example: '13'
         description: (optional) The previous sibling task id
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
       assignee:
         type: string
         example: 6QMKkEPBVWETLWrXqws94ALU
         description: User oid to assign
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-  ErrorResponse:
-    type: object
-    required:
-      - message
-    properties:
-      message:
-        type: string
-        example: Something went wrong.
-        description: The error message.
-    description: Represents an error.
   Organization:
     type: object
     properties:
@@ -1061,12 +864,12 @@ definitions:
       initials:
         type: string
         example: DG
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       iconColor:
         type: string
         example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1094,12 +897,12 @@ definitions:
       initials:
         type: string
         example: DG
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       iconColor:
         type: string
         example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1123,12 +926,12 @@ definitions:
       initials:
         type: string
         example: MP
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       iconColor:
         type: string
         example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1307,12 +1110,12 @@ definitions:
       description:
         type: string
         example: Detail about this task
-      assignee:
-        type: string
-        example: john
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'

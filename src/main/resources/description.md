@@ -16,7 +16,6 @@ Want to share your opinion on how our API works for you? <a href="https://quire.
 You can find the <a href="https://github.com/quire-api/quire-api" target="_blank">Changelog</a> of the API Reference in the Quire Community.
 
 # Authentication
-
 ## OAuth v2.0
 
 Quire recommends that you use OAuth v2.0 to authenticate to the Quire REST API. 
@@ -61,10 +60,32 @@ If the `scope` field contains more than one entity ID, you must specify the ID o
 
 If the `scope` field contains a single entity ID, you do not need to specify an entity ID.
 
-## Concurrent Request Limits
+# Rate limits
 
-Quire enforces tenant-level concurrent request limits. See <a href="https://knowledgecenter.zuora.com/BB_Introducing_Z_Business/Policies/Concurrent_Request_Limits" target="_blank">Concurrent Request Limits</a> for more information.
+To protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. 
+Requests that hit any of our rate limits will receive a `429 Too Many Requests` response.
+We may change these quotas or add new quotas (such as maximum requests per hour) in the future.
 
-## Timeout Limit
+| Plan    | Maximum requests per minute 
+|---------|-----------------------------
+| Free    | 150
+| Premium | 1500
 
-If a request does not complete within 120 seconds, the request times out and Quire returns a Gateway Timeout error.
+# Status codes
+
+| Code | Meaning               | Description                                                                                                                                  
+|------|-----------------------|--------------------------------------------------------------------------
+| 200  | Success               | Request successful
+| 400  | Bad Request           | Request parameter name or value is invalid
+| 403  | Forbidden             | Not authorized to access the resource.
+| 404  | Not Found             | Requested entity is not found.
+| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls
+| 500  | Internal Server Error | Error on the internal server
+
+## Error responses
+The following JSON data is returned in the response body when an error occurs.
+```json
+{
+  "message": "Not found"
+}
+```

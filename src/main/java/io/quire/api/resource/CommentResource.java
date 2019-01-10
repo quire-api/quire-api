@@ -19,12 +19,6 @@ public class CommentResource {
         notes = "A specific, existing comment can be updated by making a PUT request on the URL for that comment.\n" +
                 "Returns the complete updated comment record.",
         response = Comment.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Comment not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Comment not found'}")}))})
     public Response updateComment(
         @ApiParam(value = "OID of comment that needs to be updated", required = true)
         @PathParam("oid") String oid,
@@ -36,11 +30,6 @@ public class CommentResource {
     @ApiOperation(value = "Get a comment",
         notes = "returns the complete comment record.",
         response = Comment.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Comment not found: Marketing_Project'}")}))})
     public Response getComment(
         @ApiParam(value = "Oid of comment that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
@@ -53,12 +42,7 @@ public class CommentResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "ok",
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'Success': 'true'}")})),
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Comment not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Comment not found'}")}))})
+                "{'Success': 'true'}")}))})
     public Response deleteComment(
         @ApiParam(value = "OID of comment that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }

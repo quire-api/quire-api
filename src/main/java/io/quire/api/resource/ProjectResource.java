@@ -26,9 +26,6 @@ public class ProjectResource {
     @ApiOperation(value = "Create a project",
         notes = "Creates a new project in an organization.",
         response = Project.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class)})
     public Response createProject(
         @ApiParam(value = "Project to create", required = true)
         CreateProjectBody data) { return null; }
@@ -38,11 +35,6 @@ public class ProjectResource {
     @ApiOperation(value = "Get a project",
         notes = "returns the complete project record for a single project.",
         response = Project.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getProject(
         @ApiParam(value = "Oid of project that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
@@ -53,12 +45,6 @@ public class ProjectResource {
         notes = "A specific, existing project can be updated by making a PUT request on the URL for that project.\n" +
               "Returns the complete updated project record.",
         response = Project.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response updateProject(
         @ApiParam(value = "Oid of project that needs to be updated", required = true)
         @PathParam("oid") String oid,
@@ -73,12 +59,7 @@ public class ProjectResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "ok",
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'Success': 'true'}")})),
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Project not found: Marketing_Project'}")}))})
+                "{'Success': 'true'}")}))})
     public Response deleteProject(
         @ApiParam(value = "Oid of project that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
@@ -89,11 +70,6 @@ public class ProjectResource {
         notes = "Returns the complete comment record for a single project.",
         response = Comment.class,
         responseContainer = "List")
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getProjectComments(
         @ApiParam(value = "Oid of project that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
@@ -103,9 +79,6 @@ public class ProjectResource {
     @ApiOperation(value = "Add a project comment",
         notes = "Add a new comment in a project.",
         response = Comment.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 403, message = "Not allow", response = ErrorResponse.class)})
     public Response createProjectComment(
         @ApiParam(value = "Oid of project that comment to", required = true)
         @PathParam("oid") String oid,
@@ -118,11 +91,6 @@ public class ProjectResource {
         notes = "Returns the compact task records for all tasks within the given project",
         response = TaskWithChildren.class,
         responseContainer = "List")
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "Bad parameter", response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Project not found", response = ErrorResponse.class,
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'message': 'Project not found: Marketing_Project'}")}))})
     public Response getTasks(
         @ApiParam(value = "Oid of the project in which to search for tasks", required = true)
         @PathParam("oid") String oid) { return null; }

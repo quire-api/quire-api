@@ -8,7 +8,7 @@ import io.swagger.annotations.*;
       @Extension(name = "x-logo", properties = {
         @ExtensionProperty(name = "url", value = "https://quire.io/b820/s/img/website/quire_logo.svg")}),
     },
-    title = "Quire",
+    title = "Quire API",
     version = "1.0.0",
     termsOfService = "https://quire.io/terms",
     contact = @Contact(
