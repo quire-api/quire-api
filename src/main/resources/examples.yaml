@@ -96,3 +96,9 @@ definitions:
           tasks: []
           createdAt: 2018-12-24T02:06:58.158Z
           createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
+  ExternalTeam:
+    properties:
+      members:
+        example:
+        - 6QMKkEPBVWETLWrXqws94ALU
+        - Job4NSW9xK6Owcke8iKj7zyH

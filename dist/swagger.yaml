@@ -220,6 +220,8 @@ tags:
       Quire.
   - name: comments
     description: The comment belong to a task or project
+  - name: external teams
+    description: A external team object.
   - name: organizations
     description: An organization represents a prioritized list of projects in Quire.
   - name: projects
@@ -328,6 +330,48 @@ paths:
         - name: oid
           in: path
           description: Oid of comment that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+          examples:
+            application/json:
+              Success: 'true'
+  '/external_teams/{oid}':
+    get:
+      tags:
+        - external teams
+      summary: Get an external team
+      description: returns the full external team record.
+      operationId: getExternalTeam
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of external team that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ExternalTeam'
+    delete:
+      tags:
+        - external teams
+      summary: Delete an external team
+      description: >-
+        A specific, existing external team can be deleted by making a DELETE
+        request on the URL for that external team.
+      operationId: deleteExternalTeam
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of external team that needs to be deleted
           required: true
           type: string
       responses:
@@ -1027,12 +1071,12 @@ definitions:
       description:
         type: string
         example: Adjust style
-      oid:
-        type: string
-        example: tvax2wFqqiUDqiVF7YSUlQ8n
       pinned:
         type: boolean
         example: false
+      oid:
+        type: string
+        example: tvax2wFqqiUDqiVF7YSUlQ8n
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1091,12 +1135,6 @@ definitions:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
         description: The project oid
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
       after:
         type: string
         example: '13'
@@ -1105,6 +1143,53 @@ definitions:
         type: string
         example: 6QMKkEPBVWETLWrXqws94ALU
         description: User oid to assign
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+  ExternalTeam:
+    type: object
+    properties:
+      oid:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+      color:
+        type: string
+        example: '#a9cb77'
+      name:
+        type: string
+        example: Degy Entertainment
+        position: 2
+      members:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
+      initials:
+        type: string
+        example: DE
+        position: 2
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        position: 2
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   Organization:
     type: object
     properties:
@@ -1114,12 +1199,12 @@ definitions:
       id:
         type: string
         example: Develop_group
-      initials:
-        type: string
-        example: DG
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+      initials:
+        type: string
+        example: DG
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
@@ -1147,12 +1232,12 @@ definitions:
       id:
         type: string
         example: Develop_group
-      initials:
-        type: string
-        example: DG
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+      initials:
+        type: string
+        example: DG
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
@@ -1176,12 +1261,12 @@ definitions:
       id:
         type: string
         example: Marketing_Project
-      initials:
-        type: string
-        example: MP
       oid:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
+      initials:
+        type: string
+        example: MP
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
@@ -1240,22 +1325,6 @@ definitions:
         type: string
         example: Detail about this task
         position: 2
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
-      assignees:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
       tags:
         type: array
         position: 2
@@ -1264,6 +1333,22 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
+      assignees:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+        position: 2
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 2
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1296,22 +1381,6 @@ definitions:
         type: string
         example: Detail about this task
         position: 2
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
-      assignees:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
       tags:
         type: array
         position: 2
@@ -1320,6 +1389,22 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
+      assignees:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+        position: 2
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 2
       tasks:
         type: array
         position: 8
@@ -1394,15 +1479,15 @@ definitions:
       description:
         type: string
         example: Detail about this task
+      assignee:
+        type: string
+        example: john
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-      assignee:
-        type: string
-        example: john
   UpdateUserBody:
     type: object
     properties:
@@ -1421,15 +1506,15 @@ definitions:
       email:
         type: string
         example: john@gmail.com
-      initials:
-        type: string
-        example: J
       oid:
         type: string
         example: ZFrV7UGOI2oMIz48cV5IzvzZ
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      initials:
+        type: string
+        example: J
       iconColor:
         type: string
         example: '#a9cb77'
