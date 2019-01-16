@@ -889,7 +889,7 @@ paths:
     get:
       tags:
         - comments
-      summary: Get task comments.
+      summary: Get task comments
       description: Returns the complete comment record for a single task.
       operationId: getTaskComments
       produces:
@@ -1087,16 +1087,16 @@ definitions:
         type: string
         example: '10'
         description: (optional) The parent task id
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       project:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
         description: The project oid
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
       after:
         type: string
         example: '13'
@@ -1120,12 +1120,12 @@ definitions:
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1153,12 +1153,12 @@ definitions:
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1182,12 +1182,12 @@ definitions:
       oid:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1236,17 +1236,9 @@ definitions:
         format: int32
         example: 0
         position: 2
-      tags:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      due:
+      description:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
+        example: Detail about this task
         position: 2
       start:
         type: string
@@ -1260,10 +1252,18 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      description:
+      due:
         type: string
-        example: Detail about this task
+        example: '2018-12-22T02:06:58.158Z'
         position: 2
+      tags:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1292,17 +1292,9 @@ definitions:
         format: int32
         example: 0
         position: 2
-      tags:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      due:
+      description:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
+        example: Detail about this task
         position: 2
       start:
         type: string
@@ -1316,10 +1308,18 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      description:
+      due:
         type: string
-        example: Detail about this task
+        example: '2018-12-22T02:06:58.158Z'
         position: 2
+      tags:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       tasks:
         type: array
         position: 8
@@ -1391,15 +1391,15 @@ definitions:
       name:
         type: string
         example: New name of task
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       description:
         type: string
         example: Detail about this task
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
       assignee:
         type: string
         example: john
@@ -1427,9 +1427,9 @@ definitions:
       oid:
         type: string
         example: ZFrV7UGOI2oMIz48cV5IzvzZ
-      iconColor:
-        type: string
-        example: '#a9cb77'
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+      iconColor:
+        type: string
+        example: '#a9cb77'
