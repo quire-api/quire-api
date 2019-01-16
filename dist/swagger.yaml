@@ -214,6 +214,10 @@ info:
 host: quire.io
 basePath: /api
 tags:
+  - name: attachments
+    description: >-
+      An attachment object represents any file attached to a task or project in
+      Quire.
   - name: comments
     description: The comment belong to a task or project
   - name: organizations
@@ -238,6 +242,29 @@ tags:
 schemes:
   - https
 paths:
+  '/attachments/{url}':
+    delete:
+      tags:
+        - attachments
+      summary: Delete an attachment
+      description: >-
+        A specific, existing attachment can be deleted by making a DELETE
+        request on the URL for that attachment.
+      operationId: deleteAttachment
+      produces:
+        - application/json
+      parameters:
+        - name: url
+          in: path
+          description: Url of attachment that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+          examples:
+            application/json:
+              Success: 'true'
   '/comments/{oid}':
     get:
       tags:
@@ -556,10 +583,32 @@ paths:
           examples:
             application/json:
               Success: 'true'
+  '/projects/{oid}/attachments':
+    get:
+      tags:
+        - attachments
+      summary: Get project attachments
+      description: Returns the complete attachment record for a single project.
+      operationId: getProjectAttachments
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of project
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Attachment'
   '/projects/{oid}/comments':
     get:
       tags:
-        - projects
+        - comments
       summary: Get project comments
       description: Returns the complete comment record for a single project.
       operationId: getProjectComments
@@ -580,7 +629,7 @@ paths:
               $ref: '#/definitions/Comment'
     post:
       tags:
-        - projects
+        - comments
       summary: Add a project comment
       description: Add a new comment in a project.
       operationId: createProjectComment
@@ -814,10 +863,32 @@ paths:
           examples:
             application/json:
               Success: 'true'
+  '/tasks/{oid}/attachments':
+    get:
+      tags:
+        - attachments
+      summary: Get task attachments
+      description: Returns the complete attachment record for a single task.
+      operationId: getTaskAttachments
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of task
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Attachment'
   '/tasks/{oid}/comments':
     get:
       tags:
-        - tasks
+        - comments
       summary: Get task comments.
       description: Returns the complete comment record for a single task.
       operationId: getTaskComments
@@ -838,7 +909,7 @@ paths:
               $ref: '#/definitions/Comment'
     post:
       tags:
-        - tasks
+        - comments
       summary: Add a task comment
       description: Add a new comment in a task.
       operationId: createTaskComment
@@ -929,6 +1000,27 @@ securityDefinitions:
       basic: to read a user's profile info and media (granted by default)
       comments: to post and delete comments on a user's behalf
 definitions:
+  Attachment:
+    type: object
+    properties:
+      length:
+        type: integer
+        format: int32
+        example: 2048
+      name:
+        type: string
+        example: file.zip
+      url:
+        type: string
+        example: 'https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   Comment:
     type: object
     properties:
@@ -941,13 +1033,13 @@ definitions:
       pinned:
         type: boolean
         example: false
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   CreateCommentBody:
     type: object
@@ -995,6 +1087,12 @@ definitions:
         type: string
         example: '10'
         description: (optional) The parent task id
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
       project:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
@@ -1007,12 +1105,6 @@ definitions:
         type: string
         example: 6QMKkEPBVWETLWrXqws94ALU
         description: User oid to assign
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
   Organization:
     type: object
     properties:
@@ -1022,25 +1114,25 @@ definitions:
       id:
         type: string
         example: Develop_group
-      oid:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
       initials:
         type: string
         example: DG
-      image:
+      oid:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
       iconColor:
         type: string
         example: '#a9cb77'
-      createdBy:
+      image:
         type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   OrganizationWithProjects:
     type: object
@@ -1055,25 +1147,25 @@ definitions:
       id:
         type: string
         example: Develop_group
-      oid:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
       initials:
         type: string
         example: DG
-      image:
+      oid:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
       iconColor:
         type: string
         example: '#a9cb77'
-      createdBy:
+      image:
         type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   Project:
     type: object
@@ -1084,25 +1176,25 @@ definitions:
       id:
         type: string
         example: Marketing_Project
-      oid:
-        type: string
-        example: GAUpZARpeOjlHqEux6IdUZI1
       initials:
         type: string
         example: MP
-      image:
+      oid:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        example: GAUpZARpeOjlHqEux6IdUZI1
       iconColor:
         type: string
         example: '#a9cb77'
-      createdBy:
+      image:
         type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   Tag:
     type: object
@@ -1116,13 +1208,13 @@ definitions:
       color:
         type: string
         example: '#a9cb77'
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   Task:
     type: object
@@ -1144,10 +1236,6 @@ definitions:
         format: int32
         example: 0
         position: 2
-      description:
-        type: string
-        example: Detail about this task
-        position: 2
       tags:
         type: array
         position: 2
@@ -1156,6 +1244,14 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 2
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+        position: 2
       assignees:
         type: array
         position: 2
@@ -1164,21 +1260,17 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      start:
+      description:
         type: string
-        example: '2018-12-20T02:06:58.158Z'
+        example: Detail about this task
         position: 2
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   TaskWithChildren:
     type: object
@@ -1200,10 +1292,6 @@ definitions:
         format: int32
         example: 0
         position: 2
-      description:
-        type: string
-        example: Detail about this task
-        position: 2
       tags:
         type: array
         position: 2
@@ -1212,6 +1300,14 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 2
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
+        position: 2
       assignees:
         type: array
         position: 2
@@ -1220,13 +1316,9 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      start:
+      description:
         type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
+        example: Detail about this task
         position: 2
       tasks:
         type: array
@@ -1248,13 +1340,13 @@ definitions:
             tasks: []
             createdAt: 2018-12-24T02:06:58.158Z
             createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
   UpdateCommentBody:
     type: object
@@ -1299,18 +1391,18 @@ definitions:
       name:
         type: string
         example: New name of task
+      due:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
       description:
         type: string
         example: Detail about this task
       assignee:
         type: string
         example: john
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
   UpdateUserBody:
     type: object
     properties:
@@ -1329,15 +1421,15 @@ definitions:
       email:
         type: string
         example: john@gmail.com
-      oid:
-        type: string
-        example: ZFrV7UGOI2oMIz48cV5IzvzZ
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
       initials:
         type: string
         example: J
+      oid:
+        type: string
+        example: ZFrV7UGOI2oMIz48cV5IzvzZ
       iconColor:
         type: string
         example: '#a9cb77'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'

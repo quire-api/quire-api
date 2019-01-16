@@ -1,7 +1,5 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.comment.Comment;
-import io.quire.api.model.comment.CreateCommentBody;
 import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
 import io.quire.api.model.project.UpdateProjectBody;
@@ -62,27 +60,6 @@ public class ProjectResource {
     public Response deleteProject(
         @ApiParam(value = "Oid of project that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
-
-    @GET
-    @Path("/{oid}/comments")
-    @ApiOperation(value = "Get project comments",
-        notes = "Returns the complete comment record for a single project.",
-        response = Comment.class,
-        responseContainer = "List")
-    public Response getProjectComments(
-        @ApiParam(value = "Oid of project that needs to be deleted", required = true)
-        @PathParam("oid") String oid) { return null; }
-
-    @POST
-    @Path("/{oid}/comments")
-    @ApiOperation(value = "Add a project comment",
-        notes = "Add a new comment in a project.",
-        response = Comment.class)
-    public Response createProjectComment(
-        @ApiParam(value = "Oid of project that comment to", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Comment to create", required = true)
-        CreateCommentBody data) { return null; }
 
     @GET
     @Path("/{oid}/tasks")

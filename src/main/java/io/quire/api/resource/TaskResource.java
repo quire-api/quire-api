@@ -1,11 +1,7 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.ErrorResponse;
-import io.quire.api.model.comment.Comment;
-import io.quire.api.model.comment.CreateCommentBody;
 import io.quire.api.model.task.CreateTaskBody;
 import io.quire.api.model.task.Task;
-import io.quire.api.model.task.TaskWithChildren;
 import io.quire.api.model.task.UpdateTaskBody;
 import io.swagger.annotations.*;
 
@@ -61,25 +57,4 @@ public class TaskResource {
     public Response deleteTask(
         @ApiParam(value = "Oid of task that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
-
-    @GET
-    @Path("/{oid}/comments")
-    @ApiOperation(value = "Get task comments.",
-        notes = "Returns the complete comment record for a single task.",
-        response = Comment.class,
-        responseContainer = "List")
-    public Response getTaskComments(
-        @ApiParam(value = "Oid of task that needs to be fetched", required = true)
-        @PathParam("oid") String oid) { return null; }
-
-    @POST
-    @Path("/{oid}/comments")
-    @ApiOperation(value = "Add a task comment",
-        notes = "Add a new comment in a task.",
-        response = Comment.class)
-    public Response createTaskComment(
-        @ApiParam(value = "Oid of task that comment to", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Comment to create", required = true)
-        CreateCommentBody data) { return null; }
 }
