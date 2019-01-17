@@ -218,6 +218,8 @@ tags:
     description: >-
       An attachment object represents any file attached to a task or project in
       Quire.
+  - name: board
+    description: A board object.
   - name: comments
     description: The comment belong to a task or project
   - name: external teams
@@ -259,6 +261,48 @@ paths:
         - name: url
           in: path
           description: Url of attachment that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+          examples:
+            application/json:
+              Success: 'true'
+  '/board/{oid}':
+    get:
+      tags:
+        - board
+      summary: Get an board
+      description: returns the full board record.
+      operationId: getBoard
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of board that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Board'
+    delete:
+      tags:
+        - board
+      summary: Delete a board
+      description: >-
+        A specific, existing board can be deleted by making a DELETE request on
+        the URL for that board.
+      operationId: deleteBoard
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Oid of external team that needs to be deleted
           required: true
           type: string
       responses:
@@ -1065,18 +1109,58 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
+  Board:
+    type: object
+    properties:
+      oid:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+      id:
+        type: string
+        example: Marketing_Week
+        position: 1
+      name:
+        type: string
+        example: Marketing Week 1
+        position: 2
+      description:
+        type: string
+        example: Detail about this board
+        position: 2
+      initials:
+        type: string
+        example: MW
+        position: 2
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        position: 2
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
   Comment:
     type: object
     properties:
-      description:
-        type: string
-        example: Adjust style
-      pinned:
-        type: boolean
-        example: false
       oid:
         type: string
         example: tvax2wFqqiUDqiVF7YSUlQ8n
+      description:
+        type: string
+        example: Adjust style
+        position: 1
+      pinned:
+        type: boolean
+        example: false
+        position: 1
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1170,6 +1254,10 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        position: 2
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
@@ -1177,10 +1265,6 @@ definitions:
       initials:
         type: string
         example: DE
-        position: 2
-      iconColor:
-        type: string
-        example: '#a9cb77'
         position: 2
       createdAt:
         type: string
@@ -1193,24 +1277,33 @@ definitions:
   Organization:
     type: object
     properties:
-      name:
-        type: string
-        example: Develop group
-      id:
-        type: string
-        example: Develop_group
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+      id:
+        type: string
+        example: Develop_group
+        position: 1
+      name:
+        type: string
+        example: Develop group
+        position: 2
+      description:
+        type: string
+        example: Detail about this organization
+        position: 2
       initials:
         type: string
         example: DG
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
       iconColor:
         type: string
         example: '#a9cb77'
+        position: 2
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1226,24 +1319,33 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Project'
-      name:
-        type: string
-        example: Develop group
-      id:
-        type: string
-        example: Develop_group
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+      id:
+        type: string
+        example: Develop_group
+        position: 1
+      name:
+        type: string
+        example: Develop group
+        position: 2
+      description:
+        type: string
+        example: Detail about this organization
+        position: 2
       initials:
         type: string
         example: DG
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
       iconColor:
         type: string
         example: '#a9cb77'
+        position: 2
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1255,24 +1357,33 @@ definitions:
   Project:
     type: object
     properties:
-      name:
-        type: string
-        example: Marketing Project
-      id:
-        type: string
-        example: Marketing_Project
       oid:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
+      id:
+        type: string
+        example: Marketing_Project
+        position: 1
+      name:
+        type: string
+        example: Marketing Project
+        position: 2
+      description:
+        type: string
+        example: Detail about this project
+        position: 2
       initials:
         type: string
         example: MP
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
       iconColor:
         type: string
         example: '#a9cb77'
+        position: 2
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1325,22 +1436,10 @@ definitions:
         type: string
         example: Detail about this task
         position: 2
-      tags:
-        type: array
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
         position: 2
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      assignees:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
@@ -1349,6 +1448,22 @@ definitions:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 2
+      assignees:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      tags:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1381,22 +1496,10 @@ definitions:
         type: string
         example: Detail about this task
         position: 2
-      tags:
-        type: array
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
         position: 2
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      assignees:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
@@ -1405,6 +1508,22 @@ definitions:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 2
+      assignees:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      tags:
+        type: array
+        position: 2
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       tasks:
         type: array
         position: 8
@@ -1497,24 +1616,30 @@ definitions:
   User:
     type: object
     properties:
-      name:
-        type: string
-        example: John
       id:
         type: string
         example: john
-      email:
-        type: string
-        example: john@gmail.com
       oid:
         type: string
         example: ZFrV7UGOI2oMIz48cV5IzvzZ
-      image:
+        position: 1
+      name:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-      initials:
+        example: John
+        position: 2
+      email:
         type: string
-        example: J
+        example: john@gmail.com
+        position: 2
       iconColor:
         type: string
         example: '#a9cb77'
+        position: 2
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
+      initials:
+        type: string
+        example: J
+        position: 2

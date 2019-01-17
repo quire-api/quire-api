@@ -12,10 +12,10 @@ public class Comment extends StampedEntity {
         return null;
     }
 
-    @ApiModelProperty(example = "Adjust style")
+    @ApiModelProperty(example = "Adjust style", position = 1)
     public String getDescription() { return null; }
 
-    @ApiModelProperty(example = "false")
+    @ApiModelProperty(example = "false", position = 1)
     public boolean getPinned() { return false; }
 
 }

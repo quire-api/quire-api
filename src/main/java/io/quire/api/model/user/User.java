@@ -10,32 +10,32 @@ public class User {
         return null;
     }
 
-    @ApiModelProperty(example = "ZFrV7UGOI2oMIz48cV5IzvzZ")
+    @ApiModelProperty(example = "ZFrV7UGOI2oMIz48cV5IzvzZ", position = 1)
     public String getOid() {
         return null;
     }
 
-    @ApiModelProperty(example = "John")
+    @ApiModelProperty(example = "John", position = 2)
     public String getName() {
         return null;
     }
 
-    @ApiModelProperty(example = "john@gmail.com")
+    @ApiModelProperty(example = "john@gmail.com", position = 2)
     public String getEmail() {
         return null;
     }
 
-    @ApiModelProperty(example = "J")
+    @ApiModelProperty(example = "J", position = 2)
     public String getInitials() {
         return null;
     }
 
-    @ApiModelProperty(example = "#a9cb77")
+    @ApiModelProperty(example = "#a9cb77", position = 2)
     public String getIconColor() {
         return null;
     }
 
-    @ApiModelProperty(example = "https://quire.s3.amazonaws.com/oid/image.jpg")
+    @ApiModelProperty(example = "https://quire.s3.amazonaws.com/oid/image.jpg", position = 2)
     public String getImage() {
         return null;
     }

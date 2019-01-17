@@ -34,6 +34,9 @@ public class Task extends StampedEntity {
     @ApiModelProperty(position = 2)
     public List<String> getTags() { return null; }
 
+    @ApiModelProperty(example = "rcBHBYXZSiyDRrHrWPutatfF", position = 2)
+    public String getBoard() { return null; }
+
     @ApiModelProperty(example = "2018-12-20T02:06:58.158Z", position = 2)
     public String getStart() { return null; }
 
