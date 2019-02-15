@@ -9,7 +9,7 @@ public class CreateProjectBody {
     }
 
     @ApiModelProperty(example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", required = true,
-        value = "The organization oid")
+        value = "The OID of the organization the new project belongs to.")
     public String getOrganization() {
         return null;
     }
