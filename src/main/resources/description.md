@@ -47,9 +47,11 @@ To protect the stability of the API and keep it available to all users, Quire en
 Requests that hit any of our rate limits will receive a `429 Too Many Requests` response.
 We may change these quotas or add new quotas in the future.
 
-| Plan    | Maximum requests per minute | Maximum requests per hour
-|---------|-----------------------------|-----------------------------
-| Free    | 120                         | 350
+| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*
+|---------|------|-------
+| Free | 120  | 500
+
+> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organizaton.
 
 # Status codes
 

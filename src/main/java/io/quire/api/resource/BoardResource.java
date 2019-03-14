@@ -6,8 +6,8 @@ import io.swagger.annotations.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Path("/board")
-@Api(value = "board", description =
+@Path("/boards")
+@Api(value = "boards", description =
         "A board object.")
 @Produces({"application/json"})
 public class BoardResource {
