@@ -20,13 +20,10 @@ You can find the <a href="https://github.com/quire-api/quire-api/blob/master/CHA
 
 ## OAuth v2.0
 
-Quire recommends that you use OAuth v2.0 to authenticate to the Quire REST API. 
-
-Quire recommends you to create a dedicated API user with API write access on a tenant when authenticating via OAuth, and then create an OAuth client for this user. By creating a dedicated API user, you can control permissions of the API user without affecting other non-API users.
-
-If a user is deactivated, all of the user's OAuth clients will be automatically deactivated.
+Quire uses <a href="https://tools.ietf.org/html/rfc6749">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.
 
 Authenticating via OAuth2 requires the following steps:
+
 1. Register Your Application on Quire
 2. Ask a Quire User to Grant Access to Your Application
 3. Retrieve an Access Token
@@ -46,7 +43,7 @@ Your user can grant the access of an organization or a project by clicking the `
 
 After your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.
 
-Alternatively, you can prepare a link on your website for your users to click. Once your user clicks it, he will be redirected to Quire and start the same authorization flow as shown above.
+Alternatively, you can prepare a link on your website to redirect your users to Quire for authorization.
 
 The syntax of the link is as follows:
 
@@ -55,8 +52,14 @@ The syntax of the link is as follows:
 | Parameter Name | Description
 |------|------
 | `client_id` | Your client ID.
-| `redirect_uri` | If the access is being granted by user, this is where the user will be redirected after authorization.
-| `state` | Optional. It can be any string and will be returned with `redirect_uri`.
+| `redirect_uri` | URL to redirect user back upon completion (optional).
+| `state` | It can be any string and will be passed back upon completion (optional). 
+
+Once your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.
+
+The `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.
+
+If the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.
 
 ### Retrieve an Access Token
 
@@ -77,6 +80,14 @@ Then, the access token will be returned in the response's body. You shall save t
 ### Make Authenticated Requests
 
 *TBD*
+
+### Token Expiration
+
+A refresh token might stop working for one of these reasons:
+
+* The user has revoked your app's access.
+* The refresh token has not been used for 12 months.
+* The user account has exceeded a maximum number of granted refresh tokens. The current limit is 10 tokens per user account per app. If the limit is reached, the oldest refresh token will be invalidated without warning.
 
 # Rate limits
 
