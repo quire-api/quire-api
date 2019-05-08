@@ -81,13 +81,18 @@ Then, the access token will be returned in the response's body. You shall save t
 
 *TBD*
 
+In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,
+
+```
+Authorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912
+```
+
 ### Token Expiration
 
 A refresh token might stop working for one of these reasons:
 
 * The user has revoked your app's access.
-* The refresh token has not been used for 12 months.
-* The user account has exceeded a maximum number of granted refresh tokens. The current limit is 10 tokens per user account per app. If the limit is reached, the oldest refresh token will be invalidated without warning.
+* The refresh token has not been used for 4 months.
 
 # Rate limits
 
@@ -116,9 +121,22 @@ We may change these quotas or add new quotas in the future.
 | 503  | Service Unavailable   | Server is down for maintenance.
 
 ## Error responses
+
 The following JSON data is returned in the response body when an error occurs.
+
 ```json
 {
-  "message": "Not found"
+	"code": a_number,
+  "message": "an error message here"
 }
 ```
+
+| Error Code | Meaning
+|-----|-----------------------
+| 100 | General authentication error.
+| 103 | General authorization error. No permission to access a resource.
+| 105 | Invalid or expired token.
+| 200 | General invocation error.
+| 201 | Bad request including wrong request body, wrong parameter and so on.
+| 204 | Resource not found.
+| 229 | Too many invocations.
