@@ -7,22 +7,40 @@ import io.swagger.annotations.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Path("/organizations")
+@Path("/organization")
 @Api(value = "organizations", description =
-    "An organization represents a prioritized list of projects in Quire.")
+    "An organization is a group of projects where members collaborate at once.")
 @Produces({"application/json"})
 public class OrganizationResource {
     @POST
     @ApiOperation(value = "Create an organization",
-        notes = "Creates a new organization.",
+        notes = "Creates a new organization, and returns the complete record of "
+            + "new crated organization".,
         response = Organization.class)
     public Response createOrganization(
         @ApiParam(value = "Organization to create", required = true)
         CreateOrganizationBody data) { return null; }
 
     @GET
+    @Path("/list")
+    @ApiOperation(value = "Get all organizations.",
+        notes = "Returns the compact organization records for all organizations",
+        response = OrganizationWithProjects.class,
+        responseContainer = "List")
+    public Response getOrganizations(){ return null; }
+
+    @GET
+    @Path("/id/{id}")
+    @ApiOperation(value = "Get an organization by its ID.",
+        notes = "Returns the complete organization record.",
+        response = Organization.class)
+    public Response getOrganization(
+        @ApiParam(value = "Oid of organization that needs to be fetched", required = true)
+        @PathParam("oid") String oid) { return null; }
+
+    @GET
     @Path("/{oid}")
-    @ApiOperation(value = "Get an organization",
+    @ApiOperation(value = "Get an organization by its OID.",
         notes = "returns the complete organization record.",
         response = Organization.class)
     public Response getOrganization(
@@ -53,11 +71,4 @@ public class OrganizationResource {
     public Response deleteOrganization(
         @ApiParam(value = "Oid of organization that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
-
-    @GET
-    @ApiOperation(value = "Get all organizations",
-        notes = "Returns the compact organization records for all organizations",
-        response = OrganizationWithProjects.class,
-        responseContainer = "List")
-    public Response getOrganizations(){ return null; }
 }

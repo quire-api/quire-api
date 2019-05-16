@@ -115,6 +115,7 @@ We may change these quotas or add new quotas in the future.
 | 401  | Unauthorized          | Your API key is wrong.
 | 403  | Forbidden             | Not authorized to access the resource.
 | 404  | Not Found             | The specified resource could not be found.
+| 405  | Method not Allowed    | Method not allowed or supported.
 | 409  | Conflict              | There is already a resource with the same criteria.
 | 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls
 | 500  | Internal Server Error | There is an unexpected error.
@@ -136,7 +137,8 @@ The following JSON data is returned in the response body when an error occurs.
 | 100 | General authentication error.
 | 103 | General authorization error. No permission to access a resource.
 | 105 | Invalid or expired token.
-| 200 | General invocation error.
-| 201 | Bad request including wrong request body, wrong parameter and so on.
-| 204 | Resource not found.
-| 229 | Too many invocations.
+| 400 | Bad request including wrong request body, wrong parameter and so on.
+| 404 | Resource not found.
+| 405 | Method not allowed.
+| 429 | Too many invocations.
+| 500 | General invocation error.
