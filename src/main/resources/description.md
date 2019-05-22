@@ -102,9 +102,13 @@ We may change these quotas or add new quotas in the future.
 
 | Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*
 |---------|------|-------
-| Free | 120  | 500
+| Free | 60  | 300
 
-> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organizaton.
+> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.
+
+## Size limits
+
+The size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.
 
 # Status codes
 
@@ -135,10 +139,11 @@ The following JSON data is returned in the response body when an error occurs.
 | Error Code | Meaning
 |-----|-----------------------
 | 100 | General authentication error.
-| 103 | General authorization error. No permission to access a resource.
 | 105 | Invalid or expired token.
 | 400 | Bad request including wrong request body, wrong parameter and so on.
+| 403 | Forbidden.
 | 404 | Resource not found.
 | 405 | Method not allowed.
+| 413 | Request too large.
 | 429 | Too many invocations.
-| 500 | General invocation error.
+| 500 | General invocation error. Most likely, an internal error.

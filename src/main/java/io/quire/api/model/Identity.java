@@ -9,16 +9,16 @@ public class Identity extends NamedIconEntity {
     public String getId() { return null; }
 
     @ApiModelProperty(value = "Name but excluding markdown characters.")
-    public String getPlainName() { return null; }
+    public String getNameText() { return null; }
     @ApiModelProperty(value = "Name in a form of a HTML fragment converted from markdown.", example = "<b>Big</b> project")
-    public String getHtmlName() { return null; }
+    public String getNameHtml() { return null; }
 
     @ApiModelProperty(value = "Description.", example = "This is a **cool** project.")
     public String getDescription() { return null; }
     @ApiModelProperty(value = "Description but excluding markdown characters.", example = "This is a cool project.")
-    public String getPlainDescription() { return null; }
+    public String getDescriptionText() { return null; }
     @ApiModelProperty(value = "Description in a form of a HTML fragment converted from markdown.", example = "This is a <i>cool</i> project.")
-    public String getHtmlDescription() { return null; }
+    public String getDescriptionHtml() { return null; }
 
     @ApiModelProperty(value = "Url of this record on Quire website.", example = "https://quire.io/w/my_project")
     public String getUrl() { return null; }

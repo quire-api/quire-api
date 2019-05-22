@@ -11,7 +11,7 @@ import io.swagger.annotations.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Path("/projects")
+@Path("/project")
 @Api(value = "projects", description =
     "A project represents a prioritized list of tasks in Quire. " +
     "It exists in a single organization and is accessible to a subset of " +
@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 public class ProjectResource {
 
     @POST
-    @ApiOperation(value = "Create a project",
+    @ApiOperation(value = "Create a project.",
         notes = "Creates a new project in an organization.",
         response = Project.class)
     public Response createProject(
@@ -28,12 +28,41 @@ public class ProjectResource {
         CreateProjectBody data) { return null; }
 
     @GET
+    @Path("/list/id/{id}")
+    @ApiOperation(value = "Get all projects of the given organization by its ID.",
+        notes = "Returns the project records of the given organization",
+        response = List<Project>.class,
+        responseContainer = "List")
+    public Response getOrganizations(
+        @ApiParam(value = "ID of the organization", required = true)
+        @PathParam("id") String id) { return null; }
+
+    @GET
+    @Path("/list/{oid}")
+    @ApiOperation(value = "Get all projects of the given organization.",
+        notes = "Returns the project records of the given organization",
+        response = List<Project>.class,
+        responseContainer = "List")
+    public Response getOrganizations(
+        @ApiParam(value = "OID of the organization", required = true)
+        @PathParam("oid") String oid) { return null; }
+
+    @GET
+    @Path("/id/{id}")
+    @ApiOperation(value = "Get a project by its ID.",
+        notes = "returns the complete project record.",
+        response = Project.class)
+    public Response getProjectById(
+        @ApiParam(value = "ID of project that needs to be fetched", required = true)
+        @PathParam("id") String id) { return null; }
+
+    @GET
     @Path("/{oid}")
-    @ApiOperation(value = "Get a project",
-        notes = "returns the complete project record for a single project.",
+    @ApiOperation(value = "Get a project by its OID.",
+        notes = "returns the complete project record.",
         response = Project.class)
     public Response getProject(
-        @ApiParam(value = "Oid of project that needs to be fetched", required = true)
+        @ApiParam(value = "OID of project that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 
     @PUT
@@ -43,7 +72,7 @@ public class ProjectResource {
               "Returns the complete updated project record.",
         response = Project.class)
     public Response updateProject(
-        @ApiParam(value = "Oid of project that needs to be updated", required = true)
+        @ApiParam(value = "OID of project that needs to be updated", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Project to update", required = true)
         UpdateProjectBody data) { return null; }
@@ -58,7 +87,7 @@ public class ProjectResource {
             examples = @Example({@ExampleProperty(mediaType = "application/json", value =
                 "{'Success': 'true'}")}))})
     public Response deleteProject(
-        @ApiParam(value = "Oid of project that needs to be deleted", required = true)
+        @ApiParam(value = "OID of project that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
 
     @GET
@@ -68,7 +97,7 @@ public class ProjectResource {
         response = TaskWithChildren.class,
         responseContainer = "List")
     public Response getTasks(
-        @ApiParam(value = "Oid of the project in which to search for tasks", required = true)
+        @ApiParam(value = "OID of the project in which to search for tasks", required = true)
         @PathParam("oid") String oid) { return null; }
 
     @POST
@@ -77,7 +106,7 @@ public class ProjectResource {
         notes = "Add a new tag in a project.",
         response = Tag.class)
     public Response createProjectTag(
-        @ApiParam(value = "Oid of project", required = true)
+        @ApiParam(value = "OID of project", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Tag to create", required = true)
         CreateTagBody data) { return null; }
