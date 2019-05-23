@@ -49,6 +49,7 @@ public class OrganizationResource {
         @ApiParam(value = "OID of organization that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 
+/* Not supported yet
     @PUT
     @Path("/{oid}")
     @ApiOperation(value = "Update an organization",
@@ -61,7 +62,6 @@ public class OrganizationResource {
         @ApiParam(value = "Organization to update", required = true)
         UpdateOrganizationBody data) { return null; }
 
-/* Not supported yet
     @DELETE
     @Path("/{oid}")
     @ApiOperation(value = "Delete an organization",

@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
     "users in that organization, depending on its permissions.")
 @Produces({"application/json"})
 public class ProjectResource {
-
+/* Not supported yet
     @POST
     @ApiOperation(value = "Create a project.",
         notes = "Creates a new project in an organization.",
@@ -26,7 +26,7 @@ public class ProjectResource {
     public Response createProject(
         @ApiParam(value = "Project to create", required = true)
         CreateProjectBody data) { return null; }
-
+*/
     @GET
     @Path("/list/id/{id}")
     @ApiOperation(value = "Get all projects of the given organization by its ID.",
@@ -65,6 +65,7 @@ public class ProjectResource {
         @ApiParam(value = "OID of project that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 
+/* Not supported yet
     @PUT
     @Path("/{oid}")
     @ApiOperation(value = "Update a project",
@@ -89,25 +90,5 @@ public class ProjectResource {
     public Response deleteProject(
         @ApiParam(value = "OID of project that needs to be deleted", required = true)
         @PathParam("oid") String oid) { return null; }
-
-    @GET
-    @Path("/{oid}/tasks")
-    @ApiOperation(value = "Get project tasks",
-        notes = "Returns the compact task records for all tasks within the given project",
-        response = TaskWithChildren.class,
-        responseContainer = "List")
-    public Response getTasks(
-        @ApiParam(value = "OID of the project in which to search for tasks", required = true)
-        @PathParam("oid") String oid) { return null; }
-
-    @POST
-    @Path("/{oid}/tags")
-    @ApiOperation(value = "Add a project tag",
-        notes = "Add a new tag in a project.",
-        response = Tag.class)
-    public Response createProjectTag(
-        @ApiParam(value = "OID of project", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Tag to create", required = true)
-        CreateTagBody data) { return null; }
+*/
 }
