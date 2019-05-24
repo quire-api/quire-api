@@ -28,24 +28,24 @@ public class ProjectResource {
         CreateProjectBody data) { return null; }
 */
     @GET
-    @Path("/list/id/{id}")
+    @Path("/list/id/{organizationId}")
     @ApiOperation(value = "Get all projects of the given organization by its ID.",
-        notes = "Returns the project records of the given organization",
+        notes = "Returns all project records of the given organization,",
         response = Project.class,
         responseContainer = "List")
     public Response getPrjectsByOrganizationId(
         @ApiParam(value = "ID of the organization", required = true)
-        @PathParam("id") String id) { return null; }
+        @PathParam("organizationId") String organizationId) { return null; }
 
     @GET
-    @Path("/list/{oid}")
+    @Path("/list/{organizationOid}")
     @ApiOperation(value = "Get all projects of the given organization.",
-        notes = "Returns the project records of the given organization",
+        notes = "Returns all project records of the given organization,",
         response = Project.class,
         responseContainer = "List")
-    public Response getPrjectsByOrganizationOid(
+    public Response getPrjects(
         @ApiParam(value = "OID of the organization", required = true)
-        @PathParam("oid") String oid) { return null; }
+        @PathParam("organizationOid") String organizationOid) { return null; }
 
     @GET
     @Path("/id/{id}")

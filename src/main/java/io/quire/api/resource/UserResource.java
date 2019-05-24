@@ -44,7 +44,7 @@ public class UserResource {
     @ApiOperation(value = "Get a user by its OID.",
         notes = "returns the full user record.",
         response = User.class)
-    public Response getUserByOid(
+    public Response getUser(
         @ApiParam(value = "OID of user that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 }
