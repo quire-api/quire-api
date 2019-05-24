@@ -1,147 +1,6 @@
 swagger: '2.0'
 info:
-  description: >-
-    # Introduction
-
-    Welcome to the reference for the Quire REST API!
-
-
-    The Quire REST API provides a broad set of operations and resources that:
-
-      * Consistently doing repetitive or tedious tasks.
-      * Chaining a process together for your team’s processes and workflows.
-        * Pulling information from other locations like email and <a href="https://evernote.com/" target="_blank">Evernote</a> into Quire.
-        * Pushing information from Quire into other locations like email and <a href="https://zapier.com/" target="_blank">Zapier</a>. 
-
-    Want to share your opinion on how our API works for you? <a
-    href="/feedback">Tell us how you feel </a>about using our API and what we
-    can do to make it better.
-
-
-    > <a href="http://en.wikipedia.org/wiki/REST_API" target="_blank">REST</a>
-    is a web-service protocol for rapid development by using HTTP and JSON
-    technology.
-
-
-    # API Changelog
-
-    You can find the <a
-    href="https://github.com/quire-api/quire-api/blob/master/CHANGES.md"
-    target="_blank">Changelog</a> of the API Reference in the Quire Community.
-
-
-    # Authentication
-
-    ## OAuth v2.0
-
-
-    Quire recommends that you use OAuth v2.0 to authenticate to the Quire REST
-    API. 
-
-
-    Quire recommends you to create a dedicated API user with API write access on
-    a tenant when authenticating via OAuth, and then create an OAuth client for
-    this user. By creating a dedicated API user, you can control permissions of
-    the API user without affecting other non-API users.
-
-
-    If a user is deactivated, all of the user's OAuth clients will be
-    automatically deactivated.
-
-
-    Authenticating via OAuth requires the following steps:
-
-    1. Create a Client
-
-    2. Generate a Token
-
-    3. Make Authenticated Requests
-
-
-    ### Create a Client
-
-
-    *TBD*
-
-
-    ### Generate a Token
-
-
-    *TBD*
-
-
-    ### Make Authenticated Requests
-
-
-    *TBD*
-
-
-    # Rate limits
-
-
-    To protect the stability of the API and keep it available to all users,
-    Quire enforces multiple kinds of rate limiting. 
-
-    Requests that hit any of our rate limits will receive a `429 Too Many
-    Requests` response.
-
-    We may change these quotas or add new quotas in the future.
-
-
-    | Plan | Maximum requests per organization per *minute* | Maximum requests
-    per organization per *hour*
-
-    |---------|------|-------
-
-    | Free | 120  | 350
-
-
-    > Note: the limit is per-organization. It sums up the total number of all
-    accesses from all applications for each organizaton.
-
-
-    # Status codes
-
-
-    | Code | Meaning               |
-    Description                                               
-
-    |------|-----------------------|--------------------------------------------------------------------------
-
-    | 200  | Success               | Request successful
-
-    | 400  | Bad Request           | You're using a wrong parameter, or passing
-    incorrect data.
-
-    | 401  | Unauthorized          | Your API key is wrong.
-
-    | 403  | Forbidden             | Not authorized to access the resource.
-
-    | 404  | Not Found             | The specified resource could not be found.
-
-    | 409  | Conflict              | There is already a resource with the same
-    criteria.
-
-    | 429  | Too Many Requests     | Exceeded the [rate
-    limit](#section/Rate-limits) for API calls
-
-    | 500  | Internal Server Error | There is an unexpected error.
-
-    | 503  | Service Unavailable   | Server is down for maintenance.
-
-
-    ## Error responses
-
-    The following JSON data is returned in the response body when an error
-    occurs.
-
-    ```json
-
-    {
-      "message": "Not found"
-    }
-
-    ```
+  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently doing repetitive or tedious tasks.\n  * Chaining a process together for your team’s processes and workflows.\n    * Pulling information from other locations like email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Pushing information from Quire into other locations like email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your opinion on how our API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n*TBD*\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nYour user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. \n\n*Image*\n\nAfter your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.\n\nAlternatively, you can prepare a link on your website to redirect your users to Quire for authorization.\n\nThe syntax of the link is as follows:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n| Parameter Name | Description\n|------|------\n| `client_id` | Your client ID.\n| `redirect_uri` | URL to redirect user back upon completion (optional).\n| `state` | It can be any string and will be passed back upon completion (optional). \n\nOnce your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.\n\nThe `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.\n\nIf the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.\n\n### Retrieve an Access Token\n\nTo access Quire API, you need an access token. You can retrieve the token as follows.\n\n1. Retrieve the access code.\n\nAs described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.\n\n2. Use the access code to retrieve the access token.\n\nTo retrieve an access token, you have to <a href=\"https://www.w3schools.com/jquery/ajax_post.asp\" target=\"_blank\">post</a> a request to `https://quire.io/oauth/token` with the following data.\n\n`client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`\n\nThen, the access token will be returned in the response's body. You shall save the token carefully and permanently. You need to access each Quire API.\n\n### Make Authenticated Requests\n\n*TBD*\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,\n\n```\nAuthorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912\n```\n\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 4 months.\n\n# Rate limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 60  | 300\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n\n## Size limits\n\nThe size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.\n\n# Status codes\n\n| Code | Meaning               | Description                                               \n|------|-----------------------|--------------------------------------------------------------------------\n| 200  | Success               | Request successful\n| 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized          | Your API key is wrong.\n| 403  | Forbidden             | Not authorized to access the resource.\n| 404  | Not Found             | The specified resource could not be found.\n| 405  | Method not Allowed    | Method not allowed or supported.\n| 409  | Conflict              | There is already a resource with the same criteria.\n| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls\n| 500  | Internal Server Error | There is an unexpected error.\n| 503  | Service Unavailable   | Server is down for maintenance.\n\n## Error responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 105 | Invalid or expired token.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 500 | General invocation error. Most likely, an internal error.\n"
   version: 1.0.0
   title: Quire API
   termsOfService: 'https://quire.io/terms'
@@ -161,15 +20,15 @@ tags:
     description: >-
       An attachment object represents any file attached to a task or project in
       Quire.
-  - name: board
+  - name: boards
     description: A board object.
   - name: comments
     description: The comment belong to a task or project
   - name: external teams
     description: A external team object.
-  - name: organizations
-    description: An organization represents a prioritized list of projects in Quire.
-  - name: projects
+  - name: organization
+    description: An organization is a group of projects where members collaborate at once.
+  - name: project
     description: >-
       A project represents a prioritized list of tasks in Quire. It exists in a
       single organization and is accessible to a subset of users in that
@@ -182,7 +41,7 @@ tags:
       centered. In the Quire application, multiple tasks populate the middle
       pane according to some view parameters, and the set of selected tasks
       determines the more detailed information presented in the details pane.
-  - name: users
+  - name: user
     description: >-
       A user object represents an account in Quire that can be given access to
       various organizations, projects, and tasks.
@@ -209,10 +68,10 @@ paths:
       responses:
         '200':
           description: ok
-  '/board/{oid}':
+  '/boards/{oid}':
     get:
       tags:
-        - board
+        - boards
       summary: Get an board
       description: returns the full board record.
       operationId: getBoard
@@ -231,7 +90,7 @@ paths:
             $ref: '#/definitions/Board'
     delete:
       tags:
-        - board
+        - boards
       summary: Delete a board
       description: >-
         A specific, existing board can be deleted by making a DELETE request on
@@ -355,12 +214,34 @@ paths:
       responses:
         '200':
           description: ok
-  /organizations:
+  '/organization/id/{id}':
     get:
       tags:
-        - organizations
-      summary: Get all organizations
-      description: Returns the compact organization records for all organizations
+        - organization
+      summary: Get an organization by its ID.
+      description: Returns the complete organization record.
+      operationId: getOrganizationById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of organization that needs to be fetched
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Organization'
+  /organization/list:
+    get:
+      tags:
+        - organization
+      summary: Get all organizations.
+      description: >-
+        Returns the organization records for all organizations that the user can
+        access
       operationId: getOrganizations
       produces:
         - application/json
@@ -371,69 +252,12 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/OrganizationWithProjects'
-            example:
-              - id: Develop_group
-                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-                name: Develop group
-                initials: DG
-                image: 'https://quire.s3.amazonaws.com/oid1/image.jpg'
-                iconColor: '#a9cb77'
-                createdAt: 2018-12-22T02:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-                projects:
-                  - id: Marketing_Project
-                    oid: GAUpZARpeOjlHqEux6IdUZI1
-                    name: Marketing Project
-                    initials: MP
-                    image: 'https://quire.s3.amazonaws.com/oid3/image.jpg'
-                    iconColor: '#a8bf58'
-                    createdAt: 2018-12-28T02:06:58.158Z
-                    createdBy: 6QMKkEPBVWETLWrXqws94ALU
-              - id: Testing_group
-                oid: meEXBLRaHFiBTbQd1mJqgPIG
-                name: Testing group
-                initials: TG
-                image: 'https://quire.s3.amazonaws.com/oid2/image.jpg'
-                iconColor: '#b3cb60'
-                createdAt: 2018-12-27T02:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-                projects: []
-    post:
-      tags:
-        - organizations
-      summary: Create an organization
-      description: Creates a new organization.
-      operationId: createOrganization
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Organization to create
-          required: true
-          schema:
-            $ref: '#/definitions/CreateOrganizationBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Organization'
-          examples:
-            application/json:
-              - id: New_Organization
-                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-                name: New Organization
-                initials: 'NO'
-                image: null
-                iconColor: '#a9cb77'
-                createdAt: 2018-12-27T12:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-  '/organizations/{oid}':
+              $ref: '#/definitions/Organization'
+  '/organization/{oid}':
     get:
       tags:
-        - organizations
-      summary: Get an organization
+        - organization
+      summary: Get an organization by its OID.
       description: returns the complete organization record.
       operationId: getOrganization
       produces:
@@ -441,7 +265,7 @@ paths:
       parameters:
         - name: oid
           in: path
-          description: Oid of organization that needs to be fetched
+          description: OID of organization that needs to be fetched
           required: true
           type: string
       responses:
@@ -449,98 +273,83 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Organization'
-    put:
+  '/project/id/{id}':
+    get:
       tags:
-        - organizations
-      summary: Update an organization
-      description: >-
-        A specific, existing organization can be updated by making a PUT request
-        on the URL for that organization.
-
-        Returns the complete updated organization record.
-      operationId: updateOrganization
+        - project
+      summary: Get a project by its ID.
+      description: returns the complete project record.
+      operationId: getProjectById
       produces:
         - application/json
       parameters:
-        - name: oid
+        - name: id
           in: path
-          description: Oid of organization that needs to be updated
+          description: ID of project that needs to be fetched
           required: true
           type: string
-        - in: body
-          name: body
-          description: Organization to update
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateOrganizationBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Organization'
-          examples:
-            application/json:
-              - id: myId
-                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-                name: New name of organization
-                initials: 'NO'
-                image: null
-                iconColor: '#a9cb77'
-                createdAt: 2018-12-27T12:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-    delete:
-      tags:
-        - organizations
-      summary: Delete an organization
-      description: >-
-        A specific, existing organization can be deleted by making a DELETE
-        request on the URL for that organization.
-      operationId: deleteOrganization
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of organization that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
-  /projects:
-    post:
-      tags:
-        - projects
-      summary: Create a project
-      description: Creates a new project in an organization.
-      operationId: createProject
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Project to create
-          required: true
-          schema:
-            $ref: '#/definitions/CreateProjectBody'
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-  '/projects/{oid}':
+  '/project/list/id/{id}':
     get:
       tags:
-        - projects
-      summary: Get a project
-      description: returns the complete project record for a single project.
+        - project
+      summary: Get all projects of the given organization by its ID.
+      description: Returns the project records of the given organization
+      operationId: getPrjectsByOrganizationId
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of the organization
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+  '/project/list/{oid}':
+    get:
+      tags:
+        - project
+      summary: Get all projects of the given organization.
+      description: Returns the project records of the given organization
+      operationId: getPrjectsByOrganizationOid
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of the organization
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+  '/project/{oid}':
+    get:
+      tags:
+        - project
+      summary: Get a project by its OID.
+      description: returns the complete project record.
       operationId: getProject
       produces:
         - application/json
       parameters:
         - name: oid
           in: path
-          description: Oid of project that needs to be fetched
+          description: OID of project that needs to be fetched
           required: true
           type: string
       responses:
@@ -548,54 +357,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-    put:
-      tags:
-        - projects
-      summary: Update a project
-      description: >-
-        A specific, existing project can be updated by making a PUT request on
-        the URL for that project.
-
-        Returns the complete updated project record.
-      operationId: updateProject
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of project that needs to be updated
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Project to update
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateProjectBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Project'
-    delete:
-      tags:
-        - projects
-      summary: Delete a project
-      description: >-
-        A specific, existing project can be deleted by making a DELETE request
-        on the URL for that project.
-      operationId: deleteProject
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of project that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
   '/projects/{oid}/attachments':
     get:
       tags:
@@ -665,54 +426,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-  '/projects/{oid}/tags':
-    post:
-      tags:
-        - projects
-      summary: Add a project tag
-      description: Add a new tag in a project.
-      operationId: createProjectTag
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of project
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Tag to create
-          required: true
-          schema:
-            $ref: '#/definitions/CreateTagBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Tag'
-  '/projects/{oid}/tasks':
-    get:
-      tags:
-        - projects
-      summary: Get project tasks
-      description: Returns the compact task records for all tasks within the given project
-      operationId: getTasks
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of the project in which to search for tasks
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/TaskWithChildren'
   '/tags/{oid}':
     get:
       tags:
@@ -939,22 +652,20 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-  '/users/{oid}':
+  '/user/id/{id}':
     get:
       tags:
-        - users
-      summary: Get a user
+        - user
+      summary: Get a user by its ID.
       description: returns the full user record.
-      operationId: getUser
+      operationId: getUserById
       produces:
         - application/json
       parameters:
-        - name: oid
+        - name: id
           in: path
-          description: >-
-            Oid of user that needs to be fetched, can be one of an email
-            address.
-
+          description: |-
+            ID, email address or "me" of user that needs to be fetched.
             Example: "john@gmail.com","me"
           required: true
           type: string
@@ -963,35 +674,80 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/User'
-    put:
+  /user/list:
+    get:
       tags:
-        - users
-      summary: Update a user
-      description: >-
-        A specific, existing user can be updated by making a PUT request on the
-        URL for that user.
-
-        Returns the complete updated user record.
-      operationId: updateUser
+        - user
+      summary: >-
+        Get all colleagues of the current user if he granted the app to access
+        his contacts. Otherwise, it returns only colleagues who also authorized
+        the same app. If the current user didn't grant the access of his
+        contacts and none of his collegues authorized this app, only the current
+        user's record will be returned.
+      description: Returns all required user records.
+      operationId: getUsers
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+  '/user/{oid}':
+    get:
+      tags:
+        - user
+      summary: Get a user by its OID.
+      description: returns the full user record.
+      operationId: getUserByOid
       produces:
         - application/json
       parameters:
         - name: oid
           in: path
-          description: Oid of user that needs to be updated
+          description: OID of user that needs to be fetched
           required: true
           type: string
-        - in: body
-          name: body
-          description: User to update
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateUserBody'
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/User'
+  /organizations:
+    get:
+      responses:
+        '200':
+          schema:
+            example:
+              - id: Develop_group
+                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
+                name: Develop group
+                initials: DG
+                image: 'https://quire.s3.amazonaws.com/oid1/image.jpg'
+                iconColor: '#a9cb77'
+                createdAt: 2018-12-22T02:06:58.158Z
+                createdBy: 6QMKkEPBVWETLWrXqws94ALU
+                projects:
+                  - id: Marketing_Project
+                    oid: GAUpZARpeOjlHqEux6IdUZI1
+                    name: Marketing Project
+                    initials: MP
+                    image: 'https://quire.s3.amazonaws.com/oid3/image.jpg'
+                    iconColor: '#a8bf58'
+                    createdAt: 2018-12-28T02:06:58.158Z
+                    createdBy: 6QMKkEPBVWETLWrXqws94ALU
+              - id: Testing_group
+                oid: meEXBLRaHFiBTbQd1mJqgPIG
+                name: Testing group
+                initials: TG
+                image: 'https://quire.s3.amazonaws.com/oid2/image.jpg'
+                iconColor: '#b3cb60'
+                createdAt: 2018-12-27T02:06:58.158Z
+                createdBy: 6QMKkEPBVWETLWrXqws94ALU
+                projects: []
 securityDefinitions:
   api_key:
     type: apiKey
@@ -1020,20 +776,35 @@ definitions:
       url:
         type: string
         example: 'https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png'
-      createdBy:
+      oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
+        description: 'OID, aka. UUID.'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
+        description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Board:
     type: object
     properties:
       oid:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        description: The color of the icon representing this record.
       id:
         type: string
         example: Marketing_Week
@@ -1042,52 +813,38 @@ definitions:
         type: string
         example: Marketing Week 1
         position: 2
-      initials:
-        type: string
-        example: MW
-        position: 2
       description:
         type: string
         example: Detail about this board
         position: 2
-      image:
+      initials:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        example: MW
         position: 2
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        position: 2
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
   Comment:
     type: object
     properties:
       oid:
         type: string
         example: tvax2wFqqiUDqiVF7YSUlQ8n
-      pinned:
-        type: boolean
-        example: false
-        position: 1
       description:
         type: string
         example: Adjust style
         position: 1
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
+      pinned:
+        type: boolean
+        example: false
+        position: 1
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
+        description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   CreateCommentBody:
     type: object
     required:
@@ -1096,32 +853,6 @@ definitions:
       description:
         type: string
         example: Adjust style
-  CreateOrganizationBody:
-    type: object
-    properties:
-      name:
-        type: string
-        example: New Organization
-  CreateProjectBody:
-    type: object
-    required:
-      - organization
-    properties:
-      name:
-        type: string
-        example: New Project
-      organization:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: The OID of the organization the new project belongs to.
-  CreateTagBody:
-    type: object
-    required:
-      - name
-    properties:
-      name:
-        type: string
-        example: Later
   CreateTaskBody:
     type: object
     required:
@@ -1138,6 +869,9 @@ definitions:
         type: string
         example: GAUpZARpeOjlHqEux6IdUZI1
         description: The project oid
+      start:
+        type: string
+        example: '2018-12-20T02:06:58.158Z'
       after:
         type: string
         example: '13'
@@ -1146,9 +880,6 @@ definitions:
         type: string
         example: 6QMKkEPBVWETLWrXqws94ALU
         description: User oid to assign
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1177,140 +908,132 @@ definitions:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
         position: 2
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        position: 2
       initials:
         type: string
         example: DE
         position: 2
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        position: 2
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
+        description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Organization:
     type: object
     properties:
-      oid:
+      email:
         type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        example: john@gmail.cc
+        description: Email address.
+        allowEmptyValue: true
+      website:
+        type: string
+        example: 'https://coolwebsites.com'
+        description: Website.
+        allowEmptyValue: true
       id:
         type: string
-        example: Develop_group
-        position: 1
-      name:
-        type: string
-        example: Develop group
-        position: 2
-      initials:
-        type: string
-        example: DG
-        position: 2
+        example: My_Project
+        description: ID.
       description:
         type: string
-        example: Detail about this organization
-        position: 2
+        example: This is a **cool** project.
+        description: Description.
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
+      nameText:
+        type: string
+        description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: <b>Big</b> project
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is a cool project.
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is a <i>cool</i> project.
+        description: Description in a form of a HTML fragment converted from markdown.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        position: 2
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '#a9cb77'
-        position: 2
-      createdBy:
+        description: The color of the icon representing this record.
+      name:
         type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-  OrganizationWithProjects:
-    type: object
-    properties:
-      projects:
-        type: array
-        items:
-          $ref: '#/definitions/Project'
+        example: My Name
+        description: Name.
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-      id:
-        type: string
-        example: Develop_group
-        position: 1
-      name:
-        type: string
-        example: Develop group
-        position: 2
-      initials:
-        type: string
-        example: DG
-        position: 2
-      description:
-        type: string
-        example: Detail about this organization
-        position: 2
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        position: 2
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        position: 2
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
+        description: 'OID, aka. UUID.'
   Project:
     type: object
     properties:
-      oid:
+      organization:
         type: string
-        example: GAUpZARpeOjlHqEux6IdUZI1
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID of the organization this project belongs to.
       id:
         type: string
-        example: Marketing_Project
-        position: 1
-      name:
-        type: string
-        example: Marketing Project
-        position: 2
-      initials:
-        type: string
-        example: MP
-        position: 2
+        example: My_Project
+        description: ID.
       description:
         type: string
-        example: Detail about this project
-        position: 2
+        example: This is a **cool** project.
+        description: Description.
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
+      nameText:
+        type: string
+        description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: <b>Big</b> project
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is a cool project.
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is a <i>cool</i> project.
+        description: Description in a form of a HTML fragment converted from markdown.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        position: 2
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '#a9cb77'
-        position: 2
-      createdBy:
+        description: The color of the icon representing this record.
+      name:
+        type: string
+        example: My Name
+        description: Name.
+      oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
+        description: 'OID, aka. UUID.'
   Tag:
     type: object
     properties:
@@ -1323,14 +1046,16 @@ definitions:
       color:
         type: string
         example: '#a9cb77'
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
+        description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Task:
     type: object
     properties:
@@ -1355,22 +1080,6 @@ definitions:
         type: string
         example: Detail about this task
         position: 2
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
-      assignees:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
       tags:
         type: array
         position: 2
@@ -1382,38 +1091,6 @@ definitions:
       board:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 2
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-  TaskWithChildren:
-    type: object
-    properties:
-      oid:
-        type: string
-        example: 7DQI5OVhLyg2eWaQ7oNvClst
-      id:
-        type: integer
-        format: int32
-        example: 12
-        position: 1
-      name:
-        type: string
-        example: Design new logo
-        position: 2
-      state:
-        type: integer
-        format: int32
-        example: 0
-        position: 2
-      description:
-        type: string
-        example: Detail about this task
         position: 2
       start:
         type: string
@@ -1431,75 +1108,27 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      tags:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 2
-      tasks:
-        type: array
-        position: 8
-        items:
-          $ref: '#/definitions/TaskWithChildren'
-        example:
-          - oid: co7XeV3ZmvPUpGuS4avHfd7e
-            id: '19,'
-            name: Draw new logo
-            state: 10
-            description: Detail about this task
-            tags:
-              - X6nmx9XjEO2wKbqeB1pRT43C
-            assignees:
-              - 6QMKkEPBVWETLWrXqws94ALU
-            start: null
-            due: 2018-12-22T02:06:58.158Z
-            tasks: []
-            createdAt: 2018-12-24T02:06:58.158Z
-            createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
+        description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   UpdateCommentBody:
     type: object
     required:
       - description
     properties:
-      pinned:
-        type: boolean
-        example: false
       description:
         type: string
         example: Adjust style
-  UpdateOrganizationBody:
-    type: object
-    properties:
-      name:
-        type: string
-        example: New name of organization
-      id:
-        type: string
-        example: myId
-  UpdateProjectBody:
-    type: object
-    properties:
-      name:
-        type: string
-        example: New name of project
-      id:
-        type: string
-        example: myId
+      pinned:
+        type: boolean
+        example: false
   UpdateTagBody:
     type: object
     required:
@@ -1517,48 +1146,95 @@ definitions:
       description:
         type: string
         example: Detail about this task
-      assignee:
-        type: string
-        example: john
       start:
         type: string
         example: '2018-12-20T02:06:58.158Z'
+      assignee:
+        type: string
+        example: john
       due:
         type: string
         example: '2018-12-22T02:06:58.158Z'
-  UpdateUserBody:
-    type: object
-    properties:
-      name:
-        type: string
-        example: John
   User:
     type: object
     properties:
+      email:
+        type: string
+        example: john@gmail.cc
+        description: Email address.
+        allowEmptyValue: true
+      website:
+        type: string
+        example: 'https://coolwebsites.com'
+        description: Website.
+        allowEmptyValue: true
       id:
         type: string
-        example: john
-      oid:
+        example: My_Project
+        description: ID.
+      description:
         type: string
-        example: ZFrV7UGOI2oMIz48cV5IzvzZ
-        position: 1
-      name:
+        example: This is a **cool** project.
+        description: Description.
+      url:
         type: string
-        example: John
-        position: 2
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
+      nameText:
+        type: string
+        description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: <b>Big</b> project
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is a cool project.
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is a <i>cool</i> project.
+        description: Description in a form of a HTML fragment converted from markdown.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        position: 2
-      initials:
-        type: string
-        example: J
-        position: 2
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '#a9cb77'
-        position: 2
-      email:
+        description: The color of the icon representing this record.
+      name:
         type: string
-        example: john@gmail.com
-        position: 2
+        example: My Name
+        description: Name.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: 'OID, aka. UUID.'
+  TaskWithChildren:
+    properties:
+      tags:
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
+      assignees:
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      tasks:
+        example:
+          - oid: co7XeV3ZmvPUpGuS4avHfd7e
+            id: '19,'
+            name: Draw new logo
+            state: 10
+            description: Detail about this task
+            tags:
+              - X6nmx9XjEO2wKbqeB1pRT43C
+            assignees:
+              - 6QMKkEPBVWETLWrXqws94ALU
+            start: null
+            due: 2018-12-22T02:06:58.158Z
+            tasks: []
+            createdAt: 2018-12-24T02:06:58.158Z
+            createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld

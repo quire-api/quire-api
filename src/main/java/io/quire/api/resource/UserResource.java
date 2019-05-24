@@ -9,7 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/user")
-@Api(value = "users", description =
+@Api(value = "user", description =
     "A user object represents an account in Quire that can be given access to various organizations, projects, and tasks.")
 @Produces({"application/json"})
 public class UserResource {
@@ -24,7 +24,7 @@ public class UserResource {
         + "and none of his collegues authorized this app, only the current "
         + "user's record will be returned.",
         notes = "Returns all required user records.",
-        response = List<User>.class,
+        response = User.class,
         responseContainer = "List")
     public Response getUsers(){ return null; }
 
@@ -33,7 +33,7 @@ public class UserResource {
     @ApiOperation(value = "Get a user by its ID.",
         notes = "returns the full user record.",
         response = User.class)
-    public Response getUser(
+    public Response getUserById(
         @ApiParam(value = "ID, email address or \"me\" of user that needs to be fetched.\n" +
                 "Example: \"john@gmail.com\",\"me\"", required = true)
         @PathParam("id") String id) { return null; }
@@ -43,7 +43,7 @@ public class UserResource {
     @ApiOperation(value = "Get a user by its OID.",
         notes = "returns the full user record.",
         response = User.class)
-    public Response getUser(
+    public Response getUserByOid(
         @ApiParam(value = "OID of user that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 }

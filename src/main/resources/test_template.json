@@ -1,20 +1,8 @@
 {
-  "/projects": {
-    "post": {
-      "200": {
-        "body": {
-          "body": {
-            "name": "New Project",
-            "organization": "Develop_group"
-          }
-        }
-      }
-    }
-  },
-  "/projects/{id}": {
+  "/projects/{oid}": {
     "get": {
       "path": {
-        "id": "Marketing_Project"
+        "oid": "Marketing_Project"
       },
       "200": {
         "response": {

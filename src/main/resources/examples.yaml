@@ -31,33 +31,6 @@ paths:
               createdAt: 2018-12-27T02:06:58.158Z
               createdBy: 6QMKkEPBVWETLWrXqws94ALU
               projects: []
-    post:
-      responses:
-        200:
-          examples:
-            application/json:
-            - id: New_Organization
-              oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-              name: New Organization
-              initials: NO
-              image:
-              iconColor: "#a9cb77"
-              createdAt: 2018-12-27T12:06:58.158Z
-              createdBy: 6QMKkEPBVWETLWrXqws94ALU
-  '/organizations/{oid}':
-    put:
-      responses:
-        200:
-          examples:
-            application/json:
-            - id: myId
-              oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-              name: New name of organization
-              initials: NO
-              image:
-              iconColor: "#a9cb77"
-              createdAt: 2018-12-27T12:06:58.158Z
-              createdBy: 6QMKkEPBVWETLWrXqws94ALU
 definitions:
   Task:
     properties:

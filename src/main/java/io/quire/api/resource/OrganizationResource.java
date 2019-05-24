@@ -1,6 +1,5 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.ErrorResponse;
 import io.quire.api.model.organization.*;
 import io.swagger.annotations.*;
 
@@ -8,7 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/organization")
-@Api(value = "organizations", description =
+@Api(value = "organization", description =
     "An organization is a group of projects where members collaborate at once.")
 @Produces({"application/json"})
 public class OrganizationResource {
@@ -27,7 +26,7 @@ public class OrganizationResource {
     @ApiOperation(value = "Get all organizations.",
         notes = "Returns the organization records for all organizations "
             + "that the user can access",
-        response = List<Organization>.class,
+        response = Organization.class,
         responseContainer = "List")
     public Response getOrganizations(){ return null; }
 

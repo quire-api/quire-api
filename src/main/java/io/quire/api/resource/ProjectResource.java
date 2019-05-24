@@ -12,7 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/project")
-@Api(value = "projects", description =
+@Api(value = "project", description =
     "A project represents a prioritized list of tasks in Quire. " +
     "It exists in a single organization and is accessible to a subset of " +
     "users in that organization, depending on its permissions.")
@@ -31,9 +31,9 @@ public class ProjectResource {
     @Path("/list/id/{id}")
     @ApiOperation(value = "Get all projects of the given organization by its ID.",
         notes = "Returns the project records of the given organization",
-        response = List<Project>.class,
+        response = Project.class,
         responseContainer = "List")
-    public Response getOrganizations(
+    public Response getPrjectsByOrganizationId(
         @ApiParam(value = "ID of the organization", required = true)
         @PathParam("id") String id) { return null; }
 
@@ -41,9 +41,9 @@ public class ProjectResource {
     @Path("/list/{oid}")
     @ApiOperation(value = "Get all projects of the given organization.",
         notes = "Returns the project records of the given organization",
-        response = List<Project>.class,
+        response = Project.class,
         responseContainer = "List")
-    public Response getOrganizations(
+    public Response getPrjectsByOrganizationOid(
         @ApiParam(value = "OID of the organization", required = true)
         @PathParam("oid") String oid) { return null; }
 

@@ -27,8 +27,8 @@ gulp.task('build', function () {
 
    fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain))
 
-  var tests = oatts.generate(swaggerYaml, options);
-  console.log(tests)
+//  var tests = oatts.generate(swaggerYaml, options);
+//  console.log(tests)
 });
 
 gulp.task('test', () =>

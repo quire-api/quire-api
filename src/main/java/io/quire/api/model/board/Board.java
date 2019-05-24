@@ -1,11 +1,11 @@
 package io.quire.api.model.board;
 
-import io.quire.api.model.IconStampedEntity;
+import io.quire.api.model.NamedIconEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
-public class Board extends IconStampedEntity {
+public class Board extends NamedIconEntity {
 
     @ApiModelProperty(example = "rcBHBYXZSiyDRrHrWPutatfF")
     public String getOid() { return null; }
