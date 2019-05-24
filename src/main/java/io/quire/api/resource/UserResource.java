@@ -23,8 +23,9 @@ public class UserResource {
         + "If the current user didn't grant the access of his contacts "
         + "and none of his collegues authorized this app, only the current "
         + "user's record will be returned.",
-        notes = "Returns all required user records.",
-        response = User.class,
+        notes = "Returns all required user records. "
+        + "The first record must be the current user.",
+        response = List<User>.class,
         responseContainer = "List")
     public Response getUsers(){ return null; }
 
