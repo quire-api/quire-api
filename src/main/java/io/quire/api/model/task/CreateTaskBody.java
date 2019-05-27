@@ -4,31 +4,40 @@ import io.swagger.annotations.*;
 
 public class CreateTaskBody {
 
-    @ApiModelProperty(example = "GAUpZARpeOjlHqEux6IdUZI1", required = true,
-        value = "The project oid")
-    public String getProject() { return null; }
-
-    @ApiModelProperty(example = "10",
-        value = "(optional) The parent task id")
-    public String getParent() { return null; }
-
-    @ApiModelProperty(example = "13",
-        value = "(optional) The previous sibling task id" )
-    public String getAfter() {
-        return null;
-    }
-
-    @ApiModelProperty(example = "New Task")
+    @ApiModelProperty(example = "Task 101",
+        value = "The name of the task.")
     public String getName() { return null; }
 
-    @ApiModelProperty(example = "6QMKkEPBVWETLWrXqws94ALU",
-        value = "User oid to assign")
-    public String getAssignee() { return null; }
+    @ApiModelProperty(example = "A sample of task description.",
+        value = "(Optional) An optional description about this task.")
+    public String getDescription() { return null; }
 
-    @ApiModelProperty(example = "2018-12-20T02:06:58.158Z")
+    @ApiModelProperty(value = "(Optiona) An optional priority. "
+        + "Its value must be between -1 (lowest) and 2 (highest). "
+        + "Default: 0.",
+        example = "0", position = 4)
+    public int getPriority() { return 0; }
+
+    @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+        value = "(Optional) OID of the tags to be added to the new created task.")
+    public List<String> getTags() { return null; }
+
+    @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+        value = "(Optional) OID of the users that this task is assigned to.")
+    public List<String> getAssignees() { return null; }
+
+    @ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
+        value = "(Optional) An optional start time. "
+        + "Note: if time is specified, the millisecond must be `001`. "
+        + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getStart() { return null; }
 
-    @ApiModelProperty(example = "2018-12-22T02:06:58.158Z")
+    @ApiModelProperty(example = "2018-12-22T00:00:00.000Z",
+        value = "(Optional) An optional start time. "
+        + "Note: if time is specified, the millisecond must be `001`. "
+        + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getDue() { return null; }
 
+    @ApiModelProperty(value = "(Optional) A list of subtasks to create.")
+    public List<CreateTaskBody> getSubtasks() { return null; }
 }

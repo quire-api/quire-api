@@ -16,10 +16,28 @@ import javax.ws.rs.core.Response;
 public class TaskResource {
 
 	@POST
+	@Path("/{oid}")
 	@ApiOperation(value = "Add a new task.",
 		notes = "Add a new task into a project.",
 		response = Task.class)
 	public Response createTask(
+		@ApiParam(value = "OID of project or task that this new task to be added to. "
+		+ "If the given OID is a project, the new task will be added as a root task. "
+		+ "If the given OID is a task, the new task will become its subtask.",
+		required = true)
+		@PathParam("oid") String oid,
+		@ApiParam(value = "Task to create", required = true)
+		CreateTaskBody data) { return null; }
+
+	@POST
+	@Path("/before/{oid}")
+	@ApiOperation(value = "Add a new task before the given task.",
+		notes = "Add a new task before the given task.",
+		response = Task.class)
+	public Response createTask(
+		@ApiParam(value = "OID of the task that this new task to be added after. ",
+			required = true)
+		@PathParam("oid") String oid,
 		@ApiParam(value = "Task to create", required = true)
 		CreateTaskBody data) { return null; }
 
@@ -34,7 +52,7 @@ public class TaskResource {
 		notes = "Returns all task records of the given project or task.",
 		response = Task.class)
 	public Response getTask(
-		@ApiParam(value = "OID of project to look for", required = true)
+		@ApiParam(value = "OID of project or parent task to look for", required = true)
 		@PathParam("oid") String oid) { return null; }
 
 	@GET

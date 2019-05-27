@@ -39,8 +39,8 @@ public class Task extends StampedEntity {
 	public List<String> getTags() { return null; }
 
 	@ApiModelProperty(value = "When to start this task.",
-		+ "Note: if time is specified, the millisecond will be 001. "
-		+ "Otherwise, it is 000 (so are the hour, minute and second fields).",
+		+ "Note: if time is specified, the millisecond will be `001`. "
+		+ "Otherwise, it is `000` (so are the hour, minute and second fields).",
 		example = "2018-12-20T00:00:00.000Z", position = 4)
 	public String getStart() { return null; }
 	@ApiModelProperty(value = "When to complete this task. "
@@ -86,9 +86,9 @@ public class Task extends StampedEntity {
 		+ "as a cover of this task.", position = 8)
 	public String getCover() { return null; }
 
-	@ApiModelProperty(value = "OID of the subtasks of this task. ",
-		+ " It is null if there is no subtask ata all.", position = 10)
-	public List<String> getSubtasks() { return null; }
+	@ApiModelProperty(value = "Number of subtasks of this task. ",
+		+ "To retrieve these subtasks, make the GET request to \"/task/list/{oid}\".", position = 10)
+	public int getChildCount() { return 0; }
 
 	@ApiModelProperty(value = "A list of referrers that refer this task. "
 		+ "Note: some of them might no longer exist.", position = 20)
@@ -107,6 +107,11 @@ public class Task extends StampedEntity {
 
 	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
+
+	@ApiModelProperty(value = "When this task's state was archived (aka., peekaboo). "
+		+ "It is null if not archived.",
+		example = "2018-12-22T02:06:58.158Z", position = 50)
+	public String getArchivedAt() { return null; }
 
 	@ApiModelProperty(value = "Url of this task on Quire website.", example = "https://quire.io/w/my_project/123", position = 5)
 	public String getUrl() { return null; }
