@@ -41,6 +41,18 @@ public class TaskResource {
 		@ApiParam(value = "Task to create", required = true)
 		CreateTaskBody data) { return null; }
 
+	@POST
+	@Path("/after/{oid}")
+	@ApiOperation(value = "Add a new task after the given task.",
+		notes = "Add a new task after the given task.",
+		response = Task.class)
+	public Response createTask(
+		@ApiParam(value = "OID of the task that this new task to be added before. ",
+			required = true)
+		@PathParam("oid") String oid,
+		@ApiParam(value = "Task to create", required = true)
+		CreateTaskBody data) { return null; }
+
 	@GET
 	@Path("/list/{oid}")
 	@ApiOperation(value = "Get all root tasks or subtask of the given "

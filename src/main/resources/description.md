@@ -92,7 +92,7 @@ Authorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912
 A refresh token might stop working for one of these reasons:
 
 * The user has revoked your app's access.
-* The refresh token has not been used for 4 months.
+* The refresh token has not been used for 6 months.
 
 # Rate limits
 
@@ -146,4 +146,5 @@ The following JSON data is returned in the response body when an error occurs.
 | 405 | Method not allowed.
 | 413 | Request too large.
 | 429 | Too many invocations.
+| 469 | Quota exceeded.
 | 500 | General invocation error. Most likely, an internal error.

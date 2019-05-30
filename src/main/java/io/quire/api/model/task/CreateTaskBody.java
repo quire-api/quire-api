@@ -38,6 +38,11 @@ public class CreateTaskBody {
         + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getDue() { return null; }
 
-    @ApiModelProperty(value = "(Optional) A list of subtasks to create.")
-    public List<CreateTaskBody> getSubtasks() { return null; }
+    @ApiModelProperty(value = "(Optional) OID of users who follow this task.", position = 60)
+    public List<String> getFollowers() { return null; }
+    @ApiModelProperty(value = "(Optional) OID of users who favorite this task.", position = 60)
+    public List<String> getFavorites() { return null; }
+
+    @ApiModelProperty(value = "(Optional) A list of subtasks to create.", position = 90)
+    public List<CreateTaskBody> getTasks() { return null; }
 }
