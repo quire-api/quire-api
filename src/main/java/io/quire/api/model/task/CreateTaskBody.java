@@ -8,7 +8,7 @@ public class CreateTaskBody {
         value = "The name of the task.")
     public String getName() { return null; }
 
-    @ApiModelProperty(example = "A sample of task description.",
+    @ApiModelProperty(example = "**Great** task to start with.",
         value = "(Optional) An optional description about this task.")
     public String getDescription() { return null; }
 
@@ -17,6 +17,12 @@ public class CreateTaskBody {
         + "Default: 0.",
         example = "0", position = 4)
     public int getPriority() { return 0; }
+
+    @ApiModelProperty(value = "(Optiona) An optional status. "
+        + "Its value must be between 0 and 100. "
+        + "Default: 0.",
+        example = "0", position = 4)
+    public int getStatus() { return 0; }
 
     @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
         value = "(Optional) OID of the tags to be added to the new created task.")
@@ -38,11 +44,9 @@ public class CreateTaskBody {
         + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getDue() { return null; }
 
-    @ApiModelProperty(value = "(Optional) OID of users who follow this task.", position = 60)
+    @ApiModelProperty(value = "(Optional) OID of users who follow this task.")
     public List<String> getFollowers() { return null; }
-    @ApiModelProperty(value = "(Optional) OID of users who favorite this task.", position = 60)
-    public List<String> getFavorites() { return null; }
 
-    @ApiModelProperty(value = "(Optional) A list of subtasks to create.", position = 90)
+    @ApiModelProperty(value = "(Optional) A list of subtasks to create.")
     public List<CreateTaskBody> getTasks() { return null; }
 }
