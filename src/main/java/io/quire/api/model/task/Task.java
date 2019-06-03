@@ -86,7 +86,7 @@ public class Task extends StampedEntity {
 		+ "as a cover of this task.", position = 8)
 	public String getCover() { return null; }
 
-	@ApiModelProperty(value = "Number of subtasks of this task. ",
+	@ApiModelProperty(value = "Number of subtasks of this task. "
 		+ "To retrieve these subtasks, make the GET request to \"/task/list/{oid}\".", position = 10)
 	public int getChildCount() { return 0; }
 

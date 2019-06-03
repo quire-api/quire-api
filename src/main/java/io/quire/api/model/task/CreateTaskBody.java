@@ -44,6 +44,11 @@ public class CreateTaskBody {
         + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getDue() { return null; }
 
+    @ApiModelProperty(example = "true",
+        value = "(Optional) Specify true to peekaboo this task and its subtasks, "
+        + "if any. Default: false.")
+    public boolean getPeekaboo() { return null; }
+
     @ApiModelProperty(value = "(Optional) OID of users who follow this task.")
     public List<String> getFollowers() { return null; }
 

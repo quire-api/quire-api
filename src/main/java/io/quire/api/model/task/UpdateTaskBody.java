@@ -58,9 +58,9 @@ public class UpdateTaskBody {
     public String getDue() { return null; }
 
     @ApiModelProperty(example = "true",
-        value = "(Optional) Specify true to archive this task and its subtasks. "
-        + "Or, specify false to undo the previous archiving if any.")
-    public boolean getArchived() { return null; }
+        value = "(Optional) Specify true to peekaboo this task and its subtasks. "
+        + "Or, specify false to undo the previous peekaboo if any.")
+    public boolean getPeekaboo() { return null; }
 
     @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
         value = "(Optional) OID of the followers to be added to this task.")
