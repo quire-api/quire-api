@@ -63,6 +63,9 @@ public class UpdateTaskBody {
     public boolean getPeekaboo() { return null; }
 
     @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+        value = "(Optional) OID of the users to replace the followers of this task.")
+    public List<String> getFollowers() { return null; }
+    @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
         value = "(Optional) OID of the followers to be added to this task.")
     public List<String> getAddFollowers() { return null; }
     @ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",

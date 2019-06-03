@@ -12,6 +12,9 @@ public class Project extends Identity {
 	@ApiModelProperty(value = "Total number of tasks in this project.")
 	public int getTaskCount() { return 0; }
 
+	@ApiModelProperty(value = "Number of active tasks in this project.")
+	public int getActiveCount() { return 0; }
+
 	@ApiModelProperty(value = "Number of root tasks in this project.")
 	public int getRootCount() { return 0; }
 
