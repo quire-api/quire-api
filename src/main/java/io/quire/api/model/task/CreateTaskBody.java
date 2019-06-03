@@ -44,6 +44,10 @@ public class CreateTaskBody {
         + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getDue() { return null; }
 
+    @ApiModelProperty(value = "(Optional) The recurring information of this task. "
+        + "It is null if it is not a recurring task.")
+    public Recurring getRecurring() { return null; }
+
     @ApiModelProperty(example = "true",
         value = "(Optional) Specify true to peekaboo this task and its subtasks, "
         + "if any. Default: false.")

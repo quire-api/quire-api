@@ -57,6 +57,10 @@ public class UpdateTaskBody {
         + "Otherwise, it is `000` (so are the hour, minute and second fields).")
     public String getDue() { return null; }
 
+    @ApiModelProperty(value = "(Optional) The recurring information of this task. "
+        + "It is null if it is not a recurring task.")
+    public Recurring getRecurring() { return null; }
+
     @ApiModelProperty(example = "true",
         value = "(Optional) Specify true to peekaboo this task and its subtasks. "
         + "Or, specify false to undo the previous peekaboo if any.")
