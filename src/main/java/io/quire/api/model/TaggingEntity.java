@@ -5,8 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class TaggingEntity extends StampedEntity {
-    @ApiModelProperty(example = "#a9cb77")
-    public String getColor() {
-        return null;
-    }
+	@ApiModelProperty(example = "Later",
+		value = "The name.")
+	public String getName() { return null; }
+
+	@ApiModelProperty(example = "35",
+		value = "The color. It is an index of our predefined color palette. "
+			+ "The first digit is between 0 and 5, and the second between "
+			+ "0 and 7. "
+			+ "The color palette can be found in our Quire's color picker.")
+	public String getColor() { return null; }
+
+	@ApiModelProperty(value="OID of the project this tag belongs to.",
+		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
+	public String getProject() { return null; }
 }

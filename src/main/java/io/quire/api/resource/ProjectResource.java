@@ -39,14 +39,15 @@ public class ProjectResource {
 
     @GET
     @Path("/list/{organizationOid}")
-    @ApiOperation(value = "Get all granted projects of the given organization.",
+    @ApiOperation(value = "Get all granted projects, or all projects of "
+        + "the specified organization.",
         notes = "Returns all granted project records of the given organization."
             + "Note: the \"organizationOid\" is optinal. If omitted, all "
             + "granted project records will be returned.",
         response = Project.class,
         responseContainer = "List")
     public Response getPrjects(
-        @ApiParam(value = "(Optional) OID of the organization", required = true)
+        @ApiParam(value = "(Optional) OID of the organization", required = false)
         @PathParam("organizationOid") String organizationOid) { return null; }
 
     @GET

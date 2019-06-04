@@ -63,7 +63,7 @@ public class TaskResource {
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		notes = "Returns all task records of the given project or task.",
 		response = Task.class)
-	public Response getTask(
+	public Response getTasks(
 		@ApiParam(value = "OID of project or parent task to look for", required = true)
 		@PathParam("oid") String oid) { return null; }
 
@@ -72,7 +72,7 @@ public class TaskResource {
 	@ApiOperation(value = "Get all root tasks of the given project by its ID.",
 		notes = "Returns all task records of the given project.",
 		response = Task.class)
-	public Response getTask(
+	public Response getTasks(
 		@ApiParam(value = "ID of project to look for", required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
@@ -83,7 +83,7 @@ public class TaskResource {
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		notes = "Returns all subtask records of the given task.",
 		response = Task.class)
-	public Response getTask(
+	public Response getTasks(
 		@ApiParam(value = "ID of project.", required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the parent task", required = true)
