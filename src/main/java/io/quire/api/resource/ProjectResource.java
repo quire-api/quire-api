@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
     "users in that organization, depending on its permissions.")
 @Produces({"application/json"})
 public class ProjectResource {
-/* Not supported yet
+/* Not supported yet (security concern)
     @POST
     @ApiOperation(value = "Create a project.",
         notes = "Creates a new project in an organization.",
@@ -68,7 +68,7 @@ public class ProjectResource {
         @ApiParam(value = "OID of project that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 
-/* Not supported yet
+/* Not supported yet (security concern)
     @PUT
     @Path("/{oid}")
     @ApiOperation(value = "Update a project",

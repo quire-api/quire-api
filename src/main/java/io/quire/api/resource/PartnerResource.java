@@ -38,7 +38,7 @@ public class PartnerResource {
         @ApiParam(value = "ID of project to look for", required = true)
         @PathParam("projectId") String projectId) { return null; }
 
-/* Not supported yet
+/* Not supported yet (security concern)
     @DELETE
     @Path("/{oid}")
     @ApiOperation(value = "Delete an external team",

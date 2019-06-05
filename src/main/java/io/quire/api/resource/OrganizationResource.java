@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
     "An organization is a group of projects where members collaborate at once.")
 @Produces({"application/json"})
 public class OrganizationResource {
-/* Not supported yet
+/* Not supported yet (security concern)
     @POST
     @ApiOperation(value = "Create an organization.",
         notes = "Creates a new organization, and returns the complete record of "
@@ -48,7 +48,7 @@ public class OrganizationResource {
         @ApiParam(value = "OID of organization that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 
-/* Not supported yet
+/* Not supported yet (security concern)
     @PUT
     @Path("/{oid}")
     @ApiOperation(value = "Update an organization",
