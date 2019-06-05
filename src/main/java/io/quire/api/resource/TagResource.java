@@ -36,7 +36,7 @@ public class TagResource {
 
 	@GET
 	@Path("/list/{projectOid}")
-	@ApiOperation(value = "Get all tags of the given project its OID.",
+	@ApiOperation(value = "Get all tags of the given project by its OID.",
 		notes = "Returns all tag records of the given project.",
 		response = Tag.class)
 	public Response getTags(
