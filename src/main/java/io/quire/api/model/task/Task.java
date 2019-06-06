@@ -27,7 +27,7 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "The state of this task. "
 		+ "Its value must be between 0 and 100. If 100, it means completed.",
 		example = "0", position = 4)
-	public int getState() { return 0; }
+	public int getStatus() { return 0; }
 
 	@ApiModelProperty(value = "The priority of this task. "
 		+ "Its value must be between -1 (lowest) and 2 (highest). "
@@ -108,10 +108,10 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
 
-	@ApiModelProperty(value = "When this task's state was archived (aka., peekaboo). "
-		+ "It is null if not archived.",
+	@ApiModelProperty(value = "When this task was peekabooed. "
+		+ "It is null if not peekabooed.",
 		example = "2018-12-22T02:06:58.158Z", position = 50)
-	public String getArchivedAt() { return null; }
+	public String getPeekabooAt() { return null; }
 
 	@ApiModelProperty(value = "Url of this task on Quire website.",
 		example = "https://quire.io/w/my_project/123", position = 50)

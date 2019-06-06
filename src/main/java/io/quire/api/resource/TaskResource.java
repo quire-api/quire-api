@@ -64,7 +64,7 @@ public class TaskResource {
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		response = Task.class,
-        responseContainer = "List")
+		responseContainer = "List")
 	public Response getTasksByOid(
 		@ApiParam(value = "OID of project or parent task to look for", required = true)
 		@PathParam("oid") String oid) { return null; }
@@ -74,7 +74,7 @@ public class TaskResource {
 	@ApiOperation(value = "Get all root tasks of the given project.",
 		notes = "Returns all root task records of the given project.",
 		response = Task.class,
-        responseContainer = "List")
+		responseContainer = "List")
 	public Response getRootTasks(
 		@ApiParam(value = "ID of project.", required = true)
 		@PathParam("projectId") String projectId) { return null; }
@@ -86,7 +86,7 @@ public class TaskResource {
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		response = Task.class,
-        responseContainer = "List")
+		responseContainer = "List")
 	public Response getSubtasks(
 		@ApiParam(value = "ID of the project.", required = true)
 		@PathParam("projectId") String projectId,
@@ -127,7 +127,7 @@ public class TaskResource {
 
 	@DELETE
 	@Path("/{oid}")
-	@ApiOperation(value = "Delete an existing task and all of its subtasks.",
+	@ApiOperation(value = "Delete a task and all of its subtasks.",
 		notes = "Delete an existing task and all of its subtasks.")
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",

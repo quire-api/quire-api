@@ -41,7 +41,7 @@ public class TagResource {
 		response = Tag.class,
         responseContainer = "List")
 	public Response getTagsByProjectOid(
-		@ApiParam(value = "OID of the project to look for", required = true)
+		@ApiParam(value = "OID of the project.", required = true)
 		@PathParam("projectOid") String projectOid) { return null; }
 
 	@GET
@@ -51,13 +51,13 @@ public class TagResource {
 		response = Tag.class,
         responseContainer = "List")
 	public Response getTagsByProjectId(
-		@ApiParam(value = "ID of project to look for", required = true)
+		@ApiParam(value = "ID of project.", required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
 	@PUT
 	@Path("/{oid}")
 	@ApiOperation(value = "Update a tag.",
-		notes = "Updates an existing. It returns the complete updated record.",
+		notes = "Updates an existing tag, and returns the complete updated record.",
 		response = Tag.class)
 	public Response updateTag(
 		@ApiParam(value = "OID of tag that needs to be updated", required = true)
@@ -67,7 +67,7 @@ public class TagResource {
 
 	@DELETE
 	@Path("/{oid}")
-	@ApiOperation(value = "Delete an existing tag",
+	@ApiOperation(value = "Delete a tag",
 		notes = "Delete an existing tag of the given OID.")
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",

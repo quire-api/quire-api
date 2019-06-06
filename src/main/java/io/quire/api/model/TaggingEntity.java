@@ -16,7 +16,7 @@ public class TaggingEntity extends StampedEntity {
 			+ "The color palette can be found in our Quire's color picker.")
 	public String getColor() { return null; }
 
-	@ApiModelProperty(value="OID of the project this tag belongs to.",
+	@ApiModelProperty(value="OID of the project this object belongs to.",
 		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", position = 99)
 	public String getProject() { return null; }
 }

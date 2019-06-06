@@ -21,4 +21,9 @@ public class Project extends Identity {
 
 	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
+
+	@ApiModelProperty(value = "When this project was archived (aka., peekaboo). "
+		+ "It is null if not archived.",
+		example = "2018-12-22T02:06:58.158Z", position = 50)
+	public String getArchivedAt() { return null; }
 }

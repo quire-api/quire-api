@@ -8,7 +8,7 @@ import java.util.List;
 public class CreateTaskBody {
 
 	@ApiModelProperty(example = "Task 101",
-		value = "The name of the task.")
+		value = "The name of the task.", required = true)
 	public String getName() { return null; }
 
 	@ApiModelProperty(example = "**Great** task to start with.",
