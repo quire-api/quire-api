@@ -8,5 +8,5 @@ import io.swagger.annotations.ApiModelProperty;
 public class Tag extends TaggingEntity {
 	@ApiModelProperty(example = "true",
 		value = "Whether this is a global tag.")
-	public boolean getGlobal() { return null; }
+	public boolean getGlobal() { return false; }
 }

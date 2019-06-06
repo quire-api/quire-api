@@ -1,6 +1,6 @@
 package io.quire.api.model.task;
 
-import io.quire.api.model.StampedEntity;
+import io.quire.api.model.*;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "OID of tags that are tagged to this task.", position = 5)
 	public List<String> getTags() { return null; }
 
-	@ApiModelProperty(value = "When to start this task.",
+	@ApiModelProperty(value = "When to start this task."
 		+ "Note: if time is specified, the millisecond will be `001`. "
 		+ "Otherwise, it is `000` (so are the hour, minute and second fields).",
 		example = "2018-12-20T00:00:00.000Z", position = 4)

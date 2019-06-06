@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class Referrer {
-	@ApiModelProperty(value = "OID of the task that refers another task."
+	@ApiModelProperty(value = "OID of the task that refers another task.",
 		example = "wrSpgghWFCzPHBqiShSurDeD")
 	public String getTask() { return null; }
 

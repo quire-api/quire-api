@@ -38,8 +38,9 @@ public class TagResource {
 	@Path("/list/{projectOid}")
 	@ApiOperation(value = "Get all tags of the given project by its OID.",
 		notes = "Returns all tag records of the given project.",
-		response = Tag.class)
-	public Response getTags(
+		response = Tag.class,
+		responseContainer = "List")
+	public Response getTagsByProjectOid(
 		@ApiParam(value = "OID of the project to look for", required = true)
 		@PathParam("projectOid") String projectOid) { return null; }
 
@@ -47,8 +48,9 @@ public class TagResource {
 	@Path("/list/id/{projectId}")
 	@ApiOperation(value = "Get all tags of the given project by its ID.",
 		notes = "Returns all tag records of the given project.",
-		response = Tag.class)
-	public Response getTags(
+		response = Tag.class,
+		responseContainer = "List")
+	public Response getTagsByProjectId(
 		@ApiParam(value = "ID of project to look for", required = true)
 		@PathParam("projectId") String projectId) { return null; }
 

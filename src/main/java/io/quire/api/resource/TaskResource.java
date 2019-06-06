@@ -34,7 +34,7 @@ public class TaskResource {
 	@ApiOperation(value = "Add a new task before the given task.",
 		notes = "Add a new task before the given task.",
 		response = Task.class)
-	public Response createTask(
+	public Response createTaskBefore(
 		@ApiParam(value = "OID of the task that this new task to be added after. ",
 			required = true)
 		@PathParam("oid") String oid,
@@ -46,7 +46,7 @@ public class TaskResource {
 	@ApiOperation(value = "Add a new task after the given task.",
 		notes = "Add a new task after the given task.",
 		response = Task.class)
-	public Response createTask(
+	public Response createTaskAfter(
 		@ApiParam(value = "OID of the task that this new task to be added before. ",
 			required = true)
 		@PathParam("oid") String oid,
@@ -62,8 +62,9 @@ public class TaskResource {
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		notes = "Returns all task records of the given project or task.",
-		response = Task.class)
-	public Response getTasks(
+		response = Task.class,
+		responseContainer = "List")
+	public Response getSubTasks(
 		@ApiParam(value = "OID of project or parent task to look for", required = true)
 		@PathParam("oid") String oid) { return null; }
 
@@ -71,7 +72,8 @@ public class TaskResource {
 	@Path("/list/id/{projectId}")
 	@ApiOperation(value = "Get all root tasks of the given project by its ID.",
 		notes = "Returns all task records of the given project.",
-		response = Task.class)
+		response = Task.class,
+		responseContainer = "List")
 	public Response getTasks(
 		@ApiParam(value = "ID of project to look for", required = true)
 		@PathParam("projectId") String projectId) { return null; }
@@ -82,7 +84,8 @@ public class TaskResource {
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		notes = "Returns all subtask records of the given task.",
-		response = Task.class)
+		response = Task.class,
+		responseContainer = "List")
 	public Response getTasks(
 		@ApiParam(value = "ID of project.", required = true)
 		@PathParam("projectId") String projectId,

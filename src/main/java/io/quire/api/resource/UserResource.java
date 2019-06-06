@@ -25,7 +25,7 @@ public class UserResource {
         + "user's record will be returned.",
         notes = "Returns all required user records. "
         + "The first record must be the current user.",
-        response = List<User>.class,
+        response = User.class,
         responseContainer = "List")
     public Response getUsers(){ return null; }
 
@@ -44,7 +44,7 @@ public class UserResource {
     @ApiOperation(value = "Get a user by its OID.",
         notes = "returns the full user record.",
         response = User.class)
-    public Response getUser(
+    public Response getUserByOid(
         @ApiParam(value = "OID of user that needs to be fetched", required = true)
         @PathParam("oid") String oid) { return null; }
 }
