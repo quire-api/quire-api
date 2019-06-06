@@ -7,24 +7,27 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/partner")
-@Api(value = "external teams", description =
-    "An external team (aka., a parnter).")
+@Api(value = "partner", description =
+    "An external team (aka., a parnter) is a group of users that can "
+    "access only tasks that are assigned to this team.")
 @Produces({"application/json"})
 public class PartnerResource {
     @GET
     @Path("/{oid}")
     @ApiOperation(value = "Get an external team (aka., a partner).",
-        notes = "returns the full external team record.",
+        notes = "Returns the full external team record of the given OID.",
         response = Partner.class)
     public Response getPartner(
-        @ApiParam(value = "OID of external team that needs to be fetched.", required = true)
+        @ApiParam(value = "OID of external team that needs to be fetched.",
+            required = true)
         @PathParam("oid") String oid) { return null; }
 
     @GET
     @Path("/list/{projectOid}")
     @ApiOperation(value = "Get all external teams of the given project by its OID.",
-        notes = "Returns all external team records of the given project.",
-        response = Partner.class)
+        notes = "Returns all external team records of the given project by its OID.",
+        response = Partner.class,
+        responseContainer = "List")
     public Response getPartners(
         @ApiParam(value = "OID of the project to look for", required = true)
         @PathParam("projectOid") String projectOid) { return null; }
@@ -32,8 +35,9 @@ public class PartnerResource {
     @GET
     @Path("/list/id/{projectId}")
     @ApiOperation(value = "Get all external teams of the given project by its ID.",
-        notes = "Returns all external team records of the given project.",
-        response = Partner.class)
+        notes = "Returns all external team records of the given project by its ID.",
+        response = Partner.class,
+        responseContainer = "List")
     public Response getPartners(
         @ApiParam(value = "ID of project to look for", required = true)
         @PathParam("projectId") String projectId) { return null; }

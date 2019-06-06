@@ -9,7 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/task")
-@Api(value = "tasks", description =
+@Api(value = "task", description =
 	"The task is a piece of work to be done or undertaken. " +
 	"It is the basic object that you and your team can collaborate on.")
 @Produces({"application/json"})
@@ -35,7 +35,7 @@ public class TaskResource {
 		notes = "Add a new task before the given task.",
 		response = Task.class)
 	public Response createTask(
-		@ApiParam(value = "OID of the task that this new task to be added after. ",
+		@ApiParam(value = "OID of the task that this new task to be added before.",
 			required = true)
 		@PathParam("oid") String oid,
 		@ApiParam(value = "Task to create", required = true)
@@ -47,7 +47,7 @@ public class TaskResource {
 		notes = "Add a new task after the given task.",
 		response = Task.class)
 	public Response createTask(
-		@ApiParam(value = "OID of the task that this new task to be added before. ",
+		@ApiParam(value = "OID of the task that this new task to be added after. ",
 			required = true)
 		@PathParam("oid") String oid,
 		@ApiParam(value = "Task to create", required = true)
@@ -55,14 +55,15 @@ public class TaskResource {
 
 	@GET
 	@Path("/list/{oid}")
-	@ApiOperation(value = "Get all root tasks or subtask of the given "
-		+ "project or task by its OID. "
+	@ApiOperation(value = "Get all root tasks of the given project or "
+		+ "all subtasks of the given task by OID.",
+		notes = "Returns all task records of the given project or task. "
 		+ "If the given OID is a project, the root tasks are returned. "
-		+ "If the given OID is a task, the subtasks are returned. "
+		+ "If the given OID is a task, its subtasks are returned.\n"
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
-		notes = "Returns all task records of the given project or task.",
-		response = Task.class)
+		response = Task.class,
+        responseContainer = "List")
 	public Response getTasks(
 		@ApiParam(value = "OID of project or parent task to look for", required = true)
 		@PathParam("oid") String oid) { return null; }
@@ -70,21 +71,23 @@ public class TaskResource {
 	@GET
 	@Path("/list/id/{projectId}")
 	@ApiOperation(value = "Get all root tasks of the given project by its ID.",
-		notes = "Returns all task records of the given project.",
-		response = Task.class)
+		notes = "Returns all root task records of the given project.",
+		response = Task.class,
+        responseContainer = "List")
 	public Response getTasks(
 		@ApiParam(value = "ID of project to look for", required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
 	@GET
-	@Path("/list/id/{projectId}/${id}")
+	@Path("/list/id/{projectId}/{id}")
 	@ApiOperation(value = "Get all subtasks of the given task by its ID. "
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		notes = "Returns all subtask records of the given task.",
-		response = Task.class)
+		response = Task.class,
+        responseContainer = "List")
 	public Response getTasks(
-		@ApiParam(value = "ID of project.", required = true)
+		@ApiParam(value = "ID of the project.", required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the parent task", required = true)
 		@PathParam("id") int id) { return null; }
@@ -95,7 +98,8 @@ public class TaskResource {
 		notes = "Returns the complete task record for a single task.",
 		response = Task.class)
 	public Response getTask(
-		@ApiParam(value = "OID of the task that needs to be fetched", required = true)
+		@ApiParam(value = "OID of the task that needs to be fetched",
+			required = true)
 		@PathParam("oid") String oid) { return null; }
 
 	@GET
@@ -112,7 +116,7 @@ public class TaskResource {
 	@PUT
 	@Path("/{oid}")
 	@ApiOperation(value = "Update an existing task.",
-		notes = "Returns the complete updated task record.",
+		notes = "Updates an existing task, and returns the complete updated record.",
 		response = Task.class)
 	public Response updateTask(
 		@ApiParam(value = "OID of task that needs to be updated.", required = true)
@@ -123,7 +127,7 @@ public class TaskResource {
 	@DELETE
 	@Path("/{oid}")
 	@ApiOperation(value = "Delete an existing task and all of its subtasks.",
-		notes = "Delete an existing task.")
+		notes = "Delete an existing task and all of its subtasks.")
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json",

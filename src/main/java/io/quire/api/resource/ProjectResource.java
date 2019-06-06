@@ -29,8 +29,9 @@ public class ProjectResource {
 */
     @GET
     @Path("/list/id/{organizationId}")
-    @ApiOperation(value = "Get all granted projects of the given organization by its ID.",
-        notes = "Returns all project records of the given organization,",
+    @ApiOperation(value = "Get all granted projects of the organization by its ID.",
+        notes = "Returns all project records of the given organization. "
+            + "Only granted projects will be returned.",
         response = Project.class,
         responseContainer = "List")
     public Response getPrjectsByOrganizationId(
@@ -39,33 +40,36 @@ public class ProjectResource {
 
     @GET
     @Path("/list/{organizationOid}")
-    @ApiOperation(value = "Get all granted projects, or all projects of "
-        + "the specified organization.",
-        notes = "Returns all granted project records of the given organization."
+    @ApiOperation(value = "Get all granted projects of the organization by its OID.",
+        notes = "Returns all project records of the given organization. "
+            + "Only granted projects will be returned.\n",
             + "Note: the \"organizationOid\" is optinal. If omitted, all "
             + "granted project records will be returned.",
         response = Project.class,
         responseContainer = "List")
     public Response getPrjects(
-        @ApiParam(value = "(Optional) OID of the organization", required = false)
+        @ApiParam(value = "(Optional) OID of the organization.",
+            required = false)
         @PathParam("organizationOid") String organizationOid) { return null; }
 
     @GET
     @Path("/id/{id}")
     @ApiOperation(value = "Get a project by its ID.",
-        notes = "returns the complete project record.",
+        notes = "Returns the complete project record of the given ID.",
         response = Project.class)
     public Response getProjectById(
-        @ApiParam(value = "ID of project that needs to be fetched", required = true)
+        @ApiParam(value = "ID of project that needs to be fetched",
+            required = true)
         @PathParam("id") String id) { return null; }
 
     @GET
     @Path("/{oid}")
     @ApiOperation(value = "Get a project by its OID.",
-        notes = "returns the complete project record.",
+        notes = "Returns the complete project record of the given OID.",
         response = Project.class)
     public Response getProject(
-        @ApiParam(value = "OID of project that needs to be fetched", required = true)
+        @ApiParam(value = "OID of project that needs to be fetched",
+            required = true)
         @PathParam("oid") String oid) { return null; }
 
 /* Not supported yet (security concern)

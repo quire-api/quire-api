@@ -25,18 +25,19 @@ public class OrganizationResource {
     @Path("/list")
     @ApiOperation(value = "Get all organizations.",
         notes = "Returns the organization records for all organizations "
-            + "that the user can access",
+            + "that the current user can grant to this application.",
         response = Organization.class,
         responseContainer = "List")
-    public Response getOrganizations(){ return null; }
+    public Response getOrganizations() { return null; }
 
     @GET
     @Path("/id/{id}")
     @ApiOperation(value = "Get an organization by its ID.",
-        notes = "Returns the complete organization record.",
+        notes = "Returns the complete organization record of the given OID.",
         response = Organization.class)
     public Response getOrganizationById(
-        @ApiParam(value = "ID of organization that needs to be fetched", required = true)
+        @ApiParam(value = "ID of organization that needs to be fetched",
+            required = true)
         @PathParam("id") String id) { return null; }
 
     @GET
@@ -45,7 +46,8 @@ public class OrganizationResource {
         notes = "returns the complete organization record.",
         response = Organization.class)
     public Response getOrganization(
-        @ApiParam(value = "OID of organization that needs to be fetched", required = true)
+        @ApiParam(value = "OID of organization that needs to be fetched",
+            required = true)
         @PathParam("oid") String oid) { return null; }
 
 /* Not supported yet (security concern)
