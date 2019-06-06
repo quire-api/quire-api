@@ -34,7 +34,7 @@ public class TaskResource {
 	@ApiOperation(value = "Add a new task before the given task.",
 		notes = "Add a new task before the given task.",
 		response = Task.class)
-	public Response createTask(
+	public Response createTaskBefore(
 		@ApiParam(value = "OID of the task that this new task to be added before.",
 			required = true)
 		@PathParam("oid") String oid,
@@ -46,7 +46,7 @@ public class TaskResource {
 	@ApiOperation(value = "Add a new task after the given task.",
 		notes = "Add a new task after the given task.",
 		response = Task.class)
-	public Response createTask(
+	public Response createTaskAfter(
 		@ApiParam(value = "OID of the task that this new task to be added after. ",
 			required = true)
 		@PathParam("oid") String oid,
@@ -64,7 +64,7 @@ public class TaskResource {
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
 		response = Task.class,
         responseContainer = "List")
-	public Response getTasks(
+	public Response getTasksByOid(
 		@ApiParam(value = "OID of project or parent task to look for", required = true)
 		@PathParam("oid") String oid) { return null; }
 

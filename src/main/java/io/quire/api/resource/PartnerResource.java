@@ -28,7 +28,7 @@ public class PartnerResource {
         notes = "Returns all external team records of the given project by its OID.",
         response = Partner.class,
         responseContainer = "List")
-    public Response getPartners(
+    public Response getPartnersByProjectOid(
         @ApiParam(value = "OID of the project to look for", required = true)
         @PathParam("projectOid") String projectOid) { return null; }
 
@@ -38,7 +38,7 @@ public class PartnerResource {
         notes = "Returns all external team records of the given project by its ID.",
         response = Partner.class,
         responseContainer = "List")
-    public Response getPartners(
+    public Response getPartnersByProjectId(
         @ApiParam(value = "ID of project to look for", required = true)
         @PathParam("projectId") String projectId) { return null; }
 

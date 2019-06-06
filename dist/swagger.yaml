@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently doing repetitive or tedious tasks.\n  * Chaining a process together for your team’s processes and workflows.\n    * Pulling information from other locations like email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Pushing information from Quire into other locations like email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your opinion on how our API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n*TBD*\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nYour user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. \n\n*Image*\n\nAfter your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.\n\nAlternatively, you can prepare a link on your website to redirect your users to Quire for authorization.\n\nThe syntax of the link is as follows:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n| Parameter Name | Description\n|------|------\n| `client_id` | Your client ID.\n| `redirect_uri` | URL to redirect user back upon completion (optional).\n| `state` | It can be any string and will be passed back upon completion (optional). \n\nOnce your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.\n\nThe `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.\n\nIf the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.\n\n### Retrieve an Access Token\n\nTo access Quire API, you need an access token. You can retrieve the token as follows.\n\n1. Retrieve the access code.\n\nAs described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.\n\n2. Use the access code to retrieve the access token.\n\nTo retrieve an access token, you have to <a href=\"https://www.w3schools.com/jquery/ajax_post.asp\" target=\"_blank\">post</a> a request to `https://quire.io/oauth/token` with the following data.\n\n`client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`\n\nThen, the access token will be returned in the response's body. You shall save the token carefully and permanently. You need to access each Quire API.\n\n### Make Authenticated Requests\n\n*TBD*\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,\n\n```\nAuthorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912\n```\n\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 4 months.\n\n# Rate limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 60  | 300\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n\n## Size limits\n\nThe size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.\n\n# Status codes\n\n| Code | Meaning               | Description                                               \n|------|-----------------------|--------------------------------------------------------------------------\n| 200  | Success               | Request successful\n| 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized          | Your API key is wrong.\n| 403  | Forbidden             | Not authorized to access the resource.\n| 404  | Not Found             | The specified resource could not be found.\n| 405  | Method not Allowed    | Method not allowed or supported.\n| 409  | Conflict              | There is already a resource with the same criteria.\n| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls\n| 500  | Internal Server Error | There is an unexpected error.\n| 503  | Service Unavailable   | Server is down for maintenance.\n\n## Error responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 105 | Invalid or expired token.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 500 | General invocation error. Most likely, an internal error.\n"
+  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently doing repetitive or tedious tasks.\n  * Chaining a process together for your team’s processes and workflows.\n    * Pulling information from other locations like email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Pushing information from Quire into other locations like email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your opinion on how our API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n*TBD*\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nYour user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. \n\n*Image*\n\nAfter your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.\n\nAlternatively, you can prepare a link on your website to redirect your users to Quire for authorization.\n\nThe syntax of the link is as follows:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n| Parameter Name | Description\n|------|------\n| `client_id` | Your client ID.\n| `redirect_uri` | URL to redirect user back upon completion (optional).\n| `state` | It can be any string and will be passed back upon completion (optional). \n\nOnce your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.\n\nThe `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.\n\nIf the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.\n\n### Retrieve an Access Token\n\nTo access Quire API, you need an access token. You can retrieve the token as follows.\n\n1. Retrieve the access code.\n\nAs described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.\n\n2. Use the access code to retrieve the access token.\n\nTo retrieve an access token, you have to <a href=\"https://www.w3schools.com/jquery/ajax_post.asp\" target=\"_blank\">post</a> a request to `https://quire.io/oauth/token` with the following data.\n\n`client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`\n\nThen, the access token will be returned in the response's body. You shall save the token carefully and permanently. You need to access each Quire API.\n\n### Make Authenticated Requests\n\n*TBD*\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,\n\n```\nAuthorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912\n```\n\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 6 months.\n\n# Rate limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 60  | 300\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n\n## Size limits\n\nThe size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.\n\n# Status codes\n\n| Code | Meaning               | Description                                               \n|------|-----------------------|--------------------------------------------------------------------------\n| 200  | Success               | Request successful\n| 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized          | Your API key is wrong.\n| 403  | Forbidden             | Not authorized to access the resource.\n| 404  | Not Found             | The specified resource could not be found.\n| 405  | Method not Allowed    | Method not allowed or supported.\n| 409  | Conflict              | There is already a resource with the same criteria.\n| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls\n| 500  | Internal Server Error | There is an unexpected error.\n| 503  | Service Unavailable   | Server is down for maintenance.\n\n## Error responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 105 | Invalid or expired token.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 469 | Quota exceeded.\n| 500 | General invocation error. Most likely, an internal error.\n"
   version: 1.0.0
   title: Quire API
   termsOfService: 'https://quire.io/terms'
@@ -16,16 +16,12 @@ info:
 host: quire.io
 basePath: /api
 tags:
-  - name: attachments
-    description: >-
-      An attachment object represents any file attached to a task or project in
-      Quire.
   - name: boards
     description: A board object.
   - name: comments
     description: The comment belong to a task or project
   - name: external teams
-    description: A external team object.
+    description: 'An external team (aka., a parnter).'
   - name: organization
     description: An organization is a group of projects where members collaborate at once.
   - name: project
@@ -37,10 +33,8 @@ tags:
     description: A tag is a label that can be attached to any task in Quire.
   - name: tasks
     description: >-
-      The task is the basic object around which many operations in Quire are
-      centered. In the Quire application, multiple tasks populate the middle
-      pane according to some view parameters, and the set of selected tasks
-      determines the more detailed information presented in the details pane.
+      The task is a piece of work to be done or undertaken. It is the basic
+      object that you and your team can collaborate on.
   - name: user
     description: >-
       A user object represents an account in Quire that can be given access to
@@ -48,26 +42,6 @@ tags:
 schemes:
   - https
 paths:
-  '/attachments/{url}':
-    delete:
-      tags:
-        - attachments
-      summary: Delete an attachment
-      description: >-
-        A specific, existing attachment can be deleted by making a DELETE
-        request on the URL for that attachment.
-      operationId: deleteAttachment
-      produces:
-        - application/json
-      parameters:
-        - name: url
-          in: path
-          description: Url of attachment that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
   '/boards/{oid}':
     get:
       tags:
@@ -175,45 +149,6 @@ paths:
       responses:
         '200':
           description: ok
-  '/external_teams/{oid}':
-    get:
-      tags:
-        - external teams
-      summary: Get an external team
-      description: returns the full external team record.
-      operationId: getExternalTeam
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of external team that needs to be fetched.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/ExternalTeam'
-    delete:
-      tags:
-        - external teams
-      summary: Delete an external team
-      description: >-
-        A specific, existing external team can be deleted by making a DELETE
-        request on the URL for that external team.
-      operationId: deleteExternalTeam
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of external team that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
   '/organization/id/{id}':
     get:
       tags:
@@ -273,6 +208,70 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Organization'
+  '/partner/list/id/{projectId}':
+    get:
+      tags:
+        - external teams
+      summary: Get all external teams of the given project by its ID.
+      description: Returns all external team records of the given project.
+      operationId: getPartnersByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to look for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Partner'
+  '/partner/list/{projectOid}':
+    get:
+      tags:
+        - external teams
+      summary: Get all external teams of the given project by its OID.
+      description: Returns all external team records of the given project.
+      operationId: getPartnersByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of the project to look for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Partner'
+  '/partner/{oid}':
+    get:
+      tags:
+        - external teams
+      summary: 'Get an external team (aka., a partner).'
+      description: returns the full external team record.
+      operationId: getPartner
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of external team that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Partner'
   '/project/id/{id}':
     get:
       tags:
@@ -293,17 +292,17 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-  '/project/list/id/{id}':
+  '/project/list/id/{organizationId}':
     get:
       tags:
         - project
-      summary: Get all projects of the given organization by its ID.
-      description: Returns the project records of the given organization
+      summary: Get all granted projects of the given organization by its ID.
+      description: 'Returns all project records of the given organization,'
       operationId: getPrjectsByOrganizationId
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: organizationId
           in: path
           description: ID of the organization
           required: true
@@ -315,19 +314,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Project'
-  '/project/list/{oid}':
+  '/project/list/{organizationOid}':
     get:
       tags:
         - project
-      summary: Get all projects of the given organization.
-      description: Returns the project records of the given organization
+      summary: 'Get all granted projects, or all projects of the specified organization.'
+      description: >-
+        Returns all granted project records of the given organization.Note: the
+        "organizationOid" is optinal. If omitted, all granted project records
+        will be returned.
       operationId: getPrjectsByOrganizationOid
       produces:
         - application/json
       parameters:
-        - name: oid
+        - name: organizationOid
           in: path
-          description: OID of the organization
+          description: (Optional) OID of the organization
           required: true
           type: string
       responses:
@@ -357,28 +359,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
-  '/projects/{oid}/attachments':
-    get:
-      tags:
-        - attachments
-      summary: Get project attachments
-      description: Returns the complete attachment record for a single project.
-      operationId: getProjectAttachments
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of project
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Attachment'
   '/projects/{oid}/comments':
     get:
       tags:
@@ -426,12 +406,56 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-  '/tags/{oid}':
+  '/tag/list/id/{projectId}':
+    get:
+      tags:
+        - tags
+      summary: Get all tags of the given project by its ID.
+      description: Returns all tag records of the given project.
+      operationId: getTagsByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to look for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+  '/tag/list/{projectOid}':
+    get:
+      tags:
+        - tags
+      summary: Get all tags of the given project by its OID.
+      description: Returns all tag records of the given project.
+      operationId: getTagsByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of the project to look for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+  '/tag/{oid}':
     get:
       tags:
         - tags
       summary: Get a tag
-      description: returns the full tag record.
+      description: Returns the full tag record.
       operationId: getTag
       produces:
         - application/json
@@ -450,11 +474,7 @@ paths:
       tags:
         - tags
       summary: Update a tag
-      description: >-
-        A specific, existing tag can be updated by making a PUT request on the
-        URL for that tag.
-
-        Returns the complete updated tag record.
+      description: Returns the complete updated tag record.
       operationId: updateTag
       produces:
         - application/json
@@ -466,7 +486,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: User to update
+          description: Tag to update
           required: true
           schema:
             $ref: '#/definitions/UpdateTagBody'
@@ -478,10 +498,8 @@ paths:
     delete:
       tags:
         - tags
-      summary: Delete a tag
-      description: >-
-        A specific, existing tag can be deleted by making a DELETE request on
-        the URL for that tag.
+      summary: Delete an existing tag
+      description: Delete an existing tag.
       operationId: deleteTag
       produces:
         - application/json
@@ -494,16 +512,47 @@ paths:
       responses:
         '200':
           description: ok
-  /tasks:
+  '/tag/{projectOid}':
     post:
       tags:
-        - tasks
-      summary: Add a task
-      description: Add a new task in a project.
-      operationId: createTask
+        - tags
+      summary: Add a new tag.
+      description: Add a new tag into a project.
+      operationId: createTag
       produces:
         - application/json
       parameters:
+        - name: projectOid
+          in: path
+          description: OID of project that this new tag to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Tag to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateTagBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Tag'
+  '/task/after/{oid}':
+    post:
+      tags:
+        - tasks
+      summary: Add a new task after the given task.
+      description: Add a new task after the given task.
+      operationId: createTaskAfter
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: 'OID of the task that this new task to be added before. '
+          required: true
+          type: string
         - in: body
           name: body
           description: Task to create
@@ -515,11 +564,144 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Task'
-  '/tasks/{oid}':
+  '/task/before/{oid}':
+    post:
+      tags:
+        - tasks
+      summary: Add a new task before the given task.
+      description: Add a new task before the given task.
+      operationId: createTaskBefore
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: 'OID of the task that this new task to be added after. '
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Task to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateTaskBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Task'
+  '/task/id/{projectId}/{id}':
     get:
       tags:
         - tasks
-      summary: Show a task.
+      summary: Get an existing task by its ID.
+      description: Returns the complete task record for a single task.
+      operationId: getTaskById
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project that the task belongs to.
+          required: true
+          type: integer
+          format: int32
+        - name: id
+          in: path
+          description: ID of the task that needs to be fetched
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Task'
+  '/task/list/id/{projectId}':
+    get:
+      tags:
+        - tasks
+      summary: Get all root tasks of the given project by its ID.
+      description: Returns all task records of the given project.
+      operationId: getTasks
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to look for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+  '/task/list/id/{projectId}/${id}':
+    get:
+      tags:
+        - tasks
+      summary: >-
+        Get all subtasks of the given task by its ID. Note: tasks in the same
+        level are return. That is, it won't returns subtasks of subtasks. You
+        have to retrieve them recursively.
+      description: Returns all subtask records of the given task.
+      operationId: getTasks
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project.
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of the parent task
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+  '/task/list/{oid}':
+    get:
+      tags:
+        - tasks
+      summary: >-
+        Get all root tasks or subtask of the given project or task by its OID.
+        If the given OID is a project, the root tasks are returned. If the given
+        OID is a task, the subtasks are returned. Note: tasks in the same level
+        are return. That is, it won't returns subtasks of subtasks. You have to
+        retrieve them recursively.
+      description: Returns all task records of the given project or task.
+      operationId: getSubTasks
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of project or parent task to look for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+  '/task/{oid}':
+    get:
+      tags:
+        - tasks
+      summary: Get an existing task by its OID.
       description: Returns the complete task record for a single task.
       operationId: getTask
       produces:
@@ -527,9 +709,37 @@ paths:
       parameters:
         - name: oid
           in: path
-          description: Oid of task that needs to be fetched
+          description: OID of the task that needs to be fetched
           required: true
           type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Task'
+    post:
+      tags:
+        - tasks
+      summary: Add a new task.
+      description: Add a new task into a project.
+      operationId: createTask
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: >-
+            OID of project or task that this new task to be added to. If the
+            given OID is a project, the new task will be added as a root task.
+            If the given OID is a task, the new task will become its subtask.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Task to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateTaskBody'
       responses:
         '200':
           description: successful operation
@@ -538,24 +748,20 @@ paths:
     put:
       tags:
         - tasks
-      summary: Update a task
-      description: >-
-        A specific, existing task can be updated by making a PUT request on the
-        URL for that taks.
-
-        Returns the complete updated task record.
+      summary: Update an existing task.
+      description: Returns the complete updated task record.
       operationId: updateTask
       produces:
         - application/json
       parameters:
         - name: oid
           in: path
-          description: Oid of task that needs to be updated
+          description: OID of task that needs to be updated.
           required: true
           type: string
         - in: body
           name: body
-          description: Task to update
+          description: The new content of the task to update to.
           required: true
           schema:
             $ref: '#/definitions/UpdateTaskBody'
@@ -567,44 +773,20 @@ paths:
     delete:
       tags:
         - tasks
-      summary: Delete a task
-      description: >-
-        A specific, existing task can be deleted by making a DELETE request on
-        the URL for that task.
+      summary: Delete an existing task and all of its subtasks.
+      description: Delete an existing task.
       operationId: deleteTask
       produces:
         - application/json
       parameters:
         - name: oid
           in: path
-          description: Oid of task that needs to be deleted
+          description: OID of task that needs to be deleted
           required: true
           type: string
       responses:
         '200':
           description: ok
-  '/tasks/{oid}/attachments':
-    get:
-      tags:
-        - attachments
-      summary: Get task attachments
-      description: Returns the complete attachment record for a single task.
-      operationId: getTaskAttachments
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: Oid of task
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Attachment'
   '/tasks/{oid}/comments':
     get:
       tags:
@@ -684,7 +866,9 @@ paths:
         the same app. If the current user didn't grant the access of his
         contacts and none of his collegues authorized this app, only the current
         user's record will be returned.
-      description: Returns all required user records.
+      description: >-
+        Returns all required user records. The first record must be the current
+        user.
       operationId: getUsers
       produces:
         - application/json
@@ -770,16 +954,22 @@ definitions:
         type: integer
         format: int32
         example: 2048
+        description: 'The size of this attachment. Unit: bytes.'
       name:
         type: string
         example: file.zip
+        description: Attachment's name.
+      type:
+        type: integer
+        format: int32
+        example: 2048
+        description: >-
+          The type of this attachment.It is 1 if it is from Google Drive. It is
+          2 if it is stored in Quire.
       url:
         type: string
         example: 'https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png'
-      oid:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: 'OID, aka. UUID.'
+        description: URL of this attachment.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -796,15 +986,15 @@ definitions:
       oid:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        description: The color of the icon representing this record.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        description: The color of the icon representing this record.
       id:
         type: string
         example: Marketing_Week
@@ -813,13 +1003,13 @@ definitions:
         type: string
         example: Marketing Week 1
         position: 2
-      description:
-        type: string
-        example: Detail about this board
-        position: 2
       initials:
         type: string
         example: MW
+        position: 2
+      description:
+        type: string
+        example: Detail about this board
         position: 2
   Comment:
     type: object
@@ -827,13 +1017,13 @@ definitions:
       oid:
         type: string
         example: tvax2wFqqiUDqiVF7YSUlQ8n
-      description:
-        type: string
-        example: Adjust style
-        position: 1
       pinned:
         type: boolean
         example: false
+        position: 1
+      description:
+        type: string
+        example: Adjust style
         position: 1
       createdAt:
         type: string
@@ -853,79 +1043,98 @@ definitions:
       description:
         type: string
         example: Adjust style
-  CreateTaskBody:
+  CreateTagBody:
     type: object
     required:
-      - project
+      - name
     properties:
       name:
         type: string
-        example: New Task
-      parent:
-        type: string
-        example: '10'
-        description: (optional) The parent task id
-      project:
-        type: string
-        example: GAUpZARpeOjlHqEux6IdUZI1
-        description: The project oid
-      start:
-        type: string
-        example: '2018-12-20T02:06:58.158Z'
-      after:
-        type: string
-        example: '13'
-        description: (optional) The previous sibling task id
-      assignee:
-        type: string
-        example: 6QMKkEPBVWETLWrXqws94ALU
-        description: User oid to assign
-      due:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-  ExternalTeam:
-    type: object
-    properties:
-      oid:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
+        example: Later
+        description: The name of the tag
+      global:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this tag is global. If omitted, it is not glboal.'
       color:
         type: string
-        example: '#a9cb77'
+        description: >-
+          (Optional) The color of the tag.If not omitted, a color will be
+          generated automatially.
+  CreateTaskBody:
+    type: object
+    properties:
       name:
         type: string
-        example: Degy Entertainment
-        position: 2
-      members:
+        example: Task 101
+        description: The name of the task.
+      tasks:
         type: array
-        position: 2
+        description: (Optional) A list of subtasks to create.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
+      description:
+        type: string
+        example: '**Great** task to start with.'
+        description: (Optional) An optional description about this task.
+      assignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the users that this task is assigned to.
         items:
           type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      image:
+      recurring:
+        description: >-
+          (Optional) The recurring information of this task. It is null if it is
+          not a recurring task.
+        $ref: '#/definitions/Recurring'
+      peekaboo:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Specify true to peekaboo this task and its subtasks, if
+          any. Default: false.
+      followers:
+        type: array
+        description: (Optional) OID of users who follow this task.
+        items:
+          type: string
+      start:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        position: 2
-      iconColor:
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      due:
         type: string
-        example: '#a9cb77'
-        position: 2
-      initials:
-        type: string
-        example: DE
-        position: 2
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      tags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be added to the new created task.
+        items:
+          type: string
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          (Optiona) An optional priority. Its value must be between -1 (lowest)
+          and 2 (highest). Default: 0.
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          (Optiona) An optional status. Its value must be between 0 and 100.
+          Default: 0.
   Organization:
     type: object
     properties:
@@ -966,15 +1175,15 @@ definitions:
         type: string
         example: This is a <i>cool</i> project.
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        description: The color of the icon representing this record.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        description: The color of the icon representing this record.
       name:
         type: string
         example: My Name
@@ -983,6 +1192,42 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
+  Partner:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Later
+        description: The name.
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID of the project this tag belongs to.
+      color:
+        type: string
+        example: '35'
+        description: >-
+          The color. It is an index of our predefined color palette. The first
+          digit is between 0 and 5, and the second between 0 and 7. The color
+          palette can be found in our Quire's color picker.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: 'OID, aka. UUID.'
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        position: 2
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Project:
     type: object
     properties:
@@ -990,6 +1235,18 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID of the organization this project belongs to.
+      activeCount:
+        type: integer
+        format: int32
+        description: Number of active tasks in this project.
+      taskCount:
+        type: integer
+        format: int32
+        description: Total number of tasks in this project.
+      rootCount:
+        type: integer
+        format: int32
+        description: Number of root tasks in this project.
       id:
         type: string
         example: My_Project
@@ -1017,15 +1274,15 @@ definitions:
         type: string
         example: This is a <i>cool</i> project.
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        description: The color of the icon representing this record.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        description: The color of the icon representing this record.
       name:
         type: string
         example: My Name
@@ -1034,18 +1291,84 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
+  Recurring:
+    type: object
+    properties:
+      type:
+        type: integer
+        format: int32
+        example: 2048
+        description: >-
+          The type of this recurring.It is 0 if it is weekly. It is 1 if it is
+          monthly. It is 2 if it is yearly. It is 3 if it is custom. 
+      rate:
+        type: integer
+        format: int32
+        example: 2048
+        description: >-
+          How often this recurring shall occur. If the rate is 2 and the type is
+          weekly, it means it shall occur every two week. If the type is custom,
+          it means number of days to repeat.
+      data:
+        type: integer
+        format: int32
+        description: >-
+          It depends on the type of this recurring. If weekly, bit 0 is Sunday,
+          bit 1 is Monday and so on. For example, if the data is 6, it means
+          every Monday and Tuesday.
+      end:
+        type: string
+        example: '2020-12-22T00:00:00.000Z'
+        position: 4
+        description: >-
+          When this recurring shall end. If not specified, it means it is never
+          end.
+  Referrer:
+    type: object
+    properties:
+      user:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the user who made this reference.
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: When this reference is made.
+      task:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the task that refers another task.
   Tag:
     type: object
     properties:
+      global:
+        type: boolean
+        example: true
+        description: Whether this is a global tag.
       name:
         type: string
         example: Later
-      oid:
+        description: The name.
+      project:
         type: string
-        example: PxXtvzXGaC0wzm7uIE92g1j1
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID of the project this tag belongs to.
       color:
         type: string
-        example: '#a9cb77'
+        example: '35'
+        description: >-
+          The color. It is an index of our predefined color palette. The first
+          digit is between 0 and 5, and the second between 0 and 7. The color
+          palette can be found in our Quire's color picker.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: 'OID, aka. UUID.'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1061,7 +1384,8 @@ definitions:
     properties:
       oid:
         type: string
-        example: 7DQI5OVhLyg2eWaQ7oNvClst
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: 'OID, aka. UUID.'
       id:
         type: integer
         format: int32
@@ -1071,43 +1395,189 @@ definitions:
         type: string
         example: Design new logo
         position: 2
+        description: This task's name.
+      nameText:
+        type: string
+        position: 2
+        description: This task's name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: <b>Big</b> task
+        position: 2
+        description: This task's name in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: This is a **cool** task.
+        position: 3
+        description: Description about this task.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is a <i>cool</i> task.
+        position: 3
+        description: Description in a form of a HTML fragment converted from markdown.
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          The priority of this task. Its value must be between -1 (lowest) and 2
+          (highest). Default: 0.
       state:
         type: integer
         format: int32
         example: 0
-        position: 2
-      description:
-        type: string
-        example: Detail about this task
-        position: 2
-      tags:
-        type: array
-        position: 2
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 2
+        position: 4
+        description: >-
+          The state of this task. Its value must be between 0 and 100. If 100,
+          it means completed.
+      recurring:
+        position: 4
+        description: >-
+          The recurring information of this task. It is null if it is not a
+          recurring task.
+        $ref: '#/definitions/Recurring'
       start:
         type: string
-        example: '2018-12-20T02:06:58.158Z'
-        position: 2
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
       due:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 2
+        example: '2018-12-22T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to complete this task. Note: if time is specified, the
+          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
+          and second fields).
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project/123'
+        position: 5
+        description: Url of this task on Quire website.
       assignees:
         type: array
-        position: 2
+        position: 5
+        description: OID of users who are assigned to this task.
         items:
           type: string
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
+      tags:
+        type: array
+        position: 5
+        description: OID of tags that are tagged to this task.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
+      assignors:
+        type: array
+        position: 5
+        description: >-
+          OID of users who have assigned this tasks to a user. For example, the
+          first item of assignees is assigned by the first item of assignors.
+        items:
+          type: string
+      partnerBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the user who assigned this task to an external team. It is null
+          if this task doesn't belong to any external team.
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the external team that this task belongs to. It is null if this
+          task doesn't belong to any external team.
+      order:
+        type: integer
+        format: int32
+        example: 99
+        position: 6
+        description: >-
+          The order of this task shown on the board. The smaller the number is,
+          the ealier the task is shown. It is meaningless if it doesn't belong
+          to any board.
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 6
+        description: >-
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
+      cover:
+        type: string
+        position: 8
+        description: The name of the attachment that is used as a cover of this task.
+      attachments:
+        type: array
+        position: 8
+        description: The attachments of this task.
+        items:
+          $ref: '#/definitions/Attachment'
+      childCount:
+        type: integer
+        format: int32
+        position: 10
+        description: >-
+          Number of subtasks of this task. To retrieve these subtasks, make the
+          GET request to "/task/list/{oid}".
+      referrers:
+        type: array
+        position: 20
+        description: >-
+          A list of referrers that refer this task. Note: some of them might no
+          longer exist.
+        items:
+          $ref: '#/definitions/Referrer'
+      toggledAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this task's state was changed last time.
+      toggledBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 50
+        description: 'OID of the user who changed this task''s state. '
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: >-
+          When this task's state was archived (aka., peekaboo). It is null if
+          not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
+      followers:
+        type: array
+        position: 60
+        description: OID of users who follow this task.
+        items:
+          type: string
+      favorites:
+        type: array
+        position: 60
+        description: OID of users who favorite this task.
+        items:
+          type: string
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1123,38 +1593,147 @@ definitions:
     required:
       - description
     properties:
-      description:
-        type: string
-        example: Adjust style
       pinned:
         type: boolean
         example: false
+      description:
+        type: string
+        example: Adjust style
   UpdateTagBody:
     type: object
-    required:
-      - name
     properties:
       name:
         type: string
-        example: New tag
+        example: Later
+        description: (Optional) The new name of the tag.
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: >-
+          (Optional) OID of the project this tag shall be limited to. It is used
+          only if "global" is also specified and false. Otherwise, it is simply
+          ignored.
+      global:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Whether this tag is global. If you specify false here, you
+          have to specify "project" for what project you'd like to put the tag
+          to.
+      color:
+        type: string
+        description: (Optional) The color of the tag.
   UpdateTaskBody:
     type: object
     properties:
       name:
         type: string
-        example: New name of task
+        example: New idea
+        description: (Optional) New name of the task.
       description:
         type: string
-        example: Detail about this task
+        description: (Optional) Change the description about this task.
+      assignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the users that this task is assigned to. If
+          specified, it will replace any existing assignee(s). Instead of
+          replacment, you can use "addAssignees" or "removeAssignees".
+        items:
+          type: string
+      recurring:
+        description: >-
+          (Optional) The recurring information of this task. It is null if it is
+          not a recurring task.
+        $ref: '#/definitions/Recurring'
+      peekaboo:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Specify true to peekaboo this task and its subtasks. Or,
+          specify false to undo the previous peekaboo if any.
+      followers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the users to replace the followers of this task.
+        items:
+          type: string
+      addTags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be added to this task.
+        items:
+          type: string
+      removeTags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be removed from this task.
+        items:
+          type: string
       start:
         type: string
-        example: '2018-12-20T02:06:58.158Z'
-      assignee:
-        type: string
-        example: john
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
       due:
         type: string
-        example: '2018-12-22T02:06:58.158Z'
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      tags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the tags to replace existing tags of to this task.
+          If specified, it will replace any existing tag(s). Instead of
+          replacment, you can use "addTags" or "removeTags".
+        items:
+          type: string
+      addAssignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the assignees to be added to this task.
+        items:
+          type: string
+      removeAssignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the assignees to be removed from this task.
+        items:
+          type: string
+      addFollowers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the followers to be added to this task.
+        items:
+          type: string
+      removeFollowers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the followers to be removed from this task.
+        items:
+          type: string
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          (Optiona) Change the priority of this task. Its value must be between
+          -1 (lowest) and 2 (highest). 
+      status:
+        type: integer
+        format: int32
+        example: 100
+        position: 4
+        description: >-
+          (Optiona) An optional status to change to. Its value must be between 0
+          and 100. To complete a task, specify 100.
   User:
     type: object
     properties:
@@ -1195,15 +1774,15 @@ definitions:
         type: string
         example: This is a <i>cool</i> project.
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '#a9cb77'
+        description: The color of the icon representing this record.
       image:
         type: string
         example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '#a9cb77'
-        description: The color of the icon representing this record.
       name:
         type: string
         example: My Name
@@ -1238,3 +1817,9 @@ definitions:
             tasks: []
             createdAt: 2018-12-24T02:06:58.158Z
             createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
+  ExternalTeam:
+    properties:
+      members:
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH

@@ -1,11 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.project.CreateProjectBody;
 import io.quire.api.model.project.Project;
-import io.quire.api.model.project.UpdateProjectBody;
-import io.quire.api.model.tag.CreateTagBody;
-import io.quire.api.model.tag.Tag;
-import io.quire.api.model.task.TaskWithChildren;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -47,7 +42,7 @@ public class ProjectResource {
             + "granted project records will be returned.",
         response = Project.class,
         responseContainer = "List")
-    public Response getPrjects(
+    public Response getPrjectsByOrganizationOid(
         @ApiParam(value = "(Optional) OID of the organization.",
             required = false)
         @PathParam("organizationOid") String organizationOid) { return null; }

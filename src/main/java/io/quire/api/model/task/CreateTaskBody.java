@@ -1,6 +1,9 @@
 package io.quire.api.model.task;
 
+import io.quire.api.model.Recurring;
 import io.swagger.annotations.*;
+
+import java.util.List;
 
 public class CreateTaskBody {
 
@@ -51,7 +54,7 @@ public class CreateTaskBody {
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true to peekaboo this task and its subtasks, "
 		+ "if any. Default: false.")
-	public boolean getPeekaboo() { return null; }
+	public boolean getPeekaboo() { return false; }
 
 	@ApiModelProperty(value = "(Optional) OID of users who follow this task.")
 	public List<String> getFollowers() { return null; }
