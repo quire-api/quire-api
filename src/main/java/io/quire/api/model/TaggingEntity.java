@@ -17,6 +17,6 @@ public class TaggingEntity extends StampedEntity {
 	public String getColor() { return null; }
 
 	@ApiModelProperty(value="OID of the project this tag belongs to.",
-		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
+		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", position = 99)
 	public String getProject() { return null; }
 }

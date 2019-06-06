@@ -113,6 +113,11 @@ public class Task extends StampedEntity {
 		example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getArchivedAt() { return null; }
 
-	@ApiModelProperty(value = "Url of this task on Quire website.", example = "https://quire.io/w/my_project/123", position = 5)
+	@ApiModelProperty(value = "Url of this task on Quire website.",
+		example = "https://quire.io/w/my_project/123", position = 50)
 	public String getUrl() { return null; }
+
+	@ApiModelProperty(value="OID of the project this task belongs to.",
+		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", position = 99)
+	public String getProject() { return null; }
 }

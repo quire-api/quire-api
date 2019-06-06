@@ -56,8 +56,9 @@ public class TaskResource {
 	@GET
 	@Path("/list/{oid}")
 	@ApiOperation(value = "Get all root tasks of the given project or "
-		+ "all subtasks of the given task by OID.",
-		notes = "Returns all task records of the given project or task. "
+		+ "all subtasks of the given task.",
+		notes = "Returns all root task records of the given project or "
+		+ "all subtasks of the given task by OID. "
 		+ "If the given OID is a project, the root tasks are returned. "
 		+ "If the given OID is a task, its subtasks are returned.\n"
 		+ "Note: tasks in the same level are return. That is, it won't "
@@ -70,27 +71,27 @@ public class TaskResource {
 
 	@GET
 	@Path("/list/id/{projectId}")
-	@ApiOperation(value = "Get all root tasks of the given project by its ID.",
+	@ApiOperation(value = "Get all root tasks of the given project.",
 		notes = "Returns all root task records of the given project.",
 		response = Task.class,
         responseContainer = "List")
-	public Response getTasks(
-		@ApiParam(value = "ID of project to look for", required = true)
+	public Response getRootTasks(
+		@ApiParam(value = "ID of project.", required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
 	@GET
-	@Path("/list/id/{projectId}/{id}")
-	@ApiOperation(value = "Get all subtasks of the given task by its ID. "
+	@Path("/list/id/{projectId}/{taskId}")
+	@ApiOperation(value = "Get all subtasks of the given task.",
+		notes = "Returns all subtask records of the given task.\n"
 		+ "Note: tasks in the same level are return. That is, it won't "
 		+ "returns subtasks of subtasks. You have to retrieve them recursively.",
-		notes = "Returns all subtask records of the given task.",
 		response = Task.class,
         responseContainer = "List")
-	public Response getTasks(
+	public Response getSubtasks(
 		@ApiParam(value = "ID of the project.", required = true)
 		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the parent task", required = true)
-		@PathParam("id") int id) { return null; }
+		@ApiParam(value = "ID of the parent task.", required = true)
+		@PathParam("taskId") int taskId) { return null; }
 
 	@GET
 	@Path("/{oid}")
