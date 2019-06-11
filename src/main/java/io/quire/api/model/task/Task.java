@@ -24,7 +24,7 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "Description in a form of a HTML fragment converted from markdown.", example = "This is a <i>cool</i> task.", position = 3)
 	public String getDescriptionHtml() { return null; }
 
-	@ApiModelProperty(value = "The state of this task. "
+	@ApiModelProperty(value = "The status of this task. "
 		+ "Its value must be between 0 and 100. If 100, it means completed.",
 		example = "0", position = 4)
 	public int getStatus() { return 0; }

@@ -26,12 +26,23 @@ public class BoardResource {
 
 	@GET
 	@Path("/{oid}")
-	@ApiOperation(value = "Get an board",
+	@ApiOperation(value = "Get an existing board by its OID",
 		notes = "Returns the full board record of the given OID.",
 		response = Board.class)
 	public Response getBoard(
 		@ApiParam(value = "OID of board that needs to be fetched.", required = true)
 		@PathParam("oid") String oid) { return null; }
+
+	@GET
+	@Path("/id/{projectId}/{id}")
+	@ApiOperation(value = "Get an existing board by its ID.",
+		notes = "Returns the full board record of the given ID.",
+		response = Board.class)
+	public Response getBoardById(
+		@ApiParam(value = "ID of the project that the board belongs to.", required = true)
+		@PathParam("projectId") int projectId,
+		@ApiParam(value = "ID of the board that needs to be fetched", required = true)
+		@PathParam("id") String id) { return null; }
 
 	@GET
 	@Path("/list/{projectOid}")

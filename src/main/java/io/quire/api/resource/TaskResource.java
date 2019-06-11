@@ -96,7 +96,7 @@ public class TaskResource {
 	@GET
 	@Path("/{oid}")
 	@ApiOperation(value = "Get an existing task by its OID.",
-		notes = "Returns the complete task record for a single task.",
+		notes = "Returns the full task record for a single task.",
 		response = Task.class)
 	public Response getTask(
 		@ApiParam(value = "OID of the task that needs to be fetched",
@@ -106,18 +106,18 @@ public class TaskResource {
 	@GET
 	@Path("/id/{projectId}/{id}")
 	@ApiOperation(value = "Get an existing task by its ID.",
-		notes = "Returns the complete task record for a single task.",
+		notes = "Returns the full task record for a single task.",
 		response = Task.class)
 	public Response getTaskById(
 		@ApiParam(value = "ID of the project that the task belongs to.", required = true)
 		@PathParam("projectId") int projectId,
 		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
-		@PathParam("id") int id) { return null; }
+		@PathParam("id") int id) { return 0; }
 
 	@PUT
 	@Path("/{oid}")
 	@ApiOperation(value = "Update an existing task.",
-		notes = "Updates an existing task, and returns the complete updated record.",
+		notes = "Updates an existing task, and returns the full updated record.",
 		response = Task.class)
 	public Response updateTask(
 		@ApiParam(value = "OID of task that needs to be updated.", required = true)

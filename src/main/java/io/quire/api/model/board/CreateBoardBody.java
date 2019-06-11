@@ -21,8 +21,9 @@ public class CreateBoardBody {
 	public String getDescription() { return null; }
 
 	@ApiModelProperty(value = "(Optional) The column defintions of this board. "
-		+ "If omitted, the default column defintions will be generated.")
-	public List<Column> getColumns() { return null; }
+		+ "If omitted, the default column defintions will be generated. "
+		+ "If specified, it must have at least one column whose status is 100.")
+	public List<CreateColumnBody> getColumns() { return null; }
 
 	@ApiModelProperty(value = "(Optional) OID of the external team that this board belongs to. "
 		+ "If the current user is a member of an external team, this field is ignored. ",

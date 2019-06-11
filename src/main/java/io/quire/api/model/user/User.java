@@ -6,5 +6,5 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class User extends IdentityX {
-
+	//for privacy, we don't output fdCreatedAt and fdCreatedBy
 }

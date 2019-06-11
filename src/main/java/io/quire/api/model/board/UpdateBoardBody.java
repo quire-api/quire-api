@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel()
 public class UpdateBoardBody {
 	@ApiModelProperty(example = "Board101",
-		value = "(Optional) ID of the board. "
-		+ "If omitted, Quire will generate one automatically. "
-		+ "It must be unquie in the whole project if specified")
+		value = "(Optional) ID of the board.")
 	public String getId() { return null; }
 
 	@ApiModelProperty(example = "Board 101",
@@ -25,7 +23,7 @@ public class UpdateBoardBody {
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value = "(Optional) The new column defintion to be added to this board.")
-	public CreateColumnBody getAddColumn() { return null; }
+	public AddColumnBody getAddColumn() { return null; }
 
 	@ApiModelProperty(value = "(Optional) ID of the column that needs to be deleted.")
 	public String getRemoveColumn() { return null; }
@@ -33,5 +31,5 @@ public class UpdateBoardBody {
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true to archive this board. "
 		+ "Or, specify false to undo the previous archiving if any.")
-	public boolean getArchive() { return false; }
+	public boolean getArchived() { return false; }
 }
