@@ -22,6 +22,9 @@ public class UpdateBoardBody {
 		example = "2020-01-22T02:06:58.158Z")
 	public String getDue() { return null; }
 
+	@ApiModelProperty(value = "(Optional) Updates an existing column with a new content.")
+	public UpdateColumnBody getColumn() { return null; }
+
 	@ApiModelProperty(value = "(Optional) The new column defintion to be added to this board.")
 	public AddColumnBody getAddColumn() { return null; }
 
