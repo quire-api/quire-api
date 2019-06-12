@@ -28,8 +28,8 @@ public class UpdateBoardBody {
 	@ApiModelProperty(value = "(Optional) The new column defintion to be added to this board.")
 	public AddColumnBody getAddColumn() { return null; }
 
-	@ApiModelProperty(value = "(Optional) ID of the column that needs to be deleted.")
-	public String getRemoveColumn() { return null; }
+	@ApiModelProperty(value = "(Optional) The status of the column that needs to be deleted.")
+	public int getRemoveColumn() { return 0; }
 
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true to archive this board. "
