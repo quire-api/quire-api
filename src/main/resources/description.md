@@ -94,6 +94,79 @@ A refresh token might stop working for one of these reasons:
 * The user has revoked your app's access.
 * The refresh token has not been used for 6 months.
 
+# Hook
+
+A hook is a channel that Quire will push the information of updates (aka., notifications) to an app.
+
+> A hook is used by Quire to call an app, while Quire API is used by an app to call Quire.
+
+## Notifications
+
+A notification is the information about a update (aka., an activity). Here is an example:
+
+```
+{
+  "type": "notification",
+  "token": "a-token-defined-by-you",
+  "data": {
+    "type": 0, //activity's type
+    "when": "2019-09-30T08:20:12.000Z",
+    "what": {
+      "oid": "YxjapXXRCOYxoaiCT4tT3OQm", //OID of a task, project, or organization depending on type
+      "id": 101,
+      "name": "Brand new start"
+    },
+    "user": {
+      "oid": "1AbDEFed2A5031BEDDweqmde", //OID of the user
+      "id": "john.doer",
+      "name": "John Doer"
+    },
+    "message": "<a href=\"https://quire.io/u/john.doer\">John Doer</a> added <a href=\"https://quire.io/w/MyProjects/101\">Brand new start</a>",
+    "text": "John Doer added Brand new start",
+    "url": "https://quire.io/w/MyProjects/101"
+  } 
+}
+```
+
+## Registration for notifications
+
+To receive notifications, the app can *follow* tasks or projects it cares. By sending a `PUT` request to the URL it'd like to follow. To add a follower, the body of the request can be:
+
+```
+{
+  "addFollowers": ["app"]
+}
+```
+
+Where `app` is a keyword. It indicates the app would like to add itself to the followers.
+
+In additions, you can specify additional information that will be passed as part of a notification. The syntax is as follows:
+
+```
+"app|team|channel"
+```
+
+where `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`. For example,
+
+```
+{
+  "addFollowers": ["app|extra101"]
+}
+```
+
+Then, the notification will carray additional field called `team` with the value `"extra101"`:
+
+```
+{
+  "type": "notification"
+  "team": "extra101"
+  "data": {
+    //refer the Notifications section for details
+  }
+}
+```
+
+
 # Rate limits
 
 To protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. 
