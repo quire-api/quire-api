@@ -31,4 +31,7 @@ public class Project extends Identity {
     public String getCreatedAt() { return null; }
     @ApiModelProperty(value = "OID of the user who created this record.", example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", position = 99)
     public String getCreatedBy() { return null; }
+
+	@ApiModelProperty(value = "OID of users who follow this task.", position = 60)
+	public List<String> getFollowers() { return null; }
 }
