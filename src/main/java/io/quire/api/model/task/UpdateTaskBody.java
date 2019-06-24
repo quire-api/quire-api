@@ -69,13 +69,16 @@ public class UpdateTaskBody {
 		+ "Or, specify false to undo the previous peekaboo if any.")
 	public boolean getPeekaboo() { return false; }
 
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
-		value = "(Optional) OID of the users to replace the followers of this task.")
+	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\",\"app\"]",
+		value = "(Optional) OID of the users to replace the followers of this task. "
+		+ "If the application would like to follow, it can pass \"app\" as one of OIDs.")
 	public List<String> getFollowers() { return null; }
 	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
-		value = "(Optional) OID of the followers to be added to this task.")
+		value = "(Optional) OID of the followers to be added to this task."
+		+ "If the application would like to follow, it can pass \"app\" as one of OIDs.")
 	public List<String> getAddFollowers() { return null; }
 	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
-		value = "(Optional) OID of the followers to be removed from this task.")
+		value = "(Optional) OID of the followers to be removed from this task."
+		+ "If the application won't like to follow any more, it can pass \"app\" as one of OIDs.")
 	public List<String> getRemoveFollowers() { return null; }
 }

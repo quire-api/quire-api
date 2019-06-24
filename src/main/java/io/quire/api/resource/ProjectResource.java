@@ -67,12 +67,10 @@ public class ProjectResource {
             required = true)
         @PathParam("oid") String oid) { return null; }
 
-/* Not supported yet (security concern)
     @PUT
     @Path("/{oid}")
-    @ApiOperation(value = "Update a project",
-        notes = "A specific, existing project can be updated by making a PUT request on the URL for that project.\n" +
-              "Returns the complete updated project record.",
+    @ApiOperation(value = "Update a project.",
+        notes = "Updates an existing project, and returns the complete updated project record.",
         response = Project.class)
     public Response updateProject(
         @ApiParam(value = "OID of project that needs to be updated", required = true)
@@ -80,6 +78,7 @@ public class ProjectResource {
         @ApiParam(value = "Project to update", required = true)
         UpdateProjectBody data) { return null; }
 
+/* Not supported yet (security concern)
     @DELETE
     @Path("/{oid}")
     @ApiOperation(value = "Delete a project",

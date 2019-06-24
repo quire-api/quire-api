@@ -56,7 +56,8 @@ public class CreateTaskBody {
 		+ "if any. Default: false.")
 	public boolean getPeekaboo() { return false; }
 
-	@ApiModelProperty(value = "(Optional) OID of users who follow this task.")
+	@ApiModelProperty(value = "(Optional) OID of users who follow this task."
+		+ "If the application would like to follow, it can pass \"app\" as one of OIDs.")
 	public List<String> getFollowers() { return null; }
 
 	@ApiModelProperty(value = "(Optional) A list of subtasks to create.")
