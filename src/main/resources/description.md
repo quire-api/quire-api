@@ -96,7 +96,7 @@ A refresh token might stop working for one of these reasons:
 
 # Hook
 
-A hook is a channel that Quire will push the information of updates (aka., notifications) to an app.
+A hook is a channel that Quire will *push* the information of updates (aka., notifications) to an app.
 
 > A hook is used by Quire to call an app, while Quire API is used by an app to call Quire.
 
