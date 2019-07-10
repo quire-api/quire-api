@@ -1065,19 +1065,13 @@ paths:
           schema:
             $ref: '#/definitions/User'
 securityDefinitions:
-  api_key:
-    type: apiKey
-    name: access_token
-    in: header
-  quire_auth:
+  BasicAuth:
+    type: basic
+  OAuth2:
     type: oauth2
-    authorizationUrl: 'https://quire.io/oauth/authorize'
+    authorizationUrl: 'https://quire.io/oauth'
+    tokenUrl: 'https://quire.io/oauth/token'
     flow: accessCode
-    scopes:
-      'write:projects': modify projects in your account
-      'read:projects': read your projects
-      basic: to read a user's profile info and media (granted by default)
-      comments: to post and delete comments on a user's behalf
 definitions:
   AddColumnBody:
     type: object
@@ -1132,16 +1126,16 @@ definitions:
         type: string
         example: 'https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png'
         description: URL of this attachment.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Board:
     type: object
     properties:
@@ -1173,17 +1167,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1205,31 +1199,31 @@ definitions:
         description: >-
           OID of the external team that this board belongs to. It is null if
           this board can't be accessed by a member of external teams.
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: When this board was archived. It is null if not archived.
       due:
         type: string
         example: '2020-01-22T02:06:58.158Z'
         position: 50
         description: 'When this board was aimed to complete, or null if not specified.'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: When this board was archived. It is null if not archived.
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this board belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Column:
     type: object
     properties:
@@ -1287,26 +1281,26 @@ definitions:
           https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b
         position: 50
         description: Url of this comment on Quire website.
-      pinAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: 'When this comment was pinned, or null if not pinned.'
-      pinBy:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 50
-        description: 'OID of the user who pinned this comment, or null if not pinned.'
-      editedBy:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 50
-        description: 'OID of the user who edited this comment, or null if not edited.'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was edited, or null if not edited.'
+      pinBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 50
+        description: 'OID of the user who pinned this comment, or null if not pinned.'
+      pinAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: 'When this comment was pinned, or null if not pinned.'
+      editedBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 50
+        description: 'OID of the user who edited this comment, or null if not edited.'
       owner:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -1319,16 +1313,16 @@ definitions:
         description: >-
           The type of the object this comment was added to. It can be "Task" or
           "Project".
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   CreateBoardBody:
     type: object
     required:
@@ -1438,16 +1432,24 @@ definitions:
         description: (Optional) A list of subtasks to create.
         items:
           $ref: '#/definitions/CreateTaskBody'
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      followers:
+        type: array
+        description: >-
+          (Optional) OID of users who follow this task.If the application would
+          like to follow, it can pass "app" as one of OIDs.
+        items:
+          type: string
       tags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
         description: (Optional) OID of the tags to be added to the new created task.
-        items:
-          type: string
-      assignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the users that this task is assigned to.
         items:
           type: string
       start:
@@ -1457,13 +1459,12 @@ definitions:
           (Optional) An optional start time. Note: if time is specified, the
           millisecond must be `001`. Otherwise, it is `000` (so are the hour,
           minute and second fields).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
+      assignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the users that this task is assigned to.
+        items:
+          type: string
       recurring:
         description: >-
           (Optional) The recurring information of this task. It is null if it is
@@ -1475,13 +1476,6 @@ definitions:
         description: >-
           (Optional) Specify true to peekaboo this task and its subtasks, if
           any. Default: false.
-      followers:
-        type: array
-        description: >-
-          (Optional) OID of users who follow this task.If the application would
-          like to follow, it can pass "app" as one of OIDs.
-        items:
-          type: string
       priority:
         type: integer
         format: int32
@@ -1539,17 +1533,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1558,16 +1552,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Partner:
     type: object
     properties:
@@ -1595,16 +1589,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this object belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Project:
     type: object
     properties:
@@ -1652,17 +1646,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1671,6 +1665,11 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1678,27 +1677,22 @@ definitions:
         description: >-
           When this project was archived (aka., peekaboo). It is null if not
           archived.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       followers:
         type: array
         position: 60
         description: OID of users who follow this task.
         items:
           type: string
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Recurring:
     type: object
     properties:
@@ -1775,16 +1769,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this object belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Task:
     type: object
     properties:
@@ -1842,14 +1836,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to start this task.Note: if time is specified, the millisecond
-          will be `001`. Otherwise, it is `000` (so are the hour, minute and
-          second fields).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -1858,12 +1844,27 @@ definitions:
           When to complete this task. Note: if time is specified, the
           millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
           and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
       recurring:
         position: 4
         description: >-
           The recurring information of this task. It is null if it is not a
           recurring task.
         $ref: '#/definitions/Recurring'
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the external team that this task belongs to. It is null if this
+          task doesn't belong to any external team.
       tags:
         type: array
         position: 5
@@ -1873,22 +1874,6 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
-      assignees:
-        type: array
-        position: 5
-        description: OID of users who are assigned to this task.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      partner:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 5
-        description: >-
-          OID of the external team that this task belongs to. It is null if this
-          task doesn't belong to any external team.
       assignors:
         type: array
         position: 5
@@ -1907,13 +1892,15 @@ definitions:
         description: >-
           OID of the user who assigned this task to an external team. It is null
           if this task doesn't belong to any external team.
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
-        description: >-
-          OID of the board that this task was added to. It is null if this task
-          doesn't belong to any board.
+      assignees:
+        type: array
+        position: 5
+        description: OID of users who are assigned to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
       order:
         type: integer
         format: int32
@@ -1923,16 +1910,23 @@ definitions:
           The order of this task shown on the board. The smaller the number is,
           the ealier the task is shown. It is meaningless if it doesn't belong
           to any board.
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 6
+        description: >-
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
+      cover:
+        type: string
+        position: 8
+        description: The name of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
-      cover:
-        type: string
-        position: 8
-        description: The name of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -1953,6 +1947,11 @@ definitions:
         example: 'https://quire.io/w/my_project/123'
         position: 50
         description: Url of this task on Quire website.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1963,11 +1962,6 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 50
         description: 'OID of the user who changed this task''s state. '
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       peekabooAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1994,16 +1988,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this task belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   UpdateBoardBody:
     type: object
     required:
@@ -2025,12 +2019,12 @@ definitions:
         type: string
         example: '2020-01-22T02:06:58.158Z'
         description: '(Optional) When this board was aimed to complete. '
-      column:
-        description: (Optional) Updates an existing column with a new content.
-        $ref: '#/definitions/UpdateColumnBody'
       addColumn:
         description: (Optional) The new column defintion to be added to this board.
         $ref: '#/definitions/AddColumnBody'
+      column:
+        description: (Optional) Updates an existing column with a new content.
+        $ref: '#/definitions/UpdateColumnBody'
       removeColumn:
         type: integer
         format: int32
@@ -2086,6 +2080,19 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
+      followers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
+        description: >-
+          (Optional) OID of the users to replace the followers of this project.
+          If the application would like to follow, it can pass "app" as one of
+          OIDs.
+
+          In additions, it can pass additional information in the syntax of
+          "app|team" or "app|team|channel" where team and channel can be any
+          value.
+        items:
+          type: string
       addFollowers:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2104,19 +2111,6 @@ definitions:
         description: >-
           (Optional) OID of the followers to be removed from this project.If the
           application would like to follow, it can pass "app" as one of OIDs.
-
-          In additions, it can pass additional information in the syntax of
-          "app|team" or "app|team|channel" where team and channel can be any
-          value.
-        items:
-          type: string
-      followers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
-        description: >-
-          (Optional) OID of the users to replace the followers of this project.
-          If the application would like to follow, it can pass "app" as one of
-          OIDs.
 
           In additions, it can pass additional information in the syntax of
           "app|team" or "app|team|channel" where team and channel can be any
@@ -2157,6 +2151,50 @@ definitions:
       description:
         type: string
         description: (Optional) Change the description about this task.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      followers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
+        description: >-
+          (Optional) OID of the users to replace the followers of this task. If
+          the application would like to follow, it can pass "app" as one of
+          OIDs.
+
+          In additions, it can pass additional information in the syntax of
+          "app|team" or "app|team|channel" where team and channel can be any
+          value.
+        items:
+          type: string
+      addFollowers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the followers to be added to this task.If the
+          application would like to follow, it can pass "app" as one of OIDs.
+
+          In additions, it can pass additional information in the syntax of
+          "app|team" or "app|team|channel" where team and channel can be any
+          value.
+        items:
+          type: string
+      removeFollowers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the followers to be removed from this task.If the
+          application would like to follow, it can pass "app" as one of OIDs.
+
+          In additions, it can pass additional information in the syntax of
+          "app|team" or "app|team|channel" where team and channel can be any
+          value.
+        items:
+          type: string
       tags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2190,30 +2228,13 @@ definitions:
         description: (Optional) OID of the assignees to be removed from this task.
         items:
           type: string
-      addFollowers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
         description: >-
-          (Optional) OID of the followers to be added to this task.If the
-          application would like to follow, it can pass "app" as one of OIDs.
-
-          In additions, it can pass additional information in the syntax of
-          "app|team" or "app|team|channel" where team and channel can be any
-          value.
-        items:
-          type: string
-      removeFollowers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the followers to be removed from this task.If the
-          application would like to follow, it can pass "app" as one of OIDs.
-
-          In additions, it can pass additional information in the syntax of
-          "app|team" or "app|team|channel" where team and channel can be any
-          value.
-        items:
-          type: string
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
       assignees:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2223,20 +2244,6 @@ definitions:
           replacment, you can use "addAssignees" or "removeAssignees".
         items:
           type: string
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
       recurring:
         description: >-
           (Optional) The recurring information of this task. It is null if it is
@@ -2248,19 +2255,6 @@ definitions:
         description: >-
           (Optional) Specify true to peekaboo this task and its subtasks. Or,
           specify false to undo the previous peekaboo if any.
-      followers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
-        description: >-
-          (Optional) OID of the users to replace the followers of this task. If
-          the application would like to follow, it can pass "app" as one of
-          OIDs.
-
-          In additions, it can pass additional information in the syntax of
-          "app|team" or "app|team|channel" where team and channel can be any
-          value.
-        items:
-          type: string
       priority:
         type: integer
         format: int32
@@ -2318,17 +2312,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name

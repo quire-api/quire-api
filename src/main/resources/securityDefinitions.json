@@ -1,18 +1,11 @@
 {
-  "api_key": {
-    "type": "apiKey",
-    "name": "access_token",
-    "in": "header"
+  "BasicAuth": {
+    "type": "basic"
   },
-  "quire_auth": {
+  "OAuth2": {
     "type": "oauth2",
-    "authorizationUrl": "https://quire.io/oauth/authorize",
+    "authorizationUrl": "https://quire.io/oauth",
     "flow": "accessCode",
-    "scopes": {
-      "write:projects": "modify projects in your account",
-      "read:projects": "read your projects",
-      "basic": "to read a user's profile info and media (granted by default)",
-      "comments": "to post and delete comments on a user's behalf"
-    }
+    "tokenUrl": "https://quire.io/oauth/token"
   }
 }
