@@ -112,7 +112,7 @@ public class TaskResource {
 		@ApiParam(value = "ID of the project that the task belongs to.", required = true)
 		@PathParam("projectId") int projectId,
 		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
-		@PathParam("id") int id) { return 0; }
+		@PathParam("id") int id) { return null; }
 
 	@PUT
 	@Path("/{oid}")

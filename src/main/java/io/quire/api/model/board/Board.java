@@ -4,6 +4,8 @@ import io.quire.api.model.Identity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 @ApiModel()
 public class Board extends Identity {
 	@ApiModelProperty(value = "The column defintions of this board.",

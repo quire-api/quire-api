@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/partner")
 @Api(value = "partner", description =
-	"An external team (aka., a parnter) is a group of users that can "
+	"An external team (aka., a parnter) is a group of users that can " +
 	"access only tasks that are assigned to this team.")
 @Produces({"application/json"})
 public class PartnerResource {

@@ -4,6 +4,8 @@ import io.quire.api.model.Identity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 @ApiModel()
 public class CreateBoardBody {
 	@ApiModelProperty(example = "Board101",

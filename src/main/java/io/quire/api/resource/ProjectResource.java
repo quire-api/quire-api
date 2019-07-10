@@ -1,6 +1,7 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.project.Project;
+import io.quire.api.model.project.UpdateProjectBody;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -37,7 +38,7 @@ public class ProjectResource {
     @Path("/list/{organizationOid}")
     @ApiOperation(value = "Get all granted projects of the organization by its OID.",
         notes = "Returns all project records of the given organization. "
-            + "Only granted projects will be returned.\n",
+            + "Only granted projects will be returned.\n"
             + "Note: the \"organizationOid\" is optinal. If omitted, all "
             + "granted project records will be returned.",
         response = Project.class,

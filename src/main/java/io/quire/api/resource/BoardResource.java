@@ -1,6 +1,8 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.board.Board;
+import io.quire.api.model.board.CreateBoardBody;
+import io.quire.api.model.board.UpdateBoardBody;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;

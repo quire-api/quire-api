@@ -1,8 +1,11 @@
 package io.quire.api.model.comment;
 
+import io.quire.api.model.Attachment;
 import io.quire.api.model.StampedEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 @ApiModel()
 public class Comment extends StampedEntity {
@@ -20,8 +23,8 @@ public class Comment extends StampedEntity {
 	@ApiModelProperty(value = "The attachments of this task.", position = 8)
 	public List<Attachment> getAttachments() { return null; }
 
-	@ApiModelProperty(value = "When this comment was pinned, ",
-		+ "or null if not pinned."
+	@ApiModelProperty(value = "When this comment was pinned, "
+		+ "or null if not pinned.",
 		example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getPinAt() { return null; }
 	@ApiModelProperty(value = "OID of the user who pinned this comment, "
@@ -29,8 +32,8 @@ public class Comment extends StampedEntity {
 		example = "rcBHBYXZSiyDRrHrWPutatfF", position = 50)
 	public String getPinBy() { return null; }
 
-	@ApiModelProperty(value = "When this comment was edited, ",
-		+ "or null if not edited."
+	@ApiModelProperty(value = "When this comment was edited, "
+		+ "or null if not edited.",
 		example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
 	@ApiModelProperty(value = "OID of the user who edited this comment, "
