@@ -8,6 +8,7 @@ import io.swagger.annotations.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+@Path("/comment")
 @Api(value = "comment", description =
 	"A comment that an user can put to a task or project.")
 @Produces({"application/json"})

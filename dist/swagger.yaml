@@ -204,7 +204,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Board'
-  '/list/id/{projectId}':
+  '/comment/list/id/{projectId}':
     get:
       tags:
         - comment
@@ -226,7 +226,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
-  '/list/id/{projectId}/{taskId}':
+  '/comment/list/id/{projectId}/{taskId}':
     get:
       tags:
         - comment
@@ -254,7 +254,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
-  '/list/{oid}':
+  '/comment/list/{oid}':
     get:
       tags:
         - comment
@@ -278,6 +278,98 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
+  '/comment/{oid}':
+    get:
+      tags:
+        - comment
+      summary: Get a comment
+      description: Returns the full comment record of the given OID.
+      operationId: getComment
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of comment that needs to be feteched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+    post:
+      tags:
+        - comment
+      summary: Add a task comment to a task or a project.
+      description: >-
+        Add a new comment to a task or a project. If the given OID is a project,
+        the comment will be added to a project. If a task, the comment will be
+        added to a task.
+      operationId: createComment
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of a project or a task that new comment will be added to
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Comment to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateCommentBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+    put:
+      tags:
+        - comment
+      summary: Update an existing comment
+      description: >-
+        Updates an existing comment, and returns the complete updated comment
+        record.
+      operationId: updateComment
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of comment that needs to be updated.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: The new content of the comment to update to
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateCommentBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+    delete:
+      tags:
+        - comment
+      summary: Delete an existing comment
+      description: Delete an existing comment.
+      operationId: deleteComment
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of comment that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
   '/organization/id/{id}':
     get:
       tags:
@@ -972,98 +1064,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/User'
-  '/{oid}':
-    get:
-      tags:
-        - comment
-      summary: Get a comment
-      description: Returns the full comment record of the given OID.
-      operationId: getComment
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of comment that needs to be feteched.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Comment'
-    post:
-      tags:
-        - comment
-      summary: Add a task comment to a task or a project.
-      description: >-
-        Add a new comment to a task or a project. If the given OID is a project,
-        the comment will be added to a project. If a task, the comment will be
-        added to a task.
-      operationId: createComment
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of a project or a task that new comment will be added to
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Comment to create
-          required: true
-          schema:
-            $ref: '#/definitions/CreateCommentBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Comment'
-    put:
-      tags:
-        - comment
-      summary: Update an existing comment
-      description: >-
-        Updates an existing comment, and returns the complete updated comment
-        record.
-      operationId: updateComment
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of comment that needs to be updated.
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: The new content of the comment to update to
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateCommentBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Comment'
-    delete:
-      tags:
-        - comment
-      summary: Delete an existing comment
-      description: Delete an existing comment.
-      operationId: deleteComment
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of comment that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
   /organizations:
     get:
       responses:
@@ -1164,16 +1164,16 @@ definitions:
         type: string
         example: 'https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png'
         description: URL of this attachment.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Board:
     type: object
     properties:
@@ -1181,14 +1181,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      url:
-        type: string
-        example: 'https://quire.io/w/my_project'
-        description: Url of this record on Quire website.
       description:
         type: string
         example: This is *cool*!
         description: Description.
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Name
@@ -1205,17 +1205,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1252,16 +1252,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this board belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Column:
     type: object
     properties:
@@ -1329,16 +1329,16 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was pinned, or null if not pinned.'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: 'When this comment was edited, or null if not edited.'
       editedBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 50
         description: 'OID of the user who edited this comment, or null if not edited.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: 'When this comment was edited, or null if not edited.'
       owner:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -1351,16 +1351,16 @@ definitions:
         description: >-
           The type of the object this comment was added to. It can be "Task" or
           "Project".
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   CreateBoardBody:
     type: object
     required:
@@ -1461,35 +1461,27 @@ definitions:
         type: string
         example: Task 101
         description: The name of the task.
+      description:
+        type: string
+        example: '**Great** task to start with.'
+        description: (Optional) An optional description about this task.
       tasks:
         type: array
         description: (Optional) A list of subtasks to create.
         items:
           $ref: '#/definitions/CreateTaskBody'
-      description:
-        type: string
-        example: '**Great** task to start with.'
-        description: (Optional) An optional description about this task.
       tags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
         description: (Optional) OID of the tags to be added to the new created task.
         items:
           type: string
-      followers:
+      assignees:
         type: array
-        description: >-
-          (Optional) OID of users who follow this task.If the application would
-          like to follow, it can pass "app" as one of OIDs.
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the users that this task is assigned to.
         items:
           type: string
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -1497,12 +1489,13 @@ definitions:
           (Optional) An optional start time. Note: if time is specified, the
           millisecond must be `001`. Otherwise, it is `000` (so are the hour,
           minute and second fields).
-      assignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the users that this task is assigned to.
-        items:
-          type: string
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
       recurring:
         description: >-
           (Optional) The recurring information of this task. It is null if it is
@@ -1514,6 +1507,13 @@ definitions:
         description: >-
           (Optional) Specify true to peekaboo this task and its subtasks, if
           any. Default: false.
+      followers:
+        type: array
+        description: >-
+          (Optional) OID of users who follow this task.If the application would
+          like to follow, it can pass "app" as one of OIDs.
+        items:
+          type: string
       priority:
         type: integer
         format: int32
@@ -1547,14 +1547,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      url:
-        type: string
-        example: 'https://quire.io/w/my_project'
-        description: Url of this record on Quire website.
       description:
         type: string
         example: This is *cool*!
         description: Description.
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Name
@@ -1571,17 +1571,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1590,16 +1590,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Partner:
     type: object
     properties:
@@ -1627,16 +1627,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this object belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Project:
     type: object
     properties:
@@ -1644,6 +1644,10 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID of the organization this project belongs to.
+      rootCount:
+        type: integer
+        format: int32
+        description: Number of root tasks in this project.
       activeCount:
         type: integer
         format: int32
@@ -1652,22 +1656,18 @@ definitions:
         type: integer
         format: int32
         description: Total number of tasks in this project.
-      rootCount:
-        type: integer
-        format: int32
-        description: Number of root tasks in this project.
       id:
         type: string
         example: My_ID
         description: ID.
-      url:
-        type: string
-        example: 'https://quire.io/w/my_project'
-        description: Url of this record on Quire website.
       description:
         type: string
         example: This is *cool*!
         description: Description.
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Name
@@ -1684,17 +1684,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1703,6 +1703,11 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1710,27 +1715,22 @@ definitions:
         description: >-
           When this project was archived (aka., peekaboo). It is null if not
           archived.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       followers:
         type: array
         position: 60
         description: OID of users who follow this task.
         items:
           type: string
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Recurring:
     type: object
     properties:
@@ -1770,14 +1770,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that refers another task.
-      when:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        description: When this reference is made.
       user:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who made this reference.
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: When this reference is made.
   Tag:
     type: object
     properties:
@@ -1807,16 +1807,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this object belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   Task:
     type: object
     properties:
@@ -1874,14 +1874,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to complete this task. Note: if time is specified, the
-          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
-          and second fields).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -1890,6 +1882,14 @@ definitions:
           When to start this task.Note: if time is specified, the millisecond
           will be `001`. Otherwise, it is `000` (so are the hour, minute and
           second fields).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to complete this task. Note: if time is specified, the
+          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
+          and second fields).
       recurring:
         position: 4
         description: >-
@@ -1905,13 +1905,6 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
-      partner:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 5
-        description: >-
-          OID of the external team that this task belongs to. It is null if this
-          task doesn't belong to any external team.
       assignors:
         type: array
         position: 5
@@ -1927,6 +1920,13 @@ definitions:
         description: >-
           OID of the user who assigned this task to an external team. It is null
           if this task doesn't belong to any external team.
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the external team that this task belongs to. It is null if this
+          task doesn't belong to any external team.
       assignees:
         type: array
         position: 5
@@ -1936,13 +1936,6 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
-        description: >-
-          OID of the board that this task was added to. It is null if this task
-          doesn't belong to any board.
       order:
         type: integer
         format: int32
@@ -1952,6 +1945,13 @@ definitions:
           The order of this task shown on the board. The smaller the number is,
           the ealier the task is shown. It is meaningless if it doesn't belong
           to any board.
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 6
+        description: >-
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
       cover:
         type: string
         position: 8
@@ -1992,26 +1992,26 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 50
         description: 'OID of the user who changed this task''s state. '
-      peekabooAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this task was peekabooed. It is null if not peekabooed.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
-      followers:
-        type: array
-        position: 60
-        description: OID of users who follow this task.
-        items:
-          type: string
+      peekabooAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this task was peekabooed. It is null if not peekabooed.
       favorites:
         type: array
         position: 60
         description: OID of users who favorite this task.
+        items:
+          type: string
+      followers:
+        type: array
+        position: 60
+        description: OID of users who follow this task.
         items:
           type: string
       project:
@@ -2019,16 +2019,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this task belongs to.
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
       createdBy:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
   UpdateBoardBody:
     type: object
     required:
@@ -2123,6 +2123,18 @@ definitions:
           value.
         items:
           type: string
+      removeFollowers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the followers to be removed from this project.If the
+          application would like to follow, it can pass "app" as one of OIDs.
+
+          In additions, it can pass additional information in the syntax of
+          "app|team" or "app|team|channel" where team and channel can be any
+          value.
+        items:
+          type: string
       followers:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
@@ -2130,18 +2142,6 @@ definitions:
           (Optional) OID of the users to replace the followers of this project.
           If the application would like to follow, it can pass "app" as one of
           OIDs.
-
-          In additions, it can pass additional information in the syntax of
-          "app|team" or "app|team|channel" where team and channel can be any
-          value.
-        items:
-          type: string
-      removeFollowers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the followers to be removed from this project.If the
-          application would like to follow, it can pass "app" as one of OIDs.
 
           In additions, it can pass additional information in the syntax of
           "app|team" or "app|team|channel" where team and channel can be any
@@ -2182,13 +2182,28 @@ definitions:
       description:
         type: string
         description: (Optional) Change the description about this task.
-      tags:
+      addAssignees:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the tags to replace existing tags of to this task.
-          If specified, it will replace any existing tag(s). Instead of
-          replacment, you can use "addTags" or "removeTags".
+        description: (Optional) OID of the assignees to be added to this task.
+        items:
+          type: string
+      removeAssignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the assignees to be removed from this task.
+        items:
+          type: string
+      removeTags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be removed from this task.
+        items:
+          type: string
+      addTags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be added to this task.
         items:
           type: string
       addFollowers:
@@ -2197,19 +2212,6 @@ definitions:
         description: >-
           (Optional) OID of the followers to be added to this task.If the
           application would like to follow, it can pass "app" as one of OIDs.
-
-          In additions, it can pass additional information in the syntax of
-          "app|team" or "app|team|channel" where team and channel can be any
-          value.
-        items:
-          type: string
-      followers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
-        description: >-
-          (Optional) OID of the users to replace the followers of this task. If
-          the application would like to follow, it can pass "app" as one of
-          OIDs.
 
           In additions, it can pass additional information in the syntax of
           "app|team" or "app|team|channel" where team and channel can be any
@@ -2228,44 +2230,15 @@ definitions:
           value.
         items:
           type: string
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
+      tags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
         description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      addTags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the tags to be added to this task.
+          (Optional) OID of the tags to replace existing tags of to this task.
+          If specified, it will replace any existing tag(s). Instead of
+          replacment, you can use "addTags" or "removeTags".
         items:
           type: string
-      removeTags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the tags to be removed from this task.
-        items:
-          type: string
-      addAssignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the assignees to be added to this task.
-        items:
-          type: string
-      removeAssignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the assignees to be removed from this task.
-        items:
-          type: string
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
       assignees:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2275,6 +2248,20 @@ definitions:
           replacment, you can use "addAssignees" or "removeAssignees".
         items:
           type: string
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
       recurring:
         description: >-
           (Optional) The recurring information of this task. It is null if it is
@@ -2286,6 +2273,19 @@ definitions:
         description: >-
           (Optional) Specify true to peekaboo this task and its subtasks. Or,
           specify false to undo the previous peekaboo if any.
+      followers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
+        description: >-
+          (Optional) OID of the users to replace the followers of this task. If
+          the application would like to follow, it can pass "app" as one of
+          OIDs.
+
+          In additions, it can pass additional information in the syntax of
+          "app|team" or "app|team|channel" where team and channel can be any
+          value.
+        items:
+          type: string
       priority:
         type: integer
         format: int32
@@ -2319,14 +2319,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      url:
-        type: string
-        example: 'https://quire.io/w/my_project'
-        description: Url of this record on Quire website.
       description:
         type: string
         example: This is *cool*!
         description: Description.
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Name
@@ -2343,17 +2343,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
