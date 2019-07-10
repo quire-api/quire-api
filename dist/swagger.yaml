@@ -1064,38 +1064,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/User'
-  /organizations:
-    get:
-      responses:
-        '200':
-          schema:
-            example:
-              - id: Develop_group
-                oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-                name: Develop group
-                initials: DG
-                image: 'https://quire.s3.amazonaws.com/oid1/image.jpg'
-                iconColor: '#a9cb77'
-                createdAt: 2018-12-22T02:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-                projects:
-                  - id: Marketing_Project
-                    oid: GAUpZARpeOjlHqEux6IdUZI1
-                    name: Marketing Project
-                    initials: MP
-                    image: 'https://quire.s3.amazonaws.com/oid3/image.jpg'
-                    iconColor: '#a8bf58'
-                    createdAt: 2018-12-28T02:06:58.158Z
-                    createdBy: 6QMKkEPBVWETLWrXqws94ALU
-              - id: Testing_group
-                oid: meEXBLRaHFiBTbQd1mJqgPIG
-                name: Testing group
-                initials: TG
-                image: 'https://quire.s3.amazonaws.com/oid2/image.jpg'
-                iconColor: '#b3cb60'
-                createdAt: 2018-12-27T02:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-                projects: []
 securityDefinitions:
   api_key:
     type: apiKey
@@ -1164,16 +1132,16 @@ definitions:
         type: string
         example: 'https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png'
         description: URL of this attachment.
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Board:
     type: object
     properties:
@@ -1237,31 +1205,31 @@ definitions:
         description: >-
           OID of the external team that this board belongs to. It is null if
           this board can't be accessed by a member of external teams.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        position: 50
-        description: 'When this board was aimed to complete, or null if not specified.'
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
         position: 50
         description: When this board was archived. It is null if not archived.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        position: 50
+        description: 'When this board was aimed to complete, or null if not specified.'
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this board belongs to.
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Column:
     type: object
     properties:
@@ -1319,16 +1287,16 @@ definitions:
           https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b
         position: 50
         description: Url of this comment on Quire website.
-      pinBy:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 50
-        description: 'OID of the user who pinned this comment, or null if not pinned.'
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was pinned, or null if not pinned.'
+      pinBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 50
+        description: 'OID of the user who pinned this comment, or null if not pinned.'
       editedBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -1351,16 +1319,16 @@ definitions:
         description: >-
           The type of the object this comment was added to. It can be "Task" or
           "Project".
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   CreateBoardBody:
     type: object
     required:
@@ -1590,16 +1558,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Partner:
     type: object
     properties:
@@ -1627,16 +1595,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this object belongs to.
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Project:
     type: object
     properties:
@@ -1644,10 +1612,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID of the organization this project belongs to.
-      rootCount:
-        type: integer
-        format: int32
-        description: Number of root tasks in this project.
       activeCount:
         type: integer
         format: int32
@@ -1656,6 +1620,10 @@ definitions:
         type: integer
         format: int32
         description: Total number of tasks in this project.
+      rootCount:
+        type: integer
+        format: int32
+        description: Number of root tasks in this project.
       id:
         type: string
         example: My_ID
@@ -1703,11 +1671,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1715,22 +1678,27 @@ definitions:
         description: >-
           When this project was archived (aka., peekaboo). It is null if not
           archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       followers:
         type: array
         position: 60
         description: OID of users who follow this task.
         items:
           type: string
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Recurring:
     type: object
     properties:
@@ -1807,16 +1775,16 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this object belongs to.
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   Task:
     type: object
     properties:
@@ -1905,28 +1873,6 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
-      assignors:
-        type: array
-        position: 5
-        description: >-
-          OID of users who have assigned this tasks to a user. For example, the
-          first item of assignees is assigned by the first item of assignors.
-        items:
-          type: string
-      partnerBy:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 5
-        description: >-
-          OID of the user who assigned this task to an external team. It is null
-          if this task doesn't belong to any external team.
-      partner:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 5
-        description: >-
-          OID of the external team that this task belongs to. It is null if this
-          task doesn't belong to any external team.
       assignees:
         type: array
         position: 5
@@ -1936,6 +1882,38 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the external team that this task belongs to. It is null if this
+          task doesn't belong to any external team.
+      assignors:
+        type: array
+        position: 5
+        description: >-
+          OID of users who have assigned this tasks to a user. For example, the
+          first item of assignees is assigned by the first item of assignors.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - 6QMKkEPBVWETLWrXqws94ALU
+      partnerBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the user who assigned this task to an external team. It is null
+          if this task doesn't belong to any external team.
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 6
+        description: >-
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
       order:
         type: integer
         format: int32
@@ -1945,23 +1923,16 @@ definitions:
           The order of this task shown on the board. The smaller the number is,
           the ealier the task is shown. It is meaningless if it doesn't belong
           to any board.
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
-        description: >-
-          OID of the board that this task was added to. It is null if this task
-          doesn't belong to any board.
-      cover:
-        type: string
-        position: 8
-        description: The name of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      cover:
+        type: string
+        position: 8
+        description: The name of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -2002,33 +1973,37 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this task was peekabooed. It is null if not peekabooed.
-      favorites:
-        type: array
-        position: 60
-        description: OID of users who favorite this task.
-        items:
-          type: string
       followers:
         type: array
         position: 60
         description: OID of users who follow this task.
         items:
           type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      favorites:
+        type: array
+        position: 60
+        description: OID of users who favorite this task.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the project this task belongs to.
-      createdBy:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the user who created this record.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the user who created this record.
   UpdateBoardBody:
     type: object
     required:
@@ -2182,6 +2157,27 @@ definitions:
       description:
         type: string
         description: (Optional) Change the description about this task.
+      tags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the tags to replace existing tags of to this task.
+          If specified, it will replace any existing tag(s). Instead of
+          replacment, you can use "addTags" or "removeTags".
+        items:
+          type: string
+      addTags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be added to this task.
+        items:
+          type: string
+      removeTags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be removed from this task.
+        items:
+          type: string
       addAssignees:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2192,18 +2188,6 @@ definitions:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
         description: (Optional) OID of the assignees to be removed from this task.
-        items:
-          type: string
-      removeTags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the tags to be removed from this task.
-        items:
-          type: string
-      addTags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the tags to be added to this task.
         items:
           type: string
       addFollowers:
@@ -2228,15 +2212,6 @@ definitions:
           In additions, it can pass additional information in the syntax of
           "app|team" or "app|team|channel" where team and channel can be any
           value.
-        items:
-          type: string
-      tags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the tags to replace existing tags of to this task.
-          If specified, it will replace any existing tag(s). Instead of
-          replacment, you can use "addTags" or "removeTags".
         items:
           type: string
       assignees:
@@ -2362,35 +2337,3 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-  TaskWithChildren:
-    properties:
-      tags:
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      assignees:
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      tasks:
-        example:
-          - oid: co7XeV3ZmvPUpGuS4avHfd7e
-            id: '19,'
-            name: Draw new logo
-            state: 10
-            description: Detail about this task
-            tags:
-              - X6nmx9XjEO2wKbqeB1pRT43C
-            assignees:
-              - 6QMKkEPBVWETLWrXqws94ALU
-            start: null
-            due: 2018-12-22T02:06:58.158Z
-            tasks: []
-            createdAt: 2018-12-24T02:06:58.158Z
-            createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
-  ExternalTeam:
-    properties:
-      members:
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH

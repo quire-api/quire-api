@@ -1,36 +1,3 @@
-paths:
-  /organizations:
-    get:
-      responses:
-        200:
-          schema:
-            example:
-            - id: Develop_group
-              oid: Dyh2YkFcu9uLgLFIeN1kB4Ld
-              name: Develop group
-              initials: DG
-              image: https://quire.s3.amazonaws.com/oid1/image.jpg
-              iconColor: "#a9cb77"
-              createdAt: 2018-12-22T02:06:58.158Z
-              createdBy: 6QMKkEPBVWETLWrXqws94ALU
-              projects:
-              - id: Marketing_Project
-                oid: GAUpZARpeOjlHqEux6IdUZI1
-                name: Marketing Project
-                initials: MP
-                image: https://quire.s3.amazonaws.com/oid3/image.jpg
-                iconColor: "#a8bf58"
-                createdAt: 2018-12-28T02:06:58.158Z
-                createdBy: 6QMKkEPBVWETLWrXqws94ALU
-            - id: Testing_group
-              oid: meEXBLRaHFiBTbQd1mJqgPIG
-              name: Testing group
-              initials: TG
-              image: https://quire.s3.amazonaws.com/oid2/image.jpg
-              iconColor: "#b3cb60"
-              createdAt: 2018-12-27T02:06:58.158Z
-              createdBy: 6QMKkEPBVWETLWrXqws94ALU
-              projects: []
 definitions:
   Task:
     properties:
@@ -42,36 +9,13 @@ definitions:
         example:
         - 6QMKkEPBVWETLWrXqws94ALU
         - Job4NSW9xK6Owcke8iKj7zyH
-
-  TaskWithChildren:
-    properties:
-      tags:
-        example:
-        - X6nmx9XjEO2wKbqeB1pRT43C
-        - mPAQrYU1qt8wAYAInKRlTnvl
-      assignees:
+      assignors:
         example:
         - 6QMKkEPBVWETLWrXqws94ALU
-        - Job4NSW9xK6Owcke8iKj7zyH
-      tasks:
-        example:
-        - oid: co7XeV3ZmvPUpGuS4avHfd7e
-          id: 19,
-          name: Draw new logo
-          state: 10
-          description: Detail about this task
-          tags:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          assignees:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          start:
-          due: 2018-12-22T02:06:58.158Z
-          tasks: []
-          createdAt: 2018-12-24T02:06:58.158Z
-          createdBy: Dyh2YkFcu9uLgLFIeN1kB4Ld
-  ExternalTeam:
-    properties:
-      members:
+        - 6QMKkEPBVWETLWrXqws94ALU
+      followers:
         example:
         - 6QMKkEPBVWETLWrXqws94ALU
+      favorites:
+        example:
         - Job4NSW9xK6Owcke8iKj7zyH
