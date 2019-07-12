@@ -28,7 +28,31 @@ public class UserResource {
         + "The first record must be the current user. ",
         response = User.class,
         responseContainer = "List")
-    public Response getUsers(){ return null; }
+    public Response getUsers() { return null; }
+
+    @GET
+    @Path("/list/project/id/{projectId}")
+    @ApiOperation(value = "Get all users records of the given project.",
+        notes =
+        "Returns all members of the given project of the specified ID.\n"
+        + "If the current user doesn't grant the app to access his contacts, "
+        + "only basic information are returned.\n"
+        + "The first record must be the current user. ",
+        response = User.class,
+        responseContainer = "List")
+    public Response getUsersOfProjectByOid() { return null; }
+
+    @GET
+    @Path("/list/project/{oid}")
+    @ApiOperation(value = "Get all users records of the given project.",
+        notes =
+        "Returns all members of the given project of the specified OID.\n"
+        + "If the current user doesn't grant the app to access his contacts, "
+        + "only basic information are returned.\n"
+        + "The first record must be the current user. ",
+        response = User.class,
+        responseContainer = "List")
+    public Response getUsersOfProjectById() { return null; }
 
     @GET
     @Path("/id/{id}")
