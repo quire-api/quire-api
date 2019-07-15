@@ -133,7 +133,9 @@ public class TaskResource {
 		@PathParam("projectId") String projectOid,
 
 		@ApiParam(value = "Task name to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`.\n",
+			+ "To specify a regular expression, you can precede it with `~`. "
+			+ "For example, `name=~abc` matches if `abc` is part of the name. "
+			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.",
             example = "name=My first task", required = false)
         @QueryParam(value = "name") String name,
 
