@@ -94,6 +94,60 @@ public class TaskResource {
 		@PathParam("taskId") int taskId) { return null; }
 
 	@GET
+	@Path("/search/{projectOid}")
+	@ApiOperation(value = "Searches tasks in the given project.",
+		notes = "Returns task records that match the specified criteria in "
+		+ "the given project.",
+		response = SimpleTask.class,
+		responseContainer = "List")
+	public Response searchTasksByOid(
+		@ApiParam(value = "OID of the project to search for the tasks.",
+			required = true)
+		@PathParam("projectOid") String projectOid,
+
+		@ApiParam(value = "Task name to match with.\n"
+			+ "To specify a regular expression, you can precede it with `~`.\n",
+            example = "name=My first task", required = false)
+        @QueryParam(value = "name") String name,
+
+        @ApiParam(value = "Task's description to match with.\n"
+			+ "To specify a regular expression, you can precede it with `~`.",
+            example = "description=~john@gooodjob.com", required = false)
+        @QueryParam(value = "description") String description,
+
+        @ApiParam(value = "Task's status to match with.\n"
+        	"You can specify a value between 0 and 100.",
+            example = "status=100", required = false)
+        @QueryParam(value = "status") String status,) { return null; }
+
+	@GET
+	@Path("/search/id/{projectId}")
+	@ApiOperation(value = "Searches tasks in the given project.",
+		notes = "Returns task records that match the specified criteria in "
+		+ "the given project.",
+		response = SimpleTask.class,
+		responseContainer = "List")
+	public Response searchTasksById(
+		@ApiParam(value = "ID of the project to search for the tasks.",
+			required = true)
+		@PathParam("projectId") String projectOid,
+
+		@ApiParam(value = "Task name to match with.\n"
+			+ "To specify a regular expression, you can precede it with `~`.\n",
+            example = "name=My first task", required = false)
+        @QueryParam(value = "name") String name,
+
+        @ApiParam(value = "Task's description to match with.\n"
+			+ "To specify a regular expression, you can precede it with `~`.",
+            example = "description=~john@gooodjob.com", required = false)
+        @QueryParam(value = "description") String description,
+
+        @ApiParam(value = "Task's status to match with.\n"
+        	"You can specify a value between 0 and 100.",
+            example = "status=100", required = false)
+        @QueryParam(value = "status") String status,) { return null; }
+
+	@GET
 	@Path("/{oid}")
 	@ApiOperation(value = "Get an existing task by its OID.",
 		notes = "Returns the full task record for a single task.",
