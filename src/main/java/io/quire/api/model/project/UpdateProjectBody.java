@@ -14,13 +14,17 @@ public class UpdateProjectBody {
 	public List<String> getFollowers() { return null; }
 	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
 		value = "(Optional) OID of the followers to be added to this project."
-		+ "If the application would like to follow, it can pass \"app\" as one of OIDs.\n"
+		+ "If \"me\" is specified, it means the current user will follow this task.\n"
+		+ "If the application would like to follow (i.e., receive notifications), "
+		+ "it can pass \"app\" as one of OIDs.\n"
 		+ "In additions, it can pass additional information in the syntax of "
 		+ "\"app|team\" or \"app|team|channel\" where team and channel can be any value.")
 	public List<String> getAddFollowers() { return null; }
 	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
 		value = "(Optional) OID of the followers to be removed from this project."
-		+ "If the application would like to follow, it can pass \"app\" as one of OIDs.\n"
+		+ "If \"me\" is specified, it means the current user will follow this task.\n"
+		+ "If the application would like to follow (i.e., receive notifications), "
+		+ "it can pass \"app\" as one of OIDs.\n"
 		+ "In additions, it can pass additional information in the syntax of "
 		+ "\"app|team\" or \"app|team|channel\" where team and channel can be any value.")
 	public List<String> getRemoveFollowers() { return null; }
