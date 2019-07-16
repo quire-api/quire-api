@@ -97,7 +97,8 @@ public class TaskResource {
 	@Path("/search/{projectOid}")
 	@ApiOperation(value = "Searches tasks in the given project.",
 		notes = "Returns task records that match the specified criteria in "
-		+ "the given project.",
+		+ "the given project.\n\n"
+		+ "Note: it returns at most 50 records, and recent edited first.",
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksByOid(
@@ -116,7 +117,8 @@ public class TaskResource {
         @QueryParam(value = "description") String description,
 
         @ApiParam(value = "Task's status to match with.\n"
-        	"You can specify a value between 0 and 100.",
+        	"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+        	+"\"completed\" for completed tasks.",
             example = "status=100", required = false)
         @QueryParam(value = "status") String status,) { return null; }
 
