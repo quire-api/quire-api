@@ -1,6 +1,7 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.task.CreateTaskBody;
+import io.quire.api.model.task.SimpleTask;
 import io.quire.api.model.task.Task;
 import io.quire.api.model.task.UpdateTaskBody;
 import io.swagger.annotations.*;
@@ -117,10 +118,10 @@ public class TaskResource {
         @QueryParam(value = "description") String description,
 
         @ApiParam(value = "Task's status to match with.\n"
-        	"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+        	+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
         	+"\"completed\" for completed tasks.",
             example = "status=100", required = false)
-        @QueryParam(value = "status") String status,) { return null; }
+        @QueryParam(value = "status") String status) { return null; }
 
 	@GET
 	@Path("/search/id/{projectId}")
@@ -147,9 +148,9 @@ public class TaskResource {
         @QueryParam(value = "description") String description,
 
         @ApiParam(value = "Task's status to match with.\n"
-        	"You can specify a value between 0 and 100.",
+        	+"You can specify a value between 0 and 100.",
             example = "status=100", required = false)
-        @QueryParam(value = "status") String status,) { return null; }
+        @QueryParam(value = "status") String status) { return null; }
 
 	@GET
 	@Path("/{oid}")
