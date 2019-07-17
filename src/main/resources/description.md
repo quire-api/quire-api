@@ -176,6 +176,24 @@ Then, the notification will carry additional field called `team` with the value 
 
 where `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `"https://super.app/hooks/standard"`, and the follower "app|/soc/id279/channel51". Then, the notification will be posted the following URL: `"https://super.app/hooks/standard/soc/id279/channel51"`.
 
+If you'd like to pass additional information in this syntax, you can append it as follows.
+
+```
+"app|/path|channel"
+```
+
+For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object sent to the hook URL.
+
+```
+{
+  "type": "notification"
+  "channel": "box51"
+  "data": {
+    //refer the Notifications section for details
+  }
+}
+```
+
 # Rate limits
 
 To protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. 
