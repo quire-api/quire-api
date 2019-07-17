@@ -140,7 +140,9 @@ To receive notifications, the app can *follow* tasks or projects it cares. By se
 
 Where `app` is a keyword. It indicates the app would like to add itself to the followers.
 
-In additions, you can specify additional information that will be passed as part of a notification. The syntax is as follows:
+In additions, you can specify additional information that will be passed as part of a notification int the following syntaxes.
+
+**Syntax 1**
 
 ```
 "app|team|channel"
@@ -154,7 +156,7 @@ where `app` is a keyword while `team` and `channel` are application specific. Th
 }
 ```
 
-Then, the notification will carray additional field called `team` with the value `"extra101"`:
+Then, the notification will carry additional field called `team` with the value `"extra101"`:
 
 ```
 {
@@ -166,6 +168,13 @@ Then, the notification will carray additional field called `team` with the value
 }
 ```
 
+**Syntax 2**
+
+```
+"app|/path"
+```
+
+where `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `"https://super.app/hooks/standard"`, and the follower "app|/soc/id279/channel51". Then, the notification will be posted the following URL: `"https://super.app/hooks/standard/soc/id279/channel51"`.
 
 # Rate limits
 
