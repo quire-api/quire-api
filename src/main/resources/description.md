@@ -239,8 +239,8 @@ The following JSON data is returned in the response body when an error occurs.
 | Error Code | Meaning
 |-----|-----------------------
 | 100 | General authentication error.
-| 105 | Invalid or expired token.
 | 400 | Bad request including wrong request body, wrong parameter and so on.
+| 401 | Invalid or expired token.
 | 403 | Forbidden.
 | 404 | Resource not found.
 | 405 | Method not allowed.
