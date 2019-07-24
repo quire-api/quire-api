@@ -56,6 +56,13 @@ public class CreateTaskBody {
 		+ "if any. Default: false.")
 	public boolean getPeekaboo() { return false; }
 
+	@ApiModelProperty(example = "true",
+		value = "(Optional) Specify true if you'd like to make "
+		+ "this new task as created by the app.\n"
+		+ "Default: false -- the task is marked as created by the user authorizing "
+		+ "the app.")
+	public boolean getAsUser() { return false; }
+
 	@ApiModelProperty(value = "(Optional) OID of users who follow this task."
 		+ "If \"me\" is specified, it means the current user will follow this task.\n"
 		+ "If the application would like to follow (i.e., receive notifications), "
