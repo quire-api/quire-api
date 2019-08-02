@@ -1294,18 +1294,6 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      nameHtml:
-        type: string
-        example: My Name
-        description: Name in a form of a HTML fragment converted from markdown.
-      descriptionHtml:
-        type: string
-        example: This is <i>cool</i>!
-        description: Description in a form of a HTML fragment converted from markdown.
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description but excluding markdown characters.
       description:
         type: string
         example: This is *cool*!
@@ -1318,17 +1306,29 @@ definitions:
         type: string
         example: My Name
         description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: My Name
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is <i>cool</i>!
+        description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1350,16 +1350,21 @@ definitions:
         description: >-
           OID of the external team that this board belongs to. It is null if
           this board can't be accessed by a member of external teams.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        position: 50
-        description: 'When this board was aimed to complete, or null if not specified.'
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
         position: 50
         description: When this board was archived. It is null if not archived.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        position: 50
+        description: 'When this board was aimed to complete, or null if not specified.'
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: OID of the project this board belongs to.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1370,11 +1375,6 @@ definitions:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: OID of the user who created this record.
-      project:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: OID of the project this board belongs to.
   Column:
     type: object
     properties:
@@ -1405,32 +1405,27 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-      descriptionHtml:
-        type: string
-        example: It is <i>cool</i>!
-        position: 1
-        description: The content in a form of a HTML fragment converted from markdown.
-      descriptionText:
-        type: string
-        example: It is cool!
-        position: 1
-        description: The content but excluding markdown characters.
       description:
         type: string
         example: It is *cool*!
         position: 1
         description: The content.
+      descriptionText:
+        type: string
+        example: It is cool!
+        position: 1
+        description: The content but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: It is <i>cool</i>!
+        position: 1
+        description: The content in a form of a HTML fragment converted from markdown.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: 'When this comment was edited, or null if not edited.'
       url:
         type: string
         example: >-
@@ -1447,6 +1442,11 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was pinned, or null if not pinned.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: 'When this comment was edited, or null if not edited.'
       editedBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -1539,6 +1539,14 @@ definitions:
     required:
       - description
     properties:
+      description:
+        type: string
+        example: Adjust style
+        description: The content of the new comment.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
@@ -1548,14 +1556,6 @@ definitions:
 
           Default: false -- the comment is marked as created by the user
           authorizing the app.
-      description:
-        type: string
-        example: Adjust style
-        description: The content of the new comment.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
   CreateTagBody:
     type: object
     required:
@@ -1583,11 +1583,34 @@ definitions:
         type: string
         example: Task 101
         description: The name of the task.
+      description:
+        type: string
+        example: '**Great** task to start with.'
+        description: (Optional) An optional description about this task.
       tasks:
         type: array
         description: (Optional) A list of subtasks to create.
         items:
           $ref: '#/definitions/CreateTaskBody'
+      tags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the tags to be added to the new created task.
+        items:
+          type: string
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      assignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the users that this task is assigned to.
+        items:
+          type: string
       recurring:
         description: >-
           (Optional) The recurring information of this task. It is null if it is
@@ -1599,15 +1622,6 @@ definitions:
         description: >-
           (Optional) Specify true to peekaboo this task and its subtasks, if
           any. Default: false.
-      asUser:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true if you'd like to make this new task as created
-          by the app.
-
-          Default: false -- the task is marked as created by the user
-          authorizing the app.
       followers:
         type: array
         description: >-
@@ -1639,10 +1653,6 @@ definitions:
           "https://super.app/hooks/standard/soc1/33456/a7".
         items:
           type: string
-      description:
-        type: string
-        example: '**Great** task to start with.'
-        description: (Optional) An optional description about this task.
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -1650,25 +1660,15 @@ definitions:
           (Optional) An optional start time. Note: if time is specified, the
           millisecond must be `001`. Otherwise, it is `000` (so are the hour,
           minute and second fields).
-      assignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the users that this task is assigned to.
-        items:
-          type: string
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
+      asUser:
+        type: boolean
+        example: true
         description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      tags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the tags to be added to the new created task.
-        items:
-          type: string
+          (Optional) Specify true if you'd like to make this new task as created
+          by the app.
+
+          Default: false -- the task is marked as created by the user
+          authorizing the app.
       priority:
         type: integer
         format: int32
@@ -1702,18 +1702,6 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      nameHtml:
-        type: string
-        example: My Name
-        description: Name in a form of a HTML fragment converted from markdown.
-      descriptionHtml:
-        type: string
-        example: This is <i>cool</i>!
-        description: Description in a form of a HTML fragment converted from markdown.
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description but excluding markdown characters.
       description:
         type: string
         example: This is *cool*!
@@ -1726,17 +1714,29 @@ definitions:
         type: string
         example: My Name
         description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: My Name
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is <i>cool</i>!
+        description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1815,18 +1815,6 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      nameHtml:
-        type: string
-        example: My Name
-        description: Name in a form of a HTML fragment converted from markdown.
-      descriptionHtml:
-        type: string
-        example: This is <i>cool</i>!
-        description: Description in a form of a HTML fragment converted from markdown.
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description but excluding markdown characters.
       description:
         type: string
         example: This is *cool*!
@@ -1839,17 +1827,29 @@ definitions:
         type: string
         example: My Name
         description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: My Name
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is <i>cool</i>!
+        description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1858,11 +1858,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1870,6 +1865,11 @@ definitions:
         description: >-
           When this project was archived (aka., peekaboo). It is null if not
           archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       followers:
         type: array
         position: 60
@@ -1925,14 +1925,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that refers another task.
-      when:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        description: When this reference is made.
       user:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who made this reference.
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: When this reference is made.
   SimpleTask:
     type: object
     properties:
@@ -1966,14 +1966,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to complete this task. Note: if time is specified, the
-          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
-          and second fields).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -1982,6 +1974,14 @@ definitions:
           When to start this task.Note: if time is specified, the millisecond
           will be `001`. Otherwise, it is `000` (so are the hour, minute and
           second fields).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to complete this task. Note: if time is specified, the
+          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
+          and second fields).
       url:
         type: string
         example: 'https://quire.io/w/my_project/123'
@@ -2043,30 +2043,30 @@ definitions:
         example: Design new logo
         position: 2
         description: This task's name.
+      nameText:
+        type: string
+        position: 2
+        description: This task's name but excluding markdown characters.
       nameHtml:
         type: string
         example: <b>Big</b> task
         position: 2
         description: This task's name in a form of a HTML fragment converted from markdown.
-      nameText:
-        type: string
-        position: 2
-        description: This task's name but excluding markdown characters.
-      descriptionHtml:
-        type: string
-        example: This is a <i>cool</i> task.
-        position: 3
-        description: Description in a form of a HTML fragment converted from markdown.
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Description but excluding markdown characters.
       description:
         type: string
         example: This is a **cool** task.
         position: 3
         description: Description about this task.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is a <i>cool</i> task.
+        position: 3
+        description: Description in a form of a HTML fragment converted from markdown.
       priority:
         type: integer
         format: int32
@@ -2083,6 +2083,14 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
       recurring:
         position: 4
         description: >-
@@ -2097,14 +2105,24 @@ definitions:
           When to complete this task. Note: if time is specified, the
           millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
           and second fields).
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to start this task.Note: if time is specified, the millisecond
-          will be `001`. Otherwise, it is `000` (so are the hour, minute and
-          second fields).
+      tags:
+        type: array
+        position: 5
+        description: OID of tags that are tagged to this task.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
+      assignees:
+        type: array
+        position: 5
+        description: OID of users who are assigned to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
       assignors:
         type: array
         position: 5
@@ -2123,24 +2141,6 @@ definitions:
         description: >-
           OID of the user who assigned this task to an external team. It is null
           if this task doesn't belong to any external team.
-      assignees:
-        type: array
-        position: 5
-        description: OID of users who are assigned to this task.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      tags:
-        type: array
-        position: 5
-        description: OID of tags that are tagged to this task.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -2189,6 +2189,11 @@ definitions:
           longer exist.
         items:
           $ref: '#/definitions/Referrer'
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project/123'
+        position: 50
+        description: Url of this task on Quire website.
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2199,29 +2204,16 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 50
         description: 'OID of the user who changed this task''s state. '
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       peekabooAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this task was peekabooed. It is null if not peekabooed.
-      url:
+      editedAt:
         type: string
-        example: 'https://quire.io/w/my_project/123'
+        example: '2018-12-22T02:06:58.158Z'
         position: 50
-        description: Url of this task on Quire website.
-      favorites:
-        type: array
-        position: 60
-        description: OID of users who favorite this task.
-        items:
-          type: string
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
+        description: When this record was edited last time.
       followers:
         type: array
         position: 60
@@ -2230,6 +2222,14 @@ definitions:
           type: string
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
+      favorites:
+        type: array
+        position: 60
+        description: OID of users who favorite this task.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -2406,6 +2406,34 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New name of the task.
+      description:
+        type: string
+        description: (Optional) Change the description about this task.
+      tags:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the tags to replace existing tags of to this task.
+          If specified, it will replace any existing tag(s). Instead of
+          replacment, you can use "addTags" or "removeTags".
+        items:
+          type: string
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      assignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the users that this task is assigned to. If
+          specified, it will replace any existing assignee(s). Instead of
+          replacment, you can use "addAssignees" or "removeAssignees".
+        items:
+          type: string
       recurring:
         description: >-
           (Optional) The recurring information of this task. It is null if it is
@@ -2425,32 +2453,6 @@ definitions:
           Please refer to `addFollowers()` for more details.
         items:
           type: string
-      description:
-        type: string
-        description: (Optional) Change the description about this task.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      assignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the users that this task is assigned to. If
-          specified, it will replace any existing assignee(s). Instead of
-          replacment, you can use "addAssignees" or "removeAssignees".
-        items:
-          type: string
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
       addTags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2515,15 +2517,13 @@ definitions:
           refer to `addFollowers()` for more details.
         items:
           type: string
-      tags:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
         description: >-
-          (Optional) OID of the tags to replace existing tags of to this task.
-          If specified, it will replace any existing tag(s). Instead of
-          replacment, you can use "addTags" or "removeTags".
-        items:
-          type: string
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
       priority:
         type: integer
         format: int32
@@ -2557,18 +2557,6 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      nameHtml:
-        type: string
-        example: My Name
-        description: Name in a form of a HTML fragment converted from markdown.
-      descriptionHtml:
-        type: string
-        example: This is <i>cool</i>!
-        description: Description in a form of a HTML fragment converted from markdown.
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description but excluding markdown characters.
       description:
         type: string
         example: This is *cool*!
@@ -2581,17 +2569,29 @@ definitions:
         type: string
         example: My Name
         description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: My Name
+        description: Name in a form of a HTML fragment converted from markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is <i>cool</i>!
+        description: Description in a form of a HTML fragment converted from markdown.
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       name:
         type: string
         example: My Name
