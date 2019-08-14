@@ -27,11 +27,11 @@ public class CreateTaskBody {
 		example = "0", position = 4)
 	public int getStatus() { return 0; }
 
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the tags to be added to the new created task.")
 	public List<String> getTags() { return null; }
 
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the users that this task is assigned to.")
 	public List<String> getAssignees() { return null; }
 
@@ -80,6 +80,6 @@ public class CreateTaskBody {
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getFollowers() { return null; }
 
-	@ApiModelProperty(value = "(Optional) A list of subtasks to create.")
-	public List<CreateTaskBody> getTasks() { return null; }
+//	@ApiModelProperty(value = "(Optional) A list of subtasks to create.")
+//	public List<CreateTaskBody> getTasks() { return null; }
 }

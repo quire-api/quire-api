@@ -1,4 +1,13 @@
 definitions:
+  CreateTaskBody:
+    properties:
+      tags:
+        example:
+        - X6nmx9XjEO2wKbqeB1pRT43C
+      assignees:
+        example:
+        - 6QMKkEPBVWETLWrXqws94ALU
+
   Task:
     properties:
       tags:

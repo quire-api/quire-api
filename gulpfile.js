@@ -1,4 +1,5 @@
 var oatts = require('oatts');
+var spectacleDoc = require('spectacle-docs');
 var gulp = require( 'gulp' );
 var del = require('del');
 var mocha = require('gulp-mocha');
@@ -25,7 +26,12 @@ gulp.task('build', function () {
         fs.readFileSync('./src/main/resources/examples.yaml', 'utf8'));
     merge(swaggerMain, swaggerExamples);
 
-   fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain))
+    fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain))
+
+    spectacleDoc({
+        "specFile": swaggerYaml,
+        "targetDir": "./dist/v2",
+        "configFile": "./doc_template/config.js"})
 
 //  var tests = oatts.generate(swaggerYaml, options);
 //  console.log(tests)
