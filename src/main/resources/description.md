@@ -94,9 +94,9 @@ A refresh token might stop working for one of these reasons:
 * The user has revoked your app's access.
 * The refresh token has not been used for 6 months.
 
-# Hook
+# WebHook
 
-A hook is a channel that Quire will *push* the information of updates (aka., notifications) to an app.
+When one event on Quire is triggered, the system will send a payload to the webhook's configured URL.
 
 > A hook is used by Quire to call an app, while Quire API is used by an app to call Quire.
 
