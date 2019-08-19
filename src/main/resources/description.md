@@ -63,7 +63,7 @@ If the `redirect_uri` parameter is not specified, the URL defined in the app's r
 
 ### Retrieve an Access Token
 
-To access Quire API, you need an access token. You can retrieve the token as follows.
+To access Quire API, you need an access token. You can retrieve the token as following.
 
 1. Retrieve the access code.
 
@@ -75,7 +75,7 @@ To retrieve an access token, you have to <a href="https://www.w3schools.com/jque
 
 `client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`
 
-Then, the access token will be returned in the response's body. You shall save the token carefully and permanently. You need to access each Quire API.
+Then, the access token will be returned in the response's body. The token should be kept carefully and permanently since you need it to access to every Quire API. 
 
 ### Make Authenticated Requests
 
@@ -98,7 +98,7 @@ A refresh token might stop working for one of these reasons:
 
 When one event on Quire is triggered, the system will send a payload to the webhook's configured URL.
 
-> A hook is used by Quire to call an app, while Quire API is used by an app to call Quire.
+> A webhook is used by Quire to call an app, while Quire API is used by an app to call Quire.
 
 ## Notifications
 
@@ -130,7 +130,7 @@ A notification is the information about a update (aka., an activity). Here is an
 
 ## Registration for notifications
 
-To receive notifications, the app can *follow* tasks or projects it cares. By sending a `PUT` request to the URL it'd like to follow. To add a follower, the body of the request can be:
+If the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:
 
 ```
 {
@@ -138,7 +138,7 @@ To receive notifications, the app can *follow* tasks or projects it cares. By se
 }
 ```
 
-Where `app` is a keyword. It indicates the app would like to add itself to the followers.
+Where `app` is a keyword. It indicates that the app would like to add to its followers.
 
 In additions, you can specify additional information that will be passed as part of a notification int the following syntaxes.
 
