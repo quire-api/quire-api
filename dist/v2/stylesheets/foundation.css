@@ -1317,8 +1317,8 @@ h4,
 h5,
 h6 {
   font-family: Lato, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-style: 700;
-  font-weight: normal;
+  font-style: normal;
+  font-weight: 700;
   color: rgba(0, 0, 0, 0.8);
   text-rendering: optimizeLegibility; }
   h1 small,
