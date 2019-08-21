@@ -39,7 +39,6 @@ button:focus {
 //
 
 #logo {
-  text-align: center;
   padding-right: 0.5rem;
   padding-top: 1rem;
   padding-bottom: 0.25rem;
@@ -60,8 +59,7 @@ button:focus {
   padding-left: 1.5rem;
   padding-right: 1rem;
   padding-bottom: 2rem;
-  border-right: 1px solid #eee;
-  background-color: #f6f6f6;
+  background-color: #FFFFFF;
   height: 100vh;
   overflow: auto;
   position: fixed;
@@ -71,9 +69,9 @@ button:focus {
   width: $drawer-size;
 
   h5 {
-    margin: 1.5rem 0 0.65rem;
+    margin: 2.5rem 0 .65rem;
     text-transform: uppercase;
-    color: scale-color($medium-gray, $lightness: -10%);
+    color: $lighter-text-color;
     // color: $accent-color;
     font-size: 0.9rem;
   }
@@ -81,16 +79,26 @@ button:focus {
   a {
     display: block;
     // font-size: 0.95rem;
-    margin: 0 0 0.25rem;
-    color: scale-color($black, $lightness: 15%);
+    margin: 0 0 .5rem;
+    color: $light-text-color;
     white-space: nowrap;
     overflow: hidden;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
     text-transform: capitalize;
+    transition: color 0.4s ease 0s;
+
+    &:hover {
+      color: $text-color;
+    }
 
     &.active {
-      color: $primary-color;
+      color: $item-active-color;
+      font-weight: 700;
+
+      &:hover {
+        color: $dark-green-text-color;
+      }
     }
   }
 
@@ -106,6 +114,8 @@ button:focus {
     }
 
     &.expand {
+      margin-bottom: 2rem;
+
       > ul {
         display: block;
       }
@@ -114,6 +124,7 @@ button:focus {
 
   .close-button {
     opacity: 0.5;
+    display: none;
   }
 }
 
@@ -130,11 +141,11 @@ button:focus {
   margin-top: 2em;
   padding-top: 2em;
   padding-bottom: 2em;
-  border-top: 1px solid #e2e2e2;
+  border-top: 1px solid $border-color;
 }
 
 #docs {
-  background: $white;
+  background: #FFFFFF;
   overflow: hidden;
   position: relative;
 
@@ -190,22 +201,9 @@ article {
 
   h1 {
     text-transform: capitalize;
-    margin: 2.5rem 0 0;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    padding-left: $column-padding;
-    padding-right: $column-padding;
-    border-top: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e2e2e2;
-    background-color: #f6f6f6;
-    // border-top: 1px solid #ddd;
-    // border-bottom: 1px solid #ccc;
-    // background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
-    // background-size: 100%;
-    // background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fff), color-stop(100%, #f9f9f9));
-    // background-image: -moz-linear-gradient(top, #fff, #f9f9f9);
-    // background-image: -webkit-linear-gradient(top, #fff, #f9f9f9);
-    // background-image: linear-gradient(to bottom, #fff, #f9f9f9);
+    margin: 8rem 0 0;
+    padding: 3rem 0 2rem 0;
+    border-top: 1px solid $border-color;
   }
 
   h1.doc-title {
@@ -216,7 +214,7 @@ article {
     font-weight: bold;
     background: transparent;
     border: none;
-    color: scale-color($black, $lightness: 20%);
+    color: $text-color;
 
     span {
       display: none;
@@ -228,20 +226,14 @@ article {
 
   h2 {
     @extend .doc-separator;
+    border-top: none;
     margin-bottom: 0;
-    padding-left: $column-padding;
-    padding-right: $column-padding;
-    padding-bottom: 0.25rem;
-    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…gd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
-    background-size: 100%;
-    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0.4)), color-stop(100%, rgba(255, 255, 255, 0)));
-    background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-    background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+    padding: 0.75rem 0;
   }
 
   h3 {
-    margin: 0rem 0 0.75rem;
+    margin: 2rem 0 .75rem;
+    padding: .75rem 0;
   }
 
   > h1, > h2 {
@@ -282,10 +274,10 @@ article {
 
     padding-top: 0.75em;
     padding-bottom: 0.75em;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $border-color;
 
     &:first-child, &.prop-group {
-      border-top: 1px solid #ddd;
+      border-top: 1px solid $border-color;
     }
 
     .prop-title {
@@ -477,9 +469,9 @@ article {
 
       .label {
         cursor: pointer;
-        &:hover {
-          color: $light-gray;
-        }
+        // &:hover {
+        //   color: $light-gray;
+        // }
       }
     }
 

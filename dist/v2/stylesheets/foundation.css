@@ -1293,7 +1293,7 @@ td {
 p {
   margin-bottom: 1rem;
   font-size: inherit;
-  line-height: 1.6;
+  line-height: 1.5;
   text-rendering: optimizeLegibility; }
 
 em,
@@ -1317,9 +1317,9 @@ h4,
 h5,
 h6 {
   font-family: Lato, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-style: normal;
+  font-style: 700;
   font-weight: normal;
-  color: inherit;
+  color: rgba(0, 0, 0, 0.8);
   text-rendering: optimizeLegibility; }
   h1 small,
   h2 small,
@@ -1382,11 +1382,11 @@ h6 {
 
 a {
   line-height: inherit;
-  color: #1779ba;
+  color: #9AC656;
   text-decoration: none;
   cursor: pointer; }
   a:hover, a:focus {
-    color: #1468a0; }
+    color: #7BB340; }
   a img {
     border: 0; }
 
@@ -1405,7 +1405,7 @@ ol,
 dl {
   margin-bottom: 1rem;
   list-style-position: outside;
-  line-height: 1.6; }
+  line-height: 1.5; }
 
 li {
   font-size: inherit; }
@@ -1429,11 +1429,11 @@ dl {
 
 blockquote {
   margin: 0 0 1rem;
-  padding: 0.5921052632rem 1.3157894737rem 0 1.25rem;
-  border-left: 1px solid #cacaca; }
+  padding: 0.4rem 1.25rem 0.4rem 1rem;
+  border-left: 4px solid #EDEDED; }
   blockquote, blockquote p {
-    line-height: 1.6;
-    color: #8a8a8a; }
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.42); }
 
 cite {
   display: block;
@@ -1451,12 +1451,12 @@ figure {
   margin: 0; }
 
 code {
-  padding: 0.1315789474rem 0.3289473684rem 0.0657894737rem;
-  border: 1px solid #cacaca;
-  background-color: #e6e6e6;
+  padding: 0.2rem 0.4rem;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.06);
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-weight: normal;
-  color: #2d3134; }
+  color: rgba(0, 0, 0, 0.9); }
 
 kbd {
   margin: 0;
@@ -2190,23 +2190,23 @@ select {
   line-height: 1;
   white-space: nowrap;
   cursor: default;
-  background: #1779ba;
-  color: #fefefe; }
+  background: #EDEDED;
+  color: rgba(0, 0, 0, 0.42); }
   .label.primary {
     background: #1779ba;
-    color: #fefefe; }
+    color: rgba(0, 0, 0, 0.42); }
   .label.secondary {
     background: #767676;
-    color: #fefefe; }
+    color: rgba(0, 0, 0, 0.42); }
   .label.success {
     background: #3adb76;
-    color: #2d3134; }
+    color: rgba(0, 0, 0, 0.42); }
   .label.warning {
     background: #ffae00;
-    color: #2d3134; }
+    color: rgba(0, 0, 0, 0.42); }
   .label.alert {
     background: #cc4b37;
-    color: #fefefe; }
+    color: rgba(0, 0, 0, 0.42); }
 
 table {
   border-collapse: collapse;
@@ -2216,16 +2216,16 @@ table {
   thead,
   tbody,
   tfoot {
-    border: 1px solid #f1f1f1;
-    background-color: #fefefe; }
+    border: 1px solid #EDEDED;
+    background-color: #FFFFFF; }
   caption {
     padding: 0.5263157895rem 0.6578947368rem 0.6578947368rem;
     font-weight: bold; }
   thead {
-    background: #f8f8f8;
+    background: transparent;
     color: rgba(0, 0, 0, 0.9); }
   tfoot {
-    background: #f1f1f1;
+    background: #f2f2f2;
     color: rgba(0, 0, 0, 0.9); }
   thead tr,
   tfoot tr {
@@ -2242,13 +2242,13 @@ table {
     padding: 0.5263157895rem 0.6578947368rem 0.6578947368rem; }
   tbody tr:nth-child(even) {
     border-bottom: 0;
-    background-color: #f1f1f1; }
+    background-color: #F8F8F8; }
   table.unstriped tbody {
-    background-color: #fefefe; }
+    background-color: #FFFFFF; }
     table.unstriped tbody tr {
       border-bottom: 0;
-      border-bottom: 1px solid #f1f1f1;
-      background-color: #fefefe; }
+      border-bottom: 1px solid #EDEDED;
+      background-color: #FFFFFF; }
 
 @media screen and (max-width: 63.9375em) {
   table.stack thead {
@@ -2268,18 +2268,33 @@ table.scroll {
   overflow-x: auto; }
 
 table.hover thead tr:hover {
-  background-color: #f3f3f3; }
+  background-color: rgba(0, 0, 0, 0); }
 
 table.hover tfoot tr:hover {
-  background-color: #ececec; }
+  background-color: #ededed; }
 
 table.hover tbody tr:hover {
-  background-color: #f9f9f9; }
+  background-color: #fafafa; }
 
 table.hover:not(.unstriped) tr:nth-of-type(even):hover {
-  background-color: #ececec; }
+  background-color: #ededed; }
 
 .table-scroll {
   overflow-x: auto; }
   .table-scroll table {
     width: auto; }
+
+blockquote {
+  margin: 1rem 0; }
+
+table {
+  margin: 2rem 0; }
+
+tbody, tfoot, thead {
+  border: none; }
+
+tbody tr:nth-child(even) {
+  border-bottom: 1px solid #EDEDED; }
+
+tr {
+  border-bottom: 1px solid #EDEDED; }

@@ -62,6 +62,30 @@
 
 @import 'util/util';
 
+$green-9a: #9AC656;
+$green-7b: #7BB340;
+
+$gray-ed: #EDEDED;
+$gray-f8: #F8F8F8;
+
+$item-active-color: $green-9a;
+$dark-green-text-color: $green-7b;
+
+$text-base: #000;
+$text-color: rgba($text-base, .9);
+$light-text-color: rgba($text-base, .58);
+$lighter-text-color: rgba($text-base, .42);
+$lighter2-text-color: rgba($text-base, .18);
+
+$border-color: $gray-ed;
+
+$grey-bg-color: $gray-ed;
+$light-grey-bg-color: $gray-f8;
+
+
+
+
+
 // 1. Global
 // ---------
 
@@ -132,9 +156,9 @@ $block-grid-max: 8;
 
 $header-font-family: $body-font-family;
 $header-font-weight: $global-weight-normal;
-$header-font-style: normal;
+$header-font-style: 700;
 $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
-$header-color: inherit;
+$header-color: rgba(0,0,0,.8);
 $header-lineheight: 1.4;
 $header-margin-bottom: 0.5rem;
 // $header-styles: (
@@ -173,20 +197,21 @@ $header-styles: (
     'h6': ('font-size': 16),
   ),
 );
+
 $header-text-rendering: optimizeLegibility;
 $small-font-size: 80%;
 $header-small-font-color: $medium-gray;
-$paragraph-lineheight: 1.6;
+$paragraph-lineheight: 1.5;
 $paragraph-margin-bottom: 1rem;
 $paragraph-text-rendering: optimizeLegibility;
-$code-color: $black;
+$code-color: $text-color;
 $code-font-family: $font-family-monospace;
 $code-font-weight: $global-weight-normal;
-$code-background: $light-gray;
-$code-border: 1px solid $medium-gray;
-$code-padding: rem-calc(2 5 1);
-$anchor-color: $primary-color;
-$anchor-color-hover: scale-color($anchor-color, $lightness: -14%);
+$code-background: rgba(0,0,0,.06);
+$code-border: none;
+$code-padding: .2rem .4rem;
+$anchor-color: $green-9a;
+$anchor-color-hover: $green-7b;
 $anchor-text-decoration: none;
 $anchor-text-decoration-hover: none;
 $hr-width: $global-width;
@@ -201,9 +226,9 @@ $list-nested-side-margin: 1.25rem;
 $defnlist-margin-bottom: 1rem;
 $defnlist-term-weight: $global-weight-bold;
 $defnlist-term-margin-bottom: 0.3rem;
-$blockquote-color: $dark-gray;
-$blockquote-padding: rem-calc(9 20 0 19);
-$blockquote-border: 1px solid $medium-gray;
+$blockquote-color: $lighter-text-color;
+$blockquote-padding: .4rem 1.25rem .4rem 1rem;
+$blockquote-border: 4px solid $border-color;
 $cite-font-size: rem-calc(13);
 $cite-color: $dark-gray;
 $cite-pseudo-content: '\2014 \0020';
@@ -468,8 +493,8 @@ $form-button-radius: $global-radius;
 // 21. Label
 // ---------
 
-$label-background: $primary-color;
-$label-color: $white;
+$label-background: $grey-bg-color;
+$label-color: $lighter-text-color;
 $label-color-alt: $black;
 $label-palette: $foundation-palette;
 $label-font-size: 0.8rem;
@@ -783,17 +808,17 @@ $switch-paddle-transition: all 0.25s ease-out;
 // 50. Table
 // ---------
 
-$table-background: $white;
+$table-background: #FFFFFF;
 $table-color-scale: 5%;
-$table-border: 1px solid smart-scale($table-background, $table-color-scale);
+$table-border: 1px solid $border-color;
 $table-padding: rem-calc(8 10 10);
 $table-hover-scale: 2%;
 $table-row-hover: darken($table-background, $table-hover-scale);
 $table-row-stripe-hover: darken($table-background, $table-color-scale + $table-hover-scale);
 $table-is-striped: true;
-$table-striped-background: smart-scale($table-background, $table-color-scale);
+$table-striped-background: $light-grey-bg-color;
 $table-stripe: even;
-$table-head-background: smart-scale($table-background, $table-color-scale / 2);
+$table-head-background: transparent;
 $table-head-row-hover: darken($table-head-background, $table-hover-scale);
 $table-foot-background: smart-scale($table-background, $table-color-scale);
 $table-foot-row-hover: darken($table-foot-background, $table-hover-scale);

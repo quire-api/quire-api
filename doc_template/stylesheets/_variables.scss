@@ -12,7 +12,7 @@ $default-transition-length: 0.5s !default;
 $column-padding: 2.25rem !default;
 
 // The accent color to use for section headings
-$accent-color: #f68b1f !default;
+$accent-color: $light-text-color !default;
 
 // The dark backgorund color behind code examples
 $dark-background-color: $black !default;
