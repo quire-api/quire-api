@@ -32,7 +32,7 @@ module.exports = function(grunt, options, spec) {
 
           // Concentrate source JS files from the directory into the traget directory
           js: {
-              src: [options.appDir + '/javascripts/**/*.js', '!' + options.appDir + '/javascripts/jquery*.js'],
+              src: ['doc_template/javascripts/**/*.js', '!' + 'doc_template/javascripts/jquery*.js'],
               dest: options.targetDir + '/javascripts/spectacle.js',
           },
 
