@@ -62,6 +62,12 @@
 
 @import 'util/util';
 
+$base-light-weight: 300;
+$base-normal-weight: 400;
+$base-strong-weight: 500;
+$base-stronger-weight: 500;
+$base-heavy-weight: 700;
+
 $green-9a: #9AC656;
 $green-7b: #7BB340;
 
@@ -82,9 +88,12 @@ $border-color: $gray-ed;
 $grey-bg-color: $gray-ed;
 $light-grey-bg-color: $gray-f8;
 
-
-
-
+@mixin lighter-hover-text() {
+	color: $lighter-text-color;
+	&:hover {
+		color: $light-text-color;
+	}
+}
 
 // 1. Global
 // ---------

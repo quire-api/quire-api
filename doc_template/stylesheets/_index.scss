@@ -2,6 +2,8 @@
 //= Main includes
 //
 
+$header-height: 64px;
+
 // Scope everything inside #spectacle ...
 #spectacle {
   @import 'variables';
@@ -10,4 +12,75 @@
   @import 'layout';
   @import 'drawer';
   @import 'monokai';
+
+  #page {
+    position: relative;
+    min-height: 100%;
+    padding-top: $header-height;
+  }
+
+  #sidebar {
+    top: $header-height;
+  }
+
+  #docs {
+    position: relative;
+    .floating-menu-icon {
+        top: 85px;
+    }
+  }
+}
+
+html, body {
+    height: 100%;
+}
+
+.header-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: $header-height;
+    z-index: 1030;
+    box-shadow: 0 12px 24px 0 rgba(0,0,0,.05);
+}
+
+.app-home-icon {
+    display: inline-block;
+    margin: 20px 0 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid $border-color;
+    vertical-align: top;
+
+    font-size: 20px;
+    font-weight: $base-heavy-weight;
+    a {
+        @include lighter-hover-text();
+    }
+}
+
+#header {
+    .navbar-header {
+        float: left;
+    }
+    .navbar-nav {
+        float: right !important;
+
+        .item {
+            float: left;
+            position: relative;
+            display: block;
+            line-height: 45px;
+         }
+    }
+}
+
+#header-icons {
+
+    .item {
+        > a {
+            margin: 10px 4px;
+            padding: 12px 14px;
+            line-height: 16px;
+        }
+    }
 }
