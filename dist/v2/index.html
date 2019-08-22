@@ -33,13 +33,13 @@
                 <a href="#operation--board-id--projectId---id--get"> Get an existing board by its ID. </a>
               </li>
               <li>
+                <a href="#operation--board--oid--get"> Get an existing board by its OID </a>
+              </li>
+              <li>
                 <a href="#operation--board-list-id--projectId--get"> Get all boards of the given project by its ID. </a>
               </li>
               <li>
                 <a href="#operation--board-list--projectOid--get"> Get all boards of the given project by its OID. </a>
-              </li>
-              <li>
-                <a href="#operation--board--oid--get"> Get an existing board by its OID </a>
               </li>
               <li>
                 <a href="#operation--board--oid--put"> Update a board. </a>
@@ -56,6 +56,9 @@
                 <a href="#operation--comment--oid--post"> Add a task comment to a task or a project. </a>
               </li>
               <li>
+                <a href="#operation--comment--oid--get"> Get a comment </a>
+              </li>
+              <li>
                 <a href="#operation--comment-list-id--projectId--get"> Get all comments of the given project. </a>
               </li>
               <li>
@@ -63,9 +66,6 @@
               </li>
               <li>
                 <a href="#operation--comment-list--oid--get"> Get comments added to the given object. </a>
-              </li>
-              <li>
-                <a href="#operation--comment--oid--get"> Get a comment </a>
               </li>
               <li>
                 <a href="#operation--comment--oid--put"> Update an existing comment </a>
@@ -82,10 +82,10 @@
                 <a href="#operation--organization-id--id--get"> Get an organization by its ID. </a>
               </li>
               <li>
-                <a href="#operation--organization-list-get"> Get all organizations. </a>
+                <a href="#operation--organization--oid--get"> Get an organization by its OID. </a>
               </li>
               <li>
-                <a href="#operation--organization--oid--get"> Get an organization by its OID. </a>
+                <a href="#operation--organization-list-get"> Get all organizations. </a>
               </li>
             </ul>
           </section>
@@ -93,13 +93,13 @@
             <a href="#tag-partner">partner</a>
             <ul>
               <li>
+                <a href="#operation--partner--oid--get"> Get an external team (aka., a partner). </a>
+              </li>
+              <li>
                 <a href="#operation--partner-list-id--projectId--get"> Get all external teams of the given project by its ID. </a>
               </li>
               <li>
                 <a href="#operation--partner-list--projectOid--get"> Get all external teams of the given project by its OID. </a>
-              </li>
-              <li>
-                <a href="#operation--partner--oid--get"> Get an external team (aka., a partner). </a>
               </li>
             </ul>
           </section>
@@ -110,13 +110,13 @@
                 <a href="#operation--project-id--id--get"> Get a project by its ID. </a>
               </li>
               <li>
+                <a href="#operation--project--oid--get"> Get a project by its OID. </a>
+              </li>
+              <li>
                 <a href="#operation--project-list-id--organizationId--get"> Get all granted projects of the organization by its ID. </a>
               </li>
               <li>
                 <a href="#operation--project-list--organizationOid--get"> Get all granted projects of the organization by its OID. </a>
-              </li>
-              <li>
-                <a href="#operation--project--oid--get"> Get a project by its OID. </a>
               </li>
               <li>
                 <a href="#operation--project--oid--put"> Update a project. </a>
@@ -130,13 +130,13 @@
                 <a href="#operation--tag--projectOid--post"> Add a new tag. </a>
               </li>
               <li>
+                <a href="#operation--tag--oid--get"> Get a tag. </a>
+              </li>
+              <li>
                 <a href="#operation--tag-list-id--projectId--get"> Get all tags of the given project by its ID. </a>
               </li>
               <li>
                 <a href="#operation--tag-list--projectOid--get"> Get all tags of the given project by its OID. </a>
-              </li>
-              <li>
-                <a href="#operation--tag--oid--get"> Get a tag. </a>
               </li>
               <li>
                 <a href="#operation--tag--oid--put"> Update a tag. </a>
@@ -150,13 +150,19 @@
             <a href="#tag-task">task</a>
             <ul>
               <li>
+                <a href="#operation--task--oid--post"> Add a new task. </a>
+              </li>
+              <li>
                 <a href="#operation--task-after--oid--post"> Add a new task after the given task. </a>
               </li>
               <li>
                 <a href="#operation--task-before--oid--post"> Add a new task before the given task. </a>
               </li>
               <li>
-                <a href="#operation--task--oid--post"> Add a new task. </a>
+                <a href="#operation--task-id--projectId---id--get"> Get an existing task by its ID. </a>
+              </li>
+              <li>
+                <a href="#operation--task--oid--get"> Get an existing task by its OID. </a>
               </li>
               <li>
                 <a href="#operation--task-list-id--projectId--get"> Get all root tasks of the given project. </a>
@@ -174,12 +180,6 @@
                 <a href="#operation--task-search--projectOid--get"> Searches tasks in the given project. </a>
               </li>
               <li>
-                <a href="#operation--task--oid--get"> Get an existing task by its OID. </a>
-              </li>
-              <li>
-                <a href="#operation--task-id--projectId---id--get"> Get an existing task by its ID. </a>
-              </li>
-              <li>
                 <a href="#operation--task--oid--put"> Update an existing task. </a>
               </li>
               <li>
@@ -194,6 +194,9 @@
                 <a href="#operation--user-id--id--get"> Get a user by its ID or email address. </a>
               </li>
               <li>
+                <a href="#operation--user--oid--get"> Get a user by its OID. </a>
+              </li>
+              <li>
                 <a href="#operation--user-list-get"> Get all user records. </a>
               </li>
               <li>
@@ -201,9 +204,6 @@
               </li>
               <li>
                 <a href="#operation--user-list-project--oid--get"> Get all users records of the given project. </a>
-              </li>
-              <li>
-                <a href="#operation--user--oid--get"> Get a user by its OID. </a>
               </li>
             </ul>
           </section>
@@ -884,6 +884,112 @@
               </div>
             </div>
           </div>
+          <div id="operation--board--oid--get" class="operation panel" data-traverse-target="operation--board--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-board">board</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get an existing board by its OID</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/board/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the full board record of the given OID.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of board that needs to be fetched.</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;columns&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;TODO&quot;</span>,
+      <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
+      <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">0</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
           <div id="operation--board-list-id--projectId--get" class="operation panel" data-traverse-target="operation--board-list-id--projectId--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -1093,112 +1199,6 @@
     <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
   }
 ]
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--board--oid--get" class="operation panel" data-traverse-target="operation--board--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-board">board</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get an existing board by its OID</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/board/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full board record of the given OID.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of board that needs to be fetched.</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;columns&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;TODO&quot;</span>,
-      <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
-      <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">0</span>
-    }
-  ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
 </code></pre> </body>
                   </html>
                   <!-- </div> -->
@@ -1512,6 +1512,111 @@
                   <!-- </div> -->
                 </section>
               </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
+  <span class="hljs-attr">&quot;attachments&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;file.zip&quot;</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+      <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--comment--oid--get" class="operation panel" data-traverse-target="operation--comment--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-comment">comment</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get a comment</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/comment/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the full comment record of the given OID.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of comment that needs to be feteched.</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
@@ -1906,111 +2011,6 @@
               </div>
             </div>
           </div>
-          <div id="operation--comment--oid--get" class="operation panel" data-traverse-target="operation--comment--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-comment">comment</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get a comment</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/comment/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full comment record of the given OID.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of comment that needs to be feteched.</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;attachments&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;file.zip&quot;</span>,
-      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
-      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png&quot;</span>,
-      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-    }
-  ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
           <div id="operation--comment--oid--put" class="operation panel" data-traverse-target="operation--comment--oid--put">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -2318,87 +2318,6 @@
               </div>
             </div>
           </div>
-          <div id="operation--organization-list-get" class="operation panel" data-traverse-target="operation--organization-list-get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-organization">organization</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get all organizations.</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/organization/list</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the organization records for all organizations that the current user can grant to this application.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy"> </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">[
-  {
-    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
-    <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
-    <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-  }
-]
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
           <div id="operation--organization--oid--get" class="operation panel" data-traverse-target="operation--organization--oid--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -2496,10 +2415,180 @@
               </div>
             </div>
           </div>
+          <div id="operation--organization-list-get" class="operation panel" data-traverse-target="operation--organization-list-get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-organization">organization</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get all organizations.</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/organization/list</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the organization records for all organizations that the current user can grant to this application.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy"> </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">[
+  {
+    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
+    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+    <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+    <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+  }
+]
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
           <h1 id="tag-partner" class="swagger-summary-tag" data-traverse-target="tag-partner">partner</h1>
           <div class="tag-description doc-row">
             <div class="doc-copy">
               <p>An external team (aka., a parnter) is a group of users that can access only tasks that are assigned to this team.</p>
+            </div>
+          </div>
+          <div id="operation--partner--oid--get" class="operation panel" data-traverse-target="operation--partner--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-partner">partner</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get an external team (aka., a partner).</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/partner/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the full external team record of the given OID.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of external team that needs to be fetched.</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
+  <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
             </div>
           </div>
           <div id="operation--partner-list-id--projectId--get" class="operation panel" data-traverse-target="operation--partner-list-id--projectId--get">
@@ -2684,95 +2773,6 @@
               </div>
             </div>
           </div>
-          <div id="operation--partner--oid--get" class="operation panel" data-traverse-target="operation--partner--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-partner">partner</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get an external team (aka., a partner).</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/partner/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full external team record of the given OID.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of external team that needs to be fetched.</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
-  <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
           <h1 id="tag-project" class="swagger-summary-tag" data-traverse-target="tag-project">project</h1>
           <div class="tag-description doc-row">
             <div class="doc-copy">
@@ -2822,6 +2822,110 @@
                     </div>
                     <div class="prop-value">
                       <p>ID of project that needs to be fetched</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+  <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+  <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;string&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--project--oid--get" class="operation panel" data-traverse-target="operation--project--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-project">project</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get a project by its OID.</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/project/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the complete project record of the given OID.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of project that needs to be fetched</p>
                     </div>
                   </div>
                 </section>
@@ -3095,110 +3199,6 @@
               </div>
             </div>
           </div>
-          <div id="operation--project--oid--get" class="operation panel" data-traverse-target="operation--project--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-project">project</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get a project by its OID.</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/project/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the complete project record of the given OID.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of project that needs to be fetched</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-  <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-  <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;string&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
           <div id="operation--project--oid--put" class="operation panel" data-traverse-target="operation--project--oid--put">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -3460,6 +3460,95 @@
               </div>
             </div>
           </div>
+          <div id="operation--tag--oid--get" class="operation panel" data-traverse-target="operation--tag--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-tag">tag</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get a tag.</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/tag/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the full tag record of the given OID.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of tag that needs to be fetched.</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;global&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
+  <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
           <div id="operation--tag-list-id--projectId--get" class="operation panel" data-traverse-target="operation--tag-list-id--projectId--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -3635,95 +3724,6 @@
     <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
   }
 ]
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--tag--oid--get" class="operation panel" data-traverse-target="operation--tag--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-tag">tag</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get a tag.</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/tag/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full tag record of the given OID.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of tag that needs to be fetched.</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;global&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
-  <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
 </code></pre> </body>
                   </html>
                   <!-- </div> -->
@@ -3925,6 +3925,206 @@
           <div class="tag-description doc-row">
             <div class="doc-copy">
               <p>The task is a piece of work to be done or undertaken. It is the basic object that you and your team can collaborate on.</p>
+            </div>
+          </div>
+          <div id="operation--task--oid--post" class="operation panel" data-traverse-target="operation--task--oid--post">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-task">task</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Add a new task.</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">POST</span>
+                  <span class="operation-path">/task/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Add a new task into a project.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/CreateTaskBody">CreateTaskBody</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>Task to create</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of project or task that this new task to be added to. If the given OID is a project, the new task will be added as a root task. If the given OID is a task, the new task will become its subtask.</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Example</h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Task 101&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** task to start with.&quot;</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;assignees&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;recurring&quot;</span>: {
+    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
+    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
+    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
+  },
+  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;string&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;&lt;b&gt;Big&lt;/b&gt; task&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
+  <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;recurring&quot;</span>: {
+    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
+    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
+    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
+  },
+  <span class="hljs-attr">&quot;assignees&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
+    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
+    <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;assignors&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;attachments&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;file.zip&quot;</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+      <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+  <span class="hljs-attr">&quot;referrers&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;peekabooAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;favorites&quot;</span>: [
+    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
             </div>
           </div>
           <div id="operation--task-after--oid--post" class="operation panel" data-traverse-target="operation--task-after--oid--post">
@@ -4327,7 +4527,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--task--oid--post" class="operation panel" data-traverse-target="operation--task--oid--post">
+          <div id="operation--task-id--projectId---id--get" class="operation panel" data-traverse-target="operation--task-id--projectId---id--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -4337,12 +4537,178 @@
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Add a new task.</span>
+              <span class="operation-summary">Get an existing task by its ID.</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-path">
-                  <span class="operation-method">POST</span>
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/task/id/{projectId}/{id}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the full task record for a single task.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">projectId:
+                        <span class="prop-type">
+                          <span class="json-property-type">integer</span>
+                          <span class="json-property-format">(int32)</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the project that the task belongs to.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">integer</span>
+                          <span class="json-property-format">(int32)</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the task that needs to be fetched</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;&lt;b&gt;Big&lt;/b&gt; task&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
+  <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;recurring&quot;</span>: {
+    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
+    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
+    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
+  },
+  <span class="hljs-attr">&quot;assignees&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
+    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
+    <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;assignors&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;attachments&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;file.zip&quot;</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+      <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
+  <span class="hljs-attr">&quot;referrers&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;peekabooAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;favorites&quot;</span>: [
+    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--task--oid--get" class="operation panel" data-traverse-target="operation--task--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-task">task</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get an existing task by its OID.</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
                   <span class="operation-path">/task/{oid}</span>
                 </section>
               </div>
@@ -4350,28 +4716,12 @@
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-description">
-                  <p>Add a new task into a project.</p>
+                  <p>Returns the full task record for a single task.</p>
                 </section>
               </div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
-                <section class="swagger-request-body">
-                  <div class="prop-row">
-                    <div class="prop-name">
-                      <div class="swagger-request-model">
-                        <span class="">
-                          <a class="json-schema-ref" href="#/definitions/CreateTaskBody">CreateTaskBody</a>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value columns small-6">
-                      <!-- <div class="swagger-request-description"> -->
-                      <p>Task to create</p>
-                      <!-- </div> -->
-                    </div>
-                  </div>
-                </section>
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
@@ -4385,47 +4735,12 @@
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>OID of project or task that this new task to be added to. If the given OID is a project, the new task will be added as a root task. If the given OID is a task, the new task will become its subtask.</p>
+                      <p>OID of the task that needs to be fetched</p>
                     </div>
                   </div>
                 </section>
               </div>
-              <div class="doc-examples">
-                <section>
-                  <h5>Request Example</h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Task 101&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** task to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
-  <span class="hljs-attr">&quot;assignees&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;recurring&quot;</span>: {
-    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
-    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
-    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
-  },
-  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;string&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>
-}
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
+              <div class="doc-examples"></div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
@@ -5265,321 +5580,6 @@
               </div>
             </div>
           </div>
-          <div id="operation--task--oid--get" class="operation panel" data-traverse-target="operation--task--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-task">task</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get an existing task by its OID.</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/task/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full task record for a single task.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of the task that needs to be fetched</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;&lt;b&gt;Big&lt;/b&gt; task&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
-  <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
-  <span class="hljs-attr">&quot;recurring&quot;</span>: {
-    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
-    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
-    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
-  },
-  <span class="hljs-attr">&quot;assignees&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
-    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
-    <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;assignors&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
-  <span class="hljs-attr">&quot;attachments&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;file.zip&quot;</span>,
-      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
-      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png&quot;</span>,
-      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-    }
-  ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-  <span class="hljs-attr">&quot;referrers&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
-      <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
-    }
-  ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;peekabooAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;favorites&quot;</span>: [
-    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--task-id--projectId---id--get" class="operation panel" data-traverse-target="operation--task-id--projectId---id--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-task">task</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get an existing task by its ID.</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/task/id/{projectId}/{id}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full task record for a single task.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">projectId:
-                        <span class="prop-type">
-                          <span class="json-property-type">integer</span>
-                          <span class="json-property-format">(int32)</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>ID of the project that the task belongs to.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">id:
-                        <span class="prop-type">
-                          <span class="json-property-type">integer</span>
-                          <span class="json-property-format">(int32)</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>ID of the task that needs to be fetched</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;&lt;b&gt;Big&lt;/b&gt; task&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
-  <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
-  <span class="hljs-attr">&quot;recurring&quot;</span>: {
-    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
-    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
-    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
-  },
-  <span class="hljs-attr">&quot;assignees&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
-    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
-    <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;assignors&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
-  <span class="hljs-attr">&quot;attachments&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;file.zip&quot;</span>,
-      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
-      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png&quot;</span>,
-      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-    }
-  ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-string">&quot;integer (int32)&quot;</span>,
-  <span class="hljs-attr">&quot;referrers&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
-      <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
-    }
-  ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;peekabooAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;favorites&quot;</span>: [
-    <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
           <div id="operation--task--oid--put" class="operation panel" data-traverse-target="operation--task--oid--put">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -5950,6 +5950,101 @@
               </div>
             </div>
           </div>
+          <div id="operation--user--oid--get" class="operation panel" data-traverse-target="operation--user--oid--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-user">user</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-summary">Get a user by its OID.</span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-path">
+                  <span class="operation-method">GET</span>
+                  <span class="operation-path">/user/{oid}</span>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-operation-description">
+                  <p>Returns the full user record of the given OID.</p>
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">oid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of user that needs to be fetched</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> -->
+                  <html>
+                  <head></head>
+                  <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
+  <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
+}
+</code></pre> </body>
+                  </html>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
           <div id="operation--user-list-get" class="operation panel" data-traverse-target="operation--user-list-get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -6180,101 +6275,6 @@
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
   }
 ]
-</code></pre> </body>
-                  </html>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--user--oid--get" class="operation panel" data-traverse-target="operation--user--oid--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-user">user</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-summary">Get a user by its OID.</span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-path">
-                  <span class="operation-method">GET</span>
-                  <span class="operation-path">/user/{oid}</span>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-operation-description">
-                  <p>Returns the full user record of the given OID.</p>
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">oid:
-                        <span class="prop-type">
-                          <span class="json-property-type">string</span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>OID of user that needs to be fetched</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> -->
-                  <html>
-                  <head></head>
-                  <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-  <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
-  <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
-}
 </code></pre> </body>
                   </html>
                   <!-- </div> -->
