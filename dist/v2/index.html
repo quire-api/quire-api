@@ -21,7 +21,11 @@
         <nav id="nav" role="navigation">
           <h5>Topics</h5>
           <a href="#introduction">Introduction</a>
+          <a href="#api-changelog">API Changelog</a>
           <a href="#authentication">Authentication</a>
+          <a href="#webhook">WebHook</a>
+          <a href="#rate-limits">Rate limits</a>
+          <a href="#status-codes">Status codes</a>
           <h5>Operations</h5>
           <section>
             <a href="#tag-board">board</a>
@@ -218,7 +222,7 @@
           <h1 class="doc-title">Quire API
             <span>API Reference</span>
           </h1>
-          <div id="introduction" data-traverse-target="introduction">
+          <div class="introduction">
             <div class="doc-row">
               <div class="doc-copy">
                 <h1 id="introduction">Introduction</h1>
@@ -550,62 +554,6 @@
                   <h5>Version:
                     <span>1.0.0</span>
                   </h5>
-                </section>
-              </div>
-            </div>
-          </div>
-          <!-- <h1 id="security" data-traverse-target="security">Security</h1> -->
-          <h1 id="authentication" data-traverse-target="authentication">Authentication</h1>
-          <div id="security-definition-BasicAuth" class="panel">
-            <div class="doc-row">
-              <div class="doc-copy">
-                <h3 class="security-definition-title">
-                  <span class="security-name">BasicAuth</span>
-                  <span class="swagger-security-definition-basic"></span>
-                </h3>
-                <section class="swagger-security-definition-properties">
-                  <div class="prop-row security-definition-property">
-                    <div class="prop-name">
-                      <div class="prop-title security-definition-property-name">type</div>
-                    </div>
-                    <div class="prop-value security-definition-property-type"> basic </div>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="security-definition-OAuth2" class="panel">
-            <div class="doc-row">
-              <div class="doc-copy">
-                <h3 class="security-definition-title">
-                  <span class="security-name">OAuth2</span>
-                  <span class="swagger-security-definition-oauth2"></span>
-                </h3>
-                <section class="swagger-security-definition-properties">
-                  <div class="prop-row security-definition-property">
-                    <div class="prop-name">
-                      <div class="prop-title security-definition-property-name">type</div>
-                    </div>
-                    <div class="prop-value security-definition-property-type"> oauth2 </div>
-                  </div>
-                  <div class="prop-row security-definition-property">
-                    <div class="prop-name">
-                      <div class="prop-title security-definition-property-name">authorizationUrl</div>
-                    </div>
-                    <div class="prop-value security-definition-property-type"> https://quire.io/oauth </div>
-                  </div>
-                  <div class="prop-row security-definition-property">
-                    <div class="prop-name">
-                      <div class="prop-title security-definition-property-name">tokenUrl</div>
-                    </div>
-                    <div class="prop-value security-definition-property-type"> https://quire.io/oauth/token </div>
-                  </div>
-                  <div class="prop-row security-definition-property">
-                    <div class="prop-name">
-                      <div class="prop-title security-definition-property-name">flow</div>
-                    </div>
-                    <div class="prop-value security-definition-property-type"> accessCode </div>
-                  </div>
                 </section>
               </div>
             </div>

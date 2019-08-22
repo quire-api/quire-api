@@ -61,7 +61,7 @@ Traverse.defaults = {
 Traverse.prototype._init = function() {
   var id = this.$element[0].id, // || Foundation.GetYoDigits(6, 'traverse'),
       _this = this;
-  this.$targets = $('[data-traverse-target]');
+  this.$targets = $('.introduction .doc-copy > h1, [data-traverse-target]');
   this.$links = this.$element.find('a');
   this.$element.attr({
     'data-resize': id,
@@ -112,10 +112,16 @@ Traverse.prototype._events = function() {
     _this.calcPoints();
     _this._updateActive();
 
+    var timer;
     $(this).resize(function(e) {
       _this.reflow();
     }).scroll(function(e) {
-      _this._updateActive();
+        if (timer)
+            clearTimeout(timer);
+
+        timer = setTimeout(function() {
+            _this._updateActive();
+        }, 100);
     });
   })
 
@@ -127,6 +133,7 @@ Traverse.prototype._events = function() {
       $body.stop(true).animate({
         scrollTop: scrollPos
       }, opts);
+//       $body.scrollTop(scrollPos);
     });
 };
 
