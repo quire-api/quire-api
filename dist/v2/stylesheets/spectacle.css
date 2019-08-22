@@ -1396,6 +1396,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     position: relative; }
     #spectacle #docs .floating-menu-icon {
       top: 85px; }
+  #spectacle .hljs {
+    background-color: #23241f !important; }
 
 html, body {
   height: 100%; }
