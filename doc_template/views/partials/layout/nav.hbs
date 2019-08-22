@@ -27,7 +27,7 @@
       <section>
         <a href="#tag-{{htmlId name}}">{{name}}</a>
         <ul>
-          {{#each operations}}
+          {{#operationSorted operations}}
             <li>
               <a href="#operation-{{htmlId path}}-{{htmlId method}}">
                 {{#if summary}}
@@ -37,7 +37,7 @@
                 {{/if}}
               </a>
             </li>
-          {{/each}}
+          {{/operationSorted}}
         </ul>
       </section>
     {{/each}}

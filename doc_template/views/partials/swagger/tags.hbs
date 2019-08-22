@@ -7,7 +7,7 @@
         </div>
       </div>
     {{/if}}
-    {{#each operations}}
+    {{#operationSorted operations}}
       {{>swagger/operation . operation=. method=method path=path}}
-    {{/each}}
+    {{/operationSorted}}
 {{/each}}

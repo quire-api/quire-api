@@ -92,7 +92,7 @@ module.exports = function(grunt, options, spec) {
                   dest: options.cacheDir + '/' + options.targetFile
               }],
               templateData: spec,
-              helpers: options.appDir + '/helpers/*.js',
+              helpers: 'doc_template/helpers/*.js',
               partials: 'doc_template/views/partials/**/*.hbs'
           },
       },

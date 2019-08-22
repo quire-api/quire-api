@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently doing repetitive or tedious tasks.\n  * Chaining a process together for your team’s processes and workflows.\n    * Pulling information from other locations like email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Pushing information from Quire into other locations like email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your opinion on how our API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n*TBD*\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nYour user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. \n\n*Image*\n\nAfter your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.\n\nAlternatively, you can prepare a link on your website to redirect your users to Quire for authorization.\n\nThe syntax of the link is as follows:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n| Parameter Name | Description\n|------|------\n| `client_id` | Your client ID.\n| `redirect_uri` | URL to redirect user back upon completion (optional).\n| `state` | It can be any string and will be passed back upon completion (optional). \n\nOnce your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.\n\nThe `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.\n\nIf the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.\n\n### Retrieve an Access Token\n\nTo access Quire API, you need an access token. You can retrieve the token as follows.\n\n1. Retrieve the access code.\n\nAs described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.\n\n2. Use the access code to retrieve the access token.\n\nTo retrieve an access token, you have to <a href=\"https://www.w3schools.com/jquery/ajax_post.asp\" target=\"_blank\">post</a> a request to `https://quire.io/oauth/token` with the following data.\n\n`client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`\n\nThen, the access token will be returned in the response's body. You shall save the token carefully and permanently. You need to access each Quire API.\n\n### Make Authenticated Requests\n\n*TBD*\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,\n\n```\nAuthorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912\n```\n\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 6 months.\n\n# Hook\n\nA hook is a channel that Quire will *push* the information of updates (aka., notifications) to an app.\n\n> A hook is used by Quire to call an app, while Quire API is used by an app to call Quire.\n\n## Notifications\n\nA notification is the information about a update (aka., an activity). Here is an example:\n\n```\n{\n  \"type\": \"notification\",\n  \"token\": \"a-token-defined-by-you\",\n  \"data\": {\n    \"type\": 0, //activity's type\n    \"when\": \"2019-09-30T08:20:12.000Z\",\n    \"what\": {\n      \"oid\": \"YxjapXXRCOYxoaiCT4tT3OQm\", //OID of a task, project, or organization depending on type\n      \"id\": 101,\n      \"name\": \"Brand new start\"\n    },\n    \"user\": {\n      \"oid\": \"1AbDEFed2A5031BEDDweqmde\", //OID of the user\n      \"id\": \"john.doer\",\n      \"name\": \"John Doer\"\n    },\n    \"message\": \"<a href=\\\"https://quire.io/u/john.doer\\\">John Doer</a> added <a href=\\\"https://quire.io/w/MyProjects/101\\\">Brand new start</a>\",\n    \"text\": \"John Doer added Brand new start\",\n    \"url\": \"https://quire.io/w/MyProjects/101\"\n  } \n}\n```\n\n## Registration for notifications\n\nTo receive notifications, the app can *follow* tasks or projects it cares. By sending a `PUT` request to the URL it'd like to follow. To add a follower, the body of the request can be:\n\n```\n{\n  \"addFollowers\": [\"app\"]\n}\n```\n\nWhere `app` is a keyword. It indicates the app would like to add itself to the followers.\n\nIn additions, you can specify additional information that will be passed as part of a notification int the following syntaxes.\n\n**Syntax 1**\n\n```\n\"app|team|channel\"\n```\n\nwhere `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`. For example,\n\n```\n{\n  \"addFollowers\": [\"app|extra101\"]\n}\n```\n\nThen, the notification will carry additional field called `team` with the value `\"extra101\"`:\n\n```\n{\n  \"type\": \"notification\"\n  \"team\": \"extra101\"\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n**Syntax 2**\n\n```\n\"app|/path\"\n```\n\nwhere `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `\"https://super.app/hooks/standard\"`, and the follower \"app|/soc/id279/channel51\". Then, the notification will be posted the following URL: `\"https://super.app/hooks/standard/soc/id279/channel51\"`.\n\nIf you'd like to pass additional information in this syntax, you can append it as follows.\n\n```\n\"app|/path|channel\"\n```\n\nFor example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object sent to the hook URL.\n\n```\n{\n  \"type\": \"notification\"\n  \"channel\": \"box51\"\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n# Rate limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 20  | 800\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n\n## Size limits\n\nThe size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.\n\n# Status codes\n\n| Code | Meaning               | Description                                               \n|------|-----------------------|--------------------------------------------------------------------------\n| 200  | Success               | Request successful\n| 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized          | Your API key is wrong.\n| 403  | Forbidden             | Not authorized to access the resource.\n| 404  | Not Found             | The specified resource could not be found.\n| 405  | Method not Allowed    | Method not allowed or supported.\n| 409  | Conflict              | There is already a resource with the same criteria.\n| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls\n| 500  | Internal Server Error | There is an unexpected error.\n| 503  | Service Unavailable   | Server is down for maintenance.\n\n## Error responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 401 | Invalid or expired token.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 469 | Quota exceeded.\n| 500 | General invocation error. Most likely, an internal error.\n"
+  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently doing repetitive or tedious tasks.\n  * Chaining a process together for your team’s processes and workflows.\n    * Pulling information from other locations like email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Pushing information from Quire into other locations like email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your opinion on how our API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n*TBD*\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nYour user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. \n\n*Image*\n\nAfter your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.\n\nAlternatively, you can prepare a link on your website to redirect your users to Quire for authorization.\n\nThe syntax of the link is as follows:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n| Parameter Name | Description\n|------|------\n| `client_id` | Your client ID.\n| `redirect_uri` | URL to redirect user back upon completion (optional).\n| `state` | It can be any string and will be passed back upon completion (optional). \n\nOnce your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.\n\nThe `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.\n\nIf the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.\n\n### Retrieve an Access Token\n\nTo access Quire API, you need an access token. You can retrieve the token as following.\n\n1. Retrieve the access code.\n\nAs described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.\n\n2. Use the access code to retrieve the access token.\n\nTo retrieve an access token, you have to <a href=\"https://www.w3schools.com/jquery/ajax_post.asp\" target=\"_blank\">post</a> a request to `https://quire.io/oauth/token` with the following data.\n\n`client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`\n\nThen, the access token will be returned in the response's body. The token should be kept carefully and permanently since you need it to access to every Quire API. \n\n### Make Authenticated Requests\n\n*TBD*\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,\n\n```\nAuthorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912\n```\n\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 6 months.\n\n# WebHook\n\nWhen one event on Quire is triggered, the system will send a payload to the webhook's configured URL.\n\n> A webhook is used by Quire to call an app, while Quire API is used by an app to call Quire.\n\n## Notifications\n\nA notification is the information about a update (aka., an activity). Here is an example:\n\n```\n{\n  \"type\": \"notification\",\n  \"token\": \"a-token-defined-by-you\",\n  \"data\": {\n    \"type\": 0, //activity's type\n    \"when\": \"2019-09-30T08:20:12.000Z\",\n    \"what\": {\n      \"oid\": \"YxjapXXRCOYxoaiCT4tT3OQm\", //OID of a task, project, or organization depending on type\n      \"id\": 101,\n      \"name\": \"Brand new start\"\n    },\n    \"user\": {\n      \"oid\": \"1AbDEFed2A5031BEDDweqmde\", //OID of the user\n      \"id\": \"john.doer\",\n      \"name\": \"John Doer\"\n    },\n    \"message\": \"<a href=\\\"https://quire.io/u/john.doer\\\">John Doer</a> added <a href=\\\"https://quire.io/w/MyProjects/101\\\">Brand new start</a>\",\n    \"text\": \"John Doer added Brand new start\",\n    \"url\": \"https://quire.io/w/MyProjects/101\"\n  } \n}\n```\n\n## Registration for notifications\n\nIf the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:\n\n```\n{\n  \"addFollowers\": [\"app\"]\n}\n```\n\nWhere `app` is a keyword. It indicates that the app would like to add to its followers.\n\nIn additions, you can specify additional information that will be passed as part of a notification int the following syntaxes.\n\n**Syntax 1**\n\n```\n\"app|team|channel\"\n```\n\nwhere `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`. For example,\n\n```\n{\n  \"addFollowers\": [\"app|extra101\"]\n}\n```\n\nThen, the notification will carry additional field called `team` with the value `\"extra101\"`:\n\n```\n{\n  \"type\": \"notification\"\n  \"team\": \"extra101\"\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n**Syntax 2**\n\n```\n\"app|/path\"\n```\n\nwhere `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `\"https://super.app/hooks/standard\"`, and the follower \"app|/soc/id279/channel51\". Then, the notification will be posted the following URL: `\"https://super.app/hooks/standard/soc/id279/channel51\"`.\n\nIf you'd like to pass additional information in this syntax, you can append it as follows.\n\n```\n\"app|/path|channel\"\n```\n\nFor example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object sent to the hook URL.\n\n```\n{\n  \"type\": \"notification\"\n  \"channel\": \"box51\"\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n# Rate limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 20  | 800\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n\n## Size limits\n\nThe size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.\n\n# Status codes\n\n| Code | Meaning               | Description                                               \n|------|-----------------------|--------------------------------------------------------------------------\n| 200  | Success               | Request successful\n| 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized          | Your API key is wrong.\n| 403  | Forbidden             | Not authorized to access the resource.\n| 404  | Not Found             | The specified resource could not be found.\n| 405  | Method not Allowed    | Method not allowed or supported.\n| 409  | Conflict              | There is already a resource with the same criteria.\n| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls\n| 500  | Internal Server Error | There is an unexpected error.\n| 503  | Service Unavailable   | Server is down for maintenance.\n\n## Error responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 401 | Invalid or expired token.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 469 | Quota exceeded.\n| 500 | General invocation error. Most likely, an internal error.\n"
   version: 1.0.0
   title: Quire API
   termsOfService: 'https://quire.io/terms'
@@ -1318,17 +1318,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1437,16 +1437,16 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was edited, or null if not edited.'
-      pinBy:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 50
-        description: 'OID of the user who pinned this comment, or null if not pinned.'
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was pinned, or null if not pinned.'
+      pinBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 50
+        description: 'OID of the user who pinned this comment, or null if not pinned.'
       editedBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -1543,10 +1543,6 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
@@ -1556,6 +1552,10 @@ definitions:
 
           Default: false -- the comment is marked as created by the user
           authorizing the app.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
   CreateTagBody:
     type: object
     required:
@@ -1587,47 +1587,16 @@ definitions:
         type: string
         example: '**Great** task to start with.'
         description: (Optional) An optional description about this task.
-      followers:
-        type: array
-        description: >-
-          (Optional) OID of users who follow this task.If "me" is specified, it
-          means the current user will follow this task.
-
-          If the application would like to follow (i.e., receive notifications),
-          it can pass "app" as one of OIDs.
-
-          In additions, it can pass additional information in one of the
-          following syntaxes.
-
-
-          Syntax 1:
-
-          "app|team" or "app|team|channel"
-
-          where team and channel can be any value.
-
-
-          Syntax 2:
-
-          "app|/path"
-
-          where "/path" can be any URL path. It will be appended to the hook's
-          URL when calling the registered hook. For example, if the hook URL is
-          "https://super.app/hooks/standard" and the follower is
-          "app|/soc1/33456/a7", then the notification will be sent to
-          "https://super.app/hooks/standard/soc1/33456/a7".
-        items:
-          type: string
-      due:
+      start:
         type: string
-        example: '2018-12-22T00:00:00.000Z'
+        example: '2018-12-20T00:00:00.000Z'
         description: >-
           (Optional) An optional start time. Note: if time is specified, the
           millisecond must be `001`. Otherwise, it is `000` (so are the hour,
           minute and second fields).
-      start:
+      due:
         type: string
-        example: '2018-12-20T00:00:00.000Z'
+        example: '2018-12-22T00:00:00.000Z'
         description: >-
           (Optional) An optional start time. Note: if time is specified, the
           millisecond must be `001`. Otherwise, it is `000` (so are the hour,
@@ -1666,6 +1635,37 @@ definitions:
           type: string
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
+      followers:
+        type: array
+        description: >-
+          (Optional) OID of users who follow this task.If "me" is specified, it
+          means the current user will follow this task.
+
+          If the application would like to follow (i.e., receive notifications),
+          it can pass "app" as one of OIDs.
+
+          In additions, it can pass additional information in one of the
+          following syntaxes.
+
+
+          Syntax 1:
+
+          "app|team" or "app|team|channel"
+
+          where team and channel can be any value.
+
+
+          Syntax 2:
+
+          "app|/path"
+
+          where "/path" can be any URL path. It will be appended to the hook's
+          URL when calling the registered hook. For example, if the hook URL is
+          "https://super.app/hooks/standard" and the follower is
+          "app|/soc1/33456/a7", then the notification will be sent to
+          "https://super.app/hooks/standard/soc1/33456/a7".
+        items:
+          type: string
       priority:
         type: integer
         format: int32
@@ -1723,17 +1723,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1836,17 +1836,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
@@ -1918,6 +1918,10 @@ definitions:
   Referrer:
     type: object
     properties:
+      task:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the task that refers another task.
       when:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1926,10 +1930,6 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who made this reference.
-      task:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the task that refers another task.
   SimpleTask:
     type: object
     properties:
@@ -1963,14 +1963,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to complete this task. Note: if time is specified, the
-          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
-          and second fields).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -1979,6 +1971,14 @@ definitions:
           When to start this task.Note: if time is specified, the millisecond
           will be `001`. Otherwise, it is `000` (so are the hour, minute and
           second fields).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to complete this task. Note: if time is specified, the
+          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
+          and second fields).
       url:
         type: string
         example: 'https://quire.io/w/my_project/123'
@@ -2080,14 +2080,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to complete this task. Note: if time is specified, the
-          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
-          and second fields).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -2096,12 +2088,45 @@ definitions:
           When to start this task.Note: if time is specified, the millisecond
           will be `001`. Otherwise, it is `000` (so are the hour, minute and
           second fields).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to complete this task. Note: if time is specified, the
+          millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
+          and second fields).
       recurring:
         position: 4
         description: >-
           The recurring information of this task. It is null if it is not a
           recurring task.
         $ref: '#/definitions/Recurring'
+      assignees:
+        type: array
+        position: 5
+        description: OID of users who are assigned to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the external team that this task belongs to. It is null if this
+          task doesn't belong to any external team.
+      tags:
+        type: array
+        position: 5
+        description: OID of tags that are tagged to this task.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       assignors:
         type: array
         position: 5
@@ -2120,31 +2145,13 @@ definitions:
         description: >-
           OID of the user who assigned this task to an external team. It is null
           if this task doesn't belong to any external team.
-      assignees:
-        type: array
-        position: 5
-        description: OID of users who are assigned to this task.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
-      tags:
-        type: array
-        position: 5
-        description: OID of tags that are tagged to this task.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      partner:
+      board:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 5
+        position: 6
         description: >-
-          OID of the external team that this task belongs to. It is null if this
-          task doesn't belong to any external team.
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
       order:
         type: integer
         format: int32
@@ -2154,23 +2161,16 @@ definitions:
           The order of this task shown on the board. The smaller the number is,
           the ealier the task is shown. It is meaningless if it doesn't belong
           to any board.
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
-        description: >-
-          OID of the board that this task was added to. It is null if this task
-          doesn't belong to any board.
-      cover:
-        type: string
-        position: 8
-        description: The name of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      cover:
+        type: string
+        position: 8
+        description: The name of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -2211,14 +2211,6 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this task was peekabooed. It is null if not peekabooed.
-      favorites:
-        type: array
-        position: 60
-        description: OID of users who favorite this task.
-        items:
-          type: string
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
       followers:
         type: array
         position: 60
@@ -2227,6 +2219,14 @@ definitions:
           type: string
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
+      favorites:
+        type: array
+        position: 60
+        description: OID of users who favorite this task.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -2259,6 +2259,10 @@ definitions:
         type: string
         example: '**Great** board to start with.'
         description: (Optional) An optional description about this task.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this board was aimed to complete. '
       column:
         description: (Optional) Updates an existing column with a new content.
         $ref: '#/definitions/UpdateColumnBody'
@@ -2275,10 +2279,6 @@ definitions:
         description: >-
           (Optional) Specify true to archive this board. Or, specify false to
           undo the previous archiving if any.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this board was aimed to complete. '
   UpdateColumnBody:
     type: object
     properties:
@@ -2324,6 +2324,14 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
+      followers:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
+        description: |-
+          (Optional) OID of the users to replace the followers of this project.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
       addFollowers:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
@@ -2364,14 +2372,6 @@ definitions:
           Please refer to `addFollowers()` for more details.
         items:
           type: string
-      followers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
-        description: |-
-          (Optional) OID of the users to replace the followers of this project.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
   UpdateTagBody:
     type: object
     properties:
@@ -2406,28 +2406,61 @@ definitions:
       description:
         type: string
         description: (Optional) Change the description about this task.
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      assignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: >-
+          (Optional) OID of the users that this task is assigned to. If
+          specified, it will replace any existing assignee(s). Instead of
+          replacment, you can use "addAssignees" or "removeAssignees".
+        items:
+          type: string
+      recurring:
+        description: >-
+          (Optional) The recurring information of this task. It is null if it is
+          not a recurring task.
+        $ref: '#/definitions/Recurring'
+      peekaboo:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Specify true to peekaboo this task and its subtasks. Or,
+          specify false to undo the previous peekaboo if any.
       addTags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
         description: (Optional) OID of the tags to be added to this task.
         items:
           type: string
-      removeTags:
+      tags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the tags to be removed from this task.
+        description: >-
+          (Optional) OID of the tags to replace existing tags of to this task.
+          If specified, it will replace any existing tag(s). Instead of
+          replacment, you can use "addTags" or "removeTags".
         items:
           type: string
-      addAssignees:
+      followers:
         type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the assignees to be added to this task.
-        items:
-          type: string
-      removeAssignees:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: (Optional) OID of the assignees to be removed from this task.
+        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
+        description: >-
+          (Optional) OID of the users to replace the followers of this task.
+          Please refer to `addFollowers()` for more details.
         items:
           type: string
       addFollowers:
@@ -2470,55 +2503,22 @@ definitions:
           refer to `addFollowers()` for more details.
         items:
           type: string
-      followers:
-        type: array
-        example: '["6QMKkEPBVWETLWrXqws94ALU","app"]'
-        description: >-
-          (Optional) OID of the users to replace the followers of this task.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      assignees:
+      removeTags:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the users that this task is assigned to. If
-          specified, it will replace any existing assignee(s). Instead of
-          replacment, you can use "addAssignees" or "removeAssignees".
+        description: (Optional) OID of the tags to be removed from this task.
         items:
           type: string
-      recurring:
-        description: >-
-          (Optional) The recurring information of this task. It is null if it is
-          not a recurring task.
-        $ref: '#/definitions/Recurring'
-      peekaboo:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true to peekaboo this task and its subtasks. Or,
-          specify false to undo the previous peekaboo if any.
-      tags:
+      addAssignees:
         type: array
         example: '["6QMKkEPBVWETLWrXqws94ALU"]'
-        description: >-
-          (Optional) OID of the tags to replace existing tags of to this task.
-          If specified, it will replace any existing tag(s). Instead of
-          replacment, you can use "addTags" or "removeTags".
+        description: (Optional) OID of the assignees to be added to this task.
+        items:
+          type: string
+      removeAssignees:
+        type: array
+        example: '["6QMKkEPBVWETLWrXqws94ALU"]'
+        description: (Optional) OID of the assignees to be removed from this task.
         items:
           type: string
       priority:
@@ -2578,17 +2578,17 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
       iconColor:
         type: string
         example: '37'
         description: >-
           The color of the icon representing this record. It is an index of our
           predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
       name:
         type: string
         example: My Name
