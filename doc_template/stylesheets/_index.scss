@@ -21,6 +21,7 @@ $header-height: 64px;
 
   #sidebar {
     top: $header-height;
+    height: auto;
   }
 
   #docs {
