@@ -59,12 +59,33 @@
 
   <div class="doc-row">
     <div class="doc-copy">
+      {{>swagger/parameters parameters=parameters}}
       {{! The _request_body variable is filled with the parameter `body` by the preprocessor. }}
+      {{!--
       {{#if _show_requst_body_section}}
         {{>swagger/request-body consumes=consumes body=_request_body}}
       {{/if}}
+      --}}
+      {{#if _request_body}}
+        <section class="swagger-request-body">
+        {{#schemaReferenceContext _request_body.schema.$ref}}
+          {{#each properties}}
+            <div class="prop-row prop-group">
+              <div class="prop-name">
+                <div class="prop-title">{{@key}}: <span class="prop-type">{{~>json-schema/datatype . ~}}</span></div>
+                {{#ifcontains ../required @key}}
+                  <span class="json-property-required"></span>
+                {{/ifcontains}}
+              </div>
+              <div class="prop-value">
+                {{>swagger/description description}}
 
-      {{>swagger/parameters parameters=parameters}}
+              </div>
+            </div>
+          {{/each}}
+        {{/schemaReferenceContext}}
+      </section>
+      {{/if}}
     </div>
 
     {{! Print examples without whitespace }}
