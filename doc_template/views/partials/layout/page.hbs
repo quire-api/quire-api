@@ -3,9 +3,12 @@
   @api public
 --}}
 <div id="page" class="drawer-layout drawer-slide-right-large">
-  <header class="header-wrap navbar navbar-default navbar-fixed-top">
+  <header class="header-wrap navbar navbar-default navbar-fixed-top qr-collapse-navbar">
     <div id="header" class="container">
       <div id="quire-logo" class="navbar-header">
+        <button id="menu-toggle" class="navbar-toggle x30 cmn-toggle-switch htx" type="button">
+          <span>toggle menu</span>
+        </button>
         <h1 class="quire-logo-icon">
           <em>
             <a href="/" title="Quire">
@@ -13,10 +16,16 @@
             </a>
           </em>
         </h1>
-        <h3 class="app-home-icon"><a href="/doc/api/v2/">API Documentation</a></h3>
+        <h3 class="app-home-icon"><a href="/dev">Developers</a></h3>
       </div>
       <nav class="navbar-collapse bs-navbar-collapse collapse clearfix">
         <ul id="header-icons" class="nav navbar-nav navbar-right">
+          <li class="item tutorail">
+            <a href="/dev/tutorial">TUTORIAL</a>
+          </li>
+          <li class="item doc active">
+            <a href="/dev/api">DOCUMENTATION</a>
+          </li>
           <li class="item workspace">
             <a href="/w" class="b white">GO TO YOUR PROJECT</a>
           </li>

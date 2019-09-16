@@ -27,7 +27,9 @@ $header-height: 64px;
   #docs {
     position: relative;
     .floating-menu-icon {
-        top: 85px;
+        position: absolute;
+        top: 20px;
+        right: 30px;
     }
   }
 
@@ -46,7 +48,6 @@ html, body {
     left: 0;
     height: $header-height;
     z-index: 1030;
-    box-shadow: 0 12px 24px 0 rgba(0,0,0,.05);
 }
 
 .app-home-icon {
@@ -64,9 +65,6 @@ html, body {
 }
 
 #header {
-    .navbar-header {
-        float: left;
-    }
     .navbar-nav {
         float: right !important;
 
@@ -79,13 +77,23 @@ html, body {
     }
 }
 
-#header-icons {
 
+#header-icons {
     .item {
         > a {
-            margin: 10px 4px;
-            padding: 12px 14px;
-            line-height: 16px;
+           display: block;
         }
     }
+}
+
+.navbar-toggle {
+    float: right;
+}
+
+@media (min-width: 768px) {
+    #header {
+        .navbar-header {
+            float: left;
+        }
+     }
 }
