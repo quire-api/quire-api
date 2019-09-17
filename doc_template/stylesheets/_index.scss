@@ -27,9 +27,13 @@ $header-height: 64px;
   #docs {
     position: relative;
     .floating-menu-icon {
-        position: absolute;
-        top: 20px;
+        top: 85px;
         right: 30px;
+    }
+    &.sliding {
+        .floating-menu-icon {
+            display: none;
+        }
     }
   }
 
@@ -50,17 +54,13 @@ html, body {
     z-index: 1030;
 }
 
-.app-home-icon {
-    display: inline-block;
-    margin: 20px 0 0 16px;
-    padding-left: 16px;
-    border-left: 2px solid $border-color;
-    vertical-align: top;
-
-    font-size: 20px;
-    font-weight: $base-heavy-weight;
-    a {
-        @include lighter-hover-text();
+.app-header {
+    .header-wrap,
+    .footer-wrap {
+        .container {
+            width: 100%;
+            max-width: none;
+        }
     }
 }
 

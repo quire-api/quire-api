@@ -26,11 +26,17 @@ $(function() {
     var $drawerLayout = $('.drawer-layout'),
       $drawer = $drawerLayout.find('.drawer'),
       closeDrawer = function() {
+        $drawer.addClass('sliding');
         $drawer.removeClass('slide-right slide-left');
         $drawer.find('.drawer-overlay').remove();
         $drawerLayout.removeClass('drawer-open drawer-slide-left-large');
+
         return false;
       };
+
+    $drawer.on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+        $drawer.removeClass('sliding');
+    });
 
     // Drawer open buttons
     $drawerLayout.find('[data-drawer-slide]').click(function(e) {
@@ -38,6 +44,7 @@ $(function() {
         direction = $this.data('drawer-slide');
       $drawerLayout.addClass('drawer-slide-right-large');
       $drawer.addClass('slide-' + direction);
+      $drawer.addClass('sliding');
 
       var $overlay = $('<a href="#" class="drawer-overlay"></a>')
       $drawer.append($overlay);

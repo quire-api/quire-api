@@ -1396,9 +1396,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   #spectacle #docs {
     position: relative; }
     #spectacle #docs .floating-menu-icon {
-      position: absolute;
-      top: 20px;
+      top: 85px;
       right: 30px; }
+    #spectacle #docs.sliding .floating-menu-icon {
+      display: none; }
   #spectacle .hljs {
     background-color: #23241f !important; }
 
@@ -1412,18 +1413,10 @@ html, body {
   height: 64px;
   z-index: 1030; }
 
-.app-home-icon {
-  display: inline-block;
-  margin: 20px 0 0 16px;
-  padding-left: 16px;
-  border-left: 2px solid #EDEDED;
-  vertical-align: top;
-  font-size: 20px;
-  font-weight: 700; }
-  .app-home-icon a {
-    color: rgba(0, 0, 0, 0.42); }
-    .app-home-icon a:hover {
-      color: rgba(0, 0, 0, 0.58); }
+.app-header .header-wrap .container,
+.app-header .footer-wrap .container {
+  width: 100%;
+  max-width: none; }
 
 #header .navbar-nav {
   float: right !important; }
