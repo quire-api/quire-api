@@ -50,7 +50,7 @@ window.sendQS = function (data, callback, failCallback) {
 
 	return $.ajax({
 		type: 'POST',
-		url: ('/') + channel,
+		url: '/' + channel,
 			//for chrome extension, we need to specify absolute path
 		data: JSON.stringify(data),
 		contentType: "application/json;charset=UTF-8",
