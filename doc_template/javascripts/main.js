@@ -21,7 +21,7 @@ function _updateLoginUser(response) {
 		userImg != '' ?
 			$('<img class="img-icon x30 circle" src="' + userImg + '" alt="' + userName + '">') :
 			$('<div class="img-icon x30 circle bg iconc-' + iconColor +'">' + initials + '</div>')
-	).attr('href', '/u/' + userId + '#');
+	);
 	user.find('.icon-user-o').parent().attr('href', '/u/' + userId);
 
 	// remove stuff for non-user
