@@ -96,26 +96,6 @@ As described in the previous section, your user will be redirected to the URL yo
 
 2. Use the access code to retrieve the access token.
 
-To retrieve an access token, you have to <a href="https://www.w3schools.com/jquery/ajax_post.asp" target="_blank">post</a> a request to `https://quire.io/oauth/token` with the following data.
-
-`client_id=your-client-ID&grant_type=authorization_code&code=your-access-code&client_secret=your-client-secret`
-
-Then, the access token will be returned in the response's body. The token should be kept carefully and permanently since you need it to access to every Quire API. 
-
-### Make Authenticated Requests
-
-**1. Authorization code**
-
-When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
-
-The authorization endpoint should look like this:
-
-`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
-
-The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
-
-**2. Retrieve access token**
-
 To retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:
 
 | Parameter | Value |
@@ -130,6 +110,20 @@ Then, the access token will be returned in the response's body.
 `{"access_token":"ACCESS_TOKEN","expires_in":2592000,"refresh_token":"REFRESH_TOKEN"}`
 
 The token should be kept carefully and permanently since you need it to access every Quire API.
+
+### Make Authenticated Requests
+
+**1. Authorization code**
+
+When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
+
+The authorization endpoint should look like this:
+
+`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
+
+The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
+
+**2. Use Access token to access Quire API**
 
 In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,
 
