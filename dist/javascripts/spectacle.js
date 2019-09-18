@@ -43,32 +43,6 @@ function _updateNonLoginUser() {
 	_showHeaderIcon();
 }
 
-window.sendQS = function (data, callback, failCallback) {
-	var channel = $('body').data('qs') || 'qs';
-		//#7994: for chrome extension, we have to use /qs
-//	var segs = location.pathname.match(/^\/([^/]+)\//);
-
-	return $.ajax({
-		type: 'POST',
-		url: ('/') + channel,
-			//for chrome extension, we need to specify absolute path
-		data: JSON.stringify(data),
-		contentType: "application/json;charset=UTF-8",
-//		headers: {"x-spg": segs ? segs[1]: ''}
-	})
-	.done(callback)
-	.fail(function (xhr) {
-		if (failCallback)
-			failCallback(xhr);
-		else {
-			var msg = netErrorMsg(xhr);
-			if (msg)
-				showAlert($('#body'), msg, 'alert-danger');
-		}
-
-	});
-};
-
 $(function() {
   // $(document).foundation();
 
