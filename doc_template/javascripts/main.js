@@ -1,3 +1,74 @@
+var stCurrentUser = "curusr",
+	isUser = false;
+
+function _showHeaderIcon() {
+	$('#header-icons').removeClass('hide');
+}
+
+function _updateLoginUser(response) {
+	var user = $('.t-user'),
+		userId = response['id'],
+		userName = response['name'],
+		initials = response['initials'],
+		userImg = response['image'],
+		iconColor = response['iconColor'];
+
+	isUser = true;
+
+	// update for icon and its dropdown
+	user.find('.dropdown-header').text(userName);
+	user.find('.user-icon-wrapper').append(
+		userImg != '' ?
+			$('<img class="img-icon x30 circle" src="' + userImg + '" alt="' + userName + '">') :
+			$('<div class="img-icon x30 circle bg iconc-' + iconColor +'">' + initials + '</div>')
+	).attr('href', '/u/' + userId + '#');
+	user.find('.icon-user-o').parent().attr('href', '/u/' + userId);
+
+	// remove stuff for non-user
+	$('li.login').remove();
+
+	$('.workspace').removeClass('hide');
+
+	user.removeClass('hide');
+	_showHeaderIcon();
+}
+
+function _updateNonLoginUser() {
+	// remove stuff for user
+	$('#header-wrapper').addClass('qr-collapse-navbar');
+    $('li.workspace, li.t-user').remove();
+
+    $('.login').removeClass('hide');
+
+	_showHeaderIcon();
+}
+
+window.sendQS = function (data, callback, failCallback) {
+	var channel = $('body').data('qs') || 'qs';
+		//#7994: for chrome extension, we have to use /qs
+//	var segs = location.pathname.match(/^\/([^/]+)\//);
+
+	return $.ajax({
+		type: 'POST',
+		url: ('/') + channel,
+			//for chrome extension, we need to specify absolute path
+		data: JSON.stringify(data),
+		contentType: "application/json;charset=UTF-8",
+//		headers: {"x-spg": segs ? segs[1]: ''}
+	})
+	.done(callback)
+	.fail(function (xhr) {
+		if (failCallback)
+			failCallback(xhr);
+		else {
+			var msg = netErrorMsg(xhr);
+			if (msg)
+				showAlert($('#body'), msg, 'alert-danger');
+		}
+
+	});
+};
+
 $(function() {
   // $(document).foundation();
 
@@ -56,4 +127,14 @@ $(function() {
     // Drawer close buttons
     $drawerLayout.find('[data-drawer-close]').click(closeDrawer);
   }
+
+  sendQS([stCurrentUser, null], function(response) {
+    if (response)
+      _updateLoginUser(response);
+    else
+      _updateNonLoginUser();
+  }, function() {
+    _updateNonLoginUser();
+    _showHeaderIcon();
+  });
 });

@@ -12,7 +12,7 @@
   </head>
   <body id="spectacle" class="app-header">
     <div id="page" class="drawer-layout drawer-slide-right-large">
-      <header class="header-wrap navbar navbar-default navbar-fixed-top qr-collapse-navbar">
+      <header id="header-wrapper" class="header-wrap navbar navbar-default navbar-fixed-top">
         <div id="header" class="container">
           <div id="quire-logo" class="navbar-header">
             <button id="menu-toggle" class="navbar-toggle x30 cmn-toggle-switch htx" type="button">
@@ -29,15 +29,60 @@
             </h3>
           </div>
           <nav class="navbar-collapse bs-navbar-collapse collapse clearfix">
-            <ul id="header-icons" class="nav navbar-nav navbar-right">
+            <ul id="header-icons" class="nav navbar-nav navbar-right hide">
               <li class="item tutorail">
                 <a href="/dev/tutorial">TUTORIAL</a>
               </li>
               <li class="item doc active">
                 <a href="/dev/api">DOCUMENTATION</a>
               </li>
-              <li class="item workspace">
+              <li class="item login hide">
+                <a href="/login" class="b green">LOG IN</a>
+              </li>
+              <li class="item workspace hide">
                 <a href="/w" class="b white">GO TO YOUR PROJECT</a>
+              </li>
+              <li class="item t-user dropdown hide" id="u-id">
+                <a href="#" class="i-btn user-icon-wrapper dropdown-toggle" data-toggle="dropdown"></a>
+                <ul class="arrow-dropdown-menu dropdown-menu pull-right arrow-border" role="menu">
+                  <li class="dropdown-header"></li>
+                  <li class="u-item">
+                    <a href="[:url currentUser]">
+                      <i class="icon-user-o"></i>My Profile</a>
+                  </li>
+                  <li class="u-item">
+                    <a href="/r/setting?tab=options">
+                      <i class="icon-cog-o"></i>Account Settings</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li class="u-item">
+                    <a href="/invite">
+                      <i class="icon-heart-o"></i>Recommend Quire</a>
+                  </li>
+                  <li class="u-item dropdown-submenu">
+                    <a href="#">
+                      <i class="icon-question-circle"></i>Help</a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li class="u-item tutorial">
+                        <a href="/tutorial" target="_blank">
+                          <i class="icon-graduation-cap-o"></i>Tutorial</a>
+                      </li>
+                      <li class="u-item">
+                        <a href="/w/Getting_Started_with_Quire/" target="_blank">
+                          <i class="icon-book-open-o"></i>Getting Started</a>
+                      </li>
+                      <li class="u-item feedback">
+                        <a href="/feedback" class="feedback-item" target="_blank">
+                          <i class="icon-inbox-file-word"></i>Feedback</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="divider"></li>
+                  <li class="u-item">
+                    <a href="/r/logout">
+                      <i class="icon-sign-out"></i>Log out</a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </nav>
