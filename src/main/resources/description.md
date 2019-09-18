@@ -90,11 +90,11 @@ After your user clicks `Accept`, the access will be granted, and he will be redi
 
 To access Quire API, you need an access token. You can retrieve the token as following.
 
-1. Retrieve the access code.
+**1. Retrieve the access code.**
 
 As described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.
 
-2. Use the access code to retrieve the access token.
+**2. Use the access code to retrieve the access token.**
 
 To retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:
 
