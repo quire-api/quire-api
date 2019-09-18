@@ -31,7 +31,50 @@ Authenticating via OAuth2 requires the following steps:
 
 ### Register Your Application on Quire
 
-*TBD*
+![Quire API](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/openAPI.png)
+
+**1. Give your app a cool name**
+
+Your app deserves a cool name that lives up to its wide broad of great features. 
+
+All of the app users will see this name in public, so think carefully!
+
+**2. Choose the Quire Organization that your app belongs to**
+
+You can choose an organization in Quire that your app belongs to.
+
+If one day you decide to leave the organization, you will lose the authority to manage the app. 
+
+**3. Redirect URL**
+
+When users grant your app authorization request, users will be directed to the configured URL that you’ve set. 
+
+**4. Choose permission scopes** 
+
+You can set permission on what your app can do with Quire. There are several options for you to choose from. 
+
+*Note: If none of the options is selected, the app can only read user’s data.
+ 
+**5. Development Client ID and Client Secret**
+
+![Quire Open API](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/client-id-client-secret.png)
+
+The Client ID and Client secret will be automatically generated as you create an app. 
+
+The Client ID is a unique ID to identify your app.
+
+You should keep your client secret safe, which means you should never share your client secret with anyone. If you choose to regenerate the client secret, the old one will immediately become invalid. 
+
+**6. Update your App**
+
+If your app hasn’t been published to Quire App Directory, it will remain as unpublished status. You can still use the configured shareable link in the Developer App Console Distribution to share the app with other users for testing or integration. 
+
+When you make changes to the app, you can use the shareable link to access the development copy as well. Working on your development copy will not affect your live App Directory app. When your updated app is ready to be published and replaced the old version on Quire App Directory, your published app will have a different Client ID to the unpublished one.
+
+There are two sets of Client ID and Client Secret. 
+
+Development set - should be used during developing and testing internally of the app. 
+Production set - should be used once your app is ready and published on Quire App Directory.
 
 ### Ask a Quire User to Grant Access to Your Application
 
@@ -42,24 +85,6 @@ Your user can grant the access of an organization or a project by clicking the `
 *Image*
 
 After your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.
-
-Alternatively, you can prepare a link on your website to redirect your users to Quire for authorization.
-
-The syntax of the link is as follows:
-
-`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
-
-| Parameter Name | Description
-|------|------
-| `client_id` | Your client ID.
-| `redirect_uri` | URL to redirect user back upon completion (optional).
-| `state` | It can be any string and will be passed back upon completion (optional). 
-
-Once your user clicks the link, he will be redirected to Quire and start the same authorization flow as shown above.
-
-The `state` parameter should be used to avoid forgery attacks by passing in a value that's unique to the user you're authenticating and checking it when authorization completes.
-
-If the `redirect_uri` parameter is not specified, the URL defined in the app's registration will be used.
 
 ### Retrieve an Access Token
 
@@ -79,12 +104,54 @@ Then, the access token will be returned in the response's body. The token should
 
 ### Make Authenticated Requests
 
-*TBD*
+**1. Authorization code**
+
+When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
+
+The authorization endpoint should look like this:
+
+`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
+
+The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
+
+**2. Retrieve access token**
+
+To retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:
+
+| Parameter | Value |
+| --- | --- |
+| grant\_type | authorization\_code |
+| code | {your-authorization-code} |
+| client\_id | {your-client-ID} |
+| client\_secret | {your-client-secret} |
+
+Then, the access token will be returned in the response's body.
+
+`{"access_token":"ACCESS_TOKEN","expires_in":2592000,"refresh_token":"REFRESH_TOKEN"}`
+
+The token should be kept carefully and permanently since you need it to access every Quire API.
 
 In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,
 
 ```
-Authorization: Bearer jdakjo23jf18axbe21z2maewmldjqma12qr912
+curl -H 'Authorization: Bearer {access_token}' \
+https://quire.io/api/user/id/me
+        
+{
+  "email": "john@gmail.cc",
+  "website": "https://coolwebsites.com",
+  "id": "My_ID",
+  "description": "This is *cool*!",
+  "url": "https://quire.io/u/My_ID",
+  "nameText": "My Name",
+  "nameHtml": "My Name",
+  "descriptionText": "This is cool!",
+  "descriptionHtml": "This is <i>cool</i>!",
+  "image": "https://quire.s3.amazonaws.com/oid/image.jpg",
+  "iconColor": "37",
+  "name": "My Name",
+  "oid": "Dyh2YkFcu9uLgLFIeN1kB4Ld"
+}
 ```
 
 ### Token Expiration
