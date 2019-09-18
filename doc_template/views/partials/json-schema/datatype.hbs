@@ -11,9 +11,19 @@
 --}}
 <span class="json-property-type">
   {{~#if $ref}}
-    {{~>json-schema/reference .}}
+    {{!--
+     {{~>json-schema/reference .}}
+     --}}
+    {{schemaSubschemaName $ref}}
   {{~else if items.$ref}}
-    {{~>json-schema/reference .}}
+
+    {{!--
+      {{~>json-schema/reference .}}
+    --}}
+    <span class="{{#if type}}json-schema-ref-{{type}}{{/if}}">
+      {{schemaSubschemaName items.$ref}}
+    </span>
+
   {{~else}}
     {{~schemaDatatype .}}
   {{~/if}}
@@ -21,9 +31,11 @@
     | null
   {{~/if}}
 </span>
+{{!--
 {{~#if format}}
   <span class="json-property-format">({{format}})</span>
 {{~/if~}}
+--}}
 
 {{!-- Enum values --}}
 {{~#if enum}}
@@ -33,7 +45,10 @@
       {{~#if ../discriminator}}
         <span class="json-property-enum-item"><a href="#definition-{{.}}">{{.}}</a></span>
       {{~else if $ref}}
-          {{~>json-schema/reference .}}
+        {{!--
+        {{~>json-schema/reference .}}
+        --}}
+        {{schemaSubschemaName $ref}}
       {{~else}}
         <span class="json-property-enum-item{{#ifeq ../default .}} json-property-enum-default-value{{/ifeq}}">{{.}}</span>
       {{~/if}}{{#unless @last}},{{/unless}}

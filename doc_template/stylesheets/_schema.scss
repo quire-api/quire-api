@@ -129,20 +129,23 @@ table.table {
 .swagger-security-definition {
   &-basic {
     &:before {
-      color: $medium-gray;
+      color: $lighter-text-color;
       content: $msg-swagger-security-definition-type-basic;
+      margin-left: 8px;
     }
   }
   &-oauth2 {
     &:before {
-      color: $medium-gray;
+      color: $lighter-text-color;
       content: $msg-swagger-security-definition-type-oauth2;
+      margin-left: 8px;
     }
   }
   &-apiKey {
     &:before {
-      color: $medium-gray;
+      color: $lighter-text-color;
       content: $msg-swagger-security-definition-type-apikey;
+      margin-left: 8px;
     }
   }
 }
@@ -235,6 +238,10 @@ table.table {
 
 .json-property-required {
   @include named-label($msg-json-required)
+  &:before {
+    background-color: #FFF5F5;
+    color: #EE5F5B;
+  }
 }
 
 .json-property-read-only {

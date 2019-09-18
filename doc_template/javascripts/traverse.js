@@ -1,56 +1,3 @@
-$(function() {
-  // $(document).foundation();
-
-  var $sidebar = $('#sidebar');
-  if ($sidebar.length) {
-    var $docs = $('#docs');
-    var $nav = $sidebar.find('nav');
-
-    //
-    // Setup sidebar navigation
-    var traverse = new Traverse($nav, {
-      threshold: 10,
-      barOffset: $sidebar.position().top
-    });
-
-    $nav.on('update.traverse', function(event, element) {
-      $nav.find('section').removeClass('expand');
-      var $section = element.parents('section:first');
-      if ($section.length) {
-        $section.addClass('expand');
-      }
-    });
-
-    //
-    // Bind the drawer layout
-    var $drawerLayout = $('.drawer-layout'),
-      $drawer = $drawerLayout.find('.drawer'),
-      closeDrawer = function() {
-        $drawer.removeClass('slide-right slide-left');
-        $drawer.find('.drawer-overlay').remove();
-        $drawerLayout.removeClass('drawer-open drawer-slide-left-large drawer-slide-right-large');
-        return false;
-      };
-
-    // Drawer open buttons
-    $drawerLayout.find('[data-drawer-slide]').click(function(e) {
-      var $this = $(this),
-        direction = $this.data('drawer-slide');
-      $drawerLayout.addClass('drawer-open');
-      $drawer.addClass('slide-' + direction);
-
-      var $overlay = $('<a href="#" class="drawer-overlay"></a>')
-      $drawer.append($overlay);
-      $overlay.click(closeDrawer);
-
-      return false;
-    });
-
-    // Drawer close buttons
-    $drawerLayout.find('[data-drawer-close]').click(closeDrawer);
-  }
-});
-
 /**
  * Creates a new instance of Traverse.
  * @class
@@ -114,7 +61,7 @@ Traverse.defaults = {
 Traverse.prototype._init = function() {
   var id = this.$element[0].id, // || Foundation.GetYoDigits(6, 'traverse'),
       _this = this;
-  this.$targets = $('[data-traverse-target]');
+  this.$targets = $('.introduction .doc-copy > h1, [data-traverse-target]');
   this.$links = this.$element.find('a');
   this.$element.attr({
     'data-resize': id,
@@ -165,10 +112,16 @@ Traverse.prototype._events = function() {
     _this.calcPoints();
     _this._updateActive();
 
+    var timer;
     $(this).resize(function(e) {
       _this.reflow();
     }).scroll(function(e) {
-      _this._updateActive();
+        if (timer)
+            clearTimeout(timer);
+
+        timer = setTimeout(function() {
+            _this._updateActive();
+        }, 100);
     });
   })
 
@@ -180,6 +133,7 @@ Traverse.prototype._events = function() {
       $body.stop(true).animate({
         scrollTop: scrollPos
       }, opts);
+//       $body.scrollTop(scrollPos);
     });
 };
 

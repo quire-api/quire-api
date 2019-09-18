@@ -17,4 +17,4 @@ docker run --rm \
   --volume="$PWD/tool/quire.conf:/etc/nginx/conf.d/default.conf:ro" \
   -d nginx
 
-open http://localhost:5000/api-reference/
+open http://localhost:5000/dev/api/

@@ -43,3 +43,23 @@
 // @include foundation-title-bar;
 // @include foundation-tooltip;
 // @include foundation-top-bar;
+
+blockquote {
+    margin: 1rem 0;
+}
+
+table {
+    margin: 2rem 0;
+}
+
+tbody, tfoot, thead {
+    border: none;
+}
+
+tbody tr:nth-child(even) {
+	border-bottom: 1px solid $border-color;
+}
+
+tr {
+    border-bottom: 1px solid $border-color;
+}

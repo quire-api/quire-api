@@ -7,7 +7,7 @@ var jsToYaml = require('js-yaml');
 var fs = require('fs');
 var merge = require('lodash.merge');
 var swaggerYaml = './dist/swagger.yaml';
-
+//npx gulp build
 var options = {
     "scheme": "http",
     "host": "localhost:8080",
@@ -30,7 +30,7 @@ gulp.task('build', function () {
 
     spectacleDoc({
         "specFile": swaggerYaml,
-        "targetDir": "./dist/v2",
+        "targetDir": "./dist",
         "configFile": "./doc_template/config.js"})
 
 //  var tests = oatts.generate(swaggerYaml, options);
