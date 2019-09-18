@@ -53,7 +53,7 @@ When users grant your app authorization request, users will be directed to the c
 
 You can set permission on what your app can do with Quire. There are several options for you to choose from. 
 
-*Note: If none of the options is selected, the app can only read user’s data.
+*Note: If none of the options is selected, the app can only read user’s data.*
  
 **5. Development Client ID and Client Secret**
 
@@ -84,18 +84,21 @@ Your user can grant the access of an organization or a project by clicking the `
 
 *Image*
 
-After your user clicks `Accept`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.
+After your user clicks `Allow`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.
 
-### Retrieve an Access Token
+## Fulfill authorization request
 
-To access Quire API, you need an access token. You can retrieve the token as following.
+### Authorization code
 
-**1. Retrieve the access code.**
+When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
 
-As described in the previous section, your user will be redirected to the URL you specified in `redirect_uri` once he granted the access. The URL will carry an access code in the `code` parameter. You can retrieve the access code from it.
+The authorization endpoint should look like this:
 
-**2. Use the access code to retrieve the access token.**
+`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
 
+The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The redirect_uri is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
+
+### Retrieve access token
 To retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:
 
 | Parameter | Value |
@@ -107,30 +110,26 @@ To retrieve the access token, you have to post a request to `https://quire.io/oa
 
 Then, the access token will be returned in the response's body.
 
-`{"access_token":"ACCESS_TOKEN","expires_in":2592000,"refresh_token":"REFRESH_TOKEN"}`
-
+```
+{
+  "access_token":"ACCESS_TOKEN",
+  "expires_in":2592000,
+  "refresh_token":"REFRESH_TOKEN"
+}
+```
 The token should be kept carefully and permanently since you need it to access every Quire API.
 
-### Make Authenticated Requests
+### Use access token to access Quire API
 
-**1. Authorization code**
+In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`.
 
-When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
-
-The authorization endpoint should look like this:
-
-`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
-
-The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
-
-**2. Use Access token to access Quire API**
-
-In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`. For example,
+After you exchange the access token, your app can make requests to Quire API on behalf of the authorized users.
 
 ```
 curl -H 'Authorization: Bearer {access_token}' \
 https://quire.io/api/user/id/me
-        
+```
+```
 {
   "email": "john@gmail.cc",
   "website": "https://coolwebsites.com",
@@ -147,7 +146,6 @@ https://quire.io/api/user/id/me
   "oid": "Dyh2YkFcu9uLgLFIeN1kB4Ld"
 }
 ```
-
 ### Token Expiration
 
 A refresh token might stop working for one of these reasons:
