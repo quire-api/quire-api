@@ -73,30 +73,27 @@ When you make changes to the app, you can use the shareable link to access the d
 
 There are two sets of Client ID and Client Secret. 
 
-Development set - should be used during developing and testing internally of the app. 
-Production set - should be used once your app is ready and published on Quire App Directory.
+ * `Development set` - should be used during developing and testing internally of the app. 
+ * `Production set` - should be used once your app is ready and published on Quire App Directory.
+
+## Fulfill Authorization Request
 
 ### Ask a Quire User to Grant Access to Your Application
 
 Once registering your application, you can ask your user to grant access to your application.
 
-Your user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. 
-
-![Quire Grant Access](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Authorization.png)
-
-After your user clicks `Allow`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.
-
-## Fulfill Authorization Request
-
-### Authorization Code
-
-When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
+The authorization endpoint lets users grant your app access to the requested permissions. 
 
 The authorization endpoint should look like this:
 
 `https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`
 
-The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The redirect_uri is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
+![Quire Grant Access](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Authorization.png)
+
+After your user clicks `Allow`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter with an authorization code provided as a query parameter called `code`.
+
+After your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
+
 
 ### Retrieve Access Token
 To retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:
@@ -110,9 +107,10 @@ To retrieve the access token, you have to post a request to `https://quire.io/oa
 
 Then, the access token will be returned in the response's body.
 
-```
+```json
 {
   "access_token":"ACCESS_TOKEN",
+  "token_type": "bearer",
   "expires_in":2592000,
   "refresh_token":"REFRESH_TOKEN"
 }
@@ -125,11 +123,11 @@ In each request, the access token must be put in the header. The header name is 
 
 After you exchange the access token, your app can make requests to Quire API on behalf of the authorized users.
 
-```
+```bash
 curl -H 'Authorization: Bearer {access_token}' \
 https://quire.io/api/user/id/me
 ```
-```
+```json
 {
   "email": "john@gmail.cc",
   "website": "https://coolwebsites.com",
