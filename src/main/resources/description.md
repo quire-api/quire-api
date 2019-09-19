@@ -82,13 +82,13 @@ Once registering your application, you can ask your user to grant access to your
 
 Your user can grant the access of an organization or a project by clicking the `Integer | Other` menu-item on the context menu, and then select your application. 
 
-*Image*
+![Quire Grant Access](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Authorization.png)
 
 After your user clicks `Allow`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter.
 
-## Fulfill authorization request
+## Fulfill Authorization Request
 
-### Authorization code
+### Authorization Code
 
 When user grants the authorization request for your app, the user will be redirected to the configured URL that you’ve set when you created the app.
 
@@ -98,7 +98,7 @@ The authorization endpoint should look like this:
 
 The authorization endpoint lets users grant your app access to the requested scope. After your app is granted, you can have an authorization code to exchange access token for access Quire API. The redirect_uri is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.
 
-### Retrieve access token
+### Retrieve Access Token
 To retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:
 
 | Parameter | Value |
@@ -119,7 +119,7 @@ Then, the access token will be returned in the response's body.
 ```
 The token should be kept carefully and permanently since you need it to access every Quire API.
 
-### Use access token to access Quire API
+### Use Access Token to Access Quire API
 
 In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`.
 
@@ -152,6 +152,14 @@ A refresh token might stop working for one of these reasons:
 
 * The user has revoked your app's access.
 * The refresh token has not been used for 6 months.
+
+# Publish App
+
+![Quire Publish App](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Publish-App.png)
+
+By default, your app will be set as Private. You can change the app distribution to Public so that other Quire users can install your app to their workspace as well.
+
+If your app is made available on Quire App Directory and you want to delete the app, you should communicate with your users first before depreciating the app.
 
 # WebHook
 
