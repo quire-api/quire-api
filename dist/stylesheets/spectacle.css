@@ -1399,7 +1399,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       top: 85px;
       right: 30px;
       font-size: 24px;
-      padding: 0px 6px; }
+      padding: 0px 6px;
+      cursor: pointer; }
       #spectacle #docs .floating-menu-icon > i {
         line-height: 1.5;
         color: #fff;
