@@ -24,6 +24,7 @@ function _updateLoginUser(response) {
 	);
 	user.find('.icon-user-o').parent().attr('href', '/u/' + userId);
 
+    $('#header-wrapper').addClass('qr-collapse-navbar-768');
 	// remove stuff for non-user
 	$('li.login').remove();
 
