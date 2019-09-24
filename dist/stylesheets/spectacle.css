@@ -1433,6 +1433,10 @@ html, body {
     display: block;
     line-height: 45px; }
 
+.navbar-fixed-bottom {
+  bottom: 0;
+  height: auto; }
+
 #header-icons .item > a {
   display: block; }
 
