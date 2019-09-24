@@ -1425,9 +1425,9 @@ html, body {
   width: 100%;
   max-width: none; }
 
-#header .navbar-nav {
+.navbar .navbar-nav {
   float: right !important; }
-  #header .navbar-nav .item {
+  .navbar .navbar-nav .item {
     float: left;
     position: relative;
     display: block;
