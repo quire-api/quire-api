@@ -1,4 +1,16 @@
 definitions:
+  UpdateProjectBody:
+    properties:
+      removeFollowers:
+        example:
+        - aBuz4MwfZ5CasOae6stnFa2f
+      followers:
+        example:
+        - tzufRLqCnud74dARyDSvjWDl
+        - app
+      addFollowers:
+        example:
+        - sfsvLbDVPvi1QMf2GkDn7VSy
   CreateTaskBody:
     properties:
       tags:
@@ -7,7 +19,45 @@ definitions:
       assignees:
         example:
         - 6QMKkEPBVWETLWrXqws94ALU
+      followers:
+        example:
+        - tzufRLqCnud74dARyDSvjWDl
+  UpdateTaskBody:
+    properties:
+      assignees:
+        example:
+        - 6QMKkEPBVWETLWrXqws94ALU
+      addTags:
+        example:
+        - X6nmx9XjEO2wKbqeB1pRT43C
+      removeTags:
+        example:
+        - mPAQrYU1qt8wAYAInKRlTnvl
+      addAssignees:
+        example:
+        - 6QMKkEPBVWETLWrXqws94ALU
+      removeAssignees:
+        example:
+        - Job4NSW9xK6Owcke8iKj7zyH
+      tags:
+        example:
+        - ITaVbkhh3iVcEcV3vuSLeE2k
+      removeFollowers:
+        example:
+        - aBuz4MwfZ5CasOae6stnFa2f
+      followers:
+        example:
+        - tzufRLqCnud74dARyDSvjWDl
+        - app
+      addFollowers:
+        example:
+        - sfsvLbDVPvi1QMf2GkDn7VSy
 
+  Project:
+    properties:
+      followers:
+        example:
+        - 6QMKkEPBVWETLWrXqws94ALU
   Task:
     properties:
       tags:

@@ -28,6 +28,7 @@ public class Recurring {
 	@ApiModelProperty(
 		value = "It depends on the type of this recurring. "
 		+ "If weekly, bit 0 is Sunday, bit 1 is Monday and so on. "
-   		+ "For example, if the data is 6, it means every Monday and Tuesday.")
+   		+ "For example, if the data is 6, it means every Monday and Tuesday.",
+		example = "6")
 	public int getData() { return 0; }
 }

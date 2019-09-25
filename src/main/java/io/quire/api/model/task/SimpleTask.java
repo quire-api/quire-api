@@ -13,7 +13,7 @@ public class SimpleTask {
 	@ApiModelProperty(example = "12", position = 1)
 	public int getId() { return 0; }
 
-	@ApiModelProperty(value = "This task's name.", example = "Design new logo", position = 2)
+	@ApiModelProperty(value = "This task's name.", example = "Design new <b>logo</b>", position = 2)
 	public String getName() { return null; }
 
 	@ApiModelProperty(value = "The status of this task. "

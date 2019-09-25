@@ -6,11 +6,11 @@ import io.quire.api.model.Recurring;
 import io.swagger.annotations.ApiModelProperty;
 
 public class UpdateProjectBody {
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\",\"app\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the users to replace the followers of this project.\n"
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getFollowers() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the followers to be added to this project."
 		+ "If \"me\" is specified, it means the current user will follow this task.\n"
 		+ "If the application would like to follow (i.e., receive notifications), "
@@ -27,7 +27,7 @@ public class UpdateProjectBody {
 		+ "\"app|/soc1/33456/a7\", then the notification will be sent to "
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getAddFollowers() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the followers to be removed from this project.\n"
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getRemoveFollowers() { return null; }

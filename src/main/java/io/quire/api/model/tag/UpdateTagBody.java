@@ -7,7 +7,7 @@ public class UpdateTagBody {
 		value = "(Optional) The new name of the tag.", required = false)
 	public String getName() { return null; }
 
-	@ApiModelProperty(example = "",
+	@ApiModelProperty(example = "35",
 		value = "(Optional) The color of the tag.", required = false)
 	public String getColor() { return null; }
 

@@ -12,13 +12,16 @@ public class Project extends Identity {
 		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
 	public String getOrganization() { return null; }
 
-	@ApiModelProperty(value = "Total number of tasks in this project.")
+	@ApiModelProperty(value = "Total number of tasks in this project.",
+		example = "30")
 	public int getTaskCount() { return 0; }
 
-	@ApiModelProperty(value = "Number of active tasks in this project.")
+	@ApiModelProperty(value = "Number of active tasks in this project.",
+		example = "20")
 	public int getActiveCount() { return 0; }
 
-	@ApiModelProperty(value = "Number of root tasks in this project.")
+	@ApiModelProperty(value = "Number of root tasks in this project.",
+		example = "5")
 	public int getRootCount() { return 0; }
 
 	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)

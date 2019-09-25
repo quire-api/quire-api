@@ -10,7 +10,8 @@ public class UpdateTaskBody {
 		value = "(Optional) New name of the task.")
 	public String getName() { return null; }
 
-	@ApiModelProperty(value = "(Optional) Change the description about this task.")
+	@ApiModelProperty(value = "(Optional) Change the description about this task.",
+	example = "This is a **cool** task.")
 	public String getDescription() { return null; }
 
 	@ApiModelProperty(value = "(Optiona) Change the priority of this task. "
@@ -24,27 +25,27 @@ public class UpdateTaskBody {
 		example = "100", position = 4)
 	public int getStatus() { return 0; }
 
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the tags to replace existing tags of to this task. "
 		+ "If specified, it will replace any existing tag(s). "
 		+ "Instead of replacment, you can use \"addTags\" or \"removeTags\".")
 	public List<String> getTags() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the tags to be added to this task.")
 	public List<String> getAddTags() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the tags to be removed from this task.")
 	public List<String> getRemoveTags() { return null; }
 
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the users that this task is assigned to. "
 		+ "If specified, it will replace any existing assignee(s). "
 		+ "Instead of replacment, you can use \"addAssignees\" or \"removeAssignees\".")
 	public List<String> getAssignees() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the assignees to be added to this task.")
 	public List<String> getAddAssignees() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the assignees to be removed from this task.")
 	public List<String> getRemoveAssignees() { return null; }
 
@@ -69,11 +70,11 @@ public class UpdateTaskBody {
 		+ "Or, specify false to undo the previous peekaboo if any.")
 	public boolean getPeekaboo() { return false; }
 
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\",\"app\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the users to replace the followers of this task. "
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getFollowers() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the followers to be added to this task."
 		+ "If \"me\" is specified, it means the current user will follow this task.\n"
 		+ "If the application would like to follow (i.e., receive notifications), "
@@ -90,7 +91,7 @@ public class UpdateTaskBody {
 		+ "\"app|/soc1/33456/a7\", then the notification will be sent to "
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getAddFollowers() { return null; }
-	@ApiModelProperty(example = "[\"6QMKkEPBVWETLWrXqws94ALU\"]",
+	@ApiModelProperty(
 		value = "(Optional) OID of the followers to be removed from this task."
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getRemoveFollowers() { return null; }

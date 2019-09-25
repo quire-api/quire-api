@@ -7,7 +7,7 @@ public class CreateTagBody {
 		value = "The name of the tag", required = true)
 	public String getName() { return null; }
 
-	@ApiModelProperty(example = "",
+	@ApiModelProperty(example = "35",
 		value = "(Optional) The color of the tag."
 		+ "If not omitted, a color will be generated automatially.",
 		required = false)
