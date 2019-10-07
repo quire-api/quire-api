@@ -16,7 +16,7 @@ public class CommentResource {
 
 	@POST
 	@Path("/{oid}")
-	@ApiOperation(value = "Add a task comment to a task or a project.",
+	@ApiOperation(value = "Add a new comment to a task or a project.",
 		notes = "Add a new comment to a task or a project. "
 		+ "If the given OID is a project, the comment will be added to "
 		+ "a project. If a task, the comment will be added to a task.",
@@ -25,6 +25,18 @@ public class CommentResource {
 		@ApiParam(value = "OID of a project or a task that new comment will be added to",
 			required = true)
 		@PathParam("oid") String oid,
+		@ApiParam(value = "Comment to create", required = true)
+			CreateCommentBody data) { return null; }
+
+	@POST
+	@Path("/id/{projectId}")
+	@ApiOperation(value = "Add a new comment to a project.",
+		notes = "Add a new comment to a project.",
+		response = Comment.class)
+	public Response createComment(
+		@ApiParam(value = "ID of a project that new comment will be added to",
+			required = true)
+		@PathParam("projectId") String projectId,
 		@ApiParam(value = "Comment to create", required = true)
 			CreateCommentBody data) { return null; }
 

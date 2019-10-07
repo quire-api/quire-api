@@ -19,7 +19,7 @@ public class TaskResource {
 	@POST
 	@Path("/{oid}")
 	@ApiOperation(value = "Add a new task.",
-		notes = "Add a new task into a project.",
+		notes = "Add a new task into a project or a task.",
 		response = Task.class)
 	public Response createTask(
 		@ApiParam(value = "OID of project or task that this new task to be added to. "
@@ -27,6 +27,19 @@ public class TaskResource {
 		+ "If the given OID is a task, the new task will become its subtask.",
 		required = true)
 		@PathParam("oid") String oid,
+		@ApiParam(value = "Task to create", required = true)
+		CreateTaskBody data) { return null; }
+
+	@POST
+	@Path("/id/{projectId}")
+	@ApiOperation(value = "Add a new task.",
+		notes = "Add a new task into a project.",
+		response = Task.class)
+	public Response createTask(
+		@ApiParam(value = "ID of project that this new task to be added to. "
+		+ "The new task will be added as a root task.",
+		required = true)
+		@PathParam("projectId") String projectId,
 		@ApiParam(value = "Task to create", required = true)
 		CreateTaskBody data) { return null; }
 

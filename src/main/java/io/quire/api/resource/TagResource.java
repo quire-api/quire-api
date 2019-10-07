@@ -25,6 +25,18 @@ public class TagResource {
 		@ApiParam(value = "Tag to create", required = true)
 		CreateTagBody data) { return null; }
 
+	@POST
+	@Path("/id/{projectId}")
+	@ApiOperation(value = "Add a new tag.",
+		notes = "Add a new tag into a project.",
+		response = Tag.class)
+	public Response createTag(
+		@ApiParam(value = "ID of project that this new tag to be added to.",
+		required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "Tag to create", required = true)
+		CreateTagBody data) { return null; }
+
 	@GET
 	@Path("/{oid}")
 	@ApiOperation(value = "Get a tag.",

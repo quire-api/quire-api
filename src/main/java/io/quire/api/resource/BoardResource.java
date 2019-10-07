@@ -26,6 +26,18 @@ public class BoardResource {
 		@ApiParam(value = "Board to create", required = true)
 		CreateBoardBody data) { return null; }
 
+	@POST
+	@Path("/id/{projectId}")
+	@ApiOperation(value = "Add a new board.",
+		notes = "Add a new board into a project.",
+		response = Board.class)
+	public Response createBoard(
+		@ApiParam(value = "ID of project that this new board to be added to.",
+		required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "Board to create", required = true)
+		CreateBoardBody data) { return null; }
+
 	@GET
 	@Path("/{oid}")
 	@ApiOperation(value = "Get an existing board by its OID",

@@ -267,7 +267,7 @@ We may change these quotas or add new quotas in the future.
 
 | Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*
 |---------|------|-------
-| Free | 40  | 600
+| Free | 60  | 600
 
 > Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.
 
