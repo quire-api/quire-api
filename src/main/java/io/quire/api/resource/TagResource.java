@@ -30,7 +30,7 @@ public class TagResource {
 	@ApiOperation(value = "Add a new tag.",
 		notes = "Add a new tag into a project.",
 		response = Tag.class)
-	public Response createTag(
+	public Response createTagToProject(
 		@ApiParam(value = "ID of project that this new tag to be added to.",
 		required = true)
 		@PathParam("projectId") String projectId,

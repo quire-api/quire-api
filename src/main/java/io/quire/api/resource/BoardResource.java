@@ -31,7 +31,7 @@ public class BoardResource {
 	@ApiOperation(value = "Add a new board.",
 		notes = "Add a new board into a project.",
 		response = Board.class)
-	public Response createBoard(
+	public Response createBoardToProject(
 		@ApiParam(value = "ID of project that this new board to be added to.",
 		required = true)
 		@PathParam("projectId") String projectId,

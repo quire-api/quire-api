@@ -33,7 +33,7 @@ public class CommentResource {
 	@ApiOperation(value = "Add a new comment to a project.",
 		notes = "Add a new comment to a project.",
 		response = Comment.class)
-	public Response createComment(
+	public Response createCommentToProject(
 		@ApiParam(value = "ID of a project that new comment will be added to",
 			required = true)
 		@PathParam("projectId") String projectId,
