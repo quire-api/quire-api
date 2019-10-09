@@ -35,7 +35,7 @@ public class TaskResource {
 	@ApiOperation(value = "Add a new task.",
 		notes = "Add a new task into a project.",
 		response = Task.class)
-	public Response createTask(
+	public Response createTaskToProject(
 		@ApiParam(value = "ID of project that this new task to be added to. "
 		+ "The new task will be added as a root task.",
 		required = true)
@@ -182,7 +182,7 @@ public class TaskResource {
 		response = Task.class)
 	public Response getTaskById(
 		@ApiParam(value = "ID of the project that the task belongs to.", required = true)
-		@PathParam("projectId") int projectId,
+		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
 		@PathParam("id") int id) { return null; }
 
