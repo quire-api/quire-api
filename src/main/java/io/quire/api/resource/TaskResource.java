@@ -120,8 +120,9 @@ public class TaskResource {
 			required = true)
 		@PathParam("projectOid") String projectOid,
 
-		@ApiParam(value = "Text to do a full-text search against name, description, "
-			+ "and attachments."
+		@ApiParam(value = "Text to do a full-text search against the name, "
+			+ "description, and attachments.\n"
+			+ "Note: it doesn't include the content and attachment of comments."
 			example = "text=important major", required = false)
 		@QueryParam(value = "text") String text,
 
@@ -152,7 +153,8 @@ public class TaskResource {
 	@Path("/search/id/{projectId}")
 	@ApiOperation(value = "Searches tasks in the given project.",
 		notes = "Returns task records that match the specified criteria in "
-		+ "the given project.",
+		+ "the given project.\n\n",
+		+ "Note: it returns at most 50 records, and recent edited first.",
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksById(
@@ -160,10 +162,17 @@ public class TaskResource {
 			required = true)
 		@PathParam("projectId") String projectOid,
 
+		@ApiParam(value = "Text to do a full-text search against the name, "
+			+ "description, and attachments.\n"
+			+ "Note: it doesn't include the content and attachment of comments."
+			example = "text=important major", required = false)
+		@QueryParam(value = "text") String text,
+
 		@ApiParam(value = "Task name to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`. "
 			+ "For example, `name=~abc` matches if `abc` is part of the name. "
-			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.",
+			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n",
+			+ "To do a full-text search, please use `text` instead.",
 			example = "name=My first task", required = false)
 		@QueryParam(value = "name") String name,
 
@@ -171,6 +180,12 @@ public class TaskResource {
 			+ "To specify a regular expression, you can precede it with `~`.",
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
+
+		@ApiParam(value = "OID of task's board to match with.\n"
+			+ "To search tasks without board, you can specify `board=` or `board=none`.\n"
+			+ "To search tasks with any board, you can specify `board=any`.",
+			example = "board=9GFBEKOH5J_aZjNhR82Gd9xx", required = false)
+		@QueryParam(value = "board") String board,
 
 		@ApiParam(value = "Task's status to match with.\n"
 			+"You can specify a value between 0 and 100.",
