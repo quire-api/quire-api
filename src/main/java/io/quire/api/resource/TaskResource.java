@@ -35,7 +35,7 @@ public class TaskResource {
 	@ApiOperation(value = "Add a new task.",
 		notes = "Add a new task into a project.",
 		response = Task.class)
-	public Response createTaskToProject(
+	public Response createTaskByProject(
 		@ApiParam(value = "ID of project that this new task to be added to. "
 		+ "The new task will be added as a root task.",
 		required = true)
@@ -119,6 +119,11 @@ public class TaskResource {
 		@ApiParam(value = "OID of the project to search for the tasks.",
 			required = true)
 		@PathParam("projectOid") String projectOid,
+
+		@ApiParam(value = "Text to do a full-text search against name, description, "
+			+ "and attachments."
+			example = "text=important major", required = false)
+		@QueryParam(value = "text") String text,
 
 		@ApiParam(value = "Task name to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`.\n"
