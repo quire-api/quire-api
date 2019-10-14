@@ -121,20 +121,27 @@ public class TaskResource {
 		@PathParam("projectOid") String projectOid,
 
 		@ApiParam(value = "Task name to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`.\n",
-            example = "name=My first task", required = false)
-        @QueryParam(value = "name") String name,
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To do a full-text search, please use `text` instead.",
+			example = "name=My first task", required = false)
+		@QueryParam(value = "name") String name,
 
-        @ApiParam(value = "Task's description to match with.\n"
+		@ApiParam(value = "Task's description to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`.",
-            example = "description=~john@gooodjob.com", required = false)
-        @QueryParam(value = "description") String description,
+			example = "description=~john@gooodjob.com", required = false)
+		@QueryParam(value = "description") String description,
 
-        @ApiParam(value = "Task's status to match with.\n"
-        	+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
-        	+"\"completed\" for completed tasks.",
-            example = "status=100", required = false)
-        @QueryParam(value = "status") String status) { return null; }
+		@ApiParam(value = "OID of task's board to match with.\n"
+			+ "To search tasks without board, you can specify `board=` or `board=none`.\n"
+			+ "To search tasks with any board, you can specify `board=any`.",
+			example = "board=9GFBEKOH5J_aZjNhR82Gd9xx", required = false)
+		@QueryParam(value = "board") String board,
+
+		@ApiParam(value = "Task's status to match with.\n"
+			+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+			+"\"completed\" for completed tasks.",
+			example = "status=100", required = false)
+		@QueryParam(value = "status") String status) { return null; }
 
 	@GET
 	@Path("/search/id/{projectId}")
@@ -152,18 +159,18 @@ public class TaskResource {
 			+ "To specify a regular expression, you can precede it with `~`. "
 			+ "For example, `name=~abc` matches if `abc` is part of the name. "
 			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.",
-            example = "name=My first task", required = false)
-        @QueryParam(value = "name") String name,
+			example = "name=My first task", required = false)
+		@QueryParam(value = "name") String name,
 
-        @ApiParam(value = "Task's description to match with.\n"
+		@ApiParam(value = "Task's description to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`.",
-            example = "description=~john@gooodjob.com", required = false)
-        @QueryParam(value = "description") String description,
+			example = "description=~john@gooodjob.com", required = false)
+		@QueryParam(value = "description") String description,
 
-        @ApiParam(value = "Task's status to match with.\n"
-        	+"You can specify a value between 0 and 100.",
-            example = "status=100", required = false)
-        @QueryParam(value = "status") String status) { return null; }
+		@ApiParam(value = "Task's status to match with.\n"
+			+"You can specify a value between 0 and 100.",
+			example = "status=100", required = false)
+		@QueryParam(value = "status") String status) { return null; }
 
 	@GET
 	@Path("/{oid}")
