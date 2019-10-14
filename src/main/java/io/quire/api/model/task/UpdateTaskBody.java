@@ -25,6 +25,11 @@ public class UpdateTaskBody {
 		example = "100", position = 4)
 	public int getStatus() { return 0; }
 
+	@ApiModelProperty(value = "(Optional) OID of the board to replace existing board of to this task. "
+		+ "If specified, it will replace existing board. ",
+		example = "rcBHBYXZSiyDRrHrWPutatfF", position = 6)
+	public String getBoard() { return null; }
+
 	@ApiModelProperty(
 		value = "(Optional) OID of the tags to replace existing tags of to this task. "
 		+ "If specified, it will replace any existing tag(s). "
