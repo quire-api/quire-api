@@ -11,7 +11,7 @@ public class UpdateBoardBody {
 	public String getId() { return null; }
 
 	@ApiModelProperty(example = "Board 101",
-		value = "(Optional) The name of the board.", required = true)
+		value = "(Optional) The name of the board.")
 	public String getName() { return null; }
 
 	@ApiModelProperty(example = "**Great** board to start with.",
