@@ -281,7 +281,7 @@ The size of each request can't be larger than 2MB. Requests that hit this limit 
 |------|-----------------------|--------------------------------------------------------------------------
 | 200  | Success               | Request successful
 | 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.
-| 401  | Unauthorized          | Your API key is wrong.
+| 401  | Unauthorized          | Invalid or expired token.
 | 403  | Forbidden             | Not authorized to access the resource.
 | 404  | Not Found             | The specified resource could not be found.
 | 405  | Method not Allowed    | Method not allowed or supported.
