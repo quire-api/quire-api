@@ -124,7 +124,7 @@ public class TaskResource {
 			+ "description, and attachments.\n"
 			+ "Note: it doesn't include the content and attachment of comments.\n"
 			+ "Also note: the update of tasks can take 10 seconds or more before "
-			+ "it can be found by the full-text search."
+			+ "it can be found by the full-text search.",
 			example = "text=important major", required = false)
 		@QueryParam(value = "text") String text,
 
@@ -155,7 +155,7 @@ public class TaskResource {
 	@Path("/search/id/{projectId}")
 	@ApiOperation(value = "Searches tasks in the given project.",
 		notes = "Returns task records that match the specified criteria in "
-		+ "the given project.\n\n",
+		+ "the given project.\n\n"
 		+ "Note: it returns at most 50 records, and recent edited first.",
 		response = SimpleTask.class,
 		responseContainer = "List")
@@ -168,14 +168,14 @@ public class TaskResource {
 			+ "description, and attachments.\n"
 			+ "Note: it doesn't include the content and attachment of comments.\n"
 			+ "Also note: the update of tasks can take 10 seconds or more before "
-			+ "it can be found by the full-text search."
+			+ "it can be found by the full-text search.",
 			example = "text=important major", required = false)
 		@QueryParam(value = "text") String text,
 
 		@ApiParam(value = "Task name to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`. "
 			+ "For example, `name=~abc` matches if `abc` is part of the name. "
-			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n",
+			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
 			+ "To do a full-text search, please use `text` instead.",
 			example = "name=My first task", required = false)
 		@QueryParam(value = "name") String name,
