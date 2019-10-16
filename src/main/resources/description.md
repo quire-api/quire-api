@@ -311,5 +311,5 @@ The following JSON data is returned in the response body when an error occurs.
 | 405 | Method not allowed.
 | 413 | Request too large.
 | 429 | Too many invocations.
-| 469 | Quota exceeded.
+| 469 | Quota exceeded, such as number of projects and number of members.
 | 500 | General invocation error. Most likely, an internal error.
