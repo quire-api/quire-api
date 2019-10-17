@@ -77,7 +77,7 @@ public class UpdateTaskBody {
 		+ "If a positive integer is specified, it is the number of days to peekaboo a task. "
 		+ "If true, the default number of days will be used (depending on \n"
 		+ "the project's setting).")
-	public boolean getPeekaboo() { return false; }
+	public Object getPeekaboo() { return false; }
 
 	@ApiModelProperty(
 		value = "(Optional) OID of the users to replace the followers of this task. "

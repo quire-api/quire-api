@@ -54,7 +54,7 @@ public class CreateTaskBody {
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true to peekaboo this task and its subtasks, "
 		+ "if any. Default: false.")
-	public boolean getPeekaboo() { return false; }
+	public Object getPeekaboo() { return false; }
 
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true if you'd like to make "

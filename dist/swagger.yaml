@@ -1512,16 +1512,16 @@ definitions:
         description: >-
           OID of the external team that this board belongs to. It is null if
           this board can't be accessed by a member of external teams.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        position: 50
-        description: 'When this board was aimed to complete, or null if not specified.'
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
         position: 50
         description: When this board was archived. It is null if not archived.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        position: 50
+        description: 'When this board was aimed to complete, or null if not specified.'
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -1594,21 +1594,21 @@ definitions:
           https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b
         position: 50
         description: Url of this comment on Quire website.
-      pinBy:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 50
-        description: 'OID of the user who pinned this comment, or null if not pinned.'
-      pinAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: 'When this comment was pinned, or null if not pinned.'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was edited, or null if not edited.'
+      pinAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: 'When this comment was pinned, or null if not pinned.'
+      pinBy:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 50
+        description: 'OID of the user who pinned this comment, or null if not pinned.'
       editedBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -1705,10 +1705,6 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
@@ -1718,6 +1714,10 @@ definitions:
 
           Default: false -- the comment is marked as created by the user
           authorizing the app.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
   CreateTagBody:
     type: object
     required:
@@ -1750,6 +1750,50 @@ definitions:
         type: string
         example: This is a *cool* task.
         description: (Optional) An optional description about this task.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      assignees:
+        type: array
+        description: (Optional) OID of the users that this task is assigned to.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      recurring:
+        description: >-
+          (Optional) The recurring information of this task. It is null if it is
+          not a recurring task.
+        $ref: '#/definitions/Recurring'
+      peekaboo:
+        type: object
+        example: true
+        description: >-
+          (Optional) Specify true to peekaboo this task and its subtasks, if
+          any. Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
+      asUser:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Specify true if you'd like to make this new task as created
+          by the app.
+
+          Default: false -- the task is marked as created by the user
+          authorizing the app.
       followers:
         type: array
         description: >-
@@ -1783,47 +1827,6 @@ definitions:
           type: string
         example:
           - tzufRLqCnud74dARyDSvjWDl
-      peekaboo:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true to peekaboo this task and its subtasks, if
-          any. Default: false.
-      recurring:
-        description: >-
-          (Optional) The recurring information of this task. It is null if it is
-          not a recurring task.
-        $ref: '#/definitions/Recurring'
-      assignees:
-        type: array
-        description: (Optional) OID of the users that this task is assigned to.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      asUser:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true if you'd like to make this new task as created
-          by the app.
-
-          Default: false -- the task is marked as created by the user
-          authorizing the app.
       tags:
         type: array
         description: (Optional) OID of the tags to be added to the new created task.
@@ -1961,11 +1964,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID of the organization this project belongs to.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root tasks in this project.
       activeCount:
         type: integer
         format: int32
@@ -1976,6 +1974,11 @@ definitions:
         format: int32
         example: 30
         description: Total number of tasks in this project.
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root tasks in this project.
       id:
         type: string
         example: My_ID
@@ -2023,6 +2026,11 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2030,11 +2038,6 @@ definitions:
         description: >-
           When this project was archived (aka., peekaboo). It is null if not
           archived.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       followers:
         type: array
         position: 60
@@ -2063,14 +2066,6 @@ definitions:
         description: >-
           The type of this recurring.It is 0 if it is weekly. It is 1 if it is
           monthly. It is 2 if it is yearly. It is 3 if it is custom. 
-      rate:
-        type: integer
-        format: int32
-        example: 2048
-        description: >-
-          How often this recurring shall occur. If the rate is 2 and the type is
-          weekly, it means it shall occur every two week. If the type is custom,
-          it means number of days to repeat.
       data:
         type: integer
         format: int32
@@ -2079,6 +2074,14 @@ definitions:
           It depends on the type of this recurring. If weekly, bit 0 is Sunday,
           bit 1 is Monday and so on. For example, if the data is 6, it means
           every Monday and Tuesday.
+      rate:
+        type: integer
+        format: int32
+        example: 2048
+        description: >-
+          How often this recurring shall occur. If the rate is 2 and the type is
+          weekly, it means it shall occur every two week. If the type is custom,
+          it means number of days to repeat.
       end:
         type: string
         example: '2020-12-22T00:00:00.000Z'
@@ -2089,18 +2092,18 @@ definitions:
   Referrer:
     type: object
     properties:
-      when:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        description: When this reference is made.
-      user:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the user who made this reference.
       task:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that refers another task.
+      user:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the user who made this reference.
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: When this reference is made.
   SimpleTask:
     type: object
     properties:
@@ -2134,14 +2137,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to start this task.Note: if time is specified, the millisecond
-          will be `001`. Otherwise, it is `000` (so are the hour, minute and
-          second fields).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -2150,6 +2145,14 @@ definitions:
           When to complete this task. Note: if time is specified, the
           millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
           and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
       url:
         type: string
         example: 'https://quire.io/w/my_project/123'
@@ -2252,20 +2255,6 @@ definitions:
         description: >-
           The status of this task. Its value must be between 0 and 100. If 100,
           it means completed.
-      recurring:
-        position: 4
-        description: >-
-          The recurring information of this task. It is null if it is not a
-          recurring task.
-        $ref: '#/definitions/Recurring'
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to start this task.Note: if time is specified, the millisecond
-          will be `001`. Otherwise, it is `000` (so are the hour, minute and
-          second fields).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -2274,6 +2263,36 @@ definitions:
           When to complete this task. Note: if time is specified, the
           millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
           and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
+      recurring:
+        position: 4
+        description: >-
+          The recurring information of this task. It is null if it is not a
+          recurring task.
+        $ref: '#/definitions/Recurring'
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 5
+        description: >-
+          OID of the external team that this task belongs to. It is null if this
+          task doesn't belong to any external team.
+      assignees:
+        type: array
+        position: 5
+        description: OID of users who are assigned to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+          - Job4NSW9xK6Owcke8iKj7zyH
       assignors:
         type: array
         position: 5
@@ -2285,15 +2304,6 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - 6QMKkEPBVWETLWrXqws94ALU
-      assignees:
-        type: array
-        position: 5
-        description: OID of users who are assigned to this task.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-          - Job4NSW9xK6Owcke8iKj7zyH
       partnerBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -2301,13 +2311,6 @@ definitions:
         description: >-
           OID of the user who assigned this task to an external team. It is null
           if this task doesn't belong to any external team.
-      partner:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 5
-        description: >-
-          OID of the external team that this task belongs to. It is null if this
-          task doesn't belong to any external team.
       tags:
         type: array
         position: 5
@@ -2317,6 +2320,13 @@ definitions:
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
           - mPAQrYU1qt8wAYAInKRlTnvl
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 6
+        description: >-
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
       order:
         type: integer
         format: int32
@@ -2326,24 +2336,17 @@ definitions:
           The order of this task shown on the board. The smaller the number is,
           the ealier the task is shown. It is meaningless if it doesn't belong
           to any board.
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
-        description: >-
-          OID of the board that this task was added to. It is null if this task
-          doesn't belong to any board.
-      cover:
-        type: string
-        example: qfqVmUtC
-        position: 8
-        description: The id of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      cover:
+        type: string
+        example: qfqVmUtC
+        position: 8
+        description: The id of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -2365,6 +2368,11 @@ definitions:
         example: 'https://quire.io/w/my_project/123'
         position: 50
         description: Url of this task on Quire website.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2380,19 +2388,6 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this task was peekabooed. It is null if not peekabooed.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
-      followers:
-        type: array
-        position: 60
-        description: OID of users who follow this task.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
       favorites:
         type: array
         position: 60
@@ -2401,6 +2396,14 @@ definitions:
           type: string
         example:
           - Job4NSW9xK6Owcke8iKj7zyH
+      followers:
+        type: array
+        position: 60
+        description: OID of users who follow this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -2431,10 +2434,6 @@ definitions:
         type: string
         example: '**Great** board to start with.'
         description: (Optional) An optional description about this task.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this board was aimed to complete. '
       column:
         description: (Optional) Updates an existing column with a new content.
         $ref: '#/definitions/UpdateColumnBody'
@@ -2452,6 +2451,10 @@ definitions:
         description: >-
           (Optional) Specify true to archive this board. Or, specify false to
           undo the previous archiving if any.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this board was aimed to complete. '
   UpdateColumnBody:
     type: object
     properties:
@@ -2497,6 +2500,16 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
+      followers:
+        type: array
+        description: |-
+          (Optional) OID of the users to replace the followers of this project.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: >-
@@ -2530,16 +2543,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      followers:
-        type: array
-        description: |-
-          (Optional) OID of the users to replace the followers of this project.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
       removeFollowers:
         type: array
         description: |-
@@ -2585,6 +2588,89 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) Change the description about this task.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: >-
+          (Optional) An optional start time. Note: if time is specified, the
+          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
+          minute and second fields).
+      assignees:
+        type: array
+        description: >-
+          (Optional) OID of the users that this task is assigned to. If
+          specified, it will replace any existing assignee(s). Instead of
+          replacment, you can use "addAssignees" or "removeAssignees".
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      recurring:
+        description: >-
+          (Optional) The recurring information of this task. It is null if it is
+          not a recurring task.
+        $ref: '#/definitions/Recurring'
+      peekaboo:
+        type: object
+        example: true
+        description: >-
+          (Optional) Specify true or a positive integer to peekaboo this task
+          and its subtasks. Or, specify false to undo the previous peekaboo if
+          any.
+
+          If a positive integer is specified, it is the number of days to
+          peekaboo a task. If true, the default number of days will be used
+          (depending on 
+
+          the project's setting).
+        anyOf:
+          - type: boolean
+          - type: integer
+      addTags:
+        type: array
+        description: (Optional) OID of the tags to be added to this task.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+      removeTags:
+        type: array
+        description: (Optional) OID of the tags to be removed from this task.
+        items:
+          type: string
+        example:
+          - mPAQrYU1qt8wAYAInKRlTnvl
+      addAssignees:
+        type: array
+        description: (Optional) OID of the assignees to be added to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      removeAssignees:
+        type: array
+        description: (Optional) OID of the assignees to be removed from this task.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
+      followers:
+        type: array
+        description: >-
+          (Optional) OID of the users to replace the followers of this task.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: >-
@@ -2618,79 +2704,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      followers:
-        type: array
-        description: >-
-          (Optional) OID of the users to replace the followers of this task.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-      addAssignees:
-        type: array
-        description: (Optional) OID of the assignees to be added to this task.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      removeAssignees:
-        type: array
-        description: (Optional) OID of the assignees to be removed from this task.
-        items:
-          type: string
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
-      addTags:
-        type: array
-        description: (Optional) OID of the tags to be added to this task.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      removeTags:
-        type: array
-        description: (Optional) OID of the tags to be removed from this task.
-        items:
-          type: string
-        example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      peekaboo:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true to peekaboo this task and its subtasks. Or,
-          specify false to undo the previous peekaboo if any.
-      recurring:
-        description: >-
-          (Optional) The recurring information of this task. It is null if it is
-          not a recurring task.
-        $ref: '#/definitions/Recurring'
-      assignees:
-        type: array
-        description: >-
-          (Optional) OID of the users that this task is assigned to. If
-          specified, it will replace any existing assignee(s). Instead of
-          replacment, you can use "addAssignees" or "removeAssignees".
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional start time. Note: if time is specified, the
-          millisecond must be `001`. Otherwise, it is `000` (so are the hour,
-          minute and second fields).
       removeFollowers:
         type: array
         description: >-

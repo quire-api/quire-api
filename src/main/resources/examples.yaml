@@ -22,17 +22,16 @@ definitions:
       followers:
         example:
         - tzufRLqCnud74dARyDSvjWDl
+      peekaboo:
+        example: true
+        anyOf:
+        - type: boolean
+        - type: integer
   UpdateTaskBody:
     properties:
       assignees:
         example:
         - 6QMKkEPBVWETLWrXqws94ALU
-      addTags:
-        example:
-        - X6nmx9XjEO2wKbqeB1pRT43C
-      removeTags:
-        example:
-        - mPAQrYU1qt8wAYAInKRlTnvl
       addAssignees:
         example:
         - 6QMKkEPBVWETLWrXqws94ALU
@@ -42,9 +41,17 @@ definitions:
       tags:
         example:
         - ITaVbkhh3iVcEcV3vuSLeE2k
-      removeFollowers:
+      addTags:
         example:
-        - aBuz4MwfZ5CasOae6stnFa2f
+        - X6nmx9XjEO2wKbqeB1pRT43C
+      removeTags:
+        example:
+        - mPAQrYU1qt8wAYAInKRlTnvl
+      peekaboo:
+        example: true
+        anyOf:
+          - type: boolean
+          - type: integer
       followers:
         example:
         - tzufRLqCnud74dARyDSvjWDl
@@ -52,6 +59,9 @@ definitions:
       addFollowers:
         example:
         - sfsvLbDVPvi1QMf2GkDn7VSy
+      removeFollowers:
+        example:
+        - aBuz4MwfZ5CasOae6stnFa2f
 
   Project:
     properties:

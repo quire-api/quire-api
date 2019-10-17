@@ -214,6 +214,11 @@ table.table {
     dt:first-child:before {
       content: "either ";
     }
+
+    dt {
+      font-weight: normal;
+      margin: 0;
+    }
   }
 }
 

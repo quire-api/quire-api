@@ -25,7 +25,13 @@
     </span>
 
   {{~else}}
-    {{~schemaDatatype .}}
+    {{#if anyOf}}
+      {{>json-schema/anyOf anyOf}}
+    {{~else if allOf}}
+      {{>json-schema/allOf allOf}}
+    {{~else}}
+      {{~schemaDatatype .}}
+    {{/if}}
   {{~/if}}
   {{~#if x-nullable}}
     | null
