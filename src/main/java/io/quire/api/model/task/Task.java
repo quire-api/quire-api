@@ -113,10 +113,10 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
 
-	@ApiModelProperty(value = "When this task was peekabooed. "
+	@ApiModelProperty(value = "Whether this task was peekabooed. "
 		+ "It is null if not peekabooed.",
-		example = "2018-12-22T02:06:58.158Z", position = 50)
-	public String getPeekabooAt() { return null; }
+		example = "true", position = 50)
+	public boolean getPeekaboo() { return true; }
 
 	@ApiModelProperty(value = "Url of this task on Quire website.",
 		example = "https://quire.io/w/my_project/123", position = 50)
