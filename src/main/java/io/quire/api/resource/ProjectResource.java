@@ -30,7 +30,7 @@ public class ProjectResource {
             + "Only granted projects will be returned.",
         response = Project.class,
         responseContainer = "List")
-    public Response getPrjectsByOrganizationId(
+    public Response getProjectsByOrganizationId(
         @ApiParam(value = "ID of the organization", required = true)
         @PathParam("organizationId") String organizationId) { return null; }
 
@@ -43,9 +43,8 @@ public class ProjectResource {
             + "granted project records will be returned.",
         response = Project.class,
         responseContainer = "List")
-    public Response getPrjectsByOrganizationOid(
-        @ApiParam(value = "(Optional) OID of the organization.",
-            required = false)
+    public Response getProjectsByOrganizationOid(
+        @ApiParam(value = "OID of the organization.", required = true)
         @PathParam("organizationOid") String organizationOid) { return null; }
 
     @GET

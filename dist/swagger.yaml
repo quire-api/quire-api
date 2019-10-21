@@ -573,7 +573,7 @@ paths:
       description: >-
         Returns all project records of the given organization. Only granted
         projects will be returned.
-      operationId: getPrjectsByOrganizationId
+      operationId: getProjectsByOrganizationId
       produces:
         - application/json
       parameters:
@@ -600,13 +600,13 @@ paths:
 
         Note: the "organizationOid" is optinal. If omitted, all granted project
         records will be returned.
-      operationId: getPrjectsByOrganizationOid
+      operationId: getProjectsByOrganizationOid
       produces:
         - application/json
       parameters:
         - name: organizationOid
           in: path
-          description: (Optional) OID of the organization.
+          description: OID of the organization.
           required: true
           type: string
       responses:
@@ -1456,14 +1456,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       url:
         type: string
         example: 'https://quire.io/w/my_project'
         description: Url of this record on Quire website.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description.
       nameText:
         type: string
         example: My Name
@@ -1599,16 +1599,16 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was edited, or null if not edited.'
-      pinAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: 'When this comment was pinned, or null if not pinned.'
       pinBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 50
         description: 'OID of the user who pinned this comment, or null if not pinned.'
+      pinAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: 'When this comment was pinned, or null if not pinned.'
       editedBy:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -1705,6 +1705,10 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
@@ -1714,10 +1718,6 @@ definitions:
 
           Default: false -- the comment is marked as created by the user
           authorizing the app.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
   CreateTagBody:
     type: object
     required:
@@ -1780,20 +1780,20 @@ definitions:
         type: object
         example: true
         description: >-
-          (Optional) Specify true to peekaboo this task and its subtasks, if
-          any. Default: false.
+          (Optional) Specify true or a positive integer to peekaboo this task
+          and its subtasks, if any.Or, specify false to undo the previous
+          peekaboo if any.
+
+          If a positive integer is specified, it is the number of days to
+          peekaboo a task. If true, the default number of days will be used
+          (depending on 
+
+          the project's setting).
+
+          Default: false.
         anyOf:
           - type: boolean
           - type: integer
-      asUser:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true if you'd like to make this new task as created
-          by the app.
-
-          Default: false -- the task is marked as created by the user
-          authorizing the app.
       followers:
         type: array
         description: >-
@@ -1834,6 +1834,15 @@ definitions:
           type: string
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
+      asUser:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Specify true if you'd like to make this new task as created
+          by the app.
+
+          Default: false -- the task is marked as created by the user
+          authorizing the app.
       priority:
         type: integer
         format: int32
@@ -1867,14 +1876,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       url:
         type: string
         example: 'https://quire.io/w/my_project'
         description: Url of this record on Quire website.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description.
       nameText:
         type: string
         example: My Name
@@ -1983,14 +1992,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       url:
         type: string
         example: 'https://quire.io/w/my_project'
         description: Url of this record on Quire website.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description.
       nameText:
         type: string
         example: My Name
@@ -2096,14 +2105,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that refers another task.
-      user:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the user who made this reference.
       when:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         description: When this reference is made.
+      user:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the user who made this reference.
   SimpleTask:
     type: object
     properties:
@@ -2293,6 +2302,15 @@ definitions:
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
           - Job4NSW9xK6Owcke8iKj7zyH
+      tags:
+        type: array
+        position: 5
+        description: OID of tags that are tagged to this task.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+          - mPAQrYU1qt8wAYAInKRlTnvl
       assignors:
         type: array
         position: 5
@@ -2311,22 +2329,6 @@ definitions:
         description: >-
           OID of the user who assigned this task to an external team. It is null
           if this task doesn't belong to any external team.
-      tags:
-        type: array
-        position: 5
-        description: OID of tags that are tagged to this task.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
-        description: >-
-          OID of the board that this task was added to. It is null if this task
-          doesn't belong to any board.
       order:
         type: integer
         format: int32
@@ -2336,6 +2338,13 @@ definitions:
           The order of this task shown on the board. The smaller the number is,
           the ealier the task is shown. It is meaningless if it doesn't belong
           to any board.
+      board:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 6
+        description: >-
+          OID of the board that this task was added to. It is null if this task
+          doesn't belong to any board.
       attachments:
         type: array
         position: 8
@@ -2373,6 +2382,11 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
+      peekaboo:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task was peekabooed. It is null if not peekabooed.
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2383,19 +2397,6 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 50
         description: 'OID of the user who changed this task''s state. '
-      peekabooAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this task was peekabooed. It is null if not peekabooed.
-      favorites:
-        type: array
-        position: 60
-        description: OID of users who favorite this task.
-        items:
-          type: string
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
       followers:
         type: array
         position: 60
@@ -2404,6 +2405,14 @@ definitions:
           type: string
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
+      favorites:
+        type: array
+        position: 60
+        description: OID of users who favorite this task.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
       project:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -2434,6 +2443,10 @@ definitions:
         type: string
         example: '**Great** board to start with.'
         description: (Optional) An optional description about this task.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this board was aimed to complete. '
       column:
         description: (Optional) Updates an existing column with a new content.
         $ref: '#/definitions/UpdateColumnBody'
@@ -2451,10 +2464,6 @@ definitions:
         description: >-
           (Optional) Specify true to archive this board. Or, specify false to
           undo the previous archiving if any.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this board was aimed to complete. '
   UpdateColumnBody:
     type: object
     properties:
@@ -2763,14 +2772,14 @@ definitions:
         type: string
         example: My_ID
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       url:
         type: string
         example: 'https://quire.io/w/my_project'
         description: Url of this record on Quire website.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description.
       nameText:
         type: string
         example: My Name
