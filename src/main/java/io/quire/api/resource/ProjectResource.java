@@ -27,7 +27,7 @@ public class ProjectResource {
     @Path("/list/{organizationOid}")
     @ApiOperation(value = "Get all granted projects.",
         notes = "Returns all granted project records. "
-            + "The \"organizationOid\" is optinal. If specified, only "
+            + "The `organizationOid` is optinal. If specified, only "
             + "granted projects of the given organization are returned. "
             + "If omitted, all granted project records will be returned.",
         response = Project.class,
