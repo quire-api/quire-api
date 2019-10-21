@@ -24,6 +24,19 @@ public class ProjectResource {
         CreateProjectBody data) { return null; }
 */
     @GET
+    @Path("/list/{organizationOid}")
+    @ApiOperation(value = "Get all granted projects.",
+        notes = "Returns all granted project records. "
+            + "The \"organizationOid\" is optinal. If specified, only "
+            + "granted projects of the given organization are returned. "
+            + "If omitted, all granted project records will be returned.",
+        response = Project.class,
+        responseContainer = "List")
+    public Response getProjectsByOrganizationOid(
+        @ApiParam(value = "OID of the organization.", required = true)
+        @PathParam("organizationOid") String organizationOid) { return null; }
+
+    @GET
     @Path("/list/id/{organizationId}")
     @ApiOperation(value = "Get all granted projects of the organization by its ID.",
         notes = "Returns all project records of the given organization. "
@@ -33,19 +46,6 @@ public class ProjectResource {
     public Response getProjectsByOrganizationId(
         @ApiParam(value = "ID of the organization", required = true)
         @PathParam("organizationId") String organizationId) { return null; }
-
-    @GET
-    @Path("/list/{organizationOid}")
-    @ApiOperation(value = "Get all granted projects of the organization by its OID.",
-        notes = "Returns all project records of the given organization. "
-            + "Only granted projects will be returned.\n"
-            + "Note: the \"organizationOid\" is optinal. If omitted, all "
-            + "granted project records will be returned.",
-        response = Project.class,
-        responseContainer = "List")
-    public Response getProjectsByOrganizationOid(
-        @ApiParam(value = "OID of the organization.", required = true)
-        @PathParam("organizationOid") String organizationOid) { return null; }
 
     @GET
     @Path("/id/{id}")
