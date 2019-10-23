@@ -33,7 +33,7 @@ public class CreateTaskBody {
 	public List<String> getTags() { return null; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID of the users that this task is assigned to.")
+		value = "(Optional) OID or ID of the users that this task is assigned to.")
 	public List<String> getAssignees() { return null; }
 
 	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
@@ -69,7 +69,7 @@ public class CreateTaskBody {
 		+ "the app.")
 	public boolean getAsUser() { return false; }
 
-	@ApiModelProperty(value = "(Optional) OID of users who follow this task."
+	@ApiModelProperty(value = "(Optional) OID or ID of users who follow this task."
 		+ "If \"me\" is specified, it means the current user will follow this task.\n"
 		+ "If the application would like to follow (i.e., receive notifications), "
 		+ "it can pass \"app\" as one of OIDs.\n"
