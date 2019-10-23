@@ -28,7 +28,8 @@ public class CreateTaskBody {
 	public int getStatus() { return 0; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID of the tags to be added to the new created task.")
+		value = "(Optional) OID or names of the tags to be added to the new created task.\n"
+		+ "Note: if tag's name is specified, it is case-insensitive.")
 	public List<String> getTags() { return null; }
 
 	@ApiModelProperty(

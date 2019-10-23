@@ -31,15 +31,18 @@ public class UpdateTaskBody {
 	public String getBoard() { return null; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID of the tags to replace existing tags of to this task. "
+		value = "(Optional) OID or names of the tags to replace existing tags of to this task. "
 		+ "If specified, it will replace any existing tag(s). "
-		+ "Instead of replacment, you can use \"addTags\" or \"removeTags\".")
+		+ "Instead of replacment, you can use \"addTags\" or \"removeTags\".\n"
+		+ "Note: if tag's name is specified, it is case-insensitive.")
 	public List<String> getTags() { return null; }
 	@ApiModelProperty(
-		value = "(Optional) OID of the tags to be added to this task.")
+		value = "(Optional) OID or names of the tags to be added to this task.\n"
+		+ "Note: if tag's name is specified, it is case-insensitive.")
 	public List<String> getAddTags() { return null; }
 	@ApiModelProperty(
-		value = "(Optional) OID of the tags to be removed from this task.")
+		value = "(Optional) OID or names of the tags to be removed from this task.\n"
+		+ "Note: if tag's name is specified, it is case-insensitive.")
 	public List<String> getRemoveTags() { return null; }
 
 	@ApiModelProperty(
