@@ -14,12 +14,12 @@ public class UpdateTaskBody {
 	example = "This is a **cool** task.")
 	public String getDescription() { return null; }
 
-	@ApiModelProperty(value = "(Optiona) Change the priority of this task. "
+	@ApiModelProperty(value = "(Optional) Change the priority of this task. "
 		+ "Its value must be between -1 (lowest) and 2 (highest). ",
 		example = "0", position = 4)
 	public int getPriority() { return 0; }
 
-	@ApiModelProperty(value = "(Optiona) An optional status to change to. "
+	@ApiModelProperty(value = "(Optional) An optional status to change to. "
 		+ "Its value must be between 0 and 100. "
 		+ "To complete a task, specify 100.",
 		example = "100", position = 4)

@@ -15,13 +15,13 @@ public class CreateTaskBody {
 		value = "(Optional) An optional description about this task.")
 	public String getDescription() { return null; }
 
-	@ApiModelProperty(value = "(Optiona) An optional priority. "
+	@ApiModelProperty(value = "(Optional) An optional priority. "
 		+ "Its value must be between -1 (lowest) and 2 (highest). "
 		+ "Default: 0.",
 		example = "0", position = 4)
 	public int getPriority() { return 0; }
 
-	@ApiModelProperty(value = "(Optiona) An optional status. "
+	@ApiModelProperty(value = "(Optional) An optional status. "
 		+ "Its value must be between 0 and 100. "
 		+ "Default: 0.",
 		example = "0", position = 4)
