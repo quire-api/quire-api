@@ -122,9 +122,7 @@ public class TaskResource {
 
 		@ApiParam(value = "Text to do a full-text search against the name, "
 			+ "description, and attachments.\n"
-			+ "Note: it doesn't include the content and attachment of comments.\n"
-			+ "Also note: the update of tasks can take 10 seconds or more before "
-			+ "it can be found by the full-text search.",
+			+ "Note: it doesn't include the content and attachment of comments.",
 			example = "text=important major", required = false)
 		@QueryParam(value = "text") String text,
 
