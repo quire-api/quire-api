@@ -89,6 +89,13 @@ function identity(v) {
     return v;
 }
 
+function getLocalStorage(key, decode) { //default: true
+	try {
+		var val = localStorage[key];
+		return val != null && decode != false ? JSON.parse(val): val;
+	} catch ( e ) {
+	}
+}
 
 $(function() {
   // $(document).foundation();
