@@ -6,11 +6,12 @@ function _showHeaderIcon() {
 }
 
 function _updateLoginUser(response) {
-	var user = $('.t-user'),
+	var readS3 = getLocalStorage("inCgf") != null ? aws2quire: identity,
+	    user = $('.t-user'),
 		userId = response['id'],
 		userName = response['name'],
 		initials = response['initials'],
-		userImg = response['image'],
+		userImg = readS3(response['image']),
 		iconColor = response['iconColor'];
 
 	isUser = true;
@@ -69,6 +70,25 @@ window.sendQS = function (data, callback, failCallback) {
 
 	});
 };
+
+///URL of our files in Amazon S3
+var s3AwsUrl = "https://quire.s3.amazonaws.com";
+/// The prefix that was mapped to [s3AwsUrl]
+var quireS3Prefix = "/quis3";
+
+/// Whether the given path is [s3AwsUrl].
+function isAwsS3Path(path) {
+    return path && (path.startsWith(s3AwsUrl+'/') || path == s3AwsUrl);
+}
+
+function aws2quire(path) {
+    return isAwsS3Path(path) ? quireS3Prefix+path.substring(s3AwsUrl.length): path;
+}
+
+function identity(v) {
+    return v;
+}
+
 
 $(function() {
   // $(document).foundation();
@@ -139,6 +159,7 @@ $(function() {
     _showHeaderIcon();
   });
 });
+
 
 /**
  * Creates a new instance of Traverse.
