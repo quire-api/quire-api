@@ -22,6 +22,19 @@ public class CreateBoardBody {
 		value = "(Optional) An optional description about this task.")
 	public String getDescription() { return null; }
 
+	@ApiModelProperty(example = "37",
+		value = "(Optional) The color of the icon representing this record. "
+		+ "It is an index of our predefined color palette. ")
+	public String getIconColor() {
+		return null;
+	}
+
+	@ApiModelProperty(example = "https://quire.s3.amazonaws.com/oid/image.jpg",
+		value = "(Optional) The image representing this record.")
+	public String getImage() {
+		return null;
+	}
+
 	@ApiModelProperty(value = "(Optional) The column defintions of this board. "
 		+ "If omitted, the default column defintions will be generated. "
 		+ "If specified, it must have at least one column whose status is 100.")
