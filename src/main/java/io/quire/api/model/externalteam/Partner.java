@@ -8,6 +8,8 @@ import java.util.List;
 
 @ApiModel()
 public class Partner extends TaggingEntity {
+    @ApiModelProperty(value = "The name.", example = "UI design team")
+    public String getName() { return null; }
     @ApiModelProperty(example = "https://quire.s3.amazonaws.com/oid/image.jpg",
     	position = 2)
     public String getImage() { return null; }

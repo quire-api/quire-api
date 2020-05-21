@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class TaggingEntity extends StampedEntity {
-	@ApiModelProperty(example = "Later",
-		value = "The name.")
+	@ApiModelProperty(value = "The name.", example = "Later")
 	public String getName() { return null; }
 
 	@ApiModelProperty(example = "35",

@@ -14,7 +14,7 @@ public class Task extends StampedEntity {
 		example = "Design new **logo**", position = 2)
 	public String getName() { return null; }
 	@ApiModelProperty(value = "This task's name but excluding markdown characters.",
-		example = "Design new **logo**", position = 2)
+		example = "Design new logo", position = 2)
 	public String getNameText() { return null; }
 	@ApiModelProperty(value = "This task's name in a form of a HTML fragment converted from markdown.",
 		example = "Design new <b>logo</b>", position = 2)

@@ -9,6 +9,8 @@ import java.util.List;
 
 @ApiModel()
 public class Comment extends StampedEntity {
+	@ApiModelProperty(value="OID, aka. UUID.", example = "iDsPd.QP_qM.hN.Trymukn8b")
+	public String getOid() { return null; }
 
 	@ApiModelProperty(value = "The content.",
 		example = "It is *cool*!", position = 1)
@@ -42,7 +44,7 @@ public class Comment extends StampedEntity {
 	public String getEditedBy() { return null; }
 
 	@ApiModelProperty(value = "Url of this comment on Quire website.",
-		example = "https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b",
+		example = "https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b",
 		position = 50)
 	public String getUrl() { return null; }
 

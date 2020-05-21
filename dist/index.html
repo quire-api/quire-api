@@ -814,15 +814,17 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">iconColor:
+                      <div class="prop-title">columns:
                         <span class="prop-type">
-                          <span class="json-property-type">string </span>
+                          <span class="json-property-type">
+                            <span class="json-schema-ref-array"> CreateColumnBody </span>
+                          </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
+                      <p>(Optional) The column defintions of this board. If omitted, the default column defintions will be generated. If specified, it must have at least one column whose status is 100.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -840,17 +842,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">columns:
+                      <div class="prop-title">iconColor:
                         <span class="prop-type">
-                          <span class="json-property-type">
-                            <span class="json-schema-ref-array"> CreateColumnBody </span>
-                          </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) The column defintions of this board. If omitted, the default column defintions will be generated. If specified, it must have at least one column whose status is 100.</p>
+                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -891,8 +891,6 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** board to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
       <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;TODO&quot;</span>,
@@ -900,6 +898,8 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">0</span>
     }
   ],
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>
 }
@@ -934,16 +934,16 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
@@ -953,8 +953,8 @@ https://quire.io/api/user/id/me
     }
   ],
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -1055,15 +1055,17 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">iconColor:
+                      <div class="prop-title">columns:
                         <span class="prop-type">
-                          <span class="json-property-type">string </span>
+                          <span class="json-property-type">
+                            <span class="json-schema-ref-array"> CreateColumnBody </span>
+                          </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
+                      <p>(Optional) The column defintions of this board. If omitted, the default column defintions will be generated. If specified, it must have at least one column whose status is 100.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -1081,17 +1083,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">columns:
+                      <div class="prop-title">iconColor:
                         <span class="prop-type">
-                          <span class="json-property-type">
-                            <span class="json-schema-ref-array"> CreateColumnBody </span>
-                          </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) The column defintions of this board. If omitted, the default column defintions will be generated. If specified, it must have at least one column whose status is 100.</p>
+                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -1132,8 +1132,6 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** board to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
       <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;TODO&quot;</span>,
@@ -1141,6 +1139,8 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">0</span>
     }
   ],
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>
 }
@@ -1175,16 +1175,16 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
@@ -1194,8 +1194,8 @@ https://quire.io/api/user/id/me
     }
   ],
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -1296,16 +1296,16 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
@@ -1315,8 +1315,8 @@ https://quire.io/api/user/id/me
     }
   ],
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -1402,16 +1402,16 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
@@ -1421,8 +1421,8 @@ https://quire.io/api/user/id/me
     }
   ],
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -1509,16 +1509,16 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;columns&quot;</span>: [
       {
@@ -1528,8 +1528,8 @@ https://quire.io/api/user/id/me
       }
     ],
     <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-    <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -1617,16 +1617,16 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;columns&quot;</span>: [
       {
@@ -1636,8 +1636,8 @@ https://quire.io/api/user/id/me
       }
     ],
     <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-    <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -1860,16 +1860,16 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Board101&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project?board=Board101&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Board 101&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;columns&quot;</span>: [
     {
@@ -1879,8 +1879,8 @@ https://quire.io/api/user/id/me
     }
   ],
   <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2020-02-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;project&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -2016,20 +2016,6 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-body">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">description:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                    </div>
-                    <div class="prop-value">
-                      <p>The content of the new comment.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">pinned:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -2054,6 +2040,20 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Specify true if you&#39;d like to make this new comment as created by the app. Default: false -- the comment is marked as created by the user authorizing the app.</p>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">description:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>The content of the new comment.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -2063,9 +2063,9 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
   <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>
 }
 </code></pre> </body>
                   </html>
@@ -2098,9 +2098,9 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
@@ -2112,11 +2112,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
   <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -2178,20 +2178,6 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-body">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">description:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                    </div>
-                    <div class="prop-value">
-                      <p>The content of the new comment.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">pinned:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -2216,6 +2202,20 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Specify true if you&#39;d like to make this new comment as created by the app. Default: false -- the comment is marked as created by the user authorizing the app.</p>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">description:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>The content of the new comment.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -2225,9 +2225,9 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
   <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>
 }
 </code></pre> </body>
                   </html>
@@ -2260,9 +2260,9 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
@@ -2274,11 +2274,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
   <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -2365,9 +2365,9 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
@@ -2379,11 +2379,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
   <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -2471,9 +2471,9 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
     <span class="hljs-attr">&quot;attachments&quot;</span>: [
       {
@@ -2485,11 +2485,11 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
     <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -2593,9 +2593,9 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
     <span class="hljs-attr">&quot;attachments&quot;</span>: [
       {
@@ -2607,11 +2607,11 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
     <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -2700,9 +2700,9 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+    <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
     <span class="hljs-attr">&quot;attachments&quot;</span>: [
       {
@@ -2714,11 +2714,11 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
     <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -2781,19 +2781,6 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-body">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">description:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) The new content of the comment.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">pinned:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -2805,6 +2792,19 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Whether to pin this comment.</p>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">description:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) The new content of the comment.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -2814,8 +2814,8 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
-  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>
+  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>
 }
 </code></pre> </body>
                   </html>
@@ -2848,9 +2848,9 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
+  <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;It is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;It is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;It is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
@@ -2862,11 +2862,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project70/Cello_and_voilin#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;pinAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;editedBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;pinBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;ownerType&quot;</span>: <span class="hljs-string">&quot;Task&quot;</span>,
   <span class="hljs-attr">&quot;owner&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -3028,18 +3028,18 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -3125,18 +3125,18 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -3205,18 +3205,18 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
     <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
-    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
@@ -3309,7 +3309,7 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;UI design team&quot;</span>,
   <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
@@ -3399,7 +3399,7 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;UI design team&quot;</span>,
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
@@ -3490,7 +3490,7 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Later&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;UI design team&quot;</span>,
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
@@ -3586,20 +3586,20 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_project&quot;</span>,
   <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
   <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-number">20</span>,
   <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-number">30</span>,
   <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-number">5</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -3690,20 +3690,20 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_project&quot;</span>,
   <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
   <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-number">20</span>,
   <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-number">30</span>,
   <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-number">5</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -3795,20 +3795,20 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_project&quot;</span>,
     <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
     <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-number">20</span>,
     <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-number">30</span>,
     <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-number">5</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -3901,20 +3901,20 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_project&quot;</span>,
     <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
     <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-number">20</span>,
     <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-number">30</span>,
     <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-number">5</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -3981,6 +3981,19 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-body">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">followers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID of the users to replace the followers of this project. Please refer to <code>addFollowers()</code> for more details.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -4009,19 +4022,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) OID of the followers to be removed from this project. Please refer to <code>addFollowers()</code> for more details.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">followers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID of the users to replace the followers of this project. Please refer to <code>addFollowers()</code> for more details.</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -4031,15 +4031,15 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
   ],
   <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
   ]
 }
 </code></pre> </body>
@@ -4073,20 +4073,20 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_project&quot;</span>,
   <span class="hljs-attr">&quot;organization&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
   <span class="hljs-attr">&quot;activeCount&quot;</span>: <span class="hljs-number">20</span>,
   <span class="hljs-attr">&quot;taskCount&quot;</span>: <span class="hljs-number">30</span>,
   <span class="hljs-attr">&quot;rootCount&quot;</span>: <span class="hljs-number">5</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Project&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
@@ -4969,6 +4969,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">asUser:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">description:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -4999,19 +5012,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">due:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">tags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -5025,15 +5025,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">assignees:
+                      <div class="prop-title">due:
                         <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
+                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5047,6 +5047,19 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">assignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5092,19 +5105,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">asUser:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">priority:
                         <span class="prop-type">
                           <span class="json-property-type">integer </span>
@@ -5139,18 +5139,19 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;recurring&quot;</span>: {
     <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
@@ -5158,7 +5159,6 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>
 }
@@ -5196,10 +5196,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -5211,11 +5211,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -5225,8 +5225,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -5237,13 +5238,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -5331,6 +5331,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">asUser:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">description:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -5361,19 +5374,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">due:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">tags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -5387,15 +5387,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">assignees:
+                      <div class="prop-title">due:
                         <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
+                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5409,6 +5409,19 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">assignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5454,19 +5467,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">asUser:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">priority:
                         <span class="prop-type">
                           <span class="json-property-type">integer </span>
@@ -5501,18 +5501,19 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;recurring&quot;</span>: {
     <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
@@ -5520,7 +5521,6 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>
 }
@@ -5558,10 +5558,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -5573,11 +5573,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -5587,8 +5587,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -5599,13 +5600,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -5693,6 +5693,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">asUser:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">description:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -5723,19 +5736,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">due:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">tags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -5749,15 +5749,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">assignees:
+                      <div class="prop-title">due:
                         <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
+                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5771,6 +5771,19 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">assignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5816,19 +5829,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">asUser:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">priority:
                         <span class="prop-type">
                           <span class="json-property-type">integer </span>
@@ -5863,18 +5863,19 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;recurring&quot;</span>: {
     <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
@@ -5882,7 +5883,6 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>
 }
@@ -5920,10 +5920,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -5935,11 +5935,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -5949,8 +5949,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -5961,13 +5962,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -6055,6 +6055,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">asUser:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">description:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -6085,19 +6098,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">due:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">tags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -6111,15 +6111,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">assignees:
+                      <div class="prop-title">due:
                         <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
+                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -6133,6 +6133,19 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">assignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the users that this task is assigned to.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -6178,19 +6191,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">asUser:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">priority:
                         <span class="prop-type">
                           <span class="json-property-type">integer </span>
@@ -6225,18 +6225,19 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;recurring&quot;</span>: {
     <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
@@ -6244,7 +6245,6 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>
 }
@@ -6282,10 +6282,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -6297,11 +6297,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -6311,8 +6311,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -6323,13 +6324,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -6446,10 +6446,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -6461,11 +6461,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -6475,8 +6475,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -6487,13 +6488,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -6595,10 +6595,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -6610,11 +6610,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -6624,8 +6624,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -6636,13 +6637,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -6745,10 +6745,10 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
     <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -6760,11 +6760,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
       <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
     },
+    <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;tags&quot;</span>: [
       <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
       <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
     ],
-    <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;assignees&quot;</span>: [
       <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
       <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -6774,8 +6774,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
     ],
     <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-    <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+    <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
     <span class="hljs-attr">&quot;attachments&quot;</span>: [
       {
         <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -6786,13 +6787,12 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
     <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
     <span class="hljs-attr">&quot;referrers&quot;</span>: [
       {
-        <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+        <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
         <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-        <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+        <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
       }
     ],
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -6896,10 +6896,10 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
     <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -6911,11 +6911,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
       <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
     },
+    <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;tags&quot;</span>: [
       <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
       <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
     ],
-    <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;assignees&quot;</span>: [
       <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
       <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -6925,8 +6925,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
     ],
     <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-    <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+    <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
     <span class="hljs-attr">&quot;attachments&quot;</span>: [
       {
         <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -6937,13 +6938,12 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
     <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
     <span class="hljs-attr">&quot;referrers&quot;</span>: [
       {
-        <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+        <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
         <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-        <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+        <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
       }
     ],
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -7062,10 +7062,10 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
     <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -7077,11 +7077,11 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
       <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
     },
+    <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;tags&quot;</span>: [
       <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
       <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
     ],
-    <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;assignees&quot;</span>: [
       <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
       <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -7091,8 +7091,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
     ],
     <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-    <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
     <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+    <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+    <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
     <span class="hljs-attr">&quot;attachments&quot;</span>: [
       {
         <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -7103,13 +7104,12 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
     <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
     <span class="hljs-attr">&quot;referrers&quot;</span>: [
       {
-        <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+        <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
         <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-        <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+        <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
       }
     ],
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -7536,6 +7536,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">followers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the users to replace the followers of this task. Please refer to <code>addFollowers()</code> for more details.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -7566,7 +7579,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">followers:
+                      <div class="prop-title">tags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -7574,7 +7587,7 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or ID of the users to replace the followers of this task. Please refer to <code>addFollowers()</code> for more details.</p>
+                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7592,15 +7605,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">tags:
+                      <div class="prop-title">start:
                         <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7614,19 +7627,6 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) OID or ID of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use &quot;addAssignees&quot; or &quot;removeAssignees&quot;.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">start:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) An optional start time. Note: if time is specified, the millisecond must be <code>001</code>. Otherwise, it is <code>000</code> (so are the hour, minute and second fields).</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7772,24 +7772,24 @@ https://quire.io/api/user/id/me
                   <body><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;New idea&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
   ],
   <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ],
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
   ],
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
-  <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;recurring&quot;</span>: {
     <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
@@ -7847,10 +7847,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">12</span>,
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new **logo**&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;Design new logo&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;Design new &lt;b&gt;logo&lt;/b&gt;&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is a cool task.&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a *cool* task.&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is a &lt;i&gt;cool&lt;/i&gt; task.&quot;</span>,
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
@@ -7862,11 +7862,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">2048</span>,
     <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
   },
+  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;tags&quot;</span>: [
     <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>,
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
-  <span class="hljs-attr">&quot;partner&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>,
     <span class="hljs-string">&quot;Job4NSW9xK6Owcke8iKj7zyH&quot;</span>
@@ -7876,8 +7876,9 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
   ],
   <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
-  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
   <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">99</span>,
+  <span class="hljs-attr">&quot;board&quot;</span>: <span class="hljs-string">&quot;rcBHBYXZSiyDRrHrWPutatfF&quot;</span>,
+  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;attachments&quot;</span>: [
     {
       <span class="hljs-attr">&quot;length&quot;</span>: <span class="hljs-number">2048</span>,
@@ -7888,13 +7889,12 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;createdBy&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;cover&quot;</span>: <span class="hljs-string">&quot;qfqVmUtC&quot;</span>,
   <span class="hljs-attr">&quot;childCount&quot;</span>: <span class="hljs-number">5</span>,
   <span class="hljs-attr">&quot;referrers&quot;</span>: [
     {
-      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
+      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>,
       <span class="hljs-attr">&quot;when&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-      <span class="hljs-attr">&quot;user&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
+      <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
@@ -8069,18 +8069,18 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;john&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
 }
 </code></pre> </body>
@@ -8164,18 +8164,18 @@ https://quire.io/api/user/id/me
                   <html>
                   <head></head>
                   <body><pre><code class="hljs language-json">{
-  <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;john&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
+  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-  <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-  <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
 }
 </code></pre> </body>
@@ -8242,18 +8242,18 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;john&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
   }
 ]
@@ -8321,18 +8321,18 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;john&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
   }
 ]
@@ -8400,18 +8400,18 @@ https://quire.io/api/user/id/me
                   <head></head>
                   <body><pre><code class="hljs language-json">[
   {
-    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;john&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
+    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;My_ID&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
-    <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
-    <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
-    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;My Name&quot;</span>,
+    <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>
   }
 ]

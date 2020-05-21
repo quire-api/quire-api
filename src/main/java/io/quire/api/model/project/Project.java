@@ -8,6 +8,25 @@ import java.util.List;
 
 @ApiModel()
 public class Project extends Identity {
+	@ApiModelProperty(value="Name.",
+		example = "My Project")
+	public String getName() { return null; }
+
+	@ApiModelProperty(value = "Name but excluding markdown characters.",
+		example = "My Project")
+	public String getNameText() { return null; }
+	@ApiModelProperty(value = "Name in a form of a HTML fragment converted from markdown.",
+		example = "My Project")
+	public String getNameHtml() { return null; }
+
+	@ApiModelProperty(value = "ID.",
+		example = "my_project")
+	public String getId() { return null; }
+
+	@ApiModelProperty(value = "Url of this record on Quire website.",
+		example = "https://quire.io/w/my_project")
+	public String getUrl() { return null; }
+
 	@ApiModelProperty(value="OID of the organization this project belongs to.",
 		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
 	public String getOrganization() { return null; }

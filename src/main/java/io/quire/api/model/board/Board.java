@@ -8,7 +8,25 @@ import java.util.List;
 
 @ApiModel()
 public class Board extends Identity {
-	@ApiModelProperty(value = "The column defintions of this board.",
+	@ApiModelProperty(value="Name.",
+		example = "Board 101")
+	public String getName() { return null; }
+
+	@ApiModelProperty(value = "Name but excluding markdown characters.",
+		example = "Board 101")
+	public String getNameText() { return null; }
+	@ApiModelProperty(value = "Name in a form of a HTML fragment converted from markdown.",
+		example = "Board 101")
+	public String getNameHtml() { return null; }
+
+	@ApiModelProperty(value = "ID.", example = "Board101")
+	public String getId() { return null; }
+
+	@ApiModelProperty(value = "Url of this record on Quire website.",
+			example = "https://quire.io/w/my_project?board=Board101")
+	public String getUrl() { return null; }
+
+	@ApiModelProperty(value = "The column definitions of this board.",
 		position = 10)
 	public List<Column> getColumns() { return null; }
 

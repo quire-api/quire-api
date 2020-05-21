@@ -5,8 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class Identity extends NamedIconEntity {
-	@ApiModelProperty(value = "ID.", example = "My_ID")
-	public String getId() { return null; }
 
 	@ApiModelProperty(value = "Name but excluding markdown characters.",
 		example = "My Name")
@@ -14,6 +12,14 @@ public class Identity extends NamedIconEntity {
 	@ApiModelProperty(value = "Name in a form of a HTML fragment converted from markdown.",
 		example = "My Name")
 	public String getNameHtml() { return null; }
+
+	@ApiModelProperty(value = "ID.",
+		example = "my_id")
+	public String getId() { return null; }
+
+	@ApiModelProperty(value = "Url of this record on Quire website.",
+		example = "https://quire.io/w/my_id")
+	public String getUrl() { return null; }
 
 	@ApiModelProperty(value = "Description.",
 		example = "This is *cool*!")
@@ -24,9 +30,6 @@ public class Identity extends NamedIconEntity {
 	@ApiModelProperty(value = "Description in a form of a HTML fragment converted from markdown.",
 		example = "This is <i>cool</i>!")
 	public String getDescriptionHtml() { return null; }
-
-	@ApiModelProperty(value = "Url of this record on Quire website.", example = "https://quire.io/w/my_project")
-	public String getUrl() { return null; }
 
 	//Not output for privacy
 	//@ApiModelProperty(value = "When this record was created.", example = "2018-12-22T02:06:58.158Z", position = 99)
