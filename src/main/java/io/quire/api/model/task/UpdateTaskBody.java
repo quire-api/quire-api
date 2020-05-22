@@ -107,4 +107,11 @@ public class UpdateTaskBody {
 		value = "(Optional) OID or ID of the followers to be removed from this task."
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getRemoveFollowers() { return null; }
+
+	@ApiModelProperty(example = "true",
+		value = "(Optional) Specify true if you'd like to make "
+		+ "this task as updated by the app.\n"
+		+ "Default: false -- the task is marked as created by the user authorizing "
+		+ "the app.")
+	public boolean getAsUser() { return false; }
 }
