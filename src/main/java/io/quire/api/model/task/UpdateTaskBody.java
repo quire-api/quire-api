@@ -25,7 +25,7 @@ public class UpdateTaskBody {
 		example = "100", position = 4)
 	public int getStatus() { return 0; }
 
-	@ApiModelProperty(value = "(Optional) OID of the board to replace existing board of to this task. "
+	@ApiModelProperty(value = "(Optional) OID or ID of the board to replace existing board of to this task. "
 		+ "If specified, it will replace existing board. ",
 		example = "rcBHBYXZSiyDRrHrWPutatfF", position = 6)
 	public String getBoard() { return null; }
@@ -46,7 +46,7 @@ public class UpdateTaskBody {
 	public List<String> getRemoveTags() { return null; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID or ID of the users that this task is assigned to. "
+		value = "(Optional) OID, ID emails of the users that this task is assigned to. "
 		+ "If specified, it will replace any existing assignee(s). "
 		+ "Instead of replacment, you can use \"addAssignees\" or \"removeAssignees\".")
 	public List<String> getAssignees() { return null; }
@@ -83,7 +83,7 @@ public class UpdateTaskBody {
 	public Object getPeekaboo() { return false; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID or ID of the users to replace the followers of this task. "
+		value = "(Optional) OID, ID or emails of the users to replace the followers of this task. "
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getFollowers() { return null; }
 	@ApiModelProperty(
