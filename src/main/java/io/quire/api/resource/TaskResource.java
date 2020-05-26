@@ -217,12 +217,25 @@ public class TaskResource {
 
 	@PUT
 	@Path("/{oid}")
-	@ApiOperation(value = "Update an existing task.",
+	@ApiOperation(value = "Update an existing task by its OID.",
 		notes = "Updates an existing task, and returns the full updated record.",
 		response = Task.class)
 	public Response updateTask(
 		@ApiParam(value = "OID of task that needs to be updated.", required = true)
 		@PathParam("oid") String oid,
+		@ApiParam(value = "The new content of the task to update to.", required = true)
+		UpdateTaskBody data) { return null; }
+
+	@PUT
+	@Path("/id/{projectId}/{id}")
+	@ApiOperation(value = "Update an existing task by its ID.",
+		notes = "Updates an existing task, and returns the full updated record.",
+		response = Task.class)
+	public Response updateTaskById(
+		@ApiParam(value = "ID of the project that the task belongs to.", required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "ID of the task that needs to be updated", required = true)
+		@PathParam("id") int id,
 		@ApiParam(value = "The new content of the task to update to.", required = true)
 		UpdateTaskBody data) { return null; }
 

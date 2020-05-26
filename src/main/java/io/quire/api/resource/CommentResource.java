@@ -26,7 +26,7 @@ public class CommentResource {
 			required = true)
 		@PathParam("oid") String oid,
 		@ApiParam(value = "Comment to create", required = true)
-			CreateCommentBody data) { return null; }
+		CreateCommentBody data) { return null; }
 
 	@POST
 	@Path("/id/{projectId}")
@@ -38,7 +38,20 @@ public class CommentResource {
 			required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "Comment to create", required = true)
-			CreateCommentBody data) { return null; }
+		CreateCommentBody data) { return null; }
+
+	@POST
+	@Path("/id/{projectId}/{taskId}")
+	@ApiOperation(value = "Add a new comment to a task.",
+		notes = "Add a new comment to a task.",
+		response = Comment.class)
+	public Response createCommentToTask(
+		@ApiParam(value = "ID of a project", required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "ID of the task that new comment will be added to", required = true)
+		@PathParam("taskId") int taskId,
+		@ApiParam(value = "Comment to create", required = true)
+		CreateCommentBody data) { return null; }
 
 	@GET
 	@Path("/{oid}")
