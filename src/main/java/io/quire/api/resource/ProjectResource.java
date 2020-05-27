@@ -27,7 +27,9 @@ public class ProjectResource {
     @Path("/list")
     @ApiOperation(value = "Get all granted projects.",
         notes = "Returns the project records for all projects "
-                + "that the current user can grant to this application.",
+        + "that the current user can grant to this application.\n"
+        + "By default, archived projects will be ignored. "
+        + "To retrieve them, you can specify `?archived=true` at the end",
         response = Project.class,
         responseContainer = "List")
     public Response getProjects() { return null; }
@@ -36,7 +38,9 @@ public class ProjectResource {
     @Path("/list/{organizationOid}")
     @ApiOperation(value = "Get all granted projects of the organization by its OID.",
         notes = "Returns all project records of the given organization. "
-            + "Only granted projects will be returned.",
+        + "Only granted projects will be returned.\n",
+        + "By default, archived projects will be ignored. "
+        + "To retrieve them, you can specify `?archived=true` at the end",
         response = Project.class,
         responseContainer = "List")
     public Response getProjectsByOrganizationOid(
