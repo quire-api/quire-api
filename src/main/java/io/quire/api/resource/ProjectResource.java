@@ -27,44 +27,61 @@ public class ProjectResource {
     @Path("/list")
     @ApiOperation(value = "Get all granted projects.",
         notes = "Returns the project records for all projects "
-        + "that the current user can grant to this application.\n"
-        + "By default, archived projects will be ignored. "
-        + "To retrieve them, you can specify `archived=true`.\n"
-        + "If you'd like to retrieve projects that you can add tasks to "
-        + "you can specify `add-task=true`. For example, `/project/list?add-task=true`.",
+        + "that the current user can grant to this application.",
         response = Project.class,
         responseContainer = "List")
-    public Response getProjects() { return null; }
+    public Response getProjects(
+        @ApiParam(value = "Whether to return archived projects.\n"
+        + "By default, archived projects won't be returned.",
+        example = "archived=true", required = false)
+        @QueryParam(value = "archived") String archived,
+
+        @ApiParam(value = "Whether to return only projects that you can "
+        + "add tasks to.",
+        example = "add-task=true", required = false)
+        @QueryParam(value = "add-task") String addTask) { return null; }
 
     @GET
     @Path("/list/{organizationOid}")
     @ApiOperation(value = "Get all granted projects of the organization by its OID.",
         notes = "Returns all project records of the given organization. "
-        + "Only granted projects will be returned.\n",
-        + "By default, archived projects will be ignored. "
-        + "To retrieve them, you can specify `archived=true`.\n"
-        + "If you'd like to retrieve projects that you can add tasks to "
-        + "you can specify `add-task=true`. For example, `/project/list?archived=true`.",
+        + "Only granted projects will be returned.",
         response = Project.class,
         responseContainer = "List")
     public Response getProjectsByOrganizationOid(
         @ApiParam(value = "OID of the organization.", required = true)
-        @PathParam("organizationOid") String organizationOid) { return null; }
+        @PathParam("organizationOid") String organizationOid,
+
+        @ApiParam(value = "Whether to return archived projects.\n"
+        + "By default, archived projects won't be returned.",
+        example = "archived=true", required = false)
+        @QueryParam(value = "archived") String archived,
+
+        @ApiParam(value = "Whether to return only projects that you can "
+        + "add tasks to.",
+        example = "add-task=true", required = false)
+        @QueryParam(value = "add-task") String addTask) { return null; }
 
     @GET
     @Path("/list/id/{organizationId}")
     @ApiOperation(value = "Get all granted projects of the organization by its ID.",
         notes = "Returns all project records of the given organization. "
-        + "Only granted projects will be returned.\n",
-        + "By default, archived projects will be ignored. "
-        + "To retrieve them, you can specify `archived=true`.\n"
-        + "If you'd like to retrieve projects that you can add tasks to "
-        + "you can specify `add-task=true`. For example, `/project/list?archived=true`.",
+        + "Only granted projects will be returned.",
         response = Project.class,
         responseContainer = "List")
     public Response getProjectsByOrganizationId(
         @ApiParam(value = "ID of the organization", required = true)
-        @PathParam("organizationId") String organizationId) { return null; }
+        @PathParam("organizationId") String organizationId,
+
+        @ApiParam(value = "Whether to return archived projects.\n"
+        + "By default, archived projects won't be returned.",
+        example = "archived=true", required = false)
+        @QueryParam(value = "archived") String archived,
+
+        @ApiParam(value = "Whether to return only projects that you can "
+        + "add tasks to.",
+        example = "add-task=true", required = false)
+        @QueryParam(value = "add-task") String addTask) { return null; }
 
     @GET
     @Path("/id/{id}")

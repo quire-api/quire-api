@@ -137,7 +137,7 @@ public class TaskResource {
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
-		@ApiParam(value = "OID of task's board to match with.\n"
+		@ApiParam(value = "ID or OID of task's board to match with.\n"
 			+ "To search tasks without board, you can specify `board=` or `board=none`.\n"
 			+ "To search tasks with any board, you can specify `board=any`.",
 			example = "board=9GFBEKOH5J_aZjNhR82Gd9xx", required = false)
