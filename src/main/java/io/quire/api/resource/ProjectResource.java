@@ -32,14 +32,16 @@ public class ProjectResource {
         responseContainer = "List")
     public Response getProjects(
         @ApiParam(value = "Whether to return archived projects.\n"
-        + "By default, archived projects won't be returned.",
+        + "By default, archived projects won't be returned.\n"
+        + "If the parameter's value is not specified, `true` is assumed.",
         example = "archived=true", required = false)
-        @QueryParam(value = "archived") String archived,
+        @QueryParam(value = "archived") boolean archived,
 
         @ApiParam(value = "Whether to return only projects that you can "
-        + "add tasks to.",
+        + "add tasks to.\n"
+        + "If the parameter's value is not specified, `true` is assumed.",
         example = "add-task=true", required = false)
-        @QueryParam(value = "add-task") String addTask) { return null; }
+        @QueryParam(value = "add-task") boolean addTask) { return null; }
 
     @GET
     @Path("/list/{organizationOid}")
@@ -53,14 +55,16 @@ public class ProjectResource {
         @PathParam("organizationOid") String organizationOid,
 
         @ApiParam(value = "Whether to return archived projects.\n"
-        + "By default, archived projects won't be returned.",
+        + "By default, archived projects won't be returned.\n"
+        + "If the parameter's value is not specified, `true` is assumed.",
         example = "archived=true", required = false)
-        @QueryParam(value = "archived") String archived,
+        @QueryParam(value = "archived") boolean archived,
 
         @ApiParam(value = "Whether to return only projects that you can "
-        + "add tasks to.",
+        + "add tasks to.\n"
+        + "If the parameter's value is not specified, `true` is assumed.",
         example = "add-task=true", required = false)
-        @QueryParam(value = "add-task") String addTask) { return null; }
+        @QueryParam(value = "add-task") boolean addTask) { return null; }
 
     @GET
     @Path("/list/id/{organizationId}")
@@ -74,14 +78,16 @@ public class ProjectResource {
         @PathParam("organizationId") String organizationId,
 
         @ApiParam(value = "Whether to return archived projects.\n"
-        + "By default, archived projects won't be returned.",
+        + "By default, archived projects won't be returned.\n"
+        + "If the parameter's value is not specified, `true` is assumed.",
         example = "archived=true", required = false)
-        @QueryParam(value = "archived") String archived,
+        @QueryParam(value = "archived") boolean archived,
 
         @ApiParam(value = "Whether to return only projects that you can "
-        + "add tasks to.",
+        + "add tasks to.\n"
+        + "If the parameter's value is not specified, `true` is assumed.",
         example = "add-task=true", required = false)
-        @QueryParam(value = "add-task") String addTask) { return null; }
+        @QueryParam(value = "add-task") boolean addTask) { return null; }
 
     @GET
     @Path("/id/{id}")
