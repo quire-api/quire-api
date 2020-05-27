@@ -29,7 +29,9 @@ public class ProjectResource {
         notes = "Returns the project records for all projects "
         + "that the current user can grant to this application.\n"
         + "By default, archived projects will be ignored. "
-        + "To retrieve them, you can specify `?archived=true` at the end",
+        + "To retrieve them, you can specify `archived=true`.\n"
+        + "If you'd like to retrieve projects that you can add tasks to "
+        + "you can specify `add-task=true`. For example, `/project/list?add-task=true`.",
         response = Project.class,
         responseContainer = "List")
     public Response getProjects() { return null; }
@@ -40,7 +42,9 @@ public class ProjectResource {
         notes = "Returns all project records of the given organization. "
         + "Only granted projects will be returned.\n",
         + "By default, archived projects will be ignored. "
-        + "To retrieve them, you can specify `?archived=true` at the end",
+        + "To retrieve them, you can specify `archived=true`.\n"
+        + "If you'd like to retrieve projects that you can add tasks to "
+        + "you can specify `add-task=true`. For example, `/project/list?archived=true`.",
         response = Project.class,
         responseContainer = "List")
     public Response getProjectsByOrganizationOid(
@@ -51,7 +55,11 @@ public class ProjectResource {
     @Path("/list/id/{organizationId}")
     @ApiOperation(value = "Get all granted projects of the organization by its ID.",
         notes = "Returns all project records of the given organization. "
-            + "Only granted projects will be returned.",
+        + "Only granted projects will be returned.\n",
+        + "By default, archived projects will be ignored. "
+        + "To retrieve them, you can specify `archived=true`.\n"
+        + "If you'd like to retrieve projects that you can add tasks to "
+        + "you can specify `add-task=true`. For example, `/project/list?archived=true`.",
         response = Project.class,
         responseContainer = "List")
     public Response getProjectsByOrganizationId(
