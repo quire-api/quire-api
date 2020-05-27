@@ -24,12 +24,19 @@ public class ProjectResource {
         CreateProjectBody data) { return null; }
 */
     @GET
-    @Path("/list/{organizationOid}")
+    @Path("/list")
     @ApiOperation(value = "Get all granted projects.",
-        notes = "Returns all granted project records. "
-            + "The `organizationOid` is optinal. If specified, only "
-            + "granted projects of the given organization are returned. "
-            + "If omitted, all granted project records will be returned.",
+        notes = "Returns the project records for all projects "
+                + "that the current user can grant to this application.",
+        response = Project.class,
+        responseContainer = "List")
+    public Response getProjects() { return null; }
+
+    @GET
+    @Path("/list/{organizationOid}")
+    @ApiOperation(value = "Get all granted projects of the organization by its OID.",
+        notes = "Returns all project records of the given organization. "
+            + "Only granted projects will be returned.",
         response = Project.class,
         responseContainer = "List")
     public Response getProjectsByOrganizationOid(
