@@ -1,10 +1,10 @@
-package io.quire.api.model.state;
+package io.quire.api.model.status;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class CreateStateBody {
-	@ApiModelProperty(example = "Later",
-		value = "The name of the state", required = true)
+public class CreateStatusBody {
+	@ApiModelProperty(example = "Doing",
+		value = "The name of the status", required = true)
 	public String getName() { return null; }
 
 	@ApiModelProperty(example = "true",
@@ -15,7 +15,7 @@ public class CreateStateBody {
 	public int getValue() { return 0; }
 
 	@ApiModelProperty(example = "35",
-		value = "(Optional) The color of the state."
+		value = "(Optional) The color of the status."
 		+ "If not omitted, a color will be generated automatially.",
 		required = false)
 	public String getColor() { return null; }

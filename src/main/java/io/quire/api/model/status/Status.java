@@ -1,10 +1,10 @@
-package io.quire.api.model.state;
+package io.quire.api.model.status;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
-public class State {
+public class Status {
 	@ApiModelProperty(value = "The name.", example = "Doing")
 	public String getName() { return null; }
 
