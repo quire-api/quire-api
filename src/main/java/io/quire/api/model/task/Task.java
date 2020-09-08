@@ -73,13 +73,9 @@ public class Task extends StampedEntity {
 		example = "rcBHBYXZSiyDRrHrWPutatfF", position = 5)
 	public String getPartnerBy() { return null; }
 
-	@ApiModelProperty(value = "OID of the board that this task was added to. "
-		+ "It is null if this task doesn't belong to any board.",
-		example = "rcBHBYXZSiyDRrHrWPutatfF", position = 6)
-	public String getBoard() { return null; }
-	@ApiModelProperty(value = "The order of this task shown on the board. "
+	@ApiModelProperty(value = "The order of this task shown on the board view. "
 		+ "The smaller the number is, the ealier the task is shown. "
-		+ "It is meaningless if it doesn't belong to any board.",
+		+ "It is meaningless if not in a board view.",
 		example = "99", position = 6)
 	public int getOrder() { return 0; }
 
