@@ -2,7 +2,7 @@ package io.quire.api.model.state;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class UpdateTagBody {
+public class UpdateStateBody {
 	@ApiModelProperty(example = "Later",
 		value = "(Optional) The new name of the state.", required = false)
 	public String getName() { return null; }
