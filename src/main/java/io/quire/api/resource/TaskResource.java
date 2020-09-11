@@ -137,6 +137,10 @@ public class TaskResource {
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
+		@ApiParam(value = "ID or OID of task's sublist to match with.",
+			example = "sublist=Top", required = false)
+		@QueryParam(value = "sublist") String sublist,
+
 		@ApiParam(value = "Task's status to match with.\n"
 			+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
 			+"\"completed\" for completed tasks.",
@@ -176,6 +180,10 @@ public class TaskResource {
 			+ "To specify a regular expression, you can precede it with `~`.",
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
+
+		@ApiParam(value = "ID or OID of task's sublist to match with.",
+			example = "sublist=Top", required = false)
+		@QueryParam(value = "sublist") String sublist,
 
 		@ApiParam(value = "Task's status to match with.\n"
 			+"You can specify a value between 0 and 100.",
