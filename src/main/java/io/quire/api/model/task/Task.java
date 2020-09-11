@@ -95,9 +95,9 @@ public class Task extends StampedEntity {
 		+ "Note: some of them might no longer exist.", position = 20)
 	public List<Referrer> getReferrers() { return null; }
 
-	@ApiModelProperty(value = "When this task's state was changed last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
+	@ApiModelProperty(value = "When this task's status was changed last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getToggledAt() { return null; }
-	@ApiModelProperty(value = "OID of the user who changed this task's state. ",
+	@ApiModelProperty(value = "OID of the user who changed this task's status. ",
 		example = "rcBHBYXZSiyDRrHrWPutatfF", position = 50)
 	public String getToggledBy() { return null; }
 

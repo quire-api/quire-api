@@ -1,25 +1,25 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.state.UpdateStatusBody;
-import io.quire.api.model.state.CreateStatusBody;
-import io.quire.api.model.state.Status;
+import io.quire.api.model.status.UpdateStatusBody;
+import io.quire.api.model.status.CreateStatusBody;
+import io.quire.api.model.status.Status;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Path("/state")
-@Api(value = "state", description =
-	"A state is a value to indicate the progress of a task.")
+@Path("/status")
+@Api(value = "status", description =
+	"A status is a value to indicate the progress of a task.")
 @Produces({"application/json"})
 public class StatusResource {
 	@POST
 	@Path("/{projectOid}")
-	@ApiOperation(value = "Add a new state.",
-		notes = "Add a new state into a project.",
+	@ApiOperation(value = "Add a new status.",
+		notes = "Add a new status into a project.",
 		response = Status.class)
 	public Response createStatus(
-		@ApiParam(value = "OID of project that this new state to be added to.",
+		@ApiParam(value = "OID of project that this new status to be added to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
 		@ApiParam(value = "Status to create", required = true)
@@ -27,11 +27,11 @@ public class StatusResource {
 
 	@POST
 	@Path("/id/{projectId}")
-	@ApiOperation(value = "Add a new state.",
-		notes = "Add a new state into a project.",
+	@ApiOperation(value = "Add a new status.",
+		notes = "Add a new status into a project.",
 		response = Status.class)
 	public Response createStatusToProject(
-		@ApiParam(value = "ID of project that this new state to be added to.",
+		@ApiParam(value = "ID of project that this new status to be added to.",
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "Status to create", required = true)
@@ -39,34 +39,34 @@ public class StatusResource {
 
 	@GET
 	@Path("/{projectOid}/{value}")
-	@ApiOperation(value = "Get the state of the given value.",
-		notes = "Returns the full state record of the given value.",
+	@ApiOperation(value = "Get the status of the given value.",
+		notes = "Returns the full status record of the given value.",
 		response = Status.class)
 	public Response getStatus(
-		@ApiParam(value = "OID of project that the state belongs to.",
+		@ApiParam(value = "OID of project that the status belongs to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
-		@ApiParam(value = "The state's value that needs to be fetched.",
+		@ApiParam(value = "The status's value that needs to be fetched.",
 			required = true)
 		@PathParam("value") int value) { return null; }
 
 	@GET
 	@Path("/id/{projectId}/{value}")
-	@ApiOperation(value = "Get the state of the given value.",
-		notes = "Returns the full state record of the given value.",
+	@ApiOperation(value = "Get the status of the given value.",
+		notes = "Returns the full status record of the given value.",
 		response = Status.class)
 	public Response getStatus(
-		@ApiParam(value = "ID of project that the state belongs to.",
+		@ApiParam(value = "ID of project that the status belongs to.",
 			required = true)
 		@PathParam("projectId") String projectId,
-		@ApiParam(value = "The state's value that needs to be fetched.",
+		@ApiParam(value = "The status's value that needs to be fetched.",
 			required = true)
 		@PathParam("value") int value) { return null; }
 
 	@GET
 	@Path("/list/{projectOid}")
-	@ApiOperation(value = "Get all states of the given project by its OID.",
-		notes = "Returns all state records of the given project by its OID.",
+	@ApiOperation(value = "Get all statuses of the given project by its OID.",
+		notes = "Returns all status records of the given project by its OID.",
 		response = Status.class,
         responseContainer = "List")
 	public Response getStatusesByProjectOid(
@@ -75,8 +75,8 @@ public class StatusResource {
 
 	@GET
 	@Path("/list/id/{projectId}")
-	@ApiOperation(value = "Get all states of the given project by its ID.",
-		notes = "Returns all state records of the given project by its ID.",
+	@ApiOperation(value = "Get all statuses of the given project by its ID.",
+		notes = "Returns all status records of the given project by its ID.",
 		response = Status.class,
         responseContainer = "List")
 	public Response getStatusesByProjectId(
@@ -85,14 +85,14 @@ public class StatusResource {
 
 	@PUT
 	@Path("/{projectOid}/{value}")
-	@ApiOperation(value = "Update a state.",
-		notes = "Updates an existing state, and returns the complete updated record.",
+	@ApiOperation(value = "Update a status.",
+		notes = "Updates an existing status, and returns the complete updated record.",
 		response = Status.class)
 	public Response updateStatus(
-		@ApiParam(value = "OID of project that the state belongs to.",
+		@ApiParam(value = "OID of project that the status belongs to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
-		@ApiParam(value = "The state's value that needs to be updated.",
+		@ApiParam(value = "The status's value that needs to be updated.",
 			required = true)
 		@PathParam("value") int value,
 		@ApiParam(value = "Status to update", required = true)
@@ -100,14 +100,14 @@ public class StatusResource {
 
 	@PUT
 	@Path("/id/{projectId}/{value}")
-	@ApiOperation(value = "Update a state.",
-		notes = "Updates an existing state, and returns the complete updated record.",
+	@ApiOperation(value = "Update a status.",
+		notes = "Updates an existing status, and returns the complete updated record.",
 		response = Status.class)
 	public Response updateStatus(
-		@ApiParam(value = "ID of project that the state belongs to.",
+		@ApiParam(value = "ID of project that the status belongs to.",
 			required = true)
 		@PathParam("projectId") String projectId,
-		@ApiParam(value = "The state's value that needs to be updated.",
+		@ApiParam(value = "The status's value that needs to be updated.",
 			required = true)
 		@PathParam("value") int value,
 		@ApiParam(value = "Status to update", required = true)
@@ -115,33 +115,33 @@ public class StatusResource {
 
 	@DELETE
 	@Path("/{projectOid}/{value}")
-	@ApiOperation(value = "Delete a state",
-		notes = "Delete an existing state.")
+	@ApiOperation(value = "Delete a status",
+		notes = "Delete an existing status.")
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json",
 				value =	"{'Success': 'true'}")}))})
 	public Response deleteStatus(
-		@ApiParam(value = "OID of project that the state belongs to.",
+		@ApiParam(value = "OID of project that the status belongs to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
-		@ApiParam(value = "The state's value that needs to be deleted.",
+		@ApiParam(value = "The status's value that needs to be deleted.",
 			required = true)
 		@PathParam("value") int value) { return null; }
 
 	@DELETE
 	@Path("/id/{projectId}/{value}")
-	@ApiOperation(value = "Delete a state",
-		notes = "Delete an existing state.")
+	@ApiOperation(value = "Delete a status",
+		notes = "Delete an existing status.")
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json",
 				value =	"{'Success': 'true'}")}))})
 	public Response deleteStatus(
-		@ApiParam(value = "ID of project that the state belongs to.",
+		@ApiParam(value = "ID of project that the status belongs to.",
 			required = true)
 		@PathParam("projectId") String projectId,
-		@ApiParam(value = "The state's value that needs to be deleted.",
+		@ApiParam(value = "The status's value that needs to be deleted.",
 			required = true)
 		@PathParam("value") int value) { return null; }
 }
