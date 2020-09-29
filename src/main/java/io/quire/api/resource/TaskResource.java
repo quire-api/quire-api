@@ -24,7 +24,8 @@ public class TaskResource {
 	public Response createTask(
 		@ApiParam(value = "OID of project or task that this new task to be added to. "
 		+ "If the given OID is a project, the new task will be added as a root task. "
-		+ "If the given OID is a task, the new task will become its subtask.",
+		+ "If the given OID is a task, the new task will become its subtask. "
+		+ "Specify \"*\" if you'd like to add it to My Tasks.",
 		required = true)
 		@PathParam("oid") String oid,
 		@ApiParam(value = "Task to create", required = true)
@@ -37,7 +38,8 @@ public class TaskResource {
 		response = Task.class)
 	public Response createTaskByProject(
 		@ApiParam(value = "ID of project that this new task to be added to. "
-		+ "The new task will be added as a root task.",
+		+ "The new task will be added as a root task. "
+		+ "Specify \"*\" if you'd like to add it to My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "Task to create", required = true)
@@ -80,7 +82,9 @@ public class TaskResource {
 		response = Task.class,
 		responseContainer = "List")
 	public Response getTasksByOid(
-		@ApiParam(value = "OID of project or parent task to look for", required = true)
+		@ApiParam(value = "OID of project or parent task to look for",
+		notes = "Specify \"*\" if you'd like to retrieve My Tasks.",
+		required = true)
 		@PathParam("oid") String oid) { return null; }
 
 	@GET
@@ -90,7 +94,9 @@ public class TaskResource {
 		response = Task.class,
 		responseContainer = "List")
 	public Response getRootTasks(
-		@ApiParam(value = "ID of project.", required = true)
+		@ApiParam(value = "ID of project.",
+		notes = "Specify \"*\" if you'd like to retrieve My Tasks.",
+		required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
 	@GET
@@ -102,7 +108,9 @@ public class TaskResource {
 		response = Task.class,
 		responseContainer = "List")
 	public Response getSubtasks(
-		@ApiParam(value = "ID of the project.", required = true)
+		@ApiParam(value = "ID of the project.",
+		notes = "Specify \"*\" if you'd like to retrieve My Tasks.",
+		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the parent task.", required = true)
 		@PathParam("taskId") int taskId) { return null; }
@@ -117,7 +125,8 @@ public class TaskResource {
 		responseContainer = "List")
 	public Response searchTasksByOid(
 		@ApiParam(value = "OID of the project to search for the tasks.",
-			required = true)
+		notes = "Specify \"*\" if you'd like to search My Tasks.",
+		required = true)
 		@PathParam("projectOid") String projectOid,
 
 		@ApiParam(value = "Text to do a full-text search against the name, "
@@ -157,7 +166,8 @@ public class TaskResource {
 		responseContainer = "List")
 	public Response searchTasksById(
 		@ApiParam(value = "ID of the project to search for the tasks.",
-			required = true)
+		notes = "Specify \"*\" if you'd like to search My Tasks.",
+		required = true)
 		@PathParam("projectId") String projectOid,
 
 		@ApiParam(value = "Text to do a full-text search against the name, "
@@ -206,7 +216,9 @@ public class TaskResource {
 		notes = "Returns the full task record for a single task.",
 		response = Task.class)
 	public Response getTaskById(
-		@ApiParam(value = "ID of the project that the task belongs to.", required = true)
+		@ApiParam(value = "ID of the project that the task belongs to.",
+		notes = "Specify \"*\" if you'd like to retrieve My Tasks.",
+		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
 		@PathParam("id") int id) { return null; }
@@ -228,7 +240,9 @@ public class TaskResource {
 		notes = "Updates an existing task, and returns the full updated record.",
 		response = Task.class)
 	public Response updateTaskById(
-		@ApiParam(value = "ID of the project that the task belongs to.", required = true)
+		@ApiParam(value = "ID of the project that the task belongs to.",
+		notes = "Specify \"*\" if you'd like to update My Tasks.",
+		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the task that needs to be updated", required = true)
 		@PathParam("id") int id,
