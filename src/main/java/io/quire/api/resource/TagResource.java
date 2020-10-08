@@ -19,7 +19,8 @@ public class TagResource {
 		notes = "Add a new tag into a project.",
 		response = Tag.class)
 	public Response createTag(
-		@ApiParam(value = "OID of project that this new tag to be added to.",
+		@ApiParam(value = "OID of project that this new tag to be added to."
+			+ "Specify \"-\" if you'd like to add it to My Tasks.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
 		@ApiParam(value = "Tag to create", required = true)
@@ -31,7 +32,8 @@ public class TagResource {
 		notes = "Add a new tag into a project.",
 		response = Tag.class)
 	public Response createTagToProject(
-		@ApiParam(value = "ID of project that this new tag to be added to.",
+		@ApiParam(value = "ID of project that this new tag to be added to. "
+		+ "Specify \"-\" if you'd like to add it to My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "Tag to create", required = true)
@@ -53,7 +55,9 @@ public class TagResource {
 		response = Tag.class,
         responseContainer = "List")
 	public Response getTagsByProjectOid(
-		@ApiParam(value = "OID of the project.", required = true)
+		@ApiParam(value = "OID of the project. "
+		+ "Specify \"-\" if you'd like to retrieve tags from My Tasks.",
+		required = true)
 		@PathParam("projectOid") String projectOid) { return null; }
 
 	@GET
@@ -63,7 +67,9 @@ public class TagResource {
 		response = Tag.class,
         responseContainer = "List")
 	public Response getTagsByProjectId(
-		@ApiParam(value = "ID of project.", required = true)
+		@ApiParam(value = "ID of project. "
+		+ "Specify \"-\" if you'd like to retrieve tags from My Tasks.",
+		required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
 	@PUT
