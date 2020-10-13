@@ -137,12 +137,14 @@ public class TaskResource {
 
 		@ApiParam(value = "Task name to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
 			+ "To do a full-text search, please use `text` instead.",
 			example = "name=My first task", required = false)
 		@QueryParam(value = "name") String name,
 
 		@ApiParam(value = "Task's description to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`.",
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.",
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
@@ -181,7 +183,8 @@ public class TaskResource {
 		@QueryParam(value = "text") String text,
 
 		@ApiParam(value = "Task name to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`. "
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
 			+ "For example, `name=~abc` matches if `abc` is part of the name. "
 			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
 			+ "To do a full-text search, please use `text` instead.",
@@ -189,7 +192,8 @@ public class TaskResource {
 		@QueryParam(value = "name") String name,
 
 		@ApiParam(value = "Task's description to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`.",
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.",
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
