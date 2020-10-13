@@ -37,9 +37,9 @@ gulp.task('build', function () {
 //  console.log(tests)
 });
 
-gulp.task('test', () =>
-  gulp.src(['./generated/test/*.js'], {read: false})
-    .pipe(mocha({reporter: 'list', exit: true}))
-    .on('error', console.error)
-);
+//gulp.task('test', () =>
+//  gulp.src(['./generated/test/*.js'], {read: false})
+//    .pipe(mocha({reporter: 'list', exit: true}))
+//    .on('error', console.error)
+//);
 
