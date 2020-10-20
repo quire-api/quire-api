@@ -2,8 +2,8 @@
 
 ## October 13, 2020
 
-* In additions to `~`, you can search tasks case-insensitively with a regular expression.
-  * Example: `https://quire.io/api/task/search/id/your-project?name=~*[a-z]`
+* You can search tasks by matching the name and/or description with a regular expression. For case-insensitive matching, you can prefix the regular expression with `~*`. For case senstive, prefix with `~`.
+  * Example: `https://quire.io/api/task/search/id/your-project?name=~Foo[s]&description=~*(green|blue)`
 
 ## October 8, 2020
 
