@@ -82,8 +82,8 @@ public class TaskResource {
 		response = Task.class,
 		responseContainer = "List")
 	public Response getTasksByOid(
-		@ApiParam(value = "OID of project or parent task to look for",
-		notes = "Specify \"-\" if you'd like to retrieve My Tasks.",
+		@ApiParam(value = "OID of project or parent task to look for.\n" +
+			"Specify \"-\" if you'd like to retrieve My Tasks.",
 		required = true)
 		@PathParam("oid") String oid) { return null; }
 
@@ -94,8 +94,8 @@ public class TaskResource {
 		response = Task.class,
 		responseContainer = "List")
 	public Response getRootTasks(
-		@ApiParam(value = "ID of project.",
-		notes = "Specify \"-\" if you'd like to retrieve My Tasks.",
+		@ApiParam(value = "ID of project.\n" +
+			"Specify \"-\" if you'd like to retrieve My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectId) { return null; }
 
@@ -108,8 +108,8 @@ public class TaskResource {
 		response = Task.class,
 		responseContainer = "List")
 	public Response getSubtasks(
-		@ApiParam(value = "ID of the project.",
-		notes = "Specify \"-\" if you'd like to retrieve My Tasks.",
+		@ApiParam(value = "ID of the project.\n" +
+			"Specify \"-\" if you'd like to retrieve My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the parent task.", required = true)
@@ -124,8 +124,8 @@ public class TaskResource {
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksByOid(
-		@ApiParam(value = "OID of the project to search for the tasks.",
-		notes = "Specify \"-\" if you'd like to search My Tasks.",
+		@ApiParam(value = "OID of the project to search for the tasks.\n" +
+			"Specify \"-\" if you'd like to search My Tasks.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
 
@@ -137,12 +137,14 @@ public class TaskResource {
 
 		@ApiParam(value = "Task name to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
 			+ "To do a full-text search, please use `text` instead.",
 			example = "name=My first task", required = false)
 		@QueryParam(value = "name") String name,
 
 		@ApiParam(value = "Task's description to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`.",
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.",
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
@@ -165,8 +167,8 @@ public class TaskResource {
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksById(
-		@ApiParam(value = "ID of the project to search for the tasks.",
-		notes = "Specify \"-\" if you'd like to search My Tasks.",
+		@ApiParam(value = "ID of the project to search for the tasks.\n" +
+			"Specify \"-\" if you'd like to search My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectOid,
 
@@ -179,7 +181,8 @@ public class TaskResource {
 		@QueryParam(value = "text") String text,
 
 		@ApiParam(value = "Task name to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`. "
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
 			+ "For example, `name=~abc` matches if `abc` is part of the name. "
 			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
 			+ "To do a full-text search, please use `text` instead.",
@@ -187,7 +190,8 @@ public class TaskResource {
 		@QueryParam(value = "name") String name,
 
 		@ApiParam(value = "Task's description to match with.\n"
-			+ "To specify a regular expression, you can precede it with `~`.",
+			+ "To specify a regular expression, you can precede it with `~`.\n"
+			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.",
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
@@ -216,8 +220,8 @@ public class TaskResource {
 		notes = "Returns the full task record for a single task.",
 		response = Task.class)
 	public Response getTaskById(
-		@ApiParam(value = "ID of the project that the task belongs to.",
-		notes = "Specify \"-\" if you'd like to retrieve My Tasks.",
+		@ApiParam(value = "ID of the project that the task belongs to.\n" +
+			"Specify \"-\" if you'd like to retrieve My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
@@ -240,8 +244,8 @@ public class TaskResource {
 		notes = "Updates an existing task, and returns the full updated record.",
 		response = Task.class)
 	public Response updateTaskById(
-		@ApiParam(value = "ID of the project that the task belongs to.",
-		notes = "Specify \"-\" if you'd like to update My Tasks.",
+		@ApiParam(value = "ID of the project that the task belongs to.\n" +
+			"Specify \"-\" if you'd like to update My Tasks.",
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the task that needs to be updated", required = true)

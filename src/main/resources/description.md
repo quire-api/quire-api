@@ -193,6 +193,8 @@ A notification is the information about a update (aka., an activity). Here is an
 }
 ```
 
+> There is an optional field called `value` (in the `data` field). It carries the detailed information in a map instance. For example, it carries the assignee's ID, name and URL if it is an assignment.
+
 ## Registration for notifications
 
 If the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:

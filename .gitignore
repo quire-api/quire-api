@@ -6,3 +6,4 @@ node
 node_modules
 package-lock.json
 !build
+quire-api.iml
