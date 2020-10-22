@@ -27,9 +27,9 @@ public class Project extends Identity {
 		example = "https://quire.io/w/my_project")
 	public String getUrl() { return null; }
 
-	@ApiModelProperty(value="OID of the organization this project belongs to.",
-		example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
-	public String getOrganization() { return null; }
+	@ApiModelProperty(value="The organization this project belongs to.",
+		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Foo\"}")
+	public SimpleIdentity getOrganization() { return null; }
 
 	@ApiModelProperty(value = "Total number of tasks in this project.",
 		example = "30")
@@ -53,9 +53,14 @@ public class Project extends Identity {
 
     @ApiModelProperty(value = "When this record was created.", example = "2018-12-22T02:06:58.158Z", position = 99)
     public String getCreatedAt() { return null; }
-    @ApiModelProperty(value = "OID of the user who created this record.", example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", position = 99)
-    public String getCreatedBy() { return null; }
+    @ApiModelProperty(value = "The user who created this record.",
+    	example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"John\"}",
+    	position = 99)
+    public SimpleIdentity getCreatedBy() { return null; }
 
-	@ApiModelProperty(value = "OID of users who follow this task.", position = 60)
-	public List<String> getFollowers() { return null; }
+	@ApiModelProperty(value = "Users who follow this task.", position = 60)
+	public List<SimpleIdentity> getFollowers() { return null; }
+
+	@ApiModelProperty(value = "The attachments of this task.", position = 60)
+	public List<Attachment> getAttachments() { return null; }
 }

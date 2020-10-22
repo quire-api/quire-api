@@ -1,5 +1,11 @@
 # CHANGES
 
+## Upcoming (October 22, 2020)
+
+* The detailed information will be returned as part of `assignees`, `tags` and other fields. For example, the `project` property of the returned task record will be a map of OID, name, color, image and URL.
+  * Note: many APIs are changed. Please adjust your application accordingly.
+* WebHhook added an extra field called `value` to carry the detailed information about a notification. For example, it carries the assignee's ID, name and URL if it is an assignment.
+
 ## October 13, 2020
 
 * You can search tasks by matching the name and/or description with a regular expression. For case-insensitive matching, you can prefix the regular expression with `~*`. For case senstive, prefix with `~`.
