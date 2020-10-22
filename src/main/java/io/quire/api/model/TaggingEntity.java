@@ -16,7 +16,6 @@ public class TaggingEntity extends StampedEntity {
 	public String getColor() { return null; }
 
 	@ApiModelProperty(value="The project this object belongs to.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Foo\"}",
 		position = 99)
 	public SimpleIdentity getProject() { return null; }
 }

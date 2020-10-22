@@ -5,6 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class NamedEntity extends Entity {
-    @ApiModelProperty(value="Name.", example = "My Name")
+    @ApiModelProperty(value="Name.", example = "Foo")
     public String getName() { return null; }
 }

@@ -62,29 +62,3 @@ definitions:
       removeFollowers:
         example:
         - aBuz4MwfZ5CasOae6stnFa2f
-
-  Project:
-    properties:
-      followers:
-        example:
-        - 6QMKkEPBVWETLWrXqws94ALU
-  Task:
-    properties:
-      tags:
-        example:
-        - X6nmx9XjEO2wKbqeB1pRT43C
-        - mPAQrYU1qt8wAYAInKRlTnvl
-      assignees:
-        example:
-        - 6QMKkEPBVWETLWrXqws94ALU
-        - Job4NSW9xK6Owcke8iKj7zyH
-      assignors:
-        example:
-        - 6QMKkEPBVWETLWrXqws94ALU
-        - 6QMKkEPBVWETLWrXqws94ALU
-      followers:
-        example:
-        - 6QMKkEPBVWETLWrXqws94ALU
-      favorites:
-        example:
-        - Job4NSW9xK6Owcke8iKj7zyH

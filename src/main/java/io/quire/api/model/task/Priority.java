@@ -1,7 +1,6 @@
 package io.quire.api.model.task;
 
-import io.quire.api.model.*;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.*;
 
 @ApiModel()
 class Priority {

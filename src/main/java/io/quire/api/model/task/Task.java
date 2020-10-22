@@ -1,7 +1,7 @@
 package io.quire.api.model.task;
 
 import io.quire.api.model.*;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.*;
 
 import java.util.List;
 
@@ -28,15 +28,13 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "Description in a form of a HTML fragment converted from markdown.", example = "This is a <i>cool</i> task.", position = 3)
 	public String getDescriptionHtml() { return null; }
 
-	@ApiModelProperty(value = "The status of this task.",
-		example = "0", position = 4)
-	public Status getStatus() { return 0; }
+	@ApiModelProperty(value = "The status of this task.", position = 4)
+	public Status getStatus() { return null; }
 
 	@ApiModelProperty(value = "The priority of this task. "
 		+ "Its value must be between -1 (lowest) and 2 (highest). "
-		+ "Default: 0.",
-		example = "0", position = 4)
-	public Priority getPriority() { return 0; }
+		+ "Default: 0.", position = 4)
+	public Priority getPriority() { return null; }
 
 	@ApiModelProperty(value = "Tags that are tagged to this task.", position = 5)
 	public List<SimpleTaggingEntity> getTags() { return null; }
@@ -66,18 +64,15 @@ public class Task extends StampedEntity {
 
 	@ApiModelProperty(value = "The external team that this task belongs to. "
 		+ "It is null if this task doesn't belong to any external team.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Friends\"}",
 		position = 5)
 	public SimpleTaggingEntity getPartner() { return null; }
 	@ApiModelProperty(value = "The user who assigned this task to an external team. "
 		+ "It is null if this task doesn't belong to any external team.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"John\"}",
 		position = 5)
 	public SimpleIdentity getPartnerBy() { return null; }
 
 	@ApiModelProperty(value = "The board that this task was added to. "
 		+ "It is null if this task doesn't belong to any board.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Stage 1\"}",
 		position = 6)
 	public SimpleIdentity getBoard() { return null; }
 	@ApiModelProperty(value = "The order of this task shown on the board. "
@@ -105,7 +100,6 @@ public class Task extends StampedEntity {
 	@ApiModelProperty(value = "When this task's state was changed last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getToggledAt() { return null; }
 	@ApiModelProperty(value = "The user who changed this task's state. ",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"John\"}",
 		position = 50)
 	public SimpleIdentity getToggledBy() { return null; }
 
@@ -127,7 +121,6 @@ public class Task extends StampedEntity {
 	public String getUrl() { return null; }
 
 	@ApiModelProperty(value="The project this task belongs to.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Foo\"}",
 		position = 99)
 	public SimpleIdentity getProject() { return null; }
 }

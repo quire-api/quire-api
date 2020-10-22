@@ -1,9 +1,7 @@
 package io.quire.api.model.comment;
 
-import io.quire.api.model.Attachment;
-import io.quire.api.model.StampedEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.quire.api.model.*;
+import io.swagger.annotations.*;
 
 import java.util.List;
 
@@ -31,7 +29,6 @@ public class Comment extends StampedEntity {
 	public String getPinAt() { return null; }
 	@ApiModelProperty(value = "The user who pinned this comment, "
 		+ "or null if not pinned.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"John\"}",
 		position = 50)
 	public SimpleIdentity getPinBy() { return null; }
 
@@ -41,17 +38,14 @@ public class Comment extends StampedEntity {
 	public String getEditedAt() { return null; }
 	@ApiModelProperty(value = "The user who edited this comment, "
 		+ "or null if not edited.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"John\"}",
 		position = 50)
 	public SimpleIdentity getEditedBy() { return null; }
 
 	@ApiModelProperty(value = "Url of this comment on Quire website.",
-		example = "https://quire.io/w/my_project/My_Project#comment-iDsPd.QP_qM.hN.Trymukn8b",
 		position = 50)
 	public String getUrl() { return null; }
 
 	@ApiModelProperty(value="The object this comment was added to.",
-		example = "{\"oid\": \"Dyh2YkFcu9uLgLFIeN1kB4Ld\", \"type\": \"Task\"}",
 		position = 99)
 	public CommentOwner getOwner() { return null; }
 }

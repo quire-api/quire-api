@@ -1,8 +1,7 @@
 package io.quire.api.model.board;
 
-import io.quire.api.model.Identity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.quire.api.model.*;
+import io.swagger.annotations.*;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class Board extends Identity {
 
 	@ApiModelProperty(value = "The external team that this board belongs to. "
 		+ "It is null if this board can't be accessed by a member of external teams.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Friends\"}",
 		position = 15)
 	public SimpleTaggingEntity getPartner() { return null; }
 
@@ -47,14 +45,12 @@ public class Board extends Identity {
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value="The project this board belongs to.",
-		example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"Foo\"}",
 		position = 99)
 	public SimpleIdentity getProject() { return null; }
 
     @ApiModelProperty(value = "When this record was created.", example = "2018-12-22T02:06:58.158Z", position = 99)
     public String getCreatedAt() { return null; }
     @ApiModelProperty(value = "The user who created this record.",
-    	example = "{\"oid\": \"rcBHBYXZSiyDRrHrWPutatfF\", \"name\": \"John\"}",
     	position = 99)
     public SimpleIdentity getCreatedBy() { return null; }
 }

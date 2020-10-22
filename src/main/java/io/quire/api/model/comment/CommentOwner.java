@@ -1,9 +1,7 @@
 package io.quire.api.model.comment;
 
-import io.quire.api.model.Attachment;
-import io.quire.api.model.StampedEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.quire.api.model.NamedEntity;
+import io.swagger.annotations.*;
 
 @ApiModel()
 public class CommentOwner extends NamedEntity {
