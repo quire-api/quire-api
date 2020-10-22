@@ -1,6 +1,6 @@
 # CHANGES
 
-## Upcoming (October 22, 2020)
+## October 22, 2020
 
 * The detailed information will be returned as part of `assignees`, `tags` and other fields. For example, the `project` property of the returned task record will be a map of OID, name, color, image and URL.
   * Note: many APIs are changed. Please adjust your application accordingly.
