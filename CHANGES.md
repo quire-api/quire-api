@@ -1,5 +1,9 @@
 # CHANGES
 
+## Upcoming
+
+* API to manange sublists are added.
+
 ## October 22, 2020
 
 * The detailed information will be returned as part of `assignees`, `tags` and other fields. For example, the `project` property of the returned task record will be a map of OID, name, color, image and URL.

@@ -38,19 +38,9 @@ public class UpdateSublistBody {
 		example = "2020-01-22T02:06:58.158Z")
 	public String getDue() { return null; }
 
-	@ApiModelProperty(value = "(Optional) A list of tasks to add to this sublist. "
-		+ "Whether to include all their descendants depends on the descendants argument.")
-	public List<String> getAddTasks() { return null; }
-
-	@ApiModelProperty(value = "(Optional) A list of tasks to remove from this sublist. "
-		+ "Whether to include all their descendants depends on the descendants argument.")
-	public List<String> getRemoveTasks() { return null; }
-
-	@ApiModelProperty(example = "true",
-		value = "(Optional) Specify false to exclude descendants. "
-		+ "That is, if false, only the specified tasks will be added/removed.\n"
-		+ "Default: true.")
-	public boolean getDescendants() { return true; }
+	@ApiModelProperty(value = "(Optional) A list of changes to control what tasks to be "
+		+ "added to or removed from this sublist.")
+	public List<Change> getChanges() { return null; }
 
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true to archive this sublist. "
