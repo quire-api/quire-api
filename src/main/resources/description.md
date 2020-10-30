@@ -193,7 +193,8 @@ A notification is the information about a update (aka., an activity). Here is an
 }
 ```
 
-> There is an optional field called `value` (in the `data` field). It carries the detailed information in a map instance. For example, it carries the assignee's ID, name and URL if it is an assignment.
+> There is an optional field called `value` in the map of the `data` field. It carries the detailed information in a map instance. For example, it carries the assignee's ID, name and URL if it is an assignment.
+> Also, if the notification is about *start* or *due*, there will be another field called `due` in the map of the `data` field. It is the date time formatted in user's locale and time zone.
 
 ## Registration for notifications
 
