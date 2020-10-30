@@ -59,14 +59,18 @@ public class UpdateTaskBody {
 
 	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
 		value = "(Optional) An optional start time. "
-		+ "Note: if time is specified, the millisecond must be `001`. "
-		+ "Otherwise, it is `000` (so are the hour, minute and second fields).")
+		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
+		+ "e.g., `2020-10-30T09:30Z`.\n"
+		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`."
+		+ "Note: they must be in UTC time.")
 	public String getStart() { return null; }
 
 	@ApiModelProperty(example = "2018-12-22T00:00:00.000Z",
-		value = "(Optional) An optional start time. "
-		+ "Note: if time is specified, the millisecond must be `001`. "
-		+ "Otherwise, it is `000` (so are the hour, minute and second fields).")
+		value = "(Optional) An optional due time. "
+		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
+		+ "e.g., `2020-10-30T09:30Z`.\n"
+		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`."
+		+ "Note: they must be in UTC time.")
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value = "(Optional) The recurring information of this task. "

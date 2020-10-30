@@ -40,14 +40,18 @@ public class Task extends StampedEntity {
 	public List<SimpleTaggingEntity> getTags() { return null; }
 
 	@ApiModelProperty(value = "When to start this task."
-		+ "Note: if time is specified, the millisecond will be `001`. "
-		+ "Otherwise, it is `000` (so are the hour, minute and second fields).",
-		example = "2018-12-20T00:00:00.000Z", position = 4)
+		+ "If the time is also set, it returns in the format of "
+		+ "`yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.\n"
+		+ "If not, it returns in the format of `yyyy-mm-dd`, e.g., `2020-10-30`."
+		+ "Note: the are both in UTC time.",
+		example = "2020-10-30", position = 4)
 	public String getStart() { return null; }
 	@ApiModelProperty(value = "When to complete this task. "
-		+ "Note: if time is specified, the millisecond will be 001. "
-		+ "Otherwise, it is 000 (so are the hour, minute and second fields).",
-		example = "2018-12-22T00:00:00.000Z", position = 4)
+		+ "If the time is also set, it returns in the format of "
+		+ "`yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.\n"
+		+ "If not, it returns in the format of `yyyy-mm-dd`, e.g., `2020-10-30`."
+		+ "Note: the are both in UTC time.",
+		example = "2020-10-30", position = 4)
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value = "The recurring information of this task. "
