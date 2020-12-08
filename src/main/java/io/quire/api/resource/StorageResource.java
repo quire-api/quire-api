@@ -53,8 +53,11 @@ public class StorageResource {
 		notes = "Updates the value of the given name. If it doesn't exist, "
 			+"it adds the name to the given value.\n"
 			+"If the value is null, it is the same as deletion.\n"
-			+"It returns true if the value is updated or added successfully.",
-		response = Boolean.class)
+			+"It returns true if the value is updated or added successfully.")
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "ok",
+			examples = @Example({@ExampleProperty(mediaType = "application/json",
+				value =	"{'success': true}")}))})
 	public Response updateValue(
 		@ApiParam(value = "The name.\nExample: \"latest\"", required = true)
 		@PathParam("name") String name,
@@ -68,8 +71,11 @@ public class StorageResource {
 		notes = "Maps a name to the current user. The name can be anything, "
 			+"but it is usually the current user's name in a third-party application.\n"
 			+"It is useful if you'd like to retrieve a user from a name in "
-			+"a third-party application.",
-		response = Boolean.class)
+			+"a third-party application.")
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "ok",
+			examples = @Example({@ExampleProperty(mediaType = "application/json",
+				value =	"{'success': true}")}))})
 	public Response updateUserMapping(
 		@ApiParam(value = "The name.\nExample: \"John at Slack\"", required = true)
 		@PathParam("name") String name) { return null; }
@@ -79,8 +85,11 @@ public class StorageResource {
 	@ApiOperation(value = "Delete the value of the given name",
 		notes = "Delete the value of the given name.\n"
 			+"It returns true if the value is deleted successfully, "
-			+"or false if the name doesn't exist.",
-		response = Boolean.class)
+			+"or false if the name doesn't exist.")
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "ok",
+			examples = @Example({@ExampleProperty(mediaType = "application/json",
+				value =	"{'success': true}")}))})
 	public Response deleteValue(
 		@ApiParam(value = "The name.\nExample: \"latest\"", required = true)
 		@PathParam("name") String name) { return null; }
@@ -90,8 +99,11 @@ public class StorageResource {
 	@ApiOperation(value = "Delete the user mapping of the given name",
 		notes = "Delete the user mapping of the given name.\n"
 			+"It returns true if the mapping is deleted successfully, "
-			+"or false if the mapping doesn't exist.",
-		response = Boolean.class)
+			+"or false if the mapping doesn't exist.")
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "ok",
+			examples = @Example({@ExampleProperty(mediaType = "application/json",
+				value =	"{'success': true}")}))})
 	public Response deleteUserMapping(
 		@ApiParam(value = "The name.\nExample: \"latest\"", required = true)
 		@PathParam("name") String name) { return null; }

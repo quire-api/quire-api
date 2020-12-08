@@ -96,7 +96,7 @@ public class BoardResource {
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-				"{'Success': 'true'}")}))})
+				"{'success': true}")}))})
 	public Response deleteBoard(
 		@ApiParam(value = "OID of board that needs to be deleted", required = true)
 		@PathParam("oid") String oid) { return null; }
