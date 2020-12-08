@@ -105,6 +105,8 @@ public class Task extends StampedEntity {
 
 	@ApiModelProperty(value = "Users who follow this task.", position = 60)
 	public List<SimpleIdentity> getFollowers() { return null; }
+	@ApiModelProperty(value = "Users who don't want any nofications of this task even they're assinged to it.", position = 60)
+	public List<SimpleIdentity> getMutes() { return null; }
 	@ApiModelProperty(value = "Users who favorite this task.", position = 60)
 	public List<SimpleIdentity> getFavorites() { return null; }
 

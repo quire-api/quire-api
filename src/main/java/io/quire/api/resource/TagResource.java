@@ -90,7 +90,7 @@ public class TagResource {
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json",
-				value =	"{'Success': 'true'}")}))})
+				value =	"{'success': true}")}))})
 	public Response deleteTag(
 		@ApiParam(value = "OID of tag that needs to be deleted", required = true)
 		@PathParam("oid") String oid) { return null; }
