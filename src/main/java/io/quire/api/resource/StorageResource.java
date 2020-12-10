@@ -1,9 +1,9 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.SimpleIdentity;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.quire.api.model.storage.Storage;
+import io.quire.api.model.storage.StorageMap;
+import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -21,7 +21,7 @@ public class StorageResource {
 		notes =
 		"Returns all stored values that start with the given prefix.\n"
 		+ "Note: at most 20 items are returned for each query.",
-		response = Map.class)
+		response = Storage.class)
 	public Response getValues(
 		@ApiParam(value = "A prefix (optional).\nExample: \"foo\"."
 			+"If not specified, all values are returned.", required = false)
@@ -31,7 +31,7 @@ public class StorageResource {
 	@Path("/{name}")
 	@ApiOperation(value = "Get the value of the given name.",
 		notes = "Returns the value of the given name, or null if not found.",
-		response = Object.class)
+		response = StorageMap.class)
 	public Response getValue(
 		@ApiParam(value = "The name.\nExample: \"latest\"", required = true)
 		@PathParam("name") String name) { return null; }
@@ -42,7 +42,7 @@ public class StorageResource {
 		notes = "Returns the user of the given name in a third-party application, "
 		+ "or null if not found.",
 		response = SimpleIdentity.class)
-	public Response getValue(
+	public Response getUserValue(
 		@ApiParam(value = "The user's name in a third-party application.\n"
 			+"Example: \"John at Slack\"", required = true)
 		@PathParam("name") String name) { return null; }
@@ -63,7 +63,7 @@ public class StorageResource {
 		@PathParam("name") String name,
 		@ApiParam(value = "The value to store. It can be any object that can "
 			+"be stored as a JSON object", required = true)
-		Object data) { return null; }
+		StorageMap data) { return null; }
 
 	@PUT
 	@Path("/user/{name}")
