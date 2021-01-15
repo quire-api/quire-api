@@ -1,6 +1,6 @@
 package io.quire.api.model.sublist;
 
-import io.quire.api.model.Identity;
+import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

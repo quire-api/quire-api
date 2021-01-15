@@ -16,10 +16,6 @@ info:
 host: quire.io
 basePath: /api
 tags:
-  - name: board
-    description: >-
-      A board is a group of columns that an user can visualize the progress of
-      tasks.
   - name: comment
     description: A comment that an user can put to a task or project.
   - name: organization
@@ -33,10 +29,14 @@ tags:
       A project represents a prioritized list of tasks in Quire. It exists in a
       single organization and is accessible to a subset of users in that
       organization, depending on its permissions.
+  - name: status
+    description: A status is a value to indicate the progress of a task.
   - name: storage
     description: >-
       A storage to store application specifica data, or to map a user's name in
       a third-party application, such as Slack, to a Quire user.
+  - name: sublist
+    description: A sublist is a collections of tasks. It represents a subset of all tasks.
   - name: tag
     description: A tag is a label that can be attached to any task in Quire.
   - name: task
@@ -50,190 +50,6 @@ tags:
 schemes:
   - https
 paths:
-  '/board/id/{projectId}':
-    post:
-      tags:
-        - board
-      summary: Add a new board.
-      description: Add a new board into a project.
-      operationId: createBoardToProject
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of project that this new board to be added to.
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Board to create
-          required: true
-          schema:
-            $ref: '#/definitions/CreateBoardBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Board'
-  '/board/id/{projectId}/{id}':
-    get:
-      tags:
-        - board
-      summary: Get an existing board by its ID.
-      description: Returns the full board record of the given ID.
-      operationId: getBoardById
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of the project that the board belongs to.
-          required: true
-          type: integer
-          format: int32
-        - name: id
-          in: path
-          description: ID of the board that needs to be fetched
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Board'
-  '/board/list/id/{projectId}':
-    get:
-      tags:
-        - board
-      summary: Get all boards of the given project by its ID.
-      description: Returns all board records of the given project by its ID.
-      operationId: getBoardsByProjectId
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of project.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Board'
-  '/board/list/{projectOid}':
-    get:
-      tags:
-        - board
-      summary: Get all boards of the given project by its OID.
-      description: Returns all board records of the given project by its OID.
-      operationId: getBoardsByProjectOid
-      produces:
-        - application/json
-      parameters:
-        - name: projectOid
-          in: path
-          description: OID of the project.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Board'
-  '/board/{oid}':
-    get:
-      tags:
-        - board
-      summary: Get an existing board by its OID
-      description: Returns the full board record of the given OID.
-      operationId: getBoard
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of board that needs to be fetched.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Board'
-    put:
-      tags:
-        - board
-      summary: Update a board.
-      description: 'Updates an existing board, and returns the complete updated record.'
-      operationId: updateBoard
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of board that needs to be updated
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Board to update
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateBoardBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Board'
-    delete:
-      tags:
-        - board
-      summary: Delete a board
-      description: Delete an existing board of the given OID.
-      operationId: deleteBoard
-      produces:
-        - application/json
-      parameters:
-        - name: oid
-          in: path
-          description: OID of board that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
-  '/board/{projectOid}':
-    post:
-      tags:
-        - board
-      summary: Add a new board.
-      description: Add a new board into a project.
-      operationId: createBoard
-      produces:
-        - application/json
-      parameters:
-        - name: projectOid
-          in: path
-          description: OID of project that this new board to be added to.
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Board to create
-          required: true
-          schema:
-            $ref: '#/definitions/CreateBoardBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Board'
   '/comment/id/{projectId}':
     post:
       tags:
@@ -772,6 +588,262 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Project'
+  '/status/id/{projectId}':
+    post:
+      tags:
+        - status
+      summary: Add a new status.
+      description: Add a new status into a project.
+      operationId: createStatusToProject
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project that this new status to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Status to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateStatusBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Status'
+  '/status/id/{projectId}/{value}':
+    get:
+      tags:
+        - status
+      summary: Get the status of the given value.
+      description: Returns the full status record of the given value.
+      operationId: getStatusByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project that the status belongs to.
+          required: true
+          type: string
+        - name: value
+          in: path
+          description: The status's value that needs to be fetched.
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Status'
+    put:
+      tags:
+        - status
+      summary: Update a status.
+      description: 'Updates an existing status, and returns the complete updated record.'
+      operationId: updateStatusByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project that the status belongs to.
+          required: true
+          type: string
+        - name: value
+          in: path
+          description: The status's value that needs to be updated.
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: body
+          description: Status to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateStatusBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Status'
+    delete:
+      tags:
+        - status
+      summary: Delete a status
+      description: Delete an existing status.
+      operationId: deleteStatusByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project that the status belongs to.
+          required: true
+          type: string
+        - name: value
+          in: path
+          description: The status's value that needs to be deleted.
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ok
+  '/status/list/id/{projectId}':
+    get:
+      tags:
+        - status
+      summary: Get all statuses of the given project by its ID.
+      description: Returns all status records of the given project by its ID.
+      operationId: getStatusesByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Status'
+  '/status/list/{projectOid}':
+    get:
+      tags:
+        - status
+      summary: Get all statuses of the given project by its OID.
+      description: Returns all status records of the given project by its OID.
+      operationId: getStatusesByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of the project.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Status'
+  '/status/{projectOid}':
+    post:
+      tags:
+        - status
+      summary: Add a new status.
+      description: Add a new status into a project.
+      operationId: createStatus
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of project that this new status to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Status to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateStatusBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Status'
+  '/status/{projectOid}/{value}':
+    get:
+      tags:
+        - status
+      summary: Get the status of the given value.
+      description: Returns the full status record of the given value.
+      operationId: getStatusByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of project that the status belongs to.
+          required: true
+          type: string
+        - name: value
+          in: path
+          description: The status's value that needs to be fetched.
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Status'
+    put:
+      tags:
+        - status
+      summary: Update a status.
+      description: 'Updates an existing status, and returns the complete updated record.'
+      operationId: updateStatusByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of project that the status belongs to.
+          required: true
+          type: string
+        - name: value
+          in: path
+          description: The status's value that needs to be updated.
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: body
+          description: Status to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateStatusBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Status'
+    delete:
+      tags:
+        - status
+      summary: Delete a status
+      description: Delete an existing status.
+      operationId: deleteStatusByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of project that the status belongs to.
+          required: true
+          type: string
+        - name: value
+          in: path
+          description: The status's value that needs to be deleted.
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ok
   '/storage/list/{prefix}':
     get:
       tags:
@@ -945,6 +1017,244 @@ paths:
       responses:
         '200':
           description: ok
+  '/sublist/id/{projectId}':
+    post:
+      tags:
+        - sublist
+      summary: Add a new sublist.
+      description: Add a new sublist into a project.
+      operationId: createSublistToProject
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project that this new sublist to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Sublist to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateSublistBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Sublist'
+  '/sublist/id/{projectId}/{id}':
+    get:
+      tags:
+        - sublist
+      summary: Get an existing sublist by its ID.
+      description: Returns the full sublist record of the given ID.
+      operationId: getSublistById
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project that the sublist belongs to.
+          required: true
+          type: integer
+          format: int32
+        - name: id
+          in: path
+          description: ID of the sublist that needs to be fetched
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Sublist'
+    put:
+      tags:
+        - sublist
+      summary: Update a sublist by its ID.
+      description: 'Updates an existing sublist, and returns the complete updated record.'
+      operationId: updateSublist
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project that the sublist belongs to.
+          required: true
+          type: integer
+          format: int32
+        - name: id
+          in: path
+          description: ID of the sublist that needs to be fetched
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Sublist to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateSublistBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Sublist'
+    delete:
+      tags:
+        - sublist
+      summary: Delete a sublist by its ID
+      description: Delete an existing sublist of the given OID.
+      operationId: deleteSublist
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project that the sublist belongs to.
+          required: true
+          type: integer
+          format: int32
+        - name: id
+          in: path
+          description: ID of the sublist that needs to be fetched
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+  '/sublist/list/id/{projectId}':
+    get:
+      tags:
+        - sublist
+      summary: Get all sublists of the given project by its ID.
+      description: Returns all sublist records of the given project by its ID.
+      operationId: getSublistsByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sublist'
+  '/sublist/list/{projectOid}':
+    get:
+      tags:
+        - sublist
+      summary: Get all sublists of the given project by its OID.
+      description: Returns all sublist records of the given project by its OID.
+      operationId: getSublistsByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of the project.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sublist'
+  '/sublist/{oid}':
+    get:
+      tags:
+        - sublist
+      summary: Get an existing sublist by its OID
+      description: Returns the full sublist record of the given OID.
+      operationId: getSublist
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of sublist that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Sublist'
+    put:
+      tags:
+        - sublist
+      summary: Update a sublist.
+      description: 'Updates an existing sublist, and returns the complete updated record.'
+      operationId: updateSublist
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of sublist that needs to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Sublist to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateSublistBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Sublist'
+    delete:
+      tags:
+        - sublist
+      summary: Delete a sublist
+      description: Delete an existing sublist of the given OID.
+      operationId: deleteSublist
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of sublist that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+  '/sublist/{projectOid}':
+    post:
+      tags:
+        - sublist
+      summary: Add a new sublist.
+      description: Add a new sublist into a project.
+      operationId: createSublist
+      produces:
+        - application/json
+      parameters:
+        - name: projectOid
+          in: path
+          description: OID of project that this new sublist to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Sublist to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateSublistBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Sublist'
   '/tag/id/{projectId}':
     post:
       tags:
@@ -1408,18 +1718,12 @@ paths:
           required: false
           type: string
           x-example: description=~john@gooodjob.com
-        - name: board
+        - name: sublist
           in: query
-          description: >-
-            OID of task's board to match with.
-
-            To search tasks without board, you can specify `board=` or
-            `board=none`.
-
-            To search tasks with any board, you can specify `board=any`.
+          description: ID or OID of task's sublist to match with.
           required: false
           type: string
-          x-example: board=9GFBEKOH5J_aZjNhR82Gd9xx
+          x-example: sublist=Top
         - name: status
           in: query
           description: |-
@@ -1493,18 +1797,12 @@ paths:
           required: false
           type: string
           x-example: description=~john@gooodjob.com
-        - name: board
+        - name: sublist
           in: query
-          description: >-
-            ID or OID of task's board to match with.
-
-            To search tasks without board, you can specify `board=` or
-            `board=none`.
-
-            To search tasks with any board, you can specify `board=any`.
+          description: ID or OID of task's sublist to match with.
           required: false
           type: string
-          x-example: board=Top
+          x-example: sublist=Top
         - name: status
           in: query
           description: >-
@@ -1736,37 +2034,6 @@ securityDefinitions:
     tokenUrl: 'https://quire.io/oauth/token'
     flow: accessCode
 definitions:
-  AddColumnBody:
-    type: object
-    properties:
-      before:
-        type: integer
-        format: int32
-        example: 75
-        description: >-
-          (Optional) The value of the column that this new column needs to be
-          added before. If specified, the new column will be put before the
-          specified column.
-      color:
-        type: string
-        example: '35'
-        description: >-
-          (Optional) The color. It is an index of our predefined color palette.
-          The first digit is between 0 and 5, and the second between 0 and 7.
-          The color palette can be found in our Quire's color picker.
-      name:
-        type: string
-        example: TODO
-        description: The name.
-      value:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          The status that this column represents. Its value must be between 0
-          and 100. If 100, it means completed. There is exactly one column with
-          completed status.
   Attachment:
     type: object
     properties:
@@ -1799,114 +2066,32 @@ definitions:
         position: 99
         description: The user who created this record.
         $ref: '#/definitions/SimpleIdentity'
-  Board:
+  Change:
     type: object
+    required:
+      - task
     properties:
-      nameText:
-        type: string
-        example: Board 101
-        description: Name but excluding markdown characters.
-      nameHtml:
-        type: string
-        example: Board 101
-        description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: 'https://quire.io/w/my_project?board=Board101'
-        description: Url of this record on Quire website.
-      name:
-        type: string
-        example: Board 101
-        description: Name.
-      id:
-        type: string
-        example: Board101
-        description: ID.
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description but excluding markdown characters.
-      descriptionHtml:
-        type: string
-        example: This is <i>cool</i>!
-        description: Description in a form of a HTML fragment converted from markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
-      iconColor:
-        type: string
-        example: '37'
+      exclude:
+        type: boolean
+        example: false
+        description: |-
+          Whether to exclude the task.
+          Default: false (include).
+      single:
+        type: boolean
+        example: false
         description: >-
-          The color of the icon representing this record. It is an index of our
-          predefined color palette. 
-      image:
+          Whether to include or exclude only the task.
+
+          Default: false -- all descendants tasks will be included or excluded
+          too.
+
+          Note: it won't affect descendants that are explicitly excluded or
+          included before this invocation.
+      task:
         type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: The image representing this record.
-        allowEmptyValue: true
-      oid:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: 'OID, aka. UUID.'
-      columns:
-        type: array
-        position: 10
-        description: The column definitions of this board.
-        items:
-          $ref: '#/definitions/Column'
-      partner:
-        position: 15
-        description: >-
-          The external team that this board belongs to. It is null if this board
-          can't be accessed by a member of external teams.
-        $ref: '#/definitions/SimpleTaggingEntity'
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: When this board was archived. It is null if not archived.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        position: 50
-        description: 'When this board was aimed to complete, or null if not specified.'
-      project:
-        position: 99
-        description: The project this board belongs to.
-        $ref: '#/definitions/SimpleIdentity'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: When this record was created.
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
-  Column:
-    type: object
-    properties:
-      color:
-        type: string
-        example: '35'
-        description: >-
-          The color. It is an index of our predefined color palette. The first
-          digit is between 0 and 5, and the second between 0 and 7. The color
-          palette can be found in our Quire's color picker.
-      name:
-        type: string
-        example: TODO
-        description: The name.
-      value:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          The status that this column represents. Its value must be between 0
-          and 100. If 100, it means completed. There is exactly one column with
-          completed status.
+        example: 2MmYOpJH_ZLeehIjjytH1Rwr
+        description: The task's OID to be included or excluded.
   Comment:
     type: object
     properties:
@@ -1935,15 +2120,15 @@ definitions:
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      url:
+        type: string
+        position: 50
+        description: Url of this comment on Quire website.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: 'When this comment was edited, or null if not edited.'
-      url:
-        type: string
-        position: 50
-        description: Url of this comment on Quire website.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -1989,81 +2174,15 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
-  CreateBoardBody:
-    type: object
-    required:
-      - name
-    properties:
-      name:
-        type: string
-        example: Board 101
-        description: The name of the board.
-      id:
-        type: string
-        example: Board101
-        description: >-
-          (Optional) ID of the board. If omitted, Quire will generate one
-          automatically. It must be unquie in the whole project if specified
-      description:
-        type: string
-        example: '**Great** board to start with.'
-        description: (Optional) An optional description about this task.
-      iconColor:
-        type: string
-        example: '37'
-        description: >-
-          (Optional) The color of the icon representing this record. It is an
-          index of our predefined color palette. 
-      image:
-        type: string
-        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
-        description: (Optional) The image representing this record.
-      columns:
-        type: array
-        description: >-
-          (Optional) The column defintions of this board. If omitted, the
-          default column defintions will be generated. If specified, it must
-          have at least one column whose status is 100.
-        items:
-          $ref: '#/definitions/CreateColumnBody'
-      partner:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 15
-        description: (Optional) OID of the external team that this board belongs to.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        position: 50
-        description: '(Optional) When this board was aimed to complete. '
-  CreateColumnBody:
-    type: object
-    properties:
-      color:
-        type: string
-        example: '35'
-        description: >-
-          (Optional) The color. It is an index of our predefined color palette.
-          The first digit is between 0 and 5, and the second between 0 and 7.
-          The color palette can be found in our Quire's color picker.
-      name:
-        type: string
-        example: TODO
-        description: The name.
-      value:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          The status that this column represents. Its value must be between 0
-          and 100. If 100, it means completed. There is exactly one column with
-          completed status.
   CreateCommentBody:
     type: object
     required:
       - description
     properties:
+      description:
+        type: string
+        example: Adjust style
+        description: The content of the new comment.
       asUser:
         type: boolean
         example: true
@@ -2073,29 +2192,102 @@ definitions:
 
           Default: false -- the comment is marked as created by the user
           authorizing the app.
-      description:
-        type: string
-        example: Adjust style
-        description: The content of the new comment.
       pinned:
         type: boolean
         example: false
         description: '(Optional) Whether to pin this comment. Default: false'
+  CreateStatusBody:
+    type: object
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+        example: Doing
+        description: The name of the status
+      value:
+        type: integer
+        format: int32
+        example: 'true'
+        description: >-
+          The value. It is a non-negative value to indicate the progress. The
+          value must be unique. If it is great or equals to 100, it means the
+          task has been completed.
+      color:
+        type: string
+        example: '35'
+        description: >-
+          (Optional) The color of the status.If not omitted, a color will be
+          generated automatially.
+  CreateSublistBody:
+    type: object
+    required:
+      - name
+    properties:
+      iconColor:
+        type: string
+        example: '37'
+        description: >-
+          (Optional) The color of the icon representing this record. It is an
+          index of our predefined color palette. 
+      image:
+        type: string
+        example: icon-view-kanban
+        description: >-
+          (Optional) The image representing this record. It shall be one of the
+          predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      description:
+        type: string
+        example: '**Great** sublist to start with.'
+        description: (Optional) An optional description about this task.
+      name:
+        type: string
+        example: Sublist 101
+        description: The name of the sublist.
+      id:
+        type: string
+        example: Sublist101
+        description: >-
+          (Optional) ID of the sublist. If omitted, Quire will generate one
+          automatically. It must be unquie in the whole project if specified
+      tasks:
+        type: array
+        description: |-
+          (Optional) A list of tasks' OID that belong to this sublist.
+          Note: all of descendants will be included too.
+        items:
+          type: string
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 15
+        description: (Optional) OID of the external team that this sublist belongs to.
+      personal:
+        type: boolean
+        position: 15
+        description: '(Optional) Whether it is personal. If omitted, false is assumed.'
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        position: 50
+        description: '(Optional) When this sublist was aimed to complete. '
   CreateTagBody:
     type: object
     required:
       - name
     properties:
+      name:
+        type: string
+        example: Later
+        description: The name of the tag
       color:
         type: string
         example: '35'
         description: >-
           (Optional) The color of the tag.If not omitted, a color will be
           generated automatially.
-      name:
-        type: string
-        example: Later
-        description: The name of the tag
       global:
         type: boolean
         example: true
@@ -2105,6 +2297,23 @@ definitions:
     required:
       - name
     properties:
+      description:
+        type: string
+        example: This is a *cool* task.
+        description: (Optional) An optional description about this task.
+      name:
+        type: string
+        example: Design new **logo**
+        description: The name of the task.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional due time. If you'd like to specify time, use
+          `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g.,
+          `2020-10-30`.Note: they must be in UTC time.
       tags:
         type: array
         description: >-
@@ -2199,37 +2408,6 @@ definitions:
 
           Default: false -- the task is marked as created by the user
           authorizing the app.
-      name:
-        type: string
-        example: Design new **logo**
-        description: The name of the task.
-      description:
-        type: string
-        example: This is a *cool* task.
-        description: (Optional) An optional description about this task.
-      board:
-        type: string
-        example: Board101
-        description: |-
-          (Optional) ID or name of the board that this task is assigned to.
-          Note: if board's name is specified, it is case-insensitive.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional due time. If you'd like to specify time, use
-          `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g.,
-          `2020-10-30`.Note: they must be in UTC time.
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          (Optional) An optional status. Its value must be between 0 and 100.
-          Default: 0.
       priority:
         type: integer
         format: int32
@@ -2238,9 +2416,21 @@ definitions:
         description: >-
           (Optional) An optional priority. Its value must be between -1 (lowest)
           and 2 (highest). Default: 0.
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          (Optional) An optional status. Its value must be between 0 and 100.
+          Default: 0.
   Organization:
     type: object
     properties:
+      url:
+        type: string
+        example: 'https://quire.io/c/my_organization'
+        description: Url of this record on Quire website.
       email:
         type: string
         example: info@compony.com
@@ -2254,10 +2444,6 @@ definitions:
         type: string
         example: My Organization
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: 'https://quire.io/c/my_organization'
-        description: Url of this record on Quire website.
       name:
         type: string
         example: My Organization
@@ -2346,6 +2532,10 @@ definitions:
   Project:
     type: object
     properties:
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project'
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Project
@@ -2354,15 +2544,6 @@ definitions:
         type: string
         example: My Project
         description: Name in a form of a HTML fragment converted from markdown.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root tasks in this project.
-      url:
-        type: string
-        example: 'https://quire.io/w/my_project'
-        description: Url of this record on Quire website.
       organization:
         description: The organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
@@ -2384,6 +2565,11 @@ definitions:
         format: int32
         example: 30
         description: Total number of tasks in this project.
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root tasks in this project.
       descriptionText:
         type: string
         example: This is cool!
@@ -2411,6 +2597,11 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: 'OID, aka. UUID.'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2418,23 +2609,18 @@ definitions:
         description: >-
           When this project was archived (aka., peekaboo). It is null if not
           archived.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this task.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       attachments:
         type: array
         position: 60
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2480,6 +2666,10 @@ definitions:
   Referrer:
     type: object
     properties:
+      task:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the task that refers another task.
       when:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2488,10 +2678,6 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who made this reference.
-      task:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the task that refers another task.
   SimpleIdentity:
     type: object
     properties:
@@ -2582,22 +2768,6 @@ definitions:
         example: This is a *cool* task.
         position: 3
         description: Description about this task.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to start this task.Note: if time is specified, the millisecond
-          will be `001`. Otherwise, it is `000` (so are the hour, minute and
-          second fields).
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          The status of this task. Its value must be between 0 and 100. If 100,
-          it means completed.
       priority:
         type: integer
         format: int32
@@ -2606,6 +2776,14 @@ definitions:
         description: >-
           The priority of this task. Its value must be between -1 (lowest) and 2
           (highest). Default: 0.
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          The status of this task. Its value must be between 0 and 100. If 100,
+          it means completed.
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -2614,6 +2792,14 @@ definitions:
           When to complete this task. Note: if time is specified, the
           millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
           and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
       tags:
         type: array
         position: 5
@@ -2626,16 +2812,16 @@ definitions:
         description: Users who are assigned to this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      peekaboo:
-        type: boolean
-        example: true
-        position: 50
-        description: Whether this task was peekabooed. It is null if not peekabooed.
       url:
         type: string
         example: 'https://quire.io/w/my_project/123'
         position: 50
         description: Url of this task on Quire website.
+      peekaboo:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task was peekabooed. It is null if not peekabooed.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2645,6 +2831,28 @@ definitions:
         position: 99
         description: The user who created this record.
         $ref: '#/definitions/SimpleIdentity'
+  Status:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Doing
+        description: The name.
+      value:
+        type: integer
+        format: int32
+        example: 50
+        description: >-
+          The value. It is a non-negative value to indicate the progress. The
+          value must be unique. If it is great or equals to 100, it means the
+          task has been completed.
+      color:
+        type: string
+        example: '35'
+        description: >-
+          The color. It is an index of our predefined color palette. The first
+          digit is between 0 and 5, and the second between 0 and 7. The color
+          palette can be found in our Quire's color picker.
   Storage:
     type: object
     properties:
@@ -2667,6 +2875,119 @@ definitions:
         type: string
         example: My data
         description: Property name
+  Sublist:
+    type: object
+    properties:
+      url:
+        type: string
+        example: 'https://quire.io/w/my_project?sublist=Sublist101'
+        description: Url of this record on Quire website.
+      nameText:
+        type: string
+        example: Sublist 101
+        description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: Sublist 101
+        description: Name in a form of a HTML fragment converted from markdown.
+      name:
+        type: string
+        example: Sublist 101
+        description: Name.
+      id:
+        type: string
+        example: Sublist101
+        description: ID.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is <i>cool</i>!
+        description: Description in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description.
+      iconColor:
+        type: string
+        example: '37'
+        description: >-
+          The color of the icon representing this record. It is an index of our
+          predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: 'OID, aka. UUID.'
+      partner:
+        position: 15
+        description: >-
+          The external team that this sublist belongs to. It is null if this
+          sublist can't be accessed by a member of external teams.
+        $ref: '#/definitions/SimpleTaggingEntity'
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        position: 50
+        description: 'When this sublist was aimed to complete, or null if not specified.'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: When this sublist was archived. It is null if not archived.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
+      owner:
+        position: 99
+        description: The project this sublist belongs to.
+        $ref: '#/definitions/SublistOwner'
+  SublistOwner:
+    type: object
+    properties:
+      url:
+        type: string
+        example: 'https://quire.io/u/my_id'
+        description: Url of this record on Quire website.
+      type:
+        type: string
+        example: Project
+        description: The type of this object.
+      id:
+        type: string
+        example: my_id
+        description: ID.
+      iconColor:
+        type: string
+        example: '37'
+        description: >-
+          The color of the icon representing this record. It is an index of our
+          predefined color palette. 
+      image:
+        type: string
+        example: 'https://quire.s3.amazonaws.com/oid/image.jpg'
+        description: The image representing this record.
+        allowEmptyValue: true
+      name:
+        type: string
+        example: Foo
+        description: Name.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: 'OID, aka. UUID.'
   Tag:
     type: object
     properties:
@@ -2676,6 +2997,10 @@ definitions:
         description: >-
           Whether this is a global tag. Note: it won't be returned if this is
           not a global tag.
+      name:
+        type: string
+        example: Later
+        description: The name.
       color:
         type: string
         example: '35'
@@ -2683,10 +3008,6 @@ definitions:
           The color. It is an index of our predefined color palette. The first
           digit is between 0 and 5, and the second between 0 and 7. The color
           palette can be found in our Quire's color picker.
-      name:
-        type: string
-        example: Later
-        description: The name.
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -2752,22 +3073,6 @@ definitions:
           The recurring information of this task. It is null if it is not a
           recurring task.
         $ref: '#/definitions/Recurring'
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: >-
-          When to start this task.Note: if time is specified, the millisecond
-          will be `001`. Otherwise, it is `000` (so are the hour, minute and
-          second fields).
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          The status of this task. Its value must be between 0 and 100. If 100,
-          it means completed.
       priority:
         type: integer
         format: int32
@@ -2776,6 +3081,14 @@ definitions:
         description: >-
           The priority of this task. Its value must be between -1 (lowest) and 2
           (highest). Default: 0.
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: >-
+          The status of this task. Its value must be between 0 and 100. If 100,
+          it means completed.
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -2784,6 +3097,20 @@ definitions:
           When to complete this task. Note: if time is specified, the
           millisecond will be 001. Otherwise, it is 000 (so are the hour, minute
           and second fields).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: >-
+          When to start this task.Note: if time is specified, the millisecond
+          will be `001`. Otherwise, it is `000` (so are the hour, minute and
+          second fields).
+      partner:
+        position: 5
+        description: >-
+          The external team that this task belongs to. It is null if this task
+          doesn't belong to any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -2798,12 +3125,6 @@ definitions:
           The user who assigned this task to an external team. It is null if
           this task doesn't belong to any external team.
         $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: >-
-          The external team that this task belongs to. It is null if this task
-          doesn't belong to any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       tags:
         type: array
         position: 5
@@ -2822,26 +3143,20 @@ definitions:
         example: 99
         position: 6
         description: >-
-          The order of this task shown on the board. The smaller the number is,
-          the ealier the task is shown. It is meaningless if it doesn't belong
-          to any board.
-      board:
-        position: 6
-        description: >-
-          The board that this task was added to. It is null if this task doesn't
-          belong to any board.
-        $ref: '#/definitions/SimpleIdentity'
-      cover:
-        type: string
-        example: qfqVmUtC
-        position: 8
-        description: The id of the attachment that is used as a cover of this task.
+          The order of this task shown on the board view. The smaller the number
+          is, the ealier the task is shown. It is meaningless if not in a board
+          view.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      cover:
+        type: string
+        example: qfqVmUtC
+        position: 8
+        description: The id of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -2867,21 +3182,21 @@ definitions:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
-        description: When this task's state was changed last time.
+        description: When this task's status was changed last time.
       toggledBy:
         position: 50
-        description: 'The user who changed this task''s state. '
+        description: The user who changed this task's status.
         $ref: '#/definitions/SimpleIdentity'
-      peekaboo:
-        type: boolean
-        example: true
-        position: 50
-        description: Whether this task was peekabooed. It is null if not peekabooed.
       url:
         type: string
         example: 'https://quire.io/w/my_project/123'
         position: 50
         description: Url of this task on Quire website.
+      peekaboo:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task was peekabooed. It is null if not peekabooed.
       followers:
         type: array
         position: 60
@@ -2915,73 +3230,6 @@ definitions:
         position: 99
         description: The user who created this record.
         $ref: '#/definitions/SimpleIdentity'
-  UpdateBoardBody:
-    type: object
-    properties:
-      name:
-        type: string
-        example: Board 101
-        description: (Optional) The name of the board.
-      id:
-        type: string
-        example: Board101
-        description: (Optional) ID of the board.
-      description:
-        type: string
-        example: '**Great** board to start with.'
-        description: (Optional) An optional description about this task.
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this board was aimed to complete. '
-      column:
-        description: (Optional) Updates an existing column with a new content.
-        $ref: '#/definitions/UpdateColumnBody'
-      addColumn:
-        description: (Optional) The new column defintion to be added to this board.
-        $ref: '#/definitions/AddColumnBody'
-      removeColumn:
-        type: integer
-        format: int32
-        example: 75
-        description: (Optional) The status of the column that needs to be deleted.
-      archived:
-        type: boolean
-        example: true
-        description: >-
-          (Optional) Specify true to archive this board. Or, specify false to
-          undo the previous archiving if any.
-  UpdateColumnBody:
-    type: object
-    properties:
-      color:
-        type: string
-        example: '35'
-        description: >-
-          (Optional) The color. It is an index of our predefined color palette.
-          The first digit is between 0 and 5, and the second between 0 and 7.
-          The color palette can be found in our Quire's color picker.
-      name:
-        type: string
-        example: TODO
-        description: (Optional) The new name.
-      value:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: >-
-          (Optional) The new status that this column represents. Its value must
-          be between 0 and 100. If 100, it means completed. There is exactly one
-          column with completed status.
-      target:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: |-
-          The status of the existing column to update with the new content.
-          Note: it must be specified.
   UpdateCommentBody:
     type: object
     properties:
@@ -2996,16 +3244,6 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
-      followers:
-        type: array
-        description: |-
-          (Optional) OID of the users to replace the followers of this project.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
       addFollowers:
         type: array
         description: >-
@@ -3048,6 +3286,80 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
+      followers:
+        type: array
+        description: |-
+          (Optional) OID of the users to replace the followers of this project.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
+  UpdateStatusBody:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Later
+        description: (Optional) The new name of the status.
+      value:
+        type: integer
+        format: int32
+        example: 'true'
+        description: >-
+          (Optional) The new value of the status. It is a non-negative value to
+          indicate the progress. The value must be unique. If it is great or
+          equals to 100, it means the task has been completed.
+      color:
+        type: string
+        example: '35'
+        description: (Optional) The color of the status.
+  UpdateSublistBody:
+    type: object
+    properties:
+      iconColor:
+        type: string
+        example: '37'
+        description: >-
+          (Optional) The color of the icon representing this record. It is an
+          index of our predefined color palette. 
+      image:
+        type: string
+        example: icon-view-kanban
+        description: >-
+          (Optional) The image representing this record. It shall be one of the
+          predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      description:
+        type: string
+        example: '**Great** sublist to start with.'
+        description: (Optional) An optional description about this task.
+      name:
+        type: string
+        example: Sublist 101
+        description: (Optional) The name of the sublist.
+      id:
+        type: string
+        example: Sublist101
+        description: (Optional) ID of the sublist.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this sublist was aimed to complete. '
+      changes:
+        type: array
+        description: >-
+          (Optional) A list of changes to control what tasks to be added to or
+          removed from this sublist.
+        items:
+          $ref: '#/definitions/Change'
+      archived:
+        type: boolean
+        example: true
+        description: >-
+          (Optional) Specify true to archive this sublist. Or, specify false to
+          undo the previous archiving if any.
   UpdateTagBody:
     type: object
     properties:
@@ -3058,14 +3370,14 @@ definitions:
           (Optional) OID of the project this tag shall be limited to. It is used
           only if "global" is also specified and false. Otherwise, it is simply
           ignored.
-      color:
-        type: string
-        example: '35'
-        description: (Optional) The color of the tag.
       name:
         type: string
         example: Later
         description: (Optional) The new name of the tag.
+      color:
+        type: string
+        example: '35'
+        description: (Optional) The color of the tag.
       global:
         type: boolean
         example: true
@@ -3076,6 +3388,23 @@ definitions:
   UpdateTaskBody:
     type: object
     properties:
+      description:
+        type: string
+        example: This is a **cool** task.
+        description: (Optional) Change the description about this task.
+      name:
+        type: string
+        example: New idea
+        description: (Optional) New name of the task.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: >-
+          (Optional) An optional due time. If you'd like to specify time, use
+          `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g.,
+          `2020-10-30`.Note: they must be in UTC time.
       tags:
         type: array
         description: >-
@@ -3088,16 +3417,6 @@ definitions:
           type: string
         example:
           - ITaVbkhh3iVcEcV3vuSLeE2k
-      followers:
-        type: array
-        description: >-
-          (Optional) OID, ID or emails of the users to replace the followers of
-          this task. Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
       addFollowers:
         type: array
         description: >-
@@ -3140,6 +3459,16 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
+      followers:
+        type: array
+        description: >-
+          (Optional) OID, ID or emails of the users to replace the followers of
+          this task. Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       assignees:
         type: array
         description: >-
@@ -3221,31 +3550,6 @@ definitions:
           type: string
         example:
           - Job4NSW9xK6Owcke8iKj7zyH
-      name:
-        type: string
-        example: New idea
-        description: (Optional) New name of the task.
-      description:
-        type: string
-        example: This is a **cool** task.
-        description: (Optional) Change the description about this task.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: >-
-          (Optional) An optional due time. If you'd like to specify time, use
-          `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g.,
-          `2020-10-30`.Note: they must be in UTC time.
-      status:
-        type: integer
-        format: int32
-        example: 100
-        position: 4
-        description: >-
-          (Optional) An optional status to change to. Its value must be between
-          0 and 100. To complete a task, specify 100.
       priority:
         type: integer
         format: int32
@@ -3254,16 +3558,21 @@ definitions:
         description: >-
           (Optional) Change the priority of this task. Its value must be between
           -1 (lowest) and 2 (highest). 
-      board:
-        type: string
-        example: rcBHBYXZSiyDRrHrWPutatfF
-        position: 6
+      status:
+        type: integer
+        format: int32
+        example: 100
+        position: 4
         description: >-
-          (Optional) OID or ID of the board to replace existing board of to this
-          task. If specified, it will replace existing board. 
+          (Optional) An optional status to change to. Its value must be between
+          0 and 100. To complete a task, specify 100.
   User:
     type: object
     properties:
+      url:
+        type: string
+        example: 'https://quire.io/u/john'
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: John
@@ -3272,10 +3581,6 @@ definitions:
         type: string
         example: John
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: 'https://quire.io/u/john'
-        description: Url of this record on Quire website.
       name:
         type: string
         example: John

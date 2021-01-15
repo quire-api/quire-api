@@ -1,8 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.status.UpdateStatusBody;
-import io.quire.api.model.status.CreateStatusBody;
-import io.quire.api.model.status.Status;
+import io.quire.api.model.status.*;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -42,7 +40,7 @@ public class StatusResource {
 	@ApiOperation(value = "Get the status of the given value.",
 		notes = "Returns the full status record of the given value.",
 		response = Status.class)
-	public Response getStatus(
+	public Response getStatusByProjectOid(
 		@ApiParam(value = "OID of project that the status belongs to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
@@ -55,7 +53,7 @@ public class StatusResource {
 	@ApiOperation(value = "Get the status of the given value.",
 		notes = "Returns the full status record of the given value.",
 		response = Status.class)
-	public Response getStatus(
+	public Response getStatusByProjectId(
 		@ApiParam(value = "ID of project that the status belongs to.",
 			required = true)
 		@PathParam("projectId") String projectId,
@@ -88,7 +86,7 @@ public class StatusResource {
 	@ApiOperation(value = "Update a status.",
 		notes = "Updates an existing status, and returns the complete updated record.",
 		response = Status.class)
-	public Response updateStatus(
+	public Response updateStatusByProjectOid(
 		@ApiParam(value = "OID of project that the status belongs to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
@@ -103,7 +101,7 @@ public class StatusResource {
 	@ApiOperation(value = "Update a status.",
 		notes = "Updates an existing status, and returns the complete updated record.",
 		response = Status.class)
-	public Response updateStatus(
+	public Response updateStatusByProjectId(
 		@ApiParam(value = "ID of project that the status belongs to.",
 			required = true)
 		@PathParam("projectId") String projectId,
@@ -121,7 +119,7 @@ public class StatusResource {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json",
 				value =	"{'Success': 'true'}")}))})
-	public Response deleteStatus(
+	public Response deleteStatusByProjectOid(
 		@ApiParam(value = "OID of project that the status belongs to.",
 		required = true)
 		@PathParam("projectOid") String projectOid,
@@ -137,7 +135,7 @@ public class StatusResource {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json",
 				value =	"{'Success': 'true'}")}))})
-	public Response deleteStatus(
+	public Response deleteStatusByProjectId(
 		@ApiParam(value = "ID of project that the status belongs to.",
 			required = true)
 		@PathParam("projectId") String projectId,
