@@ -1,5 +1,9 @@
 # CHANGES
 
+## Upcoming
+
+* API to manange sublists are added.
+
 ## October 30, 2020
 
 * We simplified the format of `due` and `start`. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`. If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`. Note: they must be in UTC time.

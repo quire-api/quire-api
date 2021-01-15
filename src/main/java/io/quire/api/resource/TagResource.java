@@ -94,5 +94,4 @@ public class TagResource {
 	public Response deleteTag(
 		@ApiParam(value = "OID of tag that needs to be deleted", required = true)
 		@PathParam("oid") String oid) { return null; }
-
 }

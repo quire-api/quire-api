@@ -148,11 +148,9 @@ public class TaskResource {
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
-		@ApiParam(value = "ID or OID of task's board to match with.\n"
-			+ "To search tasks without board, you can specify `board=` or `board=none`.\n"
-			+ "To search tasks with any board, you can specify `board=any`.",
-			example = "board=Top", required = false)
-		@QueryParam(value = "board") String board,
+		@ApiParam(value = "ID or OID of task's sublist to match with.",
+			example = "sublist=Top", required = false)
+		@QueryParam(value = "sublist") String sublist,
 
 		@ApiParam(value = "Task's status to match with.\n"
 			+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
@@ -197,11 +195,9 @@ public class TaskResource {
 			example = "description=~john@gooodjob.com", required = false)
 		@QueryParam(value = "description") String description,
 
-		@ApiParam(value = "OID of task's board to match with.\n"
-			+ "To search tasks without board, you can specify `board=` or `board=none`.\n"
-			+ "To search tasks with any board, you can specify `board=any`.",
-			example = "board=9GFBEKOH5J_aZjNhR82Gd9xx", required = false)
-		@QueryParam(value = "board") String board,
+		@ApiParam(value = "ID or OID of task's sublist to match with.",
+			example = "sublist=Top", required = false)
+		@QueryParam(value = "sublist") String sublist,
 
 		@ApiParam(value = "Task's status to match with.\n"
 			+"You can specify a value between 0 and 100.",

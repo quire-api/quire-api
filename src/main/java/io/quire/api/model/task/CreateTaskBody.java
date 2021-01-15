@@ -28,12 +28,6 @@ public class CreateTaskBody {
 	public int getStatus() { return 0; }
 
 	@ApiModelProperty(
-		value = "(Optional) ID or name of the board that this task is assigned to.\n"
-		+ "Note: if board's name is specified, it is case-insensitive.",
-		example = "Board101")
-	public String getBoard() { return null; }
-
-	@ApiModelProperty(
 		value = "(Optional) OID or names of the tags to be added to the new created task.\n"
 		+ "Note: if tag's name is specified, it is case-insensitive.")
 	public List<String> getTags() { return null; }

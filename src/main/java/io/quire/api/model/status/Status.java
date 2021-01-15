@@ -1,19 +1,17 @@
-package io.quire.api.model.board;
+package io.quire.api.model.status;
 
-import io.quire.api.model.Identity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
-public class Column {
-	@ApiModelProperty(example = "TODO",
-		value = "The name.")
+public class Status {
+	@ApiModelProperty(value = "The name.", example = "Doing")
 	public String getName() { return null; }
 
-	@ApiModelProperty(value = "The status that this column represents. "
-		+ "Its value must be between 0 and 100. If 100, it means completed. "
-		+ "There is exactly one column with completed status.",
-		example = "0", position = 4)
+	@ApiModelProperty(example = "50",
+		value = "The value. It is a non-negative value to indicate the progress. "
+			+ "The value must be unique. "
+			+ "If it is great or equals to 100, it means the task has been completed.")
 	public int getValue() { return 0; }
 
 	@ApiModelProperty(example = "35",

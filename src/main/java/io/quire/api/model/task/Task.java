@@ -27,13 +27,9 @@ public class Task extends SimpleTask {
 		position = 5)
 	public SimpleIdentity getPartnerBy() { return null; }
 
-	@ApiModelProperty(value = "The board that this task was added to. "
-		+ "It is null if this task doesn't belong to any board.",
-		position = 6)
-	public SimpleIdentity getBoard() { return null; }
-	@ApiModelProperty(value = "The order of this task shown on the board. "
+	@ApiModelProperty(value = "The order of this task shown on the board view. "
 		+ "The smaller the number is, the ealier the task is shown. "
-		+ "It is meaningless if it doesn't belong to any board.",
+		+ "It is meaningless if not in a board view.",
 		example = "99", position = 6)
 	public int getOrder() { return 0; }
 
@@ -53,9 +49,9 @@ public class Task extends SimpleTask {
 		+ "Note: some of them might no longer exist.", position = 20)
 	public List<Referrer> getReferrers() { return null; }
 
-	@ApiModelProperty(value = "When this task's state was changed last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
+	@ApiModelProperty(value = "When this task's status was changed last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getToggledAt() { return null; }
-	@ApiModelProperty(value = "The user who changed this task's state. ",
+	@ApiModelProperty(value = "The user who changed this task's status.",
 		position = 50)
 	public SimpleIdentity getToggledBy() { return null; }
 
