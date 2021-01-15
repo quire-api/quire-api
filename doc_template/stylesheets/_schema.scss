@@ -184,12 +184,13 @@ table.table {
 
 .json-schema-ref-array {
   &:before {
-    color: $dark-gray;
-    content: "Array<";
+    //color: $dark-gray;
+    //content: "Array<";
   }
   &:after {
-    color: $dark-gray;
-    content: ">";
+    //color: $dark-gray;
+    //content: ">";
+    content: "[]";
   }
 }
 

@@ -170,12 +170,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     padding-bottom: 0.5rem; }
   #spectacle .json-schema-description + .json-schema-properties {
     margin-top: 1.5rem; }
-  #spectacle .json-schema-ref-array:before {
-    color: #8a8a8a;
-    content: "Array<"; }
   #spectacle .json-schema-ref-array:after {
-    color: #8a8a8a;
-    content: ">"; }
+    content: "[]"; }
   #spectacle .json-schema-example:before {
     content: "Example";
     display: block;
