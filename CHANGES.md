@@ -1,6 +1,11 @@
 # CHANGES
 
-## Upcoming
+## April 27, 2021
+
+* URL to get, update or delete a comment has been changed.
+   * The caller must specify project's ID or OID. For example, `comment/id/projectId/commentOid`.
+
+## November, 2020
 
 * API to manange sublists are added.
 
