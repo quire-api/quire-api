@@ -58,7 +58,7 @@ public class CommentResource {
 	@ApiOperation(value = "Get a comment with project's ID",
 		notes = "Returns the full comment record of the given OID.",
 		response = Comment.class)
-	public Response getComment(
+	public Response getCommentById(
 		@ApiParam(value = "ID of the project that the comment is in.", required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "OID of comment that needs to be feteched.", required = true)
@@ -69,7 +69,7 @@ public class CommentResource {
 	@ApiOperation(value = "Get a comment with project's OID",
 		notes = "Returns the full comment record of the given OID.",
 		response = Comment.class)
-	public Response getComment(
+	public Response getCommentByOid(
 		@ApiParam(value = "OID of the project that the comment is in.", required = true)
 		@PathParam("projectOid") String projectOid,
 		@ApiParam(value = "OID of comment that needs to be feteched.", required = true)
@@ -113,7 +113,7 @@ public class CommentResource {
 	@ApiOperation(value = "Update an existing comment with project's ID",
 		notes = "Updates an existing comment, and returns the complete updated comment record.",
 		response = Comment.class)
-	public Response updateComment(
+	public Response updateCommentById(
 		@ApiParam(value = "ID of the project that the comment is in.", required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "OID of the comment that needs to be updated.", required = true)
@@ -126,7 +126,7 @@ public class CommentResource {
 	@ApiOperation(value = "Update an existing comment with project's OID",
 		notes = "Updates an existing comment, and returns the complete updated comment record.",
 		response = Comment.class)
-	public Response updateComment(
+	public Response updateCommentByOid(
 		@ApiParam(value = "OID of the project that the comment is in.", required = true)
 		@PathParam("projectOid") String projectOid,
 		@ApiParam(value = "OID of the comment that needs to be updated.", required = true)
@@ -142,7 +142,7 @@ public class CommentResource {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json", value =
 				"{'success': true}")}))})
-	public Response deleteComment(
+	public Response deleteCommentById(
 		@ApiParam(value = "ID of the project that the comment is in.", required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "OID of comment that needs to be deleted", required = true)
@@ -156,7 +156,7 @@ public class CommentResource {
 		@ApiResponse(code = 200, message = "ok",
 			examples = @Example({@ExampleProperty(mediaType = "application/json", value =
 				"{'success': true}")}))})
-	public Response deleteComment(
+	public Response deleteCommentByOid(
 		@ApiParam(value = "OID of the project that the comment is in.", required = true)
 		@PathParam("projectOid") String projectOid,
 		@ApiParam(value = "OID of comment that needs to be deleted", required = true)
