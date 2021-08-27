@@ -172,6 +172,26 @@ When one event on Quire is triggered, the system will send a payload to the webh
 > A webhook is used by Quire to call an app, while Quire API is used by an app to call Quire.
 > To receive these events, you have to specify a valid URL for Webhooks when configuring your app.
 
+## System Events
+
+A system event is used to notify your app about system or app's activities.
+
+### Token Expiration
+
+When the user has revoked your app's access, or the token has been expired, an event will be sent. You can clean up your storage if ncessary.
+
+```
+{
+  "type": "system",
+  "token": "hook-token-defined-by-you",
+  "secret": "secret-defined-by-you",
+  "data": {
+    "type": "token-revocation",
+    "token": the-refresh-token
+  }
+}
+```
+
 ## Notification Events
 
 A notification is the information about a update (aka., an activity). Here is an example:
@@ -180,6 +200,7 @@ A notification is the information about a update (aka., an activity). Here is an
 {
   "type": "notification",
   "token": "hook-token-defined-by-you",
+  "secret": "secret-defined-by-you",
   "data": {
     "type": 0, //activity's type
     "when": "2019-09-30T08:20:12.000Z",
@@ -296,11 +317,14 @@ To protect the stability of the API and keep it available to all users, Quire en
 Requests that hit any of our rate limits will receive a `429 Too Many Requests` response.
 We may change these quotas or add new quotas in the future.
 
+Here are the limits for free plans.
+
 | Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*
 |---------|------|-------
 | Free | 25  | 120
 
 > Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.
+> For more quota, please refer to [https://quire.io](Pricing).
 
 ## Size limits
 
