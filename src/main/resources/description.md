@@ -179,7 +179,7 @@ A notification is the information about a update (aka., an activity). Here is an
 ```
 {
   "type": "notification",
-  "secret": "client-secret-defined-by-you",
+  "token": "hook-token-defined-by-you",
   "data": {
     "type": 0, //activity's type
     "when": "2019-09-30T08:20:12.000Z",
