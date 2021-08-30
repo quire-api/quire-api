@@ -187,7 +187,7 @@ When the user has revoked your app's access, or the token has been expired, an e
   "secret": "secret-defined-by-you",
   "data": {
     "type": "token-revocation",
-    "token": the-refresh-token
+    "token": "the-refresh-token"
   }
 }
 ```
