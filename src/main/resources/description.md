@@ -67,7 +67,7 @@ You should keep your client secret safe, which means you should never share your
 
 **6. Update your App**
 
-If your app hasn’t been published to Quire App Directory, it will remain as unpublished status. You can still use the configured shareable link in the Developer App Console Distribution to share the app with other users for testing or integration. 
+If your app hasn't been published to Quire App Directory, it will remain as unpublished status. You can still use the configured shareable link in the Developer App Console Distribution to share the app with other users for testing or integration. 
 
 When you make changes to the app, you can use the shareable link to access the development copy as well. Working on your development copy will not affect your live App Directory app. When your updated app is ready to be published and replaced the old version on Quire App Directory, your published app will have a different Client ID to the unpublished one.
 
@@ -178,7 +178,7 @@ A system event is used to notify your app about system or app's activities.
 
 ### Token Expiration
 
-When the user has revoked your app's access, or the token has been expired, an event will be sent. You can clean up your storage if ncessary.
+When the token has been expired or revoked, an event will be sent to your app. You can clean up your storage if necessary.
 
 ```
 {
