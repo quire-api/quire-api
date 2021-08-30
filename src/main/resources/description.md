@@ -236,7 +236,7 @@ If the app wants to receive notifications of a specific projects or tasks, it ca
 
 Where `app` is a keyword. It indicates that the app would like to add to its followers.
 
-In additions, you can specify additional information that will be passed as part of a notification int the following syntaxes.
+In additions, you can specify additional information that will be passed as part of a notification int the following syntax.
 
 **Syntax 1**
 
