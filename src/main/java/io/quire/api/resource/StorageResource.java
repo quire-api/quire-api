@@ -21,7 +21,7 @@ public class StorageResource {
 		notes =
 		"Returns all stored application specific values that start with the given prefix.\n"
 		+ "Note: at most 20 items are returned for each query.",
-		response = Storage.class)
+		response = StorageList.class)
 	public Response getValues(
 		@ApiParam(value = "A prefix (optional).\nExample: \"foo\"."
 			+"If not specified, all values are returned.", required = false)

@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
-public class Storage {
+public class StorageList {
     @ApiModelProperty(value = "Property name",
             example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
     public String getCurrentProject() { return null; }
