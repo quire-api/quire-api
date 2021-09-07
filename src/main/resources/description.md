@@ -324,7 +324,7 @@ Here are the limits for free plans.
 | Free | 25  | 120
 
 > Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.
-> For more quota, please refer to [https://quire.io](Pricing).
+> For more quota, please refer to [https://quire.io](/pricing).
 
 ## Size limits
 
@@ -341,7 +341,7 @@ The size of each request can't be larger than 2MB. Requests that hit this limit 
 | 404  | Not Found             | The specified resource could not be found.
 | 405  | Method not Allowed    | Method not allowed or supported.
 | 409  | Conflict              | There is already a resource with the same criteria.
-| 429  | Too Many Requests     | Exceeded the [rate limit](#section/Rate-limits) for API calls
+| 429  | Too Many Requests     | Exceeded the [rate limit](#rate-limits) for API calls
 | 500  | Internal Server Error | There is an unexpected error.
 | 503  | Service Unavailable   | Server is down for maintenance.
 
