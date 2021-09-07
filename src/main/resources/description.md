@@ -324,7 +324,7 @@ Here are the limits for free plans.
 | Free | 25  | 120
 
 > Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.
-> For more quota, please refer to [https://quire.io](/pricing).
+> For more quota, please refer to [Pricing](/pricing).
 
 ## Size limits
 
