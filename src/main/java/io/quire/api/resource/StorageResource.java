@@ -1,7 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.SimpleIdentity;
-import io.quire.api.model.storage.Storage;
+import io.quire.api.model.storage.StorageList;
 import io.quire.api.model.storage.StorageMap;
 import io.swagger.annotations.*;
 

@@ -1,8 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.SimpleIdentity;
-import io.quire.api.model.storage.Storage;
-import io.quire.api.model.storage.StorageMap;
+import io.quire.api.model.notification.CreateNotificationBody;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -11,7 +9,7 @@ import javax.ws.rs.core.Response;
 @Path("/notification")
 @Api(value = "notification", description =
 	"Sends a notification the user who granted the access.\n"
-	"It is usually to report an error to the user.")
+	+ "It is usually to report an error to the user.")
 @Produces({"application/json"})
 public class NotificationResource {
 	@POST
@@ -24,5 +22,5 @@ public class NotificationResource {
 				value =	"{'success': true}")}))})
 	public Response createNotification(
 		@ApiParam(value = "Message to send", required = true)
-		CreateNotificationBody data) { return null; }
+				CreateNotificationBody data) { return null; }
 }
