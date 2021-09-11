@@ -113,14 +113,19 @@ public class TaskResource {
 		required = true)
 		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the parent task.", required = true)
-		@PathParam("taskId") int taskId) { return null; }
+		@PathParam("taskId") int taskId,
+
+		@ApiParam(value = "Task's status to match with.\n"
+			+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+			+"\"completed\" for completed tasks.",
+			example = "status=active", required = false)
+		@QueryParam(value = "status") String status) { return null; }
 
 	@GET
 	@Path("/search/{projectOid}")
 	@ApiOperation(value = "Searches tasks in the given project.",
 		notes = "Returns task records that match the specified criteria in "
-		+ "the given project.\n\n"
-		+ "Note: it returns at most 50 records, and recent edited first.",
+		+ "the given project.",
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksByOid(
@@ -155,15 +160,22 @@ public class TaskResource {
 		@ApiParam(value = "Task's status to match with.\n"
 			+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
 			+"\"completed\" for completed tasks.",
-			example = "status=100", required = false)
-		@QueryParam(value = "status") String status) { return null; }
+			example = "status=active", required = false)
+		@QueryParam(value = "status") String status,
+
+		@ApiParam(value = "The maximal number of tasks to return.\n"
+			+"Default: 30. That is, at most 30 tasks will be returned.\n"
+			+"You can specify -1 to return all matched tasks.\n\n"
+			+"Note: If the project is on a free plan, the value cannot "
+			+"be larger than 30 or -1 (unlimited).",
+			example = "limit=-1", required = false)
+		@QueryParam(value = "limit") String limit) { return null; }
 
 	@GET
 	@Path("/search/id/{projectId}")
 	@ApiOperation(value = "Searches tasks in the given project.",
 		notes = "Returns task records that match the specified criteria in "
-		+ "the given project.\n\n"
-		+ "Note: it returns at most 50 records, and recent edited first.",
+		+ "the given project.",
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksById(
