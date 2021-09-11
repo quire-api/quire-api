@@ -163,12 +163,17 @@ public class TaskResource {
 			example = "status=active", required = false)
 		@QueryParam(value = "status") String status,
 
+		@ApiParam(value = "Whether the task is scheduled.\n"
+			+"By scheduled we mean either `start` or `due` is specified.",
+			example = "scheduled=true", required = false)
+		@QueryParam(value = "scheduled") boolean scheduled,
+
 		@ApiParam(value = "The maximal number of tasks to return.\n"
 			+"Default: 30. That is, at most 30 tasks will be returned.\n"
-			+"You can specify -1 to return all matched tasks.\n\n"
+			+"You can specify \"no\" to return all matched tasks.\n\n"
 			+"Note: If the project is on a free plan, the value cannot "
-			+"be larger than 30 or -1 (unlimited).",
-			example = "limit=-1", required = false)
+			+"be larger than 30 or \"no\" (unlimited).",
+			example = "limit=no", required = false)
 		@QueryParam(value = "limit") String limit) { return null; }
 
 	@GET

@@ -12,12 +12,12 @@ public class Change {
 	@ApiModelProperty(value = "Whether to exclude the task.\n"
 		+ "Default: false (include).",
 		example = "false")
-	public Boolean getExclude() { return false; }
+	public boolean getExclude() { return false; }
 
 	@ApiModelProperty(value = "Whether to include or exclude only the task.\n"
 		+ "Default: false -- all descendants tasks will be included or excluded too.\n"
 		+ "Note: it won't affect descendants that are explicitly excluded or included "
 		+ "before this invocation.",
 		example = "false")
-	public Boolean getSingle() { return false; }
+	public boolean getSingle() { return false; }
 }
