@@ -163,10 +163,18 @@ public class TaskResource {
 			example = "status=active", required = false)
 		@QueryParam(value = "status") String status,
 
-		@ApiParam(value = "Whether the task is scheduled.\n"
-			+"By scheduled we mean either `start` or `due` is specified.",
+		@ApiParam(value = "Whether to return only tasks that are scheduled.\n"
+			+"By scheduled we mean either `start` or `due` is scheduled.\n"
+			+"If `scheduled=false` is specified, it returns only tasks "
+			+"that neither start nor due is scheduled."
 			example = "scheduled=true", required = false)
 		@QueryParam(value = "scheduled") boolean scheduled,
+
+		@ApiParam(value = "Whether to return only My Tasks.\n"
+			+"By My Tasks we mean tasks that are assigned to me, "
+			+"or tasks that are created by me and scheduled, but not assigned to anyone.",
+			example = "mine=true", required = false)
+		@QueryParam(value = "mine") boolean scheduled,
 
 		@ApiParam(value = "The maximal number of tasks to return.\n"
 			+"Default: 30. That is, at most 30 tasks will be returned.\n"
