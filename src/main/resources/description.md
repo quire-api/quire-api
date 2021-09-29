@@ -311,6 +311,14 @@ For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object 
 }
 ```
 
+## Responding and Retries
+
+When receiving the notification, your Web Hook shall return a status code between 200 and 299 to indicate success.
+
+If 403 or 404 is returned, the registration will be removed, so called *unfollow*. That is, you won't receive further notifications for the same task or project your app *follows*.
+
+If a status code other than above is returned, we will retry 10 minutes later, then 1 hour later, 1 day later and 3 days later.
+
 # Rate limits
 
 To protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. 
