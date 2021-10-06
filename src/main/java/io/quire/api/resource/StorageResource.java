@@ -12,6 +12,21 @@ import javax.ws.rs.core.Response;
 	"A storage to store application specific data.\n"
 	+ "The application specific data is stored per access token. "
 	+ "They will be deleted if the token is revoked or expired.")
+//TODO: add the following description:
+//"**Special Values**\n"
+//"If the name is \"channel\" or \"channel-<i>host</i>\", the value will be shown "
+//"on [My Apps](https://quire.io/r/setting?tab=app). It is used to know "
+//"the status of your app.\n"
+//"Note: `host` in \"channel-<i>host</i>\" must be the OID of the project "
+//"or the organization that the user granted the access to.\n"
+//"The value must be a map. For example,\n"
+//"```\n"
+//"PUT /storage/channel-KocoR0Nr8yCFxGejEdsLZdzG\n"
+//"{\n"
+//"  "id": "app_specific_id",\n"
+//"  "name": "a human readable name or message", //optional. Omitted, `id` will be displayed instead.\n"
+//"  "url": "https://..." //optional. A hyperlink to your website for details.\n"
+//"}\n"
 @Produces({"application/json"})
 public class StorageResource {
 	@GET
