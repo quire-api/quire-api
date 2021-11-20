@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class Recurring {
-	@ApiModelProperty(example = "2048",
+	@ApiModelProperty(example = "9",
 		value = "The type of this recurring."
 		+ "It is 0 if it is weekly. "
 		+ "It is 1 if it is monthly. "
@@ -13,7 +13,7 @@ public class Recurring {
 		+ "It is 3 if it is custom. ")
     public int getType() { return 0; }
 
-	@ApiModelProperty(example = "2048",
+	@ApiModelProperty(example = "1",
 		value = "How often this recurring shall occur. "
 		+ "If the rate is 2 and the type is weekly, it means it shall "
 		+ "occur every two week. "

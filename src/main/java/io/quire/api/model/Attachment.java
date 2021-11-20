@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class Attachment {
-    @ApiModelProperty(example = "2048",
+    @ApiModelProperty(example = "1",
         value = "The type of this attachment."
         + "It is 1 if it is from Google Drive. "
         + "It is 2 if it is stored in Quire.")
@@ -19,7 +19,7 @@ public class Attachment {
         value = "URL of this attachment.")
     public String getUrl() { return null; }
 
-    @ApiModelProperty(example = "2048",
+    @ApiModelProperty(example = "20000",
         value = "The size of this attachment. Unit: bytes.")
     public int getLength() { return 0; }
 
