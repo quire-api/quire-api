@@ -44,7 +44,8 @@ public class StorageResource {
 	@GET
 	@Path("/{name}")
 	@ApiOperation(value = "Get the application specific data of the given name.",
-		notes = "Returns the application specific data of the given name, or null if not found.\n"
+		notes = "Returns the application specific data of the given name\n"
+		+ "If not found, it returns 404 (status code)."
 		+ "Note: application specific data are stored per access token.",
 		response = StorageMap.class)
 	public Response getValue(
