@@ -1,5 +1,10 @@
 # CHANGES
 
+## January 14, 2022
+
+* Storage API's GET: It returns 404 if not found.
+    * Old Spec: it returns 200 with an empty body.
+
 ## April 27, 2021
 
 * URL to get, update or delete a comment has been changed.
