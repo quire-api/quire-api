@@ -1,6 +1,6 @@
 # CHANGES
 
-## January 14, 2022
+## January 17, 2022
 
 * Storage API's GET: It returns 404 if not found.
     * Old Spec: it returns 200 with an empty body.
