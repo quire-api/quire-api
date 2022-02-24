@@ -109,6 +109,30 @@ public class ProjectResource {
             required = true)
         @PathParam("oid") String oid) { return null; }
 
+    @GET
+    @Path("/export-json/id/{id}")
+    @ApiOperation(value = "Export a project into a JSON map by the given ID.",
+        notes = "Returns a JSON map containing the project, all tasks, and so on.\n"
+            + "Note: it is allowed only for projects with professional plan or above.\n"
+            + "Also notice that the allowed number of invocation of this API is more restricted.",
+        response = ProjectJsonMap.class)
+    public Response getProjectJsonById(
+        @ApiParam(value = "ID of project that needs to be exported",
+            required = true)
+        @PathParam("id") String id) { return null; }
+
+    @GET
+    @Path("/export-json/{oid}")
+    @ApiOperation(value = "Export a project into a JSON map by the given OID.",
+        notes = "Returns a JSON map containing the project, all tasks, and so on.\n"
+            + "Note: it is allowed only for projects with professional plan or above.\n"
+            + "Also notice that the allowed number of invocation of this API is more restricted.",
+        response = ProjectJsonMap.class)
+    public Response getProjectJson(
+        @ApiParam(value = "OID of project that needs to be exported",
+            required = true)
+        @PathParam("oid") String oid) { return null; }
+
     @PUT
     @Path("/{oid}")
     @ApiOperation(value = "Update a project.",

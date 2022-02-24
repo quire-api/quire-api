@@ -1,5 +1,10 @@
 # CHANGES
 
+## February 25, 2022
+
+* API to export project into a JSON map is added
+  * `GET /project/export-json`
+
 ## January 17, 2022
 
 * Storage API's GET: It returns 404 if not found.
@@ -12,7 +17,7 @@
 
 ## November, 2020
 
-* API to manange sublists are added.
+* APIs to manange sublists are added.
 
 ## October 30, 2020
 
