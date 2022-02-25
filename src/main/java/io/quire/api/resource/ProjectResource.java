@@ -1,7 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.project.Project;
-import io.quire.api.model.project.UpdateProjectBody;
+import io.quire.api.model.project.*;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
