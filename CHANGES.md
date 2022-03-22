@@ -1,5 +1,10 @@
 # CHANGES
 
+## March 22, 2022
+
+* API to export project into a CSV string is added
+  * `GET /project/export-csv`
+
 ## February 25, 2022
 
 * API to export project into a JSON map is added

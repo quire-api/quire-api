@@ -109,6 +109,55 @@ public class ProjectResource {
         @PathParam("oid") String oid) { return null; }
 
     @GET
+    @Path("/export-csv/id/{id}")
+    @ApiOperation(value = "Export a project into a CSV string by the given ID.",
+        notes = "Returns a JSON string containing the project, tasks, and so on.\n"
+            + "Note: it is allowed only for projects with professional plan or above.\n"
+            + "Also notice that the allowed number of invocation of this API is more restricted.",
+        response = String.class)
+    public Response getProjectCsvById(
+        @ApiParam(value = "ID of project that needs to be exported",
+            required = true)
+        @PathParam("id") String id,
+
+        @ApiParam(value = "Task's status to match with.\n"
+            +"You can specify a value \"active\" for active tasks, "
+            +"\"completed\" for completed tasks, or \"all\" for all tasks.\n"
+            +"Default: all.",
+        @QueryParam(value = "status") String status,
+
+        @ApiParam(value = "Whether to merge all values of the same header into one column.\n"
+            +"Example: All values for tags will be put in the same column.\n"
+            +"Default: false.",
+            example = "merge=true", required = false)
+        @QueryParam(value = "merge") boolean merge) { return null; }
+
+    @GET
+    @Path("/export-csv/{oid}")
+    @ApiOperation(value = "Export a project into a JSON string by the given OID.",
+        notes = "Returns a JSON string containing the project, tasks, and so on.\n"
+            + "Note: it is allowed only for projects with professional plan or above.\n"
+            + "Also notice that the allowed number of invocation of this API is more restricted.",
+        response = String.class)
+    public Response getProjectCsv(
+        @ApiParam(value = "OID of project that needs to be exported",
+            required = true)
+        @PathParam("oid") String oid,
+
+        @ApiParam(value = "Task's status to match with.\n"
+            +"You can specify a value \"active\" for active tasks, "
+            +"\"completed\" for completed tasks, or \"all\" for all tasks.\n"
+            +"Default: all.",
+            example = "status=active", required = false)
+        @QueryParam(value = "status") String status,
+
+        @ApiParam(value = "Whether to merge all values of the same header into one column.\n"
+            +"Example: All values for tags will be put in the same column.\n"
+            +"Default: false.",
+            example = "merge=true", required = false)
+        @QueryParam(value = "merge") boolean merge) { return null; }
+
+    @GET
     @Path("/export-json/id/{id}")
     @ApiOperation(value = "Export a project into a JSON map by the given ID.",
         notes = "Returns a JSON map containing the project, all tasks, and so on.\n"
