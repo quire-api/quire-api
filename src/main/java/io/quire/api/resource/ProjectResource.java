@@ -124,6 +124,7 @@ public class ProjectResource {
             +"You can specify a value \"active\" for active tasks, "
             +"\"completed\" for completed tasks, or \"all\" for all tasks.\n"
             +"Default: all.",
+            example = "status=active", required = false)
         @QueryParam(value = "status") String status,
 
         @ApiParam(value = "Whether to merge all values of the same header into one column.\n"
