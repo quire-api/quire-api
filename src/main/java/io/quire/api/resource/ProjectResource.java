@@ -111,7 +111,7 @@ public class ProjectResource {
     @GET
     @Path("/export-csv/id/{id}")
     @ApiOperation(value = "Export a project into a CSV string by the given ID.",
-        notes = "Returns a JSON string containing the project, tasks, and so on.\n"
+        notes = "Returns a CSV string containing the project, tasks, and so on.\n"
             + "Note: it is allowed only for projects with professional plan or above.\n"
             + "Also notice that the allowed number of invocation of this API is more restricted.",
         response = String.class)
@@ -135,8 +135,8 @@ public class ProjectResource {
 
     @GET
     @Path("/export-csv/{oid}")
-    @ApiOperation(value = "Export a project into a JSON string by the given OID.",
-        notes = "Returns a JSON string containing the project, tasks, and so on.\n"
+    @ApiOperation(value = "Export a project into a CSV string by the given OID.",
+        notes = "Returns a CSV string containing the project, tasks, and so on.\n"
             + "Note: it is allowed only for projects with professional plan or above.\n"
             + "Also notice that the allowed number of invocation of this API is more restricted.",
         response = String.class)
