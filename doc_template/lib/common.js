@@ -196,7 +196,7 @@ var common = {
       // Add an extra CRLR before the code so the postprocessor can determine
       // the correct line indent for the <pre> tag.
 
-    var $ = cheerio.load(marked(tocsv ? "```csv\r\n" + schemaString + "```" : toyaml ? "```yaml\r\n" + schemaString + "```" : "```json\r\n" + schemaString + "\n```"))
+    var $ = cheerio.load(marked(tocsv ? "```plaintext\r\n" + schemaString + "```" : toyaml ? "```yaml\r\n" + schemaString + "```" : "```json\r\n" + schemaString + "\n```"))
     var definitions = $('span:not(:has(span)):contains("#/definitions/")')
     definitions.each(function(index, item) {
       var ref = $(item).html()
