@@ -7,6 +7,7 @@ var _ = require('lodash')
 const SUPPORTED_MIME_TYPES = [
   'text/plain',
   'application/json',
+  'text/csv',
 ]
 
 var common = {
@@ -95,6 +96,9 @@ var common = {
     if (value.examples) {
       for (let mime_type of SUPPORTED_MIME_TYPES) {
         if (value.examples[mime_type]) {
+          if (mime_type == 'text/csv')
+            options.tocsv = true
+
           return value.examples[mime_type]
         }
       }
@@ -183,16 +187,16 @@ var common = {
     console.error('Cannot format example on property ', ref, ref.$ref)
   },
 
-  printSchema: function(value, toyaml) {
+  printSchema: function(value, toyaml, tocsv) {
     if (!value) {
       return '';
     }
     
-    var schemaString = toyaml ? yaml.safeDump(value, {skipInvalid:true}) : JSON.stringify(value, null, 2) 
+    var schemaString = tocsv ? value: toyaml ? yaml.safeDump(value, {skipInvalid:true}) : JSON.stringify(value, null, 2)
       // Add an extra CRLR before the code so the postprocessor can determine
       // the correct line indent for the <pre> tag.
-      
-    var $ = cheerio.load(marked(toyaml ? "```yaml\r\n" + schemaString + "```" : "```json\r\n" + schemaString + "\n```"))
+
+    var $ = cheerio.load(marked(tocsv ? "```csv\r\n" + schemaString + "```" : toyaml ? "```yaml\r\n" + schemaString + "```" : "```json\r\n" + schemaString + "\n```"))
     var definitions = $('span:not(:has(span)):contains("#/definitions/")')
     definitions.each(function(index, item) {
       var ref = $(item).html()

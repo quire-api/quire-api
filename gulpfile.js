@@ -26,7 +26,7 @@ gulp.task('build', function () {
         fs.readFileSync('./src/main/resources/examples.yaml', 'utf8'));
     merge(swaggerMain, swaggerExamples);
 
-    fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain))
+    fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain, {lineWidth: -1}))
 
     spectacleDoc({
         "specFile": swaggerYaml,

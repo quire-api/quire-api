@@ -1,3 +1,32 @@
+paths:
+  '/project/export-csv/id/{id}':
+    get:
+      produces:
+        - text/csv
+      responses:
+        '200':
+          examples:
+            text/csv: |
+              "ID",Name,Status,Started,Completed,Priority,Start,Due,Assignee,Tag,Created,Created by,Description
+              #6,Task A,In Progress,"Mar 8, 2022",,Medium,,"Mar 8, 2022",,,"Mar 7, 2022",John,
+              "#6, #8",Task A1,To-Do,"Jan 24, 2022",,Urgent,,,,,"Mar 7, 2022",John,
+              #7,Task B,In Progress,"Jan 24, 2022",,Urgent,,"Mar 4, 2022",,,"Mar 7, 2022",John,
+              "#7, #9",Task B1,In Progress,"Jan 24, 2022",,Medium,,,,,"Mar 7, 2022",John,
+              "#7, #4",Task B2,In Progress,"Mar 2, 2022",,Medium,,"Mar 8, 2022",,,"Mar 2, 2022",John,
+  '/project/export-csv/{oid}':
+    get:
+      produces:
+        - text/csv
+      responses:
+        '200':
+          examples:
+            text/csv: |
+              "ID",Name,Status,Started,Completed,Priority,Start,Due,Assignee,Tag,Created,Created by,Description
+              #6,Task A,In Progress,"Mar 8, 2022",,Medium,,"Mar 8, 2022",,,"Mar 7, 2022",John,
+              "#6, #8",Task A1,To-Do,"Jan 24, 2022",,Urgent,,,,,"Mar 7, 2022",John,
+              #7,Task B,In Progress,"Jan 24, 2022",,Urgent,,"Mar 4, 2022",,,"Mar 7, 2022",John,
+              "#7, #9",Task B1,In Progress,"Jan 24, 2022",,Medium,,,,,"Mar 7, 2022",John,
+              "#7, #4",Task B2,In Progress,"Mar 2, 2022",,Medium,,"Mar 8, 2022",,,"Mar 2, 2022",John,
 definitions:
   UpdateProjectBody:
     properties:
