@@ -97,8 +97,20 @@ function getLocalStorage(key, decode) { //default: true
 	}
 }
 
+function initHeaderMenuToggle() {
+	var menu = $("#header .navbar-collapse")
+	$("#menu-toggle").click(function() {
+		var isOpen = menu.hasClass('in');
+		menu[isOpen ? 'removeClass': 'addClass']('in');
+		$(this)[isOpen ? 'removeClass': 'addClass']('open');
+		$('.qr-collapse-navbar,.qr-collapse-navbar-768')[isOpen ? 'removeClass': 'addClass']('navbar-fixed-bottom');
+	});
+}
+
 $(function() {
   // $(document).foundation();
+
+  initHeaderMenuToggle();
 
   var $sidebar = $('#sidebar');
   if ($sidebar.length) {
