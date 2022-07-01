@@ -20,13 +20,13 @@ gulp.task('clean', function(cb){
 });
 
 gulp.task('build', function () {
-    var swaggerMain = jsToYaml.safeLoad(
+    var swaggerMain = jsToYaml.load(
         fs.readFileSync('./generated/swagger.yaml', 'utf8'));
-    var swaggerExamples = jsToYaml.safeLoad(
+    var swaggerExamples = jsToYaml.load(
         fs.readFileSync('./src/main/resources/examples.yaml', 'utf8'));
     merge(swaggerMain, swaggerExamples);
 
-    fs.writeFileSync(swaggerYaml, jsToYaml.safeDump(swaggerMain, {lineWidth: -1}))
+    fs.writeFileSync(swaggerYaml, jsToYaml.dump(swaggerMain, {lineWidth: -1}))
 
     spectacleDoc({
         "specFile": swaggerYaml,
