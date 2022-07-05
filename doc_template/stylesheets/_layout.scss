@@ -90,11 +90,12 @@ button:focus {
 
     &:hover {
       color: $text-color;
+      text-decoration: none;
     }
 
     &.active {
       color: $item-active-color;
-      font-weight: 700;
+      // font-weight: 700;
 
       &:hover {
         color: $dark-green-text-color;
@@ -372,7 +373,7 @@ article {
       color: $white;
       //color: $medium-gray;
       font-size: 1rem;
-      opacity: 0.8;
+      //opacity: 0.8;
 
       span {
         opacity: 0.5;

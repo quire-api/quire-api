@@ -63,3 +63,7 @@ tbody tr:nth-child(even) {
 tr {
     border-bottom: 1px solid $border-color;
 }
+
+.no-touch a:hover {
+    text-decoration: underline;
+}

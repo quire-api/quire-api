@@ -68,25 +68,28 @@ $base-strong-weight: 500;
 $base-stronger-weight: 500;
 $base-heavy-weight: 700;
 
-$green-9a: #9AC656;
-$green-7b: #7BB340;
+$green-05: #05843E;
+$green-4a: #4AA433;
 
-$gray-ed: #EDEDED;
-$gray-f8: #F8F8F8;
+$black-8: rgba(0, 0, 0, .08);
+$black-4: rgba(0, 0, 0, .04);
 
-$item-active-color: $green-9a;
-$dark-green-text-color: $green-7b;
+$black: #181D25;
+$white: #F5F5F5;
 
-$text-base: #000;
-$text-color: rgba($text-base, .9);
-$light-text-color: rgba($text-base, .58);
-$lighter-text-color: rgba($text-base, .42);
-$lighter2-text-color: rgba($text-base, .18);
+$item-active-color: $green-05;
+$dark-green-text-color: $green-4a;
 
-$border-color: $gray-ed;
+$text-base: $black;
+$text-color: rgba($text-base, 1);
+$light-text-color: rgba($text-base, .8);
+$lighter-text-color: rgba($text-base, .6);
+$lighter2-text-color: rgba($text-base, .24);
 
-$grey-bg-color: $gray-ed;
-$light-grey-bg-color: $gray-f8;
+$border-color: $black-8;
+
+$grey-bg-color: $black-8;
+$light-grey-bg-color: $black-4;
 
 @mixin lighter-hover-text() {
 	color: $lighter-text-color;
@@ -105,17 +108,15 @@ $foundation-palette: (
   primary: #1779ba,
   secondary: #767676,
   success: #3adb76,
-  warning: #ffae00,
-  alert: #cc4b37,
+  warning: #FFB20F,
+  alert: #EB425E,
 );
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #8a8a8a;
 $light-black: #353a3d;
-$black: rgba(0,0,0,0.9); //#0a0a0a;
-$white: #fefefe;
 $body-background: $white;
-$body-font-color: rgba(0,0,0,0.9);
+$body-font-color: $black;
 $body-font-family: Inter,-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 $body-antialiased: true;
 $global-margin: 1rem;
@@ -216,11 +217,11 @@ $paragraph-text-rendering: optimizeLegibility;
 $code-color: $text-color;
 $code-font-family: $font-family-monospace;
 $code-font-weight: $global-weight-normal;
-$code-background: rgba(0,0,0,.06);
+$code-background: $black-8;
 $code-border: none;
-$code-padding: .2rem .4rem;
-$anchor-color: $green-9a;
-$anchor-color-hover: $green-7b;
+$code-padding: .2rem .2rem;
+$anchor-color: $green-05;
+$anchor-color-hover: $green-4a;
 $anchor-text-decoration: none;
 $anchor-text-decoration-hover: none;
 $hr-width: $global-width;
