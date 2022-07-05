@@ -14,7 +14,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Path";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -22,7 +22,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Description";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -30,7 +30,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Request parameters";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -38,7 +38,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Request body";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -48,7 +48,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Responses";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -60,8 +60,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     line-height: 1;
     white-space: nowrap;
     cursor: default;
-    background: #cc4b37;
-    color: rgba(0, 0, 0, 0.9);
+    background: #EB425E;
+    color: #181D25;
     font-size: 0.75rem;
     border-radius: 4px;
     padding: 3px 6px;
@@ -126,27 +126,27 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Security";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
   #spectacle .swagger-security-definition-basic:before {
-    color: rgba(0, 0, 0, 0.42);
+    color: rgba(24, 29, 37, 0.6);
     content: "(HTTP Basic Authentication)";
     margin-left: 8px; }
   #spectacle .swagger-security-definition-oauth2:before {
-    color: rgba(0, 0, 0, 0.42);
+    color: rgba(24, 29, 37, 0.6);
     content: "(OAuth2 Authentication)";
     margin-left: 8px; }
   #spectacle .swagger-security-definition-apiKey:before {
-    color: rgba(0, 0, 0, 0.42);
+    color: rgba(24, 29, 37, 0.6);
     content: "(API Key Authentication)";
     margin-left: 8px; }
   #spectacle .json-schema-description:before {
     content: "Description";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -154,7 +154,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Properties";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -176,7 +176,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Example";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -184,7 +184,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Items";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -192,7 +192,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Inherited";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -209,7 +209,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     content: "Additional properties";
     display: block;
     margin-bottom: 0.5em;
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(24, 29, 37, 0.8);
     text-transform: uppercase;
     font-size: 0.9rem;
     font-weight: 700; }
@@ -228,8 +228,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     line-height: 1;
     white-space: nowrap;
     cursor: default;
-    background: #cc4b37;
-    color: rgba(0, 0, 0, 0.9);
+    background: #EB425E;
+    color: #181D25;
     font-size: 0.75rem;
     border-radius: 4px;
     padding: 3px 6px;
@@ -242,8 +242,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     line-height: 1;
     white-space: nowrap;
     cursor: default;
-    background: #cc4b37;
-    color: rgba(0, 0, 0, 0.9);
+    background: #EB425E;
+    color: #181D25;
     font-size: 0.75rem;
     border-radius: 4px;
     padding: 3px 6px;
@@ -259,8 +259,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     line-height: 1;
     white-space: nowrap;
     cursor: default;
-    background: #cc4b37;
-    color: rgba(0, 0, 0, 0.9);
+    background: #EB425E;
+    color: #181D25;
     font-size: 0.75rem;
     border-radius: 4px;
     padding: 3px 6px;
@@ -297,7 +297,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     white-space: nowrap;
     cursor: default;
     background: #767676;
-    color: rgba(0, 0, 0, 0.9);
+    color: #F5F5F5;
     font-size: 0.75rem;
     border-radius: 4px;
     padding: 3px 6px; }
@@ -1028,12 +1028,12 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle #sidebar h5 {
       margin: 2.5rem 0 .65rem;
       text-transform: uppercase;
-      color: rgba(0, 0, 0, 0.42);
+      color: rgba(24, 29, 37, 0.6);
       font-size: 0.9rem; }
     #spectacle #sidebar a {
       display: block;
       margin: 0 0 .5rem;
-      color: rgba(0, 0, 0, 0.58);
+      color: rgba(24, 29, 37, 0.8);
       white-space: nowrap;
       overflow: hidden;
       -o-text-overflow: ellipsis;
@@ -1041,12 +1041,12 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       text-transform: capitalize;
       transition: color 0.4s ease 0s; }
       #spectacle #sidebar a:hover {
-        color: rgba(0, 0, 0, 0.9); }
+        color: #181d25;
+        text-decoration: none; }
       #spectacle #sidebar a.active {
-        color: #9AC656;
-        font-weight: 700; }
+        color: #05843E; }
         #spectacle #sidebar a.active:hover {
-          color: #7BB340; }
+          color: #4AA433; }
     #spectacle #sidebar ul {
       list-style-type: none;
       padding: 0;
@@ -1067,7 +1067,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     margin-top: 2em;
     padding-top: 2em;
     padding-bottom: 2em;
-    border-top: 1px solid #EDEDED; }
+    border-top: 1px solid rgba(0, 0, 0, 0.08); }
   #spectacle #docs {
     background: #FFFFFF;
     overflow: hidden;
@@ -1077,7 +1077,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     @media print, screen and (min-width: 64em) {
       #spectacle #docs .example-box {
         display: block;
-        background-color: rgba(0, 0, 0, 0.9);
+        background-color: #181D25;
         position: absolute;
         right: 0;
         top: 0;
@@ -1087,7 +1087,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle article .no-description {
       color: #8a8a8a; }
     #spectacle article dt {
-      color: rgba(0, 0, 0, 0.9); }
+      color: #181D25; }
     #spectacle article table.table {
       width: 100%; }
     #spectacle article code {
@@ -1100,7 +1100,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       text-transform: capitalize;
       margin: 8rem 0 0;
       padding: 3rem 0 2rem 0;
-      border-top: 1px solid #EDEDED; }
+      border-top: 1px solid rgba(0, 0, 0, 0.08); }
     #spectacle article h1.doc-title {
       margin: 0;
       padding-top: 2.15rem;
@@ -1108,7 +1108,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       font-weight: bold;
       background: transparent;
       border: none;
-      color: rgba(0, 0, 0, 0.9); }
+      color: #181d25; }
       #spectacle article h1.doc-title span {
         display: none;
         opacity: 0.65;
@@ -1133,9 +1133,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle article .prop-row {
       padding-top: 0.75em;
       padding-bottom: 0.75em;
-      border-top: 1px solid #EDEDED; }
+      border-top: 1px solid rgba(0, 0, 0, 0.08); }
       #spectacle article .prop-row:first-child, #spectacle article .prop-row.prop-group {
-        border-top: 1px solid #EDEDED; }
+        border-top: 1px solid rgba(0, 0, 0, 0.08); }
       #spectacle article .prop-row .prop-title {
         font-weight: bold; }
       #spectacle article .prop-row .prop-type {
@@ -1169,12 +1169,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle article .doc-examples {
       padding-left: 2.25rem !important;
       padding-right: 2.25rem !important;
-      color: #fefefe;
-      background-color: rgba(0, 0, 0, 0.9); }
+      color: #F5F5F5;
+      background-color: #181D25; }
       #spectacle article .doc-examples h5 {
-        color: #fefefe;
-        font-size: 1rem;
-        opacity: 0.8; }
+        color: #F5F5F5;
+        font-size: 1rem; }
         #spectacle article .doc-examples h5 span {
           opacity: 0.5; }
       @media screen and (max-width: 63.9375em) {
@@ -1203,10 +1202,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         background-color: #353a3d; }
       #spectacle article .doc-examples tbody, #spectacle article .doc-examples tfoot, #spectacle article .doc-examples thead {
         color: #FFFFFF;
-        background-color: rgba(0, 0, 0, 0.9);
+        background-color: #181D25;
         border: 0px; }
       #spectacle article .doc-examples thead {
-        background-color: rgba(0, 0, 0, 0.9); }
+        background-color: #181D25; }
       #spectacle article .doc-examples .swagger-response-headers {
         background-color: transparent;
         border: none;
@@ -1216,7 +1215,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         box-shadow: 0 0 200px rgba(0, 0, 0, 0.33) inset;
         margin-bottom: 1.5rem; }
         #spectacle article .doc-examples .swagger-response-headers thead {
-          color: #fefefe;
+          color: #F5F5F5;
           font-size: 1rem;
           opacity: 0.8;
           background-color: transparent;
@@ -1231,7 +1230,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       font-size: 80%;
       color: #cacaca; }
       #spectacle article .powered-by span {
-        color: rgba(0, 0, 0, 0.58); }
+        color: rgba(24, 29, 37, 0.8); }
     #spectacle article .operation .operation-tags {
       position: absolute;
       top: 0;
@@ -1281,7 +1280,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(254, 254, 254, 0.25); }
+      background-color: rgba(245, 245, 245, 0.25); }
     @media print, screen and (min-width: 64em) {
       #spectacle .drawer-layout .drawer.slide-left {
         transform: none;
@@ -1306,7 +1305,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     position: fixed;
     top: 0.75rem;
     right: 0.75rem;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(24, 29, 37, 0.75);
     padding: 0.65rem;
     z-index: 1;
     border-radius: 5px;
@@ -1325,8 +1324,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         display: block;
         width: 100%;
         height: 2px;
-        background: #fefefe;
-        box-shadow: 0 7px 0 #fefefe, 0 14px 0 #fefefe;
+        background: #F5F5F5;
+        box-shadow: 0 7px 0 #F5F5F5, 0 14px 0 #F5F5F5;
         content: ''; }
       #spectacle .drawer-layout .floating-menu-icon .hamburger:hover::after {
         background: #cacaca;
