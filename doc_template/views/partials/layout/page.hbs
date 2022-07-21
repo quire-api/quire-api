@@ -20,7 +20,7 @@
       </div>
       <nav class="navbar-collapse bs-navbar-collapse collapse clearfix">
         <ul id="header-icons" class="nav navbar-nav navbar-right hide">
-          <li class="item tutorail">
+          <li class="item tutorial">
             <a href="/dev/tutorial">TUTORIAL</a>
           </li>
           <li class="item doc active">
@@ -30,7 +30,25 @@
             <a href="/login" class="b green">LOG IN</a>
           </li>
           <li class="item workspace hide">
-            <a href="/w" class="b white">GO TO YOUR PROJECT</a>
+            <a href="/w" class="b white ws-btn">Go to workspace</a>
+          </li>
+          <li class="item t-notification hide">
+            <a id="notification" href="#" class="i-btn x30 icon-bell-o notification-btn dropdown-toggle" data-toggle="dropdown">
+              <i class="notification-count"></i>
+            </a>
+            <ul class="arrow-dropdown-menu dropdown-menu arrow-border" role="menu">
+              <li class="dropdown-header"><a class="pull-right mk-rd-btn" href="#">Mark All as Read</a> Notifications</li>
+              <li class="scroll-content">
+                <div class="ntf-cnt content">
+                  <ul class="ntf-list dropdown-list dropdown-menu"><li></li></ul>
+                  <div class="message-empty">You don't have any notifications.</div>
+                  <div class="scroller-buttons">
+                    <button class="scroller-btn b white">New notifications</button>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </li>
+            </ul> 
           </li>
           <li class="item t-user dropdown hide" id="u-id">
             <a href="#" class="i-btn user-icon-wrapper dropdown-toggle" data-toggle="dropdown"></a>
@@ -80,4 +98,5 @@
   </div>
 </div>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-48347893-1"></script>
+<script async src="/r/en/mesg.js"></script>
 <script async src="/s/js/pack.min.js"></script>
