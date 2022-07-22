@@ -1436,7 +1436,7 @@ html, body {
   height: auto; }
 
 #header-icons .item > a {
-  display: block; }
+  display: inline-block; }
 
 .navbar-toggle {
   float: right; }
@@ -1448,6 +1448,14 @@ html, body {
 @media (min-width: 768px) and (max-width: 959px) {
   .qr-collapse-navbar-768 #header .navbar-header {
     float: none; } }
+
+.tooltip {
+  position: absolute;
+  z-index: 1030;
+  display: block;
+  visibility: visible;
+  font-size: 12px;
+  line-height: 1.4; }
 
 .dropdown-menu {
   position: absolute;
@@ -1491,6 +1499,9 @@ html, body {
 
 .open > .dropdown-menu {
   display: block; }
+
+.pull-left {
+  float: left !important; }
 
 .pull-right {
   float: right !important; }

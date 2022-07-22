@@ -19,7 +19,7 @@ function _updateLoginUser(response) {
 	// update for icon and its dropdown
 	user.find('.dropdown-header').text(userName);
 	user.find('.user-icon-wrapper').append(
-		userImg != '' ?
+		userImg ?
 			$('<img class="img-icon x30 circle" src="' + userImg + '" alt="' + userName + '">') :
 			$('<div class="img-icon x30 circle bg iconc-' + iconColor +'">' + initials + '</div>')
 	);
@@ -32,13 +32,19 @@ function _updateLoginUser(response) {
 	$('.workspace').removeClass('hide');
 
 	user.removeClass('hide');
+
+  var notification = window['notification'];
+  if (notification) {
+    $('.t-notification').removeClass('hide');
+    notification.init();
+  } 
 	_showHeaderIcon();
 }
 
 function _updateNonLoginUser() {
 	// remove stuff for user
-	$('#header-wrapper').addClass('qr-collapse-navbar');
-    $('li.workspace, li.t-user').remove();
+	$('#header-wrapper').addClass('qr-collapse-navbar-768');
+    $('li.workspace, li.t-notification, li.t-user').remove();
 
     $('.login').removeClass('hide');
 
@@ -97,20 +103,8 @@ function getLocalStorage(key, decode) { //default: true
 	}
 }
 
-function initHeaderMenuToggle() {
-	var menu = $("#header .navbar-collapse")
-	$("#menu-toggle").click(function() {
-		var isOpen = menu.hasClass('in');
-		menu[isOpen ? 'removeClass': 'addClass']('in');
-		$(this)[isOpen ? 'removeClass': 'addClass']('open');
-		$('.qr-collapse-navbar,.qr-collapse-navbar-768')[isOpen ? 'removeClass': 'addClass']('navbar-fixed-bottom');
-	});
-}
-
 $(function() {
   // $(document).foundation();
-
-  initHeaderMenuToggle();
 
   var $sidebar = $('#sidebar');
   if ($sidebar.length) {

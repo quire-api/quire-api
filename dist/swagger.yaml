@@ -2297,16 +2297,16 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this new comment as created by the app.
           Default: false -- the comment is marked as created by the user authorizing the app.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
   CreateNotificationBody:
     type: object
     required:
@@ -2623,6 +2623,11 @@ definitions:
       organization:
         description: The organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root tasks in this project.
       nameText:
         type: string
         example: My Project
@@ -2631,11 +2636,6 @@ definitions:
         type: string
         example: My Project
         description: Name in a form of a HTML fragment converted from markdown.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root tasks in this project.
       description:
         type: string
         example: This is *cool*!
@@ -2737,14 +2737,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that refers another task.
-      user:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the user who made this reference.
       when:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         description: When this reference is made.
+      user:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the user who made this reference.
   SimpleIdentity:
     type: object
     properties:
@@ -3414,12 +3414,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
       removeFollowers:
         type: array
         description: (Optional) OID or ID of the followers to be removed from this task.Please refer to `addFollowers()` for more details.
@@ -3427,24 +3421,12 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      addTags:
-        type: array
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
         description: |-
-          (Optional) OID or names of the tags to be added to this task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      removeTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be removed from this task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
       addAssignees:
         type: array
         description: (Optional) OID or ID of the assignees to be added to this task.
@@ -3485,6 +3467,24 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
+      addTags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be added to this task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+      removeTags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be removed from this task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - mPAQrYU1qt8wAYAInKRlTnvl
       priority:
         type: integer
         format: int32
