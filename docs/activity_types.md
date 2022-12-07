@@ -77,5 +77,5 @@
 | 147 | Removes a sublist. | Project |
 | 148 | Adds a new status. | Project |
 | 149 | Remvoes a status. | Project |
-| 150 | Enables the mailbox for a project. | Project |
+| 150 | Enables the mailbox (Email-to-Quire) for a project. | Project |
 | 151 | Disables the mailbox for a project. | Project |
