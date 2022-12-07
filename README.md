@@ -1,6 +1,6 @@
 # Quire API
 
-Quire API project is used to build the Quire API Reference for [Quire](https://quire.io)
+Quire API project is used to build the [Quire](https://quire.io) API Reference
 
 ## Tools
 
@@ -15,3 +15,7 @@ Quire API project is used to build the Quire API Reference for [Quire](https://q
 ```
 ./tool/startWebsite
 ```
+
+## Other Documents
+
+* [Activity Types](docs/activity_types.md)
