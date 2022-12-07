@@ -224,7 +224,7 @@ A notification is the information about a update (aka., an activity). Here is an
 > There is an optional field called `value` in the map of the `data` field. It carries the detailed information in a map instance. For example, it carries the assignee's ID, name and URL if it is an assignment.
 > Also, if the notification is about *start* or *due*, there will be another field called `due` in the map of the `data` field. It is the date time formatted in user's locale and time zone.
 
-## Registration for notifications
+## Registration for Notifications
 
 If the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:
 
@@ -319,7 +319,12 @@ If 403 or 404 is returned, the registration will be removed, so called *unfollow
 
 If a status code other than above is returned, we will retry 10 minutes later, then 1 hour later, 1 day later and 3 days later.
 
-# Rate limits
+## Activities Types
+
+* [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md)
+
+
+# Rate Limits
 
 To protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. 
 Requests that hit any of our rate limits will receive a `429 Too Many Requests` response.
@@ -338,7 +343,7 @@ Here are the limits for free plans.
 
 The size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.
 
-# Status codes
+# Status Codes
 
 | Code | Meaning               | Description                                               
 |------|-----------------------|--------------------------------------------------------------------------
@@ -353,7 +358,7 @@ The size of each request can't be larger than 2MB. Requests that hit this limit 
 | 500  | Internal Server Error | There is an unexpected error.
 | 503  | Service Unavailable   | Server is down for maintenance.
 
-## Error responses
+## Error Responses
 
 The following JSON data is returned in the response body when an error occurs.
 
