@@ -66,6 +66,11 @@ public class CreateTaskBody {
 		+ "Default: false.")
 	public Object getPeekaboo() { return false; }
 
+//	@ApiModelProperty(example = "true",
+//		value = "(Optional) Specify whether this task is a section.\n"
+//		+ "Default: false.")
+//	public boolean getSection() { return false; }
+
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true if you'd like to make "
 		+ "this new task as created by the app.\n"
