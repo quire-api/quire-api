@@ -25,6 +25,13 @@ public class UpdateTaskBody {
 		example = "100", position = 4)
 	public int getStatus() { return 0; }
 
+	@ApiModelProperty(value = "(Optional) The estimated time to complete. "
+		+ "If specified, it must be non-negative or null. "
+		+ "If null is specified, it means to clear the value."
+		+ "Unit: seconds.",
+		example = "0", position = 4)
+	public int getEtc() { return 0; }
+
 	@ApiModelProperty(
 		value = "(Optional) OID or names of the tags to replace existing tags of to this task. "
 		+ "If specified, it will replace any existing tag(s). "

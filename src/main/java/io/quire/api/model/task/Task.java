@@ -13,6 +13,11 @@ public class Task extends SimpleTask {
 		position = 4)
 	public Recurring getRecurring() { return null; }
 
+	@ApiModelProperty(value = "The estimed time to complete, or null if not specified. "
+		+ "Unit: seconds.",
+		example = "500", position = 4)
+	public int getEtc() { return 0; }
+
 	@ApiModelProperty(value = "Users who have assigned this tasks to a user. "
 		+ "For example, the first item of assignees is assigned by the first item of "
 		+ "assignors.", position = 5)

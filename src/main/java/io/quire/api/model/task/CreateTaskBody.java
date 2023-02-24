@@ -27,6 +27,12 @@ public class CreateTaskBody {
 		example = "0", position = 4)
 	public int getStatus() { return 0; }
 
+	@ApiModelProperty(value = "(Optional) The estimated time to complete. "
+		+ "If specified, it must be non-negative. "
+		+ "Unit: seconds.",
+		example = "0", position = 4)
+	public int getEtc() { return 0; }
+
 	@ApiModelProperty(
 		value = "(Optional) OID or names of the tags to be added to the new created task.\n"
 		+ "Note: if tag's name is specified, it is case-insensitive.")
@@ -95,6 +101,6 @@ public class CreateTaskBody {
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getFollowers() { return null; }
 
-//	@ApiModelProperty(value = "(Optional) A list of subtasks to create.")
-//	public List<CreateTaskBody> getTasks() { return null; }
+	@ApiModelProperty(value = "(Optional) A list of subtasks to create.")
+	public List<CreateTaskBody> getTasks() { return null; }
 }
