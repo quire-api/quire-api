@@ -17,6 +17,9 @@ public class Task extends SimpleTask {
 		+ "Unit: seconds.",
 		example = "500", position = 4)
 	public int getEtc() { return 0; }
+	@ApiModelProperty(value = "The timelogs of this task if available.",
+		position = 4)
+	public List<Timelog> getTimelogs() { return null; }
 
 	@ApiModelProperty(value = "Users who have assigned this tasks to a user. "
 		+ "For example, the first item of assignees is assigned by the first item of "
@@ -27,6 +30,7 @@ public class Task extends SimpleTask {
 		+ "It is null if this task doesn't belong to any external team.",
 		position = 5)
 	public SimpleTaggingEntity getPartner() { return null; }
+
 	@ApiModelProperty(value = "The user who assigned this task to an external team. "
 		+ "It is null if this task doesn't belong to any external team.",
 		position = 5)
