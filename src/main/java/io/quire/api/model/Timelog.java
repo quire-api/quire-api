@@ -11,7 +11,7 @@ public class Timelog {
 
 	@ApiModelProperty(value = "When the time log ended",
 		example = "2023-02-20T00:05:35.000Z", position = 2)
-	public String getStart() { return null; }
+	public String getEnd() { return null; }
 
 	@ApiModelProperty(value = "The user who did this.",
 		position = 3)
