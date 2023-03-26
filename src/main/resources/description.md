@@ -341,22 +341,24 @@ Here are the limits for free plans.
 
 ## Size limits
 
-The size of each request can't be larger than 2MB. Requests that hit this limit will receive a `413 Payload too large` response.
+The size of each request can't be larger than 1MB. Requests that hit this limit will receive a `413 Content too large` response.
 
 # Status Codes
 
-| Code | Meaning               | Description                                               
-|------|-----------------------|--------------------------------------------------------------------------
-| 200  | Success               | Request successful
-| 400  | Bad Request           | You're using a wrong parameter, or passing incorrect data.
-| 401  | Unauthorized          | Invalid or expired token.
-| 403  | Forbidden             | Not authorized to access the resource.
-| 404  | Not Found             | The specified resource could not be found.
-| 405  | Method not Allowed    | Method not allowed or supported.
-| 409  | Conflict              | There is already a resource with the same criteria.
-| 429  | Too Many Requests     | Exceeded the [rate limit](#rate-limits) for API calls
-| 500  | Internal Server Error | There is an unexpected error.
-| 503  | Service Unavailable   | Server is down for maintenance.
+| Code | Meaning                | Description
+|------|------------------------|--------------------------------
+| 200  | Success                | Request successful
+| 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.
+| 401  | Unauthorized           | Invalid or expired token.
+| 403  | Forbidden              | Not authorized to access the resource.
+| 404  | Not Found              | The specified resource could not be found.
+| 405  | Method not allowed     | Method not allowed or supported.
+| 409  | Conflict               | There is already a resource with the same criteria.
+| 413  | Content too large      | The request's content is larger than 1MB.
+| 418  | Not valid JSON content | The request's content doesn't appear to be JSON.
+| 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls
+| 500  | Internal Server Error  | There is an unexpected error.
+| 503  | Service Unavailable    | Server is down for maintenance.
 
 ## Error Responses
 
