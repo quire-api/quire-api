@@ -88,9 +88,9 @@ public class UpdateTaskBody {
 		+ "the project's setting).")
 	public Object getPeekaboo() { return false; }
 
-//	@ApiModelProperty(example = "true",
-//		value = "(Optional) Specify whether this task is a section or a normal task.")
-//	public boolean getSection() { return false; }
+	@ApiModelProperty(example = "true",
+		value = "(Optional) Specify whether this task is a section or a normal task.")
+	public boolean getSection() { return false; }
 
 	@ApiModelProperty(
 		value = "(Optional) OID, ID or emails of the users to replace the followers of this task. "

@@ -60,10 +60,10 @@ public class SimpleTask extends StampedEntity {
 		example = "true", position = 50)
 	public boolean getPeekaboo() { return false; }
 
-//	@ApiModelProperty(value = "Whether this task is a section. "
-//		+ "It is null if it is a normal task",
-//		example = "true", position = 50)
-//	public boolean getSection() { return false; }
+	@ApiModelProperty(value = "Whether this task is a section. "
+		+ "It is null if it is a normal task",
+		example = "true", position = 50)
+	public boolean getSection() { return false; }
 
 	@ApiModelProperty(value = "Url of this task on Quire website.",
 		example = "https://quire.io/w/my_project/123", position = 50)
