@@ -2175,15 +2175,15 @@ definitions:
         type: string
         example: https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png
         description: URL of this attachment.
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   Change:
     type: object
     required:
@@ -2234,15 +2234,15 @@ definitions:
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      editedBy:
+        position: 50
+        description: The user who edited this comment, or null if not edited.
+        $ref: '#/definitions/SimpleIdentity'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this comment was edited, or null if not edited.
-      editedBy:
-        position: 50
-        description: The user who edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2260,15 +2260,15 @@ definitions:
         position: 99
         description: The object this comment was added to.
         $ref: '#/definitions/CommentOwner'
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   CommentOwner:
     type: object
     properties:
@@ -2297,16 +2297,16 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this new comment as created by the app.
           Default: false -- the comment is marked as created by the user authorizing the app.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
   CreateNotificationBody:
     type: object
     required:
@@ -2413,24 +2413,6 @@ definitions:
         type: string
         example: Design new **logo**
         description: The name of the task.
-      assignees:
-        type: array
-        description: (Optional) OID, ID or emails of the users that this task is assigned to.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      peekaboo:
-        type: object
-        example: true
-        description: |-
-          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.Or, specify false to undo the previous peekaboo if any.
-          If a positive integer is specified, it is the number of days to peekaboo a task. If true, the default number of days will be used (depending on 
-          the project's setting).
-          Default: false.
-        anyOf:
-          - type: boolean
-          - type: integer
       followers:
         type: array
         description: |-
@@ -2449,6 +2431,24 @@ definitions:
           type: string
         example:
           - tzufRLqCnud74dARyDSvjWDl
+      assignees:
+        type: array
+        description: (Optional) OID, ID or emails of the users that this task is assigned to.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      peekaboo:
+        type: object
+        example: true
+        description: |-
+          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.Or, specify false to undo the previous peekaboo if any.
+          If a positive integer is specified, it is the number of days to peekaboo a task. If true, the default number of days will be used (depending on 
+          the project's setting).
+          Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
       recurring:
         description: (Optional) The recurring information of this task. It is null if it is not a recurring task.
         $ref: '#/definitions/Recurring'
@@ -2456,23 +2456,11 @@ definitions:
         type: string
         example: This is a *cool* task.
         description: (Optional) An optional description about this task.
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify true if you'd like to make this new task as created by the app.
-          Default: false -- the task is marked as created by the user authorizing the app.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
         description: |-
           (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
           If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
       section:
         type: boolean
@@ -2480,11 +2468,12 @@ definitions:
         description: |-
           (Optional) Specify whether this task is a section.
           Default: false.
-      tasks:
-        type: array
-        description: (Optional) A list of subtasks to create.
-        items:
-          $ref: '#/definitions/CreateTaskBody'
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) Specify true if you'd like to make this new task as created by the app.
+          Default: false -- the task is marked as created by the user authorizing the app.
       tags:
         type: array
         description: |-
@@ -2494,6 +2483,17 @@ definitions:
           type: string
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
+      tasks:
+        type: array
+        description: (Optional) A list of subtasks to create.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
       priority:
         type: integer
         format: int32
@@ -2523,23 +2523,23 @@ definitions:
         type: string
         example: my_organization
         description: ID.
-      nameText:
-        type: string
-        example: My Organization
-        description: Name but excluding markdown characters.
       nameHtml:
         type: string
         example: My Organization
         description: Name in a form of a HTML fragment converted from markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Name but excluding markdown characters.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: Url of this record on Quire website.
       email:
         type: string
         example: info@compony.com
         description: Email address.
         allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: Url of this record on Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -2570,16 +2570,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID, aka. UUID.
-      createdBy:
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   Partner:
     type: object
     properties:
@@ -2603,15 +2603,15 @@ definitions:
         position: 99
         description: The project this object belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   Project:
     type: object
     properties:
@@ -2623,19 +2623,19 @@ definitions:
         type: string
         example: my_project
         description: ID.
+      nameHtml:
+        type: string
+        example: My Project
+        description: Name in a form of a HTML fragment converted from markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Name but excluding markdown characters.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Name but excluding markdown characters.
-      nameHtml:
-        type: string
-        example: My Project
-        description: Name in a form of a HTML fragment converted from markdown.
       organization:
         description: The organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
@@ -2700,15 +2700,15 @@ definitions:
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   ProjectJsonMap:
     type: object
     properties:
@@ -2822,16 +2822,16 @@ definitions:
         example: Design new **logo**
         position: 2
         description: This task's name.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: This task's name but excluding markdown characters.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: This task's name in a form of a HTML fragment converted from markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: This task's name but excluding markdown characters.
       descriptionText:
         type: string
         example: This is a cool task.
@@ -2896,15 +2896,15 @@ definitions:
         example: https://quire.io/w/my_project/123
         position: 50
         description: Url of this task on Quire website.
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   Status:
     type: object
     properties:
@@ -2954,14 +2954,14 @@ definitions:
         type: string
         example: Sublist101
         description: ID.
-      nameText:
-        type: string
-        example: Sublist 101
-        description: Name but excluding markdown characters.
       nameHtml:
         type: string
         example: Sublist 101
         description: Name in a form of a HTML fragment converted from markdown.
+      nameText:
+        type: string
+        example: Sublist 101
+        description: Name but excluding markdown characters.
       url:
         type: string
         example: https://quire.io/w/my_project?sublist=Sublist101
@@ -3009,15 +3009,15 @@ definitions:
         position: 99
         description: The project this sublist belongs to.
         $ref: '#/definitions/SublistOwner'
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   SublistOwner:
     type: object
     properties:
@@ -3073,15 +3073,15 @@ definitions:
         position: 99
         description: The project this object belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   Task:
     type: object
     properties:
@@ -3099,16 +3099,16 @@ definitions:
         example: Design new **logo**
         position: 2
         description: This task's name.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: This task's name but excluding markdown characters.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: This task's name in a form of a HTML fragment converted from markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: This task's name but excluding markdown characters.
       descriptionText:
         type: string
         example: This is a cool task.
@@ -3124,16 +3124,16 @@ definitions:
         example: This is a *cool* task.
         position: 3
         description: Description about this task.
+      recurring:
+        position: 4
+        description: The recurring information of this task. It is null if it is not a recurring task.
+        $ref: '#/definitions/Recurring'
       timelogs:
         type: array
         position: 4
         description: The timelogs of this task if available.
         items:
           $ref: '#/definitions/Timelog'
-      recurring:
-        position: 4
-        description: The recurring information of this task. It is null if it is not a recurring task.
-        $ref: '#/definitions/Recurring'
       etc:
         type: integer
         format: int32
@@ -3162,16 +3162,16 @@ definitions:
         example: 0
         position: 4
         description: The status of this task. Its value must be between 0 and 100. If 100, it means completed.
-      partnerBy:
-        position: 5
-        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
-        $ref: '#/definitions/SimpleIdentity'
       assignors:
         type: array
         position: 5
         description: Users who have assigned this tasks to a user. For example, the first item of assignees is assigned by the first item of assignors.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      partnerBy:
+        position: 5
+        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
+        $ref: '#/definitions/SimpleIdentity'
       partner:
         position: 5
         description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
@@ -3217,20 +3217,20 @@ definitions:
         description: 'A list of referrers that refer this task. Note: some of them might no longer exist.'
         items:
           $ref: '#/definitions/Referrer'
-      toggledAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this task's status was changed last time.
-      toggledBy:
-        position: 50
-        description: The user who changed this task's status.
-        $ref: '#/definitions/SimpleIdentity'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
+      toggledBy:
+        position: 50
+        description: The user who changed this task's status.
+        $ref: '#/definitions/SimpleIdentity'
+      toggledAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this task's status was changed last time.
       peekaboo:
         type: boolean
         example: true
@@ -3268,15 +3268,15 @@ definitions:
         position: 99
         description: The project this task belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      createdBy:
-        position: 99
-        description: The user who created this record.
-        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
   Timelog:
     type: object
     properties:
@@ -3318,6 +3318,16 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
+      followers:
+        type: array
+        description: |-
+          (Optional) OID of the users to replace the followers of this project.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -3336,16 +3346,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      followers:
-        type: array
-        description: |-
-          (Optional) OID of the users to replace the followers of this project.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
       removeFollowers:
         type: array
         description: |-
@@ -3394,15 +3394,15 @@ definitions:
         type: string
         example: '**Great** sublist to start with.'
         description: (Optional) An optional description about this task.
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this sublist was aimed to complete. '
       changes:
         type: array
         description: (Optional) A list of changes to control what tasks to be added to or removed from this sublist.
         items:
           $ref: '#/definitions/Change'
-      due:
-        type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this sublist was aimed to complete. '
       image:
         type: string
         example: icon-view-kanban
@@ -3435,6 +3435,14 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New name of the task.
+      followers:
+        type: array
+        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -3453,13 +3461,13 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      addAssignees:
+      removeFollowers:
         type: array
-        description: (Optional) OID or ID of the assignees to be added to this task.
+        description: (Optional) OID or ID of the followers to be removed from this task.Please refer to `addFollowers()` for more details.
         items:
           type: string
         example:
-          - 6QMKkEPBVWETLWrXqws94ALU
+          - aBuz4MwfZ5CasOae6stnFa2f
       assignees:
         type: array
         description: (Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
@@ -3477,21 +3485,9 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
-      followers:
-        type: array
-        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-      removeFollowers:
-        type: array
-        description: (Optional) OID or ID of the followers to be removed from this task.Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
+      recurring:
+        description: (Optional) The recurring information of this task. It is null if it is not a recurring task.
+        $ref: '#/definitions/Recurring'
       removeTags:
         type: array
         description: |-
@@ -3501,6 +3497,13 @@ definitions:
           type: string
         example:
           - mPAQrYU1qt8wAYAInKRlTnvl
+      addAssignees:
+        type: array
+        description: (Optional) OID or ID of the assignees to be added to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
       removeAssignees:
         type: array
         description: (Optional) OID or ID of the assignees to be removed from this task.
@@ -3508,35 +3511,26 @@ definitions:
           type: string
         example:
           - Job4NSW9xK6Owcke8iKj7zyH
-      recurring:
-        description: (Optional) The recurring information of this task. It is null if it is not a recurring task.
-        $ref: '#/definitions/Recurring'
       description:
         type: string
         example: This is a **cool** task.
         description: (Optional) Change the description about this task.
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify true if you'd like to make this task as updated by the app.
-          Default: false -- the task is marked as created by the user authorizing the app.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
         description: |-
           (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
           If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
       section:
         type: boolean
         example: true
         description: (Optional) Specify whether this task is a section or a normal task.
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) Specify true if you'd like to make this task as updated by the app.
+          Default: false -- the task is marked as created by the user authorizing the app.
       addTags:
         type: array
         description: |-
@@ -3555,6 +3549,12 @@ definitions:
           type: string
         example:
           - ITaVbkhh3iVcEcV3vuSLeE2k
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
       priority:
         type: integer
         format: int32
@@ -3584,14 +3584,14 @@ definitions:
         type: string
         example: john
         description: ID.
-      nameText:
-        type: string
-        example: John
-        description: Name but excluding markdown characters.
       nameHtml:
         type: string
         example: John
         description: Name in a form of a HTML fragment converted from markdown.
+      nameText:
+        type: string
+        example: John
+        description: Name but excluding markdown characters.
       url:
         type: string
         example: https://quire.io/u/john
