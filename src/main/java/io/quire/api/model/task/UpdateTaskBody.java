@@ -62,7 +62,7 @@ public class UpdateTaskBody {
 	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
 		value = "(Optional) An optional start time. "
 		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
-		+ "e.g., `2020-10-30T09:30Z`.\n"
+		+ "e.g., `2020-10-30T09:30Z`.\n\n"
 		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`."
 		+ "Note: they must be in UTC time.")
 	public String getStart() { return null; }
@@ -70,7 +70,7 @@ public class UpdateTaskBody {
 	@ApiModelProperty(example = "2018-12-22T00:00:00.000Z",
 		value = "(Optional) An optional due time. "
 		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
-		+ "e.g., `2020-10-30T09:30Z`.\n"
+		+ "e.g., `2020-10-30T09:30Z`.\n\n"
 		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`."
 		+ "Note: they must be in UTC time.")
 	public String getDue() { return null; }
@@ -80,12 +80,14 @@ public class UpdateTaskBody {
 	public Recurring getRecurring() { return null; }
 
 	@ApiModelProperty(example = "true",
-		value = "(Optional) Specify true or a positive integer to peekaboo "
-		+ "this task and its subtasks. "
-		+ "Or, specify false to undo the previous peekaboo if any.\n"
-		+ "If a positive integer is specified, it is the number of days to peekaboo a task. "
-		+ "If true, the default number of days will be used (depending on \n"
-		+ "the project's setting).")
+		value = "(Optional) Specify true, a positive integer or -1 to peekaboo "
+		+ "this task and its subtasks, if any. "
+		+ "Or, specify false to undo the previous peekaboo if any.\n\n"
+		+ "If a positive integer is specified, it is the number of days to peekaboo a task.\n"
+		+ "If -1, it won't be reshowed automatically.\n"
+		+ "If true, the default number of days will be used (depending on "
+		+ "the project's setting).\n\n"
+		+ "Default: false.")
 	public Object getPeekaboo() { return false; }
 
 	@ApiModelProperty(example = "true",
