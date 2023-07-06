@@ -63,13 +63,11 @@ public class CreateTaskBody {
 	public Recurring getRecurring() { return null; }
 
 	@ApiModelProperty(example = "true",
-		value = "(Optional) Specify true, a positive integer or -1 to peekaboo "
+		value = "(Optional) Specify true or a positive integer to peekaboo "
 		+ "this task and its subtasks, if any.\n"
 		+ "Or, specify false to undo the previous peekaboo if any.\n\n"
 		+ "If a positive integer is specified, it is the number of days to peekaboo a task.\n"
-		+ "If -1, it won't be reshowed automatically.\n"
-		+ "If true, the default number of days will be used (depending on "
-		+ "the project's setting).\n\n"
+		+ "If true, it won't be reshowed automatically.\n\n"
 		+ "Default: false.")
 	public Object getPeekaboo() { return false; }
 

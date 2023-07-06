@@ -1,5 +1,22 @@
 # CHANGES
 
+## July 13, 2023
+
+* `peekaboo=false` means it won't be reshowed automatically.
+
+## April 10, 2023
+
+* `Section` supported
+
+## March 26, 2023
+
+* Content's size is limited to 1MB
+
+## Feburary 24, 2023
+
+* `Timelogs` supported
+* `etc` supported
+
 ## March 22, 2022
 
 * API to export project into a CSV string is added
