@@ -3,7 +3,7 @@
 ## Task Related Activities
 
 | Type | Description | `what` | `tasks` | 
-|--|--|--|
+|--|--|--|--|
 | 0 | Adds a task. | Task | |
 | 1 | Removes a task. | Task | All tasks being removed. |
 | 3 | Edits the content of a task. | Task | |
