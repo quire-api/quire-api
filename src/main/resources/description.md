@@ -221,8 +221,13 @@ A notification is the information about a update (aka., an activity). Here is an
 }
 ```
 
-> There is an optional field called `value` in the map of the `data` field. It carries the detailed information in a map instance. For example, it carries the assignee's ID, name and URL if it is an assignment.
-> Also, if the notification is about *start* or *due*, there will be another field called `due` in the map of the `data` field. It is the date time formatted in user's locale and time zone.
+* There is an optional field called `value` in the map of the `data` field. It contains the detailed information in a map instance. For example, it contains the assignee's ID, name and URL if it is an assignment.
+
+* Also, if the notification is about *start* or *due*, there will be another field called `due` in the map of the `data` field. It is the date time formatted in user's locale and time zone.
+
+* There is an addition field called `tasks` for activities that can affect multiple tasks. The field is a collection of OIDs of tasks that were changed.
+    - For example, completing a task will complete its subtasks too. And, you can find all of them from the `tasks` field.
+    - Please refer to [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
 
 ## Registration for Notifications
 

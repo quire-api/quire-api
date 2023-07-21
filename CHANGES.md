@@ -1,5 +1,9 @@
 # CHANGES
 
+## July 21, 2023
+
+* An addition field called `tasks` is added to [Notification Events](https://quire.io/dev/api/#tag-notification) for activities that can affect multiple tasks. Refer to [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
+
 ## July 13, 2023
 
 * `peekaboo=false` means it won't be reshowed automatically.

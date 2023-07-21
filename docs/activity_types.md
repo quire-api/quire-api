@@ -2,41 +2,41 @@
 
 ## Task Related Activities
 
-| Type | Description | What | 
+| Type | Description | `what` | `tasks` | 
 |--|--|--|
-| 0 | Adds a task. | Task |
-| 1 | Removes a task. | Task |
-| 3 | Edits the content of a task. | Task |
-| 5 | Completes a task. | Task |
-| 6 | Reopens a task. | Task |
-| 7 | Assigns a member to a task. | Task |
-| 8 | Un-assigns a member from a task. | Task |
-| 9 | Sets a due date to a task. | Task |
-| 10 | Clears the due date. | Task |
-| 11 | Changes the status. | Task |
-| 12 | Peekaboos a task. | Task |
-| 13 | Un-peekaboos a task. | Task |
-| 16 | Adds a comment. | Task |
-| 17 | Undo the completing. | Task |
-| 18 | Undo the removal. | Task |
-| 19 | Undo the peekabooing. | Task |
-| 20 | Adds an attachment. | Task |
-| 21 | Removes an attachment. | Task |
-| 24 | Sets an external team to a task. | Task |
-| 25 | Removes an external team from a task. | Task |
-| 27 | Removes a comment from a task. | Task |
-| 28 | Adds a tag to a task | Task |
-| 29 | Removes a tag from a task. | Task |
-| 30 | Transfers a task to another project. | Task |
-| 31 | Duplicates a task. | Task |
-| 32 | Mentions a member in a comment or description. | Task |
-| 33 | Duplicates a recurring task automatically when completed. | Task |
-| 34 | Edits the time track | Task |
-| 35 | Sets the priority. | Task |
-| 36 | Changes the task type. | Task |
-| 38 | Sets a start date to a task. | Task |
-| 39 | Clears the start date. | Task |
-| 84 | Pauses a task.  | Task |
+| 0 | Adds a task. | Task | |
+| 1 | Removes a task. | Task | All tasks being removed. |
+| 3 | Edits the content of a task. | Task | |
+| 5 | Completes a task. | Task | All tasks being completed. |
+| 6 | Reopens a task. | Task | All tasks being reopened. |
+| 7 | Assigns a member to a task. | Task | |
+| 8 | Un-assigns a member from a task. | Task | |
+| 9 | Sets a due date to a task. | Task | |
+| 10 | Clears the due date. | Task | |
+| 11 | Changes the status. | Task | |
+| 12 | Peekaboos a task. | Task | All tasks being peekabooed. |
+| 13 | Reshows a task. | Task | All tasks being reshowed. |
+| 16 | Adds a comment. | Task | |
+| 17 | Undo the completing. | Task | All tasks being reopened. |
+| 18 | Undo the removal. | Task | All tasks being un-removed. |
+| 19 | Undo the peekabooing. | Task | All tasks being reshowed. |
+| 20 | Adds an attachment. | Task | |
+| 21 | Removes an attachment. | Task | |
+| 24 | Sets an external team to a task. | Task | |
+| 25 | Removes an external team from a task. | Task | |
+| 27 | Removes a comment from a task. | Task | |
+| 28 | Adds a tag to a task. | Task | |
+| 29 | Removes a tag from a task. | Task | |
+| 30 | Transfers a task to another project. | Task | |
+| 31 | Duplicates a task. | Task | |
+| 32 | Mentions a member in a comment or description. | Task | |
+| 33 | Duplicates a recurring task automatically when completed. | Task | |
+| 34 | Edits the time track. | Task | |
+| 35 | Sets the priority. | Task | |
+| 36 | Changes the task type. | Task | |
+| 38 | Sets a start date to a task. | Task | |
+| 39 | Clears the start date. | Task | |
+| 84 | Pauses a task.  | Task | |
 
 ## Project Related Activities
 
@@ -76,6 +76,6 @@
 | 146 | Adds a new sublist. | Project |
 | 147 | Removes a sublist. | Project |
 | 148 | Adds a new status. | Project |
-| 149 | Remvoes a status. | Project |
+| 149 | Removes a status. | Project |
 | 150 | Enables the mailbox (Email-to-Quire) for a project. | Project |
 | 151 | Disables the mailbox for a project. | Project |
