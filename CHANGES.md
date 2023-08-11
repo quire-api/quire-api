@@ -1,5 +1,9 @@
 # CHANGES
 
+## Auguest 12, 2023
+
+* The redirect URL is allowed to be `localhost`.
+
 ## July 21, 2023
 
 * An addition field called `tasks` is added to [Notification Events](https://quire.io/dev/api/#webhook) for activities that can affect multiple tasks. Refer to [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
