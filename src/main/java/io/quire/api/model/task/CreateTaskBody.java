@@ -100,6 +100,15 @@ public class CreateTaskBody {
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getFollowers() { return null; }
 
+	@ApiModelProperty(
+		value = "(Optional) Specify a value to your custom field. "
+		+ "The name and value depends on your definition of the custom field.\n\n"
+		+ "- For Money type, please specify the value directly (without currency).\n"
+		+ "- For User or Task type, please specify the OID.\n"
+		+ "- For Duration type, please specify number of seconds.\n"
+		+ "- For multiple values, you can specify a list of values.")
+	public Object getYourField() { return false; }
+
 	@ApiModelProperty(value = "(Optional) A list of subtasks to create.")
 	public List<CreateTaskBody> getTasks() { return null; }
 }

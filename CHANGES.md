@@ -1,5 +1,9 @@
 # CHANGES
 
+## Auguest 23, 2023
+
+* Support custom fields
+
 ## Auguest 12, 2023
 
 * The redirect URL is allowed to be `localhost`.

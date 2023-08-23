@@ -124,4 +124,13 @@ public class UpdateTaskBody {
 		+ "Default: false -- the task is marked as created by the user authorizing "
 		+ "the app.")
 	public boolean getAsUser() { return false; }
+
+	@ApiModelProperty(
+		value = "(Optional) Specify a value to your custom field. "
+		+ "The name and value depends on your definition of the custom field.\n\n"
+		+ "- For Money type, please specify the value directly (without currency).\n"
+		+ "- For User or Task type, please specify the OID.\n"
+		+ "- For Duration type, please specify number of seconds.\n"
+		+ "- For multiple values, you can specify a list of values.")
+	public Object getYourField() { return false; }
 }
