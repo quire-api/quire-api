@@ -38,6 +38,10 @@
 | 39 | Clears the start date. | Task | |
 | 84 | Pauses a task.  | Task | |
 
+*Notes*
+
+- For 5, 6 and 11, there are two extra fields, `status` and `previousStatus`, to indicate the new and previous status.
+
 ## Project Related Activities
 
 | Type | Description | What | 
