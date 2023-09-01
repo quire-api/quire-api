@@ -1,10 +1,15 @@
 # CHANGES
 
-## Auguest 23, 2023
+## September 1, 2023
+
+* Activity 84, [detail](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#project-related-activities), replaced with 11.
+  * Also, there are two extra fields, `status` and `previousStatus`, are added for Activity 5, 6 and 11 to indicate the new and previous status.
+
+## August 23, 2023
 
 * Support custom fields
 
-## Auguest 12, 2023
+## August 12, 2023
 
 * The redirect URL is allowed to be `localhost`.
 

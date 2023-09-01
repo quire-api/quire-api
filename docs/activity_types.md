@@ -36,7 +36,6 @@
 | 36 | Changes the task type. | Task | |
 | 38 | Sets a start date to a task. | Task | |
 | 39 | Clears the start date. | Task | |
-| 84 | Pauses a task.  | Task | |
 
 *Notes*
 
