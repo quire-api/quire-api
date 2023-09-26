@@ -233,23 +233,29 @@ A notification is the information about a update (aka., an activity). Here is an
 
 If the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:
 
+**Syntax 1**
+
 ```
 {
   "addFollowers": ["app"]
 }
 ```
 
-Where `app` is a keyword. It indicates that the app would like to add to its followers.
+where `app` is a keyword. It indicates that the app would like to receives the notifications about the given target (a project or a task). That is, it'll add the app into the target's followers.
 
-In additions, you can specify additional information that will be passed as part of a notification int the following syntax.
+**Syntax 2**
 
-**Syntax 1**
+In additions, you can specify additional information that will be passed as part of a notification in the following syntax.
 
 ```
 "app|team|channel"
 ```
 
-where `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`. For example,
+where `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`.
+
+> Note: `team` and `channel` can not contain `'|'`.
+
+For example,
 
 ```
 {
@@ -290,13 +296,27 @@ You'll get:
 }
 ```
 
-**Syntax 2**
+**Syntax 3**
+
+```
+"app|team|channel|mine"
+```
+
+where both `app` and `mine` are keywords. It is similar to *Syntax 2*, except it receives only notifications that match the notification setting of the user.
+
+If you don't need both `team` and `channel`, you can specify: `"app|||mine`.
+
+> The notification setting can be found at `https://quire.io/w/YourProject?view=setting&tab=options#notifications`
+
+**Syntax 4**
 
 ```
 "app|/path"
 ```
 
 where `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `"https://super.app/hooks/standard"`, and the follower "app|/soc/id279/channel51". Then, the notification will be posted the following URL: `"https://super.app/hooks/standard/soc/id279/channel51"`.
+
+**Syntax 5**
 
 If you'd like to pass additional information in this syntax, you can append it as follows.
 

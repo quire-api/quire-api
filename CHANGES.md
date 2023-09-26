@@ -1,5 +1,9 @@
 # CHANGES
 
+## September 26, 2023
+
+* Allow to add a follower that receives only notifications that match the notification setting of the user: `app|team|channel|mine`
+
 ## September 1, 2023
 
 * Activity 84, [detail](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md), replaced with 11.
