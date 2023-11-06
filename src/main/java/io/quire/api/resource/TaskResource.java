@@ -123,7 +123,7 @@ public class TaskResource {
 
 	@GET
 	@Path("/search/{projectOid}")
-	@ApiOperation(value = "Searches tasks in the given project.",
+	@ApiOperation(value = "Searches tasks in the project of the given OID.",
 		notes = "Returns task records that match the specified criteria in "
 		+ "the given project.",
 		response = SimpleTask.class,
@@ -136,13 +136,17 @@ public class TaskResource {
 
 		@ApiParam(value = "Text to do a full-text search against the name, "
 			+ "description, and attachments.\n"
-			+ "Note: it doesn't include the content and attachment of comments.",
+			+ "Note: it doesn't include the content and attachment of comments.\n"
+			+ "Also note: the update of tasks can take 10 seconds or more before "
+			+ "it can be found by the full-text search.",
 			example = "text=important major", required = false)
 		@QueryParam(value = "text") String text,
 
 		@ApiParam(value = "Task name to match with.\n"
 			+ "To specify a regular expression, you can precede it with `~`.\n"
 			+ "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
+			+ "For example, `name=~abc` matches if `abc` is part of the name. "
+			+ "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
 			+ "To do a full-text search, please use `text` instead.",
 			example = "name=My first task", required = false)
 		@QueryParam(value = "name") String name,
@@ -186,7 +190,7 @@ public class TaskResource {
 
 	@GET
 	@Path("/search/id/{projectId}")
-	@ApiOperation(value = "Searches tasks in the given project.",
+	@ApiOperation(value = "Searches tasks in the project of the given ID.",
 		notes = "Returns task records that match the specified criteria in "
 		+ "the given project.",
 		response = SimpleTask.class,
@@ -225,9 +229,30 @@ public class TaskResource {
 		@QueryParam(value = "sublist") String sublist,
 
 		@ApiParam(value = "Task's status to match with.\n"
-			+"You can specify a value between 0 and 100.",
-			example = "status=100", required = false)
-		@QueryParam(value = "status") String status) { return null; }
+			+"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+			+"\"completed\" for completed tasks.",
+			example = "status=active", required = false)
+		@QueryParam(value = "status") String status,
+		@ApiParam(value = "Whether to return only tasks that are scheduled.\n"
+			+"By scheduled we mean either `start` or `due` is scheduled.\n"
+			+"If `scheduled=false` is specified, it returns only tasks "
+			+"that neither start nor due is scheduled.",
+			example = "scheduled=true", required = false)
+		@QueryParam(value = "scheduled") boolean scheduled,
+
+		@ApiParam(value = "Whether to return only My Tasks.\n"
+			+"By My Tasks we mean tasks that are assigned to me, "
+			+"or tasks that are created by me and scheduled, but not assigned to anyone.",
+			example = "mine=true", required = false)
+		@QueryParam(value = "mine") boolean mine,
+
+		@ApiParam(value = "The maximal number of tasks to return.\n"
+			+"Default: 30. That is, at most 30 tasks will be returned.\n"
+			+"You can specify \"no\" to return all matched tasks.\n\n"
+			+"Note: If the project is on a free plan, the value cannot "
+			+"be larger than 30 or \"no\" (unlimited).",
+			example = "limit=no", required = false)
+		@QueryParam(value = "limit") String limit) { return null; }
 
 	@GET
 	@Path("/{oid}")
