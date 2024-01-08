@@ -62,9 +62,9 @@ public class UpdateTaskBody {
 	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
 		value = "(Optional) An optional start time. "
 		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
-		+ "e.g., `2020-10-30T09:30Z`.\n\n"
-		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`."
+		+ "e.g., `2020-10-30T09:30Z`.\n"
 		+ "Note: they must be in UTC time, and we don't support seconds.\n\n"
+		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.\n\n"
 		+ "Also note: for backward compatibility, `2020-10-30T00:00:00` "
 		+ "(all zero and up to second) is considered the same as `2020-10-30`, "
 		+ "i.e., without time.")
@@ -73,9 +73,9 @@ public class UpdateTaskBody {
 	@ApiModelProperty(example = "2018-12-22T00:00:00.000Z",
 		value = "(Optional) An optional due time. "
 		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
-		+ "e.g., `2020-10-30T09:30Z`.\n\n"
-		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`."
+		+ "e.g., `2020-10-30T09:30Z`.\n"
 		+ "Note: they must be in UTC time, and we don't support seconds.\n\n"
+		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.\n\n"
 		+ "Also note: for backward compatibility, `2020-10-30T00:00:00` "
 		+ "(all zero and up to second) is considered the same as `2020-10-30`, "
 		+ "i.e., without time.")
