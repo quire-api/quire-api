@@ -2243,11 +2243,6 @@ definitions:
         type: string
         example: iDsPd.QP_qM.hN.Trymukn8b
         description: OID, aka. UUID.
-      description:
-        type: string
-        example: It is *cool*!
-        position: 1
-        description: The content.
       descriptionText:
         type: string
         example: It is cool!
@@ -2258,25 +2253,17 @@ definitions:
         example: It is <i>cool</i>!
         position: 1
         description: The content in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: It is *cool*!
+        position: 1
+        description: The content.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
-      editedBy:
-        position: 50
-        description: The user who edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this comment was edited, or null if not edited.
-      url:
-        type: string
-        position: 50
-        description: Url of this comment on Quire website.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2285,6 +2272,19 @@ definitions:
       pinBy:
         position: 50
         description: The user who pinned this comment, or null if not pinned.
+        $ref: '#/definitions/SimpleIdentity'
+      url:
+        type: string
+        position: 50
+        description: Url of this comment on Quire website.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this comment was edited, or null if not edited.
+      editedBy:
+        position: 50
+        description: The user who edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
@@ -2323,10 +2323,6 @@ definitions:
     required:
       - description
     properties:
-      description:
-        type: string
-        example: Adjust style
-        description: The content of the new comment.
       pinned:
         type: boolean
         example: false
@@ -2337,6 +2333,10 @@ definitions:
         description: |-
           (Optional) Specify true if you'd like to make this new comment as created by the app.
           Default: false -- the comment is marked as created by the user authorizing the app.
+      description:
+        type: string
+        example: Adjust style
+        description: The content of the new comment.
   CreateNotificationBody:
     type: object
     required:
@@ -2382,10 +2382,16 @@ definitions:
         type: string
         example: Sublist101
         description: (Optional) ID of the sublist. If omitted, Quire will generate one automatically. It must be unquie in the whole project if specified
-      description:
+      image:
         type: string
-        example: '**Great** sublist to start with.'
-        description: (Optional) An optional description about this task.
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
       includes:
         type: array
         description: |-
@@ -2393,25 +2399,19 @@ definitions:
           Note: all of descendants will be included too.
         items:
           type: string
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
-      image:
-        type: string
-        example: icon-view-kanban
-        description: |-
-          (Optional) The image representing this record. It shall be one of the predined images:
-           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
-      personal:
-        type: boolean
-        position: 15
-        description: (Optional) Whether it is personal. If omitted, false is assumed.
+        example: '**Great** sublist to start with.'
+        description: (Optional) An optional description about this task.
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 15
         description: (Optional) OID of the external team that this sublist belongs to.
+      personal:
+        type: boolean
+        position: 15
+        description: (Optional) Whether it is personal. If omitted, false is assumed.
       due:
         type: string
         example: '2020-01-22T02:06:58.158Z'
@@ -2443,10 +2443,49 @@ definitions:
         type: string
         example: Design new **logo**
         description: The name of the task.
-      description:
+      tags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be added to the new created task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) Specify true if you'd like to make this new task as created by the app.
+          Default: false -- the task is marked as created by the user authorizing the app.
+      start:
         type: string
-        example: This is a *cool* task.
-        description: (Optional) An optional description about this task.
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time, and we don't support seconds.
+
+          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time, and we don't support seconds.
+
+          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
+      section:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) Specify whether this task is a section.
+          Default: false.
+      tasks:
+        type: array
+        description: (Optional) A list of subtasks to create.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
       assignees:
         type: array
         description: (Optional) OID, ID or emails of the users that this task is assigned to.
@@ -2471,6 +2510,15 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
+      yourField:
+        type: object
+        description: |-
+          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
+
+          - For Money type, please specify the value directly (without currency).
+          - For User or Task type, please specify the OID.
+          - For Duration type, please specify number of seconds.
+          - For multiple values, you can specify a list of values.
       followers:
         type: array
         description: |-
@@ -2489,72 +2537,28 @@ definitions:
           type: string
         example:
           - tzufRLqCnud74dARyDSvjWDl
-      yourField:
-        type: object
-        description: |-
-          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
-
-          - For Money type, please specify the value directly (without currency).
-          - For User or Task type, please specify the OID.
-          - For Duration type, please specify number of seconds.
-          - For multiple values, you can specify a list of values.
-      tasks:
-        type: array
-        description: (Optional) A list of subtasks to create.
-        items:
-          $ref: '#/definitions/CreateTaskBody'
-      start:
+      description:
         type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
-      section:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify whether this task is a section.
-          Default: false.
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify true if you'd like to make this new task as created by the app.
-          Default: false -- the task is marked as created by the user authorizing the app.
-      tags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to the new created task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
+        example: This is a *cool* task.
+        description: (Optional) An optional description about this task.
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: '(Optional) An optional priority. Its value must be between -1 (lowest) and 2 (highest). Default: 0.'
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: '(Optional) An optional status. Its value must be between 0 and 100. Default: 0.'
       etc:
         type: integer
         format: int32
         example: 0
         position: 4
         description: '(Optional) The estimated time to complete. If specified, it must be non-negative. Unit: seconds.'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: '(Optional) An optional status. Its value must be between 0 and 100. Default: 0.'
   Organization:
     type: object
     properties:
@@ -2566,6 +2570,15 @@ definitions:
         type: string
         example: my_organization
         description: ID.
+      email:
+        type: string
+        example: info@compony.com
+        description: Email address.
+        allowEmptyValue: true
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Organization
@@ -2574,24 +2587,11 @@ definitions:
         type: string
         example: My Organization
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: Url of this record on Quire website.
-      email:
-        type: string
-        example: info@compony.com
-        description: Email address.
-        allowEmptyValue: true
       website:
         type: string
         example: https://coolwebsites.com
         description: Website.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       descriptionText:
         type: string
         example: This is cool!
@@ -2600,15 +2600,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
+        example: This is *cool*!
+        description: Description.
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -2666,14 +2670,10 @@ definitions:
         type: string
         example: my_project
         description: ID.
-      organization:
-        description: The organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root tasks in this project.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Project
@@ -2682,10 +2682,14 @@ definitions:
         type: string
         example: My Project
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: Url of this record on Quire website.
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root tasks in this project.
+      organization:
+        description: The organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
       activeCount:
         type: integer
         format: int32
@@ -2696,10 +2700,6 @@ definitions:
         format: int32
         example: 30
         description: Total number of tasks in this project.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       descriptionText:
         type: string
         example: This is cool!
@@ -2708,41 +2708,45 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
+        example: This is *cool*!
+        description: Description.
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID, aka. UUID.
-      archivedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this project was archived (aka., peekaboo). It is null if not archived.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this task.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this project was archived (aka., peekaboo). It is null if not archived.
       attachments:
         type: array
         position: 60
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2775,16 +2779,16 @@ definitions:
         format: int32
         example: 9
         description: 'The type of this recurring.It is 0 if it is weekly. It is 1 if it is monthly. It is 2 if it is yearly. It is 3 if it is custom. '
-      data:
-        type: integer
-        format: int32
-        example: 6
-        description: It depends on the type of this recurring. If weekly, bit 0 is Sunday, bit 1 is Monday and so on. For example, if the data is 6, it means every Monday and Tuesday.
       rate:
         type: integer
         format: int32
         example: 1
         description: How often this recurring shall occur. If the rate is 2 and the type is weekly, it means it shall occur every two week. If the type is custom, it means number of days to repeat.
+      data:
+        type: integer
+        format: int32
+        example: 6
+        description: It depends on the type of this recurring. If weekly, bit 0 is Sunday, bit 1 is Monday and so on. For example, if the data is 6, it means every Monday and Tuesday.
       end:
         type: string
         example: '2020-12-22T00:00:00.000Z'
@@ -2816,15 +2820,15 @@ definitions:
         type: string
         example: https://quire.io/u/my_id
         description: Url of this record on Quire website.
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       name:
         type: string
         example: Foo
@@ -2875,11 +2879,6 @@ definitions:
         example: Design new <b>logo</b>
         position: 2
         description: This task's name in a form of a HTML fragment converted from markdown.
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Description about this task.
       descriptionText:
         type: string
         example: This is a cool task.
@@ -2890,18 +2889,17 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Description in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Description about this task.
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: 'The priority of this task. Its value must be between -1 (lowest) and 2 (highest). Default: 0.'
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: The status of this task. Its value must be between 0 and 100. If 100, it means completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -2912,33 +2910,39 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
-      assignees:
-        type: array
-        position: 5
-        description: Users who are assigned to this task.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: The status of this task. Its value must be between 0 and 100. If 100, it means completed.
       tags:
         type: array
         position: 5
         description: Tags that are tagged to this task.
         items:
           $ref: '#/definitions/SimpleTaggingEntity'
-      peekaboo:
-        type: boolean
-        example: true
-        position: 50
-        description: Whether this task was peekabooed. It is null if not peekabooed.
-      url:
-        type: string
-        example: https://quire.io/w/my_project/123
-        position: 50
-        description: Url of this task on Quire website.
+      assignees:
+        type: array
+        position: 5
+        description: Users who are assigned to this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       section:
         type: boolean
         example: true
         position: 50
         description: Whether this task is a section. It is null if it is a normal task
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: Url of this task on Quire website.
+      peekaboo:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task was peekabooed. It is null if not peekabooed.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -2967,18 +2971,18 @@ definitions:
   StorageList:
     type: object
     properties:
-      currentProject:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: Property name
-      latest:
-        description: Property name.
-        $ref: '#/definitions/StorageMap'
       myList:
         type: array
         description: Property name.
         items:
           type: string
+      latest:
+        description: Property name.
+        $ref: '#/definitions/StorageMap'
+      currentProject:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: Property name
   StorageMap:
     type: object
     properties:
@@ -2997,6 +3001,10 @@ definitions:
         type: string
         example: Sublist101
         description: ID.
+      url:
+        type: string
+        example: https://quire.io/w/my_project?sublist=Sublist101
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: Sublist 101
@@ -3005,14 +3013,6 @@ definitions:
         type: string
         example: Sublist 101
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project?sublist=Sublist101
-        description: Url of this record on Quire website.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description.
       descriptionText:
         type: string
         example: This is cool!
@@ -3021,15 +3021,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
+        example: This is *cool*!
+        description: Description.
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -3038,16 +3042,16 @@ definitions:
         position: 15
         description: The external team that this sublist belongs to. It is null if this sublist can't be accessed by a member of external teams.
         $ref: '#/definitions/SimpleTaggingEntity'
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: When this sublist was archived. It is null if not archived.
       due:
         type: string
         example: '2020-01-22T02:06:58.158Z'
         position: 50
         description: When this sublist was aimed to complete, or null if not specified.
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: When this sublist was archived. It is null if not archived.
       owner:
         position: 99
         description: The project this sublist belongs to.
@@ -3076,15 +3080,15 @@ definitions:
         type: string
         example: my_id
         description: ID.
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       name:
         type: string
         example: Foo
@@ -3152,11 +3156,6 @@ definitions:
         example: Design new <b>logo</b>
         position: 2
         description: This task's name in a form of a HTML fragment converted from markdown.
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Description about this task.
       descriptionText:
         type: string
         example: This is a cool task.
@@ -3167,6 +3166,17 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Description in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Description about this task.
+      etc:
+        type: integer
+        format: int32
+        example: 500
+        position: 4
+        description: 'The estimed time to complete, or null if not specified. Unit: seconds.'
       recurring:
         position: 4
         description: The recurring information of this task. It is null if it is not a recurring task.
@@ -3177,24 +3187,12 @@ definitions:
         description: The timelogs of this task if available.
         items:
           $ref: '#/definitions/Timelog'
-      etc:
-        type: integer
-        format: int32
-        example: 500
-        position: 4
-        description: 'The estimed time to complete, or null if not specified. Unit: seconds.'
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: 'The priority of this task. Its value must be between -1 (lowest) and 2 (highest). Default: 0.'
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: The status of this task. Its value must be between 0 and 100. If 100, it means completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -3205,6 +3203,16 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: The status of this task. Its value must be between 0 and 100. If 100, it means completed.
+      partner:
+        position: 5
+        description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -3215,39 +3223,35 @@ definitions:
         position: 5
         description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
         $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
-      assignees:
-        type: array
-        position: 5
-        description: Users who are assigned to this task.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       tags:
         type: array
         position: 5
         description: Tags that are tagged to this task.
         items:
           $ref: '#/definitions/SimpleTaggingEntity'
+      assignees:
+        type: array
+        position: 5
+        description: Users who are assigned to this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       order:
         type: integer
         format: int32
         example: 99
         position: 6
         description: The order of this task shown on the board view. The smaller the number is, the ealier the task is shown. It is meaningless if not in a board view.
+      cover:
+        type: string
+        example: qfqVmUtC
+        position: 8
+        description: The id of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
-      cover:
-        type: string
-        example: qfqVmUtC
-        position: 8
-        description: The id of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -3274,25 +3278,25 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
-      peekaboo:
-        type: boolean
-        example: true
-        position: 50
-        description: Whether this task was peekabooed. It is null if not peekabooed.
-      url:
-        type: string
-        example: https://quire.io/w/my_project/123
-        position: 50
-        description: Url of this task on Quire website.
       section:
         type: boolean
         example: true
         position: 50
         description: Whether this task is a section. It is null if it is a normal task
-      followers:
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: Url of this task on Quire website.
+      peekaboo:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task was peekabooed. It is null if not peekabooed.
+      mutes:
         type: array
         position: 60
-        description: Users who follow this task.
+        description: Users who don't want any nofications of this task even they're assinged to it.
         items:
           $ref: '#/definitions/SimpleIdentity'
       favorites:
@@ -3301,10 +3305,10 @@ definitions:
         description: Users who favorite this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      mutes:
+      followers:
         type: array
         position: 60
-        description: Users who don't want any nofications of this task even they're assinged to it.
+        description: Users who follow this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
       project:
@@ -3350,14 +3354,14 @@ definitions:
   UpdateCommentBody:
     type: object
     properties:
-      description:
-        type: string
-        example: Adjust style
-        description: (Optional) The new content of the comment.
       pinned:
         type: boolean
         example: false
         description: (Optional) Whether to pin this comment.
+      description:
+        type: string
+        example: Adjust style
+        description: (Optional) The new content of the comment.
   UpdateProjectBody:
     type: object
     properties:
@@ -3425,10 +3429,21 @@ definitions:
         type: string
         example: Sublist101
         description: (Optional) ID of the sublist.
-      description:
+      image:
         type: string
-        example: '**Great** sublist to start with.'
-        description: (Optional) An optional description about this task.
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      changes:
+        type: array
+        description: (Optional) A list of changes to control what tasks to be added to or removed from this sublist.
+        items:
+          $ref: '#/definitions/Change'
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this sublist was aimed to complete. '
       archived:
         type: boolean
         example: true
@@ -3437,21 +3452,10 @@ definitions:
         type: string
         example: '37'
         description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
-      due:
+      description:
         type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this sublist was aimed to complete. '
-      changes:
-        type: array
-        description: (Optional) A list of changes to control what tasks to be added to or removed from this sublist.
-        items:
-          $ref: '#/definitions/Change'
-      image:
-        type: string
-        example: icon-view-kanban
-        description: |-
-          (Optional) The image representing this record. It shall be one of the predined images:
-           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+        example: '**Great** sublist to start with.'
+        description: (Optional) An optional description about this task.
   UpdateTagBody:
     type: object
     properties:
@@ -3463,14 +3467,14 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Whether this tag is global. If you specify false here, you have to specify "project" for what project you'd like to put the tag to.
-      project:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: (Optional) OID of the project this tag shall be limited to. It is used only if "global" is also specified and false. Otherwise, it is simply ignored.
       color:
         type: string
         example: '35'
         description: (Optional) The color of the tag.
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: (Optional) OID of the project this tag shall be limited to. It is used only if "global" is also specified and false. Otherwise, it is simply ignored.
   UpdateTaskBody:
     type: object
     properties:
@@ -3478,10 +3482,48 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New name of the task.
-      description:
+      tags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - ITaVbkhh3iVcEcV3vuSLeE2k
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) Specify true if you'd like to make this task as updated by the app.
+          Default: false -- the task is marked as created by the user authorizing the app.
+      start:
         type: string
-        example: This is a **cool** task.
-        description: (Optional) Change the description about this task.
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
+      section:
+        type: boolean
+        example: true
+        description: (Optional) Specify whether this task is a section or a normal task.
+      addTags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be added to this task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
       assignees:
         type: array
         description: (Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
@@ -3506,14 +3548,6 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
-      followers:
-        type: array
-        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
       yourField:
         type: object
         description: |-
@@ -3546,6 +3580,14 @@ definitions:
           type: string
         example:
           - Job4NSW9xK6Owcke8iKj7zyH
+      followers:
+        type: array
+        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -3571,66 +3613,28 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      start:
+      description:
         type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.Note: they must be in UTC time.
-      section:
-        type: boolean
-        example: true
-        description: (Optional) Specify whether this task is a section or a normal task.
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify true if you'd like to make this task as updated by the app.
-          Default: false -- the task is marked as created by the user authorizing the app.
-      tags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
-      addTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to this task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
+        example: This is a **cool** task.
+        description: (Optional) Change the description about this task.
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: '(Optional) Change the priority of this task. Its value must be between -1 (lowest) and 2 (highest). '
-      status:
-        type: integer
-        format: int32
-        example: 100
-        position: 4
-        description: (Optional) An optional status to change to. Its value must be between 0 and 100. To complete a task, specify 100.
       etc:
         type: integer
         format: int32
         example: 0
         position: 4
         description: '(Optional) The estimated time to complete. If specified, it must be non-negative or null. If null is specified, it means to clear the value.Unit: seconds.'
+      status:
+        type: integer
+        format: int32
+        example: 100
+        position: 4
+        description: (Optional) An optional status to change to. Its value must be between 0 and 100. To complete a task, specify 100.
   User:
     type: object
     properties:
@@ -3642,6 +3646,10 @@ definitions:
         type: string
         example: john
         description: ID.
+      url:
+        type: string
+        example: https://quire.io/u/john
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: John
@@ -3650,24 +3658,16 @@ definitions:
         type: string
         example: John
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/u/john
-        description: Url of this record on Quire website.
-      email:
-        type: string
-        example: john@gmail.cc
-        description: Email address.
-        allowEmptyValue: true
       website:
         type: string
         example: https://coolwebsites.com
         description: Website.
         allowEmptyValue: true
-      description:
+      email:
         type: string
-        example: This is *cool*!
-        description: Description.
+        example: john@gmail.cc
+        description: Email address.
+        allowEmptyValue: true
       descriptionText:
         type: string
         example: This is cool!
@@ -3676,15 +3676,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
+        example: This is *cool*!
+        description: Description.
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
