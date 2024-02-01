@@ -106,6 +106,11 @@ public class CreateTaskBody {
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getFollowers() { return null; }
 
+	@ApiModelProperty(value = "(Optional) OID or ID of successors of this task.\n\n"
+		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
+		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
+	public List<String> getSuccessors() { return null; }
+
 	@ApiModelProperty(
 		value = "(Optional) Specify a value to your custom field. "
 		+ "The name and value depends on your definition of the custom field.\n\n"

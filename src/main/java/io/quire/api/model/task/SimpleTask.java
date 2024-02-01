@@ -55,6 +55,10 @@ public class SimpleTask extends StampedEntity {
 	@ApiModelProperty(value = "Users who are assigned to this task.", position = 5)
 	public List<SimpleIdentity> getAssignees() { return null; }
 
+	@ApiModelProperty(value = "Successors of this task.\n\n"
+		+ "Example, `['#135', '#26']`")
+	public List<String> getSuccessors() { return null; }
+
 	@ApiModelProperty(value = "Whether this task was peekabooed. "
 		+ "It is null if not peekabooed.",
 		example = "true", position = 50)

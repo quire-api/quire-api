@@ -124,6 +124,19 @@ public class UpdateTaskBody {
 		+ "Please refer to `addFollowers()` for more details.")
 	public List<String> getRemoveFollowers() { return null; }
 
+	@ApiModelProperty(value = "(Optional) OID or ID of tasks to replace the successors of this task.\n\n"
+		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
+		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
+	public List<String> getSuccessors() { return null; }
+	@ApiModelProperty(value = "(Optional) OID or ID of tasks to be added to the successors of this task.\n\n"
+		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
+		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
+	public List<String> getAddSuccessors() { return null; }
+	@ApiModelProperty(value = "(Optional) OID or ID of tasks to be removed from the successors of this task.\n\n"
+		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
+		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
+	public List<String> getRemoveSuccessors() { return null; }
+
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true if you'd like to make "
 		+ "this task as updated by the app.\n"

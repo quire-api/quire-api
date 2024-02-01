@@ -1,5 +1,9 @@
 # CHANGES
 
+## Feburary 16, 2024
+
+* Allow to add or remove successors.
+
 ## September 26, 2023
 
 * Allow to add a follower that receives only notifications that match the notification setting of the user: `app|team|channel|mine`
