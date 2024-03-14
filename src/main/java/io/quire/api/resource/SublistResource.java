@@ -53,7 +53,7 @@ public class SublistResource {
 		response = Sublist.class)
 	public Response getSublistById(
 		@ApiParam(value = "ID of the project that the sublist belongs to.", required = true)
-		@PathParam("projectId") int projectId,
+		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the sublist that needs to be fetched", required = true)
 		@PathParam("id") String id) { return null; }
 
@@ -95,7 +95,7 @@ public class SublistResource {
 		response = Sublist.class)
 	public Response updateSublist(
 		@ApiParam(value = "ID of the project that the sublist belongs to.", required = true)
-		@PathParam("projectId") int projectId,
+		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the sublist that needs to be fetched", required = true)
 		@PathParam("id") String id,
 		@ApiParam(value = "Sublist to update", required = true)
@@ -123,7 +123,7 @@ public class SublistResource {
 				"{'Success': 'true'}")}))})
 	public Response deleteSublist(
 		@ApiParam(value = "ID of the project that the sublist belongs to.", required = true)
-		@PathParam("projectId") int projectId,
+		@PathParam("projectId") String projectId,
 		@ApiParam(value = "ID of the sublist that needs to be fetched", required = true)
 		@PathParam("id") String id) { return null; }
 }
