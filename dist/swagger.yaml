@@ -1171,19 +1171,24 @@ paths:
       responses:
         '200':
           description: ok
-  /sublist/id/{projectId}:
+  /sublist/id/{ownerType}/{ownerId}:
     post:
       tags:
         - sublist
-      summary: Add a new sublist.
-      description: Add a new sublist into a project.
+      summary: Add a new sublist by owner's ID.
+      description: Add a new sublist by owner's ID.
       operationId: createSublistToProject
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: owenerType
           in: path
-          description: ID of project that this new sublist to be added to.
+          description: The type of the owner that this new sublist to be added to. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
+          required: false
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of owner that this new sublist to be added to.
           required: true
           type: string
         - in: body
@@ -1197,7 +1202,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Sublist'
-  /sublist/id/{projectId}/{id}:
+  /sublist/id/{ownerType}/{ownerId}/{id}:
     get:
       tags:
         - sublist
@@ -1207,12 +1212,16 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: owenerType
           in: path
-          description: ID of the project that the sublist belongs to.
+          description: The type of the owner that this sublist belongs to. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
           required: true
-          type: integer
-          format: int32
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of owner that this sublist belongs to.
+          required: true
+          type: string
         - name: id
           in: path
           description: ID of the sublist that needs to be fetched
@@ -1232,15 +1241,14 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: ownerType
           in: path
-          description: ID of the project that the sublist belongs to.
+          description: The type of the owner. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
           required: true
-          type: integer
-          format: int32
-        - name: id
+          type: string
+        - name: ownerId
           in: path
-          description: ID of the sublist that needs to be fetched
+          description: ID of the owner.
           required: true
           type: string
         - in: body
@@ -1263,33 +1271,41 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: ownerType
           in: path
-          description: ID of the project that the sublist belongs to.
+          description: The type of the owner. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
           required: true
-          type: integer
-          format: int32
-        - name: id
+          type: string
+        - name: ownerId
           in: path
-          description: ID of the sublist that needs to be fetched
+          description: ID of the owner.
           required: true
           type: string
       responses:
         '200':
           description: ok
-  /sublist/list/id/{projectId}:
+    post:
+      parameters:
+        - name: owenerType
+          required: false
+  /sublist/list/id/{ownerType}/{ownerId}:
     get:
       tags:
         - sublist
-      summary: Get all sublists of the given project by its ID.
-      description: Returns all sublist records of the given project by its ID.
+      summary: Get all sublists of the given owner by its ID.
+      description: Returns all sublist records of the given owner by its ID.
       operationId: getSublistsByProjectId
       produces:
         - application/json
       parameters:
-        - name: projectId
+        - name: ownerType
           in: path
-          description: ID of project.
+          description: The type of the owner. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/list/id/this_is_id` is equivalent to `/list/id/project/this_is_id`.
+          required: true
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of the owner.
           required: true
           type: string
       responses:
@@ -1299,19 +1315,24 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Sublist'
-  /sublist/list/{projectOid}:
+  /sublist/list/{ownerType}/{ownerOid}:
     get:
       tags:
         - sublist
-      summary: Get all sublists of the given project by its OID.
-      description: Returns all sublist records of the given project by its OID.
+      summary: Get all sublists of the given owner by its OID.
+      description: Returns all sublist records of the given owner by its OID.
       operationId: getSublistsByProjectOid
       produces:
         - application/json
       parameters:
-        - name: projectOid
+        - name: ownerType
           in: path
-          description: OID of the project.
+          description: The type of the owner. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/list/this_is_oid` is equivalent to `/list/project/this_is_oid`.
+          required: true
+          type: string
+        - name: ownerOid
+          in: path
+          description: OID of the owner.
           required: true
           type: string
       responses:
@@ -1344,7 +1365,7 @@ paths:
     put:
       tags:
         - sublist
-      summary: Update a sublist.
+      summary: Update a sublist by its OID.
       description: Updates an existing sublist, and returns the complete updated record.
       operationId: updateSublist
       produces:
@@ -1369,7 +1390,7 @@ paths:
     delete:
       tags:
         - sublist
-      summary: Delete a sublist
+      summary: Delete a sublist by its OID
       description: Delete an existing sublist of the given OID.
       operationId: deleteSublist
       produces:
@@ -1383,19 +1404,24 @@ paths:
       responses:
         '200':
           description: ok
-  /sublist/{projectOid}:
+  /sublist/{ownerType}/{ownerOid}:
     post:
       tags:
         - sublist
-      summary: Add a new sublist.
-      description: Add a new sublist into a project.
+      summary: Add a new sublist by owner's OID.
+      description: Add a new sublist by owner's OID
       operationId: createSublist
       produces:
         - application/json
       parameters:
-        - name: projectOid
+        - name: ownerType
           in: path
-          description: OID of project that this new sublist to be added to.
+          description: The type of the owner that this new sublist to be added to. It can be `project`, `organization`, `folder` or `smart-folder`. If omitted, `project` is assumed. For example, `/this_is_oid` is equivalent to `/project/this_is_oid`.
+          required: true
+          type: string
+        - name: ownerOid
+          in: path
+          description: OID of the owner that this new sublist to be added to.
           required: true
           type: string
         - in: body
@@ -2327,16 +2353,16 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this new comment as created by the app.
           Default: false -- the comment is marked as created by the user authorizing the app.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
   CreateNotificationBody:
     type: object
     required:
@@ -2513,6 +2539,15 @@ definitions:
         description: (Optional) A list of subtasks to create.
         items:
           $ref: '#/definitions/CreateTaskBody'
+      tags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be added to the new created task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -2545,15 +2580,6 @@ definitions:
         description: |-
           (Optional) Specify true if you'd like to make this new task as created by the app.
           Default: false -- the task is marked as created by the user authorizing the app.
-      tags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to the new created task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
       priority:
         type: integer
         format: int32
@@ -2591,15 +2617,15 @@ definitions:
         type: string
         example: My Organization
         description: Name but excluding markdown characters.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: Url of this record on Quire website.
       email:
         type: string
         example: info@compony.com
         description: Email address.
         allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: Url of this record on Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -2738,16 +2764,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID, aka. UUID.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this project was archived (aka., peekaboo). It is null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       followers:
         type: array
         position: 60
@@ -3238,16 +3264,16 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
+      partnerBy:
+        position: 5
+        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
+        $ref: '#/definitions/SimpleIdentity'
       assignors:
         type: array
         position: 5
         description: Users who have assigned this tasks to a user. For example, the first item of assignees is assigned by the first item of assignors.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      partnerBy:
-        position: 5
-        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
-        $ref: '#/definitions/SimpleIdentity'
       partner:
         position: 5
         description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
@@ -3293,20 +3319,20 @@ definitions:
         description: 'A list of referrers that refer this task. Note: some of them might no longer exist.'
         items:
           $ref: '#/definitions/Referrer'
-      toggledAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this task's status was changed last time.
-      toggledBy:
-        position: 50
-        description: The user who changed this task's status.
-        $ref: '#/definitions/SimpleIdentity'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
+      toggledBy:
+        position: 50
+        description: The user who changed this task's status.
+        $ref: '#/definitions/SimpleIdentity'
+      toggledAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this task's status was changed last time.
       peekaboo:
         type: boolean
         example: true
@@ -3394,6 +3420,16 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
+      followers:
+        type: array
+        description: |-
+          (Optional) OID of the users to replace the followers of this project.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -3421,16 +3457,6 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      followers:
-        type: array
-        description: |-
-          (Optional) OID of the users to replace the followers of this project.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
   UpdateStatusBody:
     type: object
     properties:
@@ -3462,24 +3488,24 @@ definitions:
         type: string
         example: '**Great** sublist to start with.'
         description: (Optional) An optional description about this task.
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
       archived:
         type: boolean
         example: true
         description: (Optional) Specify true to archive this sublist. Or, specify false to undo the previous archiving if any.
-      due:
+      iconColor:
         type: string
-        example: '2020-01-22T02:06:58.158Z'
-        description: '(Optional) When this sublist was aimed to complete. '
+        example: '37'
+        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: icon-view-kanban
         description: |-
           (Optional) The image representing this record. It shall be one of the predined images:
            'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      due:
+        type: string
+        example: '2020-01-22T02:06:58.158Z'
+        description: '(Optional) When this sublist was aimed to complete. '
       changes:
         type: array
         description: (Optional) A list of changes to control what tasks to be added to or removed from this sublist.
@@ -3515,6 +3541,57 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) Change the description about this task.
+      assignees:
+        type: array
+        description: (Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      recurring:
+        description: (Optional) The recurring information of this task. It is null if it is not a recurring task.
+        $ref: '#/definitions/Recurring'
+      peekaboo:
+        type: object
+        example: true
+        description: |-
+          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.
+          Or, specify false to undo the previous peekaboo if any.
+
+          If a positive integer is specified, it is the number of days to peekaboo a task.
+          If true, it won't be reshowed automatically.
+
+          Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
+      followers:
+        type: array
+        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
+      successors:
+        type: array
+        description: |-
+          (Optional) OID or ID of tasks to replace the successors of this task.
+
+          To specify task's ID, you can specify as `#id` or `id`.
+
+          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
+
+          - For Money type, please specify the value directly (without currency).
+          - For User or Task type, please specify the OID.
+          - For Duration type, please specify number of seconds.
+          - For multiple values, you can specify a list of values.
       removeTags:
         type: array
         description: |-
@@ -3583,66 +3660,15 @@ definitions:
           Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
         items:
           type: string
-      assignees:
-        type: array
-        description: (Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      recurring:
-        description: (Optional) The recurring information of this task. It is null if it is not a recurring task.
-        $ref: '#/definitions/Recurring'
-      peekaboo:
-        type: object
-        example: true
-        description: |-
-          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.
-          Or, specify false to undo the previous peekaboo if any.
-
-          If a positive integer is specified, it is the number of days to peekaboo a task.
-          If true, it won't be reshowed automatically.
-
-          Default: false.
-        anyOf:
-          - type: boolean
-          - type: integer
-      followers:
-        type: array
-        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-      successors:
+      tags:
         type: array
         description: |-
-          (Optional) OID or ID of tasks to replace the successors of this task.
-
-          To specify task's ID, you can specify as `#id` or `id`.
-
-          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
-
-          - For Money type, please specify the value directly (without currency).
-          - For User or Task type, please specify the OID.
-          - For Duration type, please specify number of seconds.
-          - For multiple values, you can specify a list of values.
-      addTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to this task.
+          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
           Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
+          - ITaVbkhh3iVcEcV3vuSLeE2k
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -3673,15 +3699,15 @@ definitions:
         description: |-
           (Optional) Specify true if you'd like to make this task as updated by the app.
           Default: false -- the task is marked as created by the user authorizing the app.
-      tags:
+      addTags:
         type: array
         description: |-
-          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
+          (Optional) OID or names of the tags to be added to this task.
           Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
+          - X6nmx9XjEO2wKbqeB1pRT43C
       priority:
         type: integer
         format: int32
@@ -3723,15 +3749,15 @@ definitions:
         type: string
         example: https://quire.io/u/john
         description: Url of this record on Quire website.
-      email:
-        type: string
-        example: john@gmail.cc
-        description: Email address.
-        allowEmptyValue: true
       website:
         type: string
         example: https://coolwebsites.com
         description: Website.
+        allowEmptyValue: true
+      email:
+        type: string
+        example: john@gmail.cc
+        description: Email address.
         allowEmptyValue: true
       description:
         type: string

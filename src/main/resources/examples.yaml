@@ -1,4 +1,14 @@
 paths:
+  '/sublist/id/{ownerType}/{ownerId}':
+    post:
+      parameters:
+        - name: owenerType
+          required: false
+  '/sublist/id/{ownerType}/{ownerId}/{id}':
+    post:
+      parameters:
+        - name: owenerType
+          required: false
   '/project/export-csv/id/{id}':
     get:
       produces:

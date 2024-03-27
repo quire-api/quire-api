@@ -309,34 +309,34 @@
             <a href="#tag-sublist">sublist</a>
             <ul>
               <li>
-                <a href="#operation--sublist--projectOid--post"> Add a new sublist. </a>
+                <a href="#operation--sublist--ownerType---ownerOid--post"> Add a new sublist by owner&#x27;s OID. </a>
               </li>
               <li>
-                <a href="#operation--sublist-id--projectId--post"> Add a new sublist. </a>
+                <a href="#operation--sublist-id--ownerType---ownerId--post"> Add a new sublist by owner&#x27;s ID. </a>
               </li>
               <li>
-                <a href="#operation--sublist-id--projectId---id--get"> Get an existing sublist by its ID. </a>
+                <a href="#operation--sublist-id--ownerType---ownerId---id--get"> Get an existing sublist by its ID. </a>
               </li>
               <li>
                 <a href="#operation--sublist--oid--get"> Get an existing sublist by its OID </a>
               </li>
               <li>
-                <a href="#operation--sublist-list-id--projectId--get"> Get all sublists of the given project by its ID. </a>
+                <a href="#operation--sublist-list-id--ownerType---ownerId--get"> Get all sublists of the given owner by its ID. </a>
               </li>
               <li>
-                <a href="#operation--sublist-list--projectOid--get"> Get all sublists of the given project by its OID. </a>
+                <a href="#operation--sublist-list--ownerType---ownerOid--get"> Get all sublists of the given owner by its OID. </a>
               </li>
               <li>
-                <a href="#operation--sublist-id--projectId---id--put"> Update a sublist by its ID. </a>
+                <a href="#operation--sublist-id--ownerType---ownerId---id--put"> Update a sublist by its ID. </a>
               </li>
               <li>
-                <a href="#operation--sublist--oid--put"> Update a sublist. </a>
+                <a href="#operation--sublist--oid--put"> Update a sublist by its OID. </a>
               </li>
               <li>
-                <a href="#operation--sublist-id--projectId---id--delete"> Delete a sublist by its ID </a>
+                <a href="#operation--sublist-id--ownerType---ownerId---id--delete"> Delete a sublist by its ID </a>
               </li>
               <li>
-                <a href="#operation--sublist--oid--delete"> Delete a sublist </a>
+                <a href="#operation--sublist--oid--delete"> Delete a sublist by its OID </a>
               </li>
             </ul>
           </section>
@@ -430,6 +430,14 @@
               </li>
               <li>
                 <a href="#operation--user-list-project--oid--get"> Get all users records of the given project. </a>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <a href="#tag-default">default</a>
+            <ul>
+              <li>
+                <a href="#operation--sublist-id--ownerType---ownerId---id--post"> POST /sublist/id/{ownerType}/{ownerId}/{id} </a>
               </li>
             </ul>
           </section>
@@ -1019,19 +1027,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">pinned:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Whether to pin this comment. Default: false</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">asUser:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -1043,6 +1038,19 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Specify true if you&#39;d like to make this new comment as created by the app. Default: false -- the comment is marked as created by the user authorizing the app.</p>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">pinned:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Whether to pin this comment. Default: false</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -1050,8 +1058,8 @@ https://quire.io/api/user/id/me
                   <h5>Request Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
-  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -1199,19 +1207,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">pinned:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Whether to pin this comment. Default: false</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">asUser:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -1223,6 +1218,19 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Specify true if you&#39;d like to make this new comment as created by the app. Default: false -- the comment is marked as created by the user authorizing the app.</p>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">pinned:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Whether to pin this comment. Default: false</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -1230,8 +1238,8 @@ https://quire.io/api/user/id/me
                   <h5>Request Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
-  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -1364,19 +1372,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">pinned:
-                        <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Whether to pin this comment. Default: false</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">asUser:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -1388,6 +1383,19 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Specify true if you&#39;d like to make this new comment as created by the app. Default: false -- the comment is marked as created by the user authorizing the app.</p>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">pinned:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Whether to pin this comment. Default: false</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -1395,8 +1403,8 @@ https://quire.io/api/user/id/me
                   <h5>Request Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
-  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -2753,8 +2761,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -2846,8 +2854,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -2922,8 +2930,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
     <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
     <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -3708,8 +3716,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
@@ -3825,8 +3833,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
@@ -3956,8 +3964,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;followers&quot;</span>: [
       <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
     ],
@@ -4103,8 +4111,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;followers&quot;</span>: [
       <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
     ],
@@ -4250,8 +4258,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
     <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
     <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;followers&quot;</span>: [
       <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
     ],
@@ -4324,6 +4332,19 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-body">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">followers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID of the users to replace the followers of this project. Please refer to <code>addFollowers()</code> for more details.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -4352,34 +4373,21 @@ https://quire.io/api/user/id/me
                       <p>(Optional) OID of the followers to be removed from this project. Please refer to <code>addFollowers()</code> for more details.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">followers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID of the users to replace the followers of this project. Please refer to <code>addFollowers()</code> for more details.</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
                 <section>
                   <h5>Request Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
   ],
   <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
   ]
 }
 </code></pre>
@@ -4431,8 +4439,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
@@ -5891,7 +5899,7 @@ https://quire.io/api/user/id/me
               <p>A sublist is a collections of tasks. It represents a subset of all tasks.</p>
             </div>
           </div>
-          <div id="operation--sublist--projectOid--post" class="operation panel" data-traverse-target="operation--sublist--projectOid--post">
+          <div id="operation--sublist--ownerType---ownerOid--post" class="operation panel" data-traverse-target="operation--sublist--ownerType---ownerOid--post">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -5901,20 +5909,20 @@ https://quire.io/api/user/id/me
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Add a new sublist.</span>
+              <span class="operation-summary">Add a new sublist by owner&apos;s OID.</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">POST</span>
-                  <span class="operation-path">/sublist/{projectOid}</span>
+                  <span class="operation-path">/sublist/{ownerType}/{ownerOid}</span>
                 </section>
               </div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-description">
-                  <p>Add a new sublist into a project.</p>
+                  <p>Add a new sublist by owner&#39;s OID</p>
                 </section>
               </div>
             </div>
@@ -5923,7 +5931,7 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectOid:
+                      <div class="prop-title">ownerType:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -5933,7 +5941,22 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>OID of project that this new sublist to be added to.</p>
+                      <p>The type of the owner that this new sublist to be added to. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/this_is_oid</code> is equivalent to <code>/project/this_is_oid</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerOid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of the owner that this new sublist to be added to.</p>
                     </div>
                   </div>
                 </section>
@@ -6144,7 +6167,7 @@ https://quire.io/api/user/id/me
               </div>
             </div>
           </div>
-          <div id="operation--sublist-id--projectId--post" class="operation panel" data-traverse-target="operation--sublist-id--projectId--post">
+          <div id="operation--sublist-id--ownerType---ownerId--post" class="operation panel" data-traverse-target="operation--sublist-id--ownerType---ownerId--post">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -6154,20 +6177,20 @@ https://quire.io/api/user/id/me
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Add a new sublist.</span>
+              <span class="operation-summary">Add a new sublist by owner&apos;s ID.</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">POST</span>
-                  <span class="operation-path">/sublist/id/{projectId}</span>
+                  <span class="operation-path">/sublist/id/{ownerType}/{ownerId}</span>
                 </section>
               </div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-description">
-                  <p>Add a new sublist into a project.</p>
+                  <p>Add a new sublist by owner&#39;s ID.</p>
                 </section>
               </div>
             </div>
@@ -6176,7 +6199,21 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectId:
+                      <div class="prop-title">owenerType:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>The type of the owner that this new sublist to be added to. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/id/this_is_id</code> is equivalent to <code>/id/project/this_is_id</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerId:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -6186,7 +6223,7 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>ID of project that this new sublist to be added to.</p>
+                      <p>ID of owner that this new sublist to be added to.</p>
                     </div>
                   </div>
                 </section>
@@ -6397,7 +6434,7 @@ https://quire.io/api/user/id/me
               </div>
             </div>
           </div>
-          <div id="operation--sublist-id--projectId---id--get" class="operation panel" data-traverse-target="operation--sublist-id--projectId---id--get">
+          <div id="operation--sublist-id--ownerType---ownerId---id--get" class="operation panel" data-traverse-target="operation--sublist-id--ownerType---ownerId---id--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -6413,7 +6450,7 @@ https://quire.io/api/user/id/me
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">GET</span>
-                  <span class="operation-path">/sublist/id/{projectId}/{id}</span>
+                  <span class="operation-path">/sublist/id/{ownerType}/{ownerId}/{id}</span>
                 </section>
               </div>
             </div>
@@ -6429,9 +6466,9 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectId:
+                      <div class="prop-title">owenerType:
                         <span class="prop-type">
-                          <span class="json-property-type">integer </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
@@ -6439,7 +6476,22 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>ID of the project that the sublist belongs to.</p>
+                      <p>The type of the owner that this sublist belongs to. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/id/this_is_id</code> is equivalent to <code>/id/project/this_is_id</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerId:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of owner that this sublist belongs to.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -6640,7 +6692,7 @@ https://quire.io/api/user/id/me
               </div>
             </div>
           </div>
-          <div id="operation--sublist-list-id--projectId--get" class="operation panel" data-traverse-target="operation--sublist-list-id--projectId--get">
+          <div id="operation--sublist-list-id--ownerType---ownerId--get" class="operation panel" data-traverse-target="operation--sublist-list-id--ownerType---ownerId--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -6650,20 +6702,20 @@ https://quire.io/api/user/id/me
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Get all sublists of the given project by its ID.</span>
+              <span class="operation-summary">Get all sublists of the given owner by its ID.</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">GET</span>
-                  <span class="operation-path">/sublist/list/id/{projectId}</span>
+                  <span class="operation-path">/sublist/list/id/{ownerType}/{ownerId}</span>
                 </section>
               </div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-description">
-                  <p>Returns all sublist records of the given project by its ID.</p>
+                  <p>Returns all sublist records of the given owner by its ID.</p>
                 </section>
               </div>
             </div>
@@ -6672,7 +6724,7 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectId:
+                      <div class="prop-title">ownerType:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -6682,7 +6734,22 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>ID of project.</p>
+                      <p>The type of the owner. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/list/id/this_is_id</code> is equivalent to <code>/list/id/project/this_is_id</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerId:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the owner.</p>
                     </div>
                   </div>
                 </section>
@@ -6756,7 +6823,7 @@ https://quire.io/api/user/id/me
               </div>
             </div>
           </div>
-          <div id="operation--sublist-list--projectOid--get" class="operation panel" data-traverse-target="operation--sublist-list--projectOid--get">
+          <div id="operation--sublist-list--ownerType---ownerOid--get" class="operation panel" data-traverse-target="operation--sublist-list--ownerType---ownerOid--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -6766,20 +6833,20 @@ https://quire.io/api/user/id/me
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Get all sublists of the given project by its OID.</span>
+              <span class="operation-summary">Get all sublists of the given owner by its OID.</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">GET</span>
-                  <span class="operation-path">/sublist/list/{projectOid}</span>
+                  <span class="operation-path">/sublist/list/{ownerType}/{ownerOid}</span>
                 </section>
               </div>
             </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <section class="swagger-operation-description">
-                  <p>Returns all sublist records of the given project by its OID.</p>
+                  <p>Returns all sublist records of the given owner by its OID.</p>
                 </section>
               </div>
             </div>
@@ -6788,7 +6855,7 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectOid:
+                      <div class="prop-title">ownerType:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -6798,7 +6865,22 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>OID of the project.</p>
+                      <p>The type of the owner. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/list/this_is_oid</code> is equivalent to <code>/list/project/this_is_oid</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerOid:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>OID of the owner.</p>
                     </div>
                   </div>
                 </section>
@@ -6872,7 +6954,7 @@ https://quire.io/api/user/id/me
               </div>
             </div>
           </div>
-          <div id="operation--sublist-id--projectId---id--put" class="operation panel" data-traverse-target="operation--sublist-id--projectId---id--put">
+          <div id="operation--sublist-id--ownerType---ownerId---id--put" class="operation panel" data-traverse-target="operation--sublist-id--ownerType---ownerId---id--put">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -6888,7 +6970,7 @@ https://quire.io/api/user/id/me
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">PUT</span>
-                  <span class="operation-path">/sublist/id/{projectId}/{id}</span>
+                  <span class="operation-path">/sublist/id/{ownerType}/{ownerId}/{id}</span>
                 </section>
               </div>
             </div>
@@ -6904,22 +6986,7 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectId:
-                        <span class="prop-type">
-                          <span class="json-property-type">integer </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>ID of the project that the sublist belongs to.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">id:
+                      <div class="prop-title">ownerType:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -6929,7 +6996,22 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>ID of the sublist that needs to be fetched</p>
+                      <p>The type of the owner. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/id/this_is_id</code> is equivalent to <code>/id/project/this_is_id</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerId:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the owner.</p>
                     </div>
                   </div>
                 </section>
@@ -6975,19 +7057,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">iconColor:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">archived:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -7001,7 +7070,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">due:
+                      <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -7009,7 +7078,7 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) When this sublist was aimed to complete. </p>
+                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7023,6 +7092,19 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) The image representing this record. It shall be one of the predined images: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">due:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) When this sublist was aimed to complete. </p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7049,10 +7131,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Sublist 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Sublist101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** sublist to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;changes&quot;</span>: [
     {
       <span class="hljs-attr">&quot;exclude&quot;</span>: <span class="hljs-literal">false</span>,
@@ -7141,7 +7223,7 @@ https://quire.io/api/user/id/me
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Update a sublist.</span>
+              <span class="operation-summary">Update a sublist by its OID.</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
@@ -7219,19 +7301,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">iconColor:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">archived:
                         <span class="prop-type">
                           <span class="json-property-type">boolean </span>
@@ -7245,7 +7314,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">due:
+                      <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -7253,7 +7322,7 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) When this sublist was aimed to complete. </p>
+                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7267,6 +7336,19 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) The image representing this record. It shall be one of the predined images: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">due:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) When this sublist was aimed to complete. </p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -7293,10 +7375,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Sublist 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Sublist101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** sublist to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;changes&quot;</span>: [
     {
       <span class="hljs-attr">&quot;exclude&quot;</span>: <span class="hljs-literal">false</span>,
@@ -7375,7 +7457,7 @@ https://quire.io/api/user/id/me
               </div>
             </div>
           </div>
-          <div id="operation--sublist-id--projectId---id--delete" class="operation panel" data-traverse-target="operation--sublist-id--projectId---id--delete">
+          <div id="operation--sublist-id--ownerType---ownerId---id--delete" class="operation panel" data-traverse-target="operation--sublist-id--ownerType---ownerId---id--delete">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -7391,7 +7473,7 @@ https://quire.io/api/user/id/me
               <div class="doc-copy">
                 <section class="swagger-operation-path">
                   <span class="operation-method">DELETE</span>
-                  <span class="operation-path">/sublist/id/{projectId}/{id}</span>
+                  <span class="operation-path">/sublist/id/{ownerType}/{ownerId}/{id}</span>
                 </section>
               </div>
             </div>
@@ -7407,22 +7489,7 @@ https://quire.io/api/user/id/me
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">projectId:
-                        <span class="prop-type">
-                          <span class="json-property-type">integer </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>ID of the project that the sublist belongs to.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">id:
+                      <div class="prop-title">ownerType:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -7432,7 +7499,22 @@ https://quire.io/api/user/id/me
                       <div class="prop-subtitle"> in path </div>
                     </div>
                     <div class="prop-value">
-                      <p>ID of the sublist that needs to be fetched</p>
+                      <p>The type of the owner. It can be <code>project</code>, <code>organization</code>, <code>folder</code> or <code>smart-folder</code>. If omitted, <code>project</code> is assumed. For example, <code>/id/this_is_id</code> is equivalent to <code>/id/project/this_is_id</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">ownerId:
+                        <span class="prop-type">
+                          <span class="json-property-type">string </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>ID of the owner.</p>
                     </div>
                   </div>
                 </section>
@@ -7469,7 +7551,7 @@ https://quire.io/api/user/id/me
             <!-- </div> -->
             <!-- </section> -->
             <h2 class="operation-title">
-              <span class="operation-summary">Delete a sublist</span>
+              <span class="operation-summary">Delete a sublist by its OID</span>
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
@@ -8535,6 +8617,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">start:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -8587,19 +8682,6 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">tags:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -8669,13 +8751,13 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;tasks&quot;</span>: [
     <span class="hljs-string"><a href="#definition-CreateTaskBody">&quot;#/definitions/CreateTaskBody&quot;</a></span>
   ],
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-  ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;etc&quot;</span>: <span class="hljs-number">0</span>
@@ -8745,10 +8827,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -8780,9 +8862,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -9003,6 +9085,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">start:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -9055,19 +9150,6 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">tags:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -9137,13 +9219,13 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;tasks&quot;</span>: [
     <span class="hljs-string"><a href="#definition-CreateTaskBody">&quot;#/definitions/CreateTaskBody&quot;</a></span>
   ],
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-  ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;etc&quot;</span>: <span class="hljs-number">0</span>
@@ -9213,10 +9295,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -9248,9 +9330,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -9471,6 +9553,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">start:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -9523,19 +9618,6 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">tags:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -9605,13 +9687,13 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;tasks&quot;</span>: [
     <span class="hljs-string"><a href="#definition-CreateTaskBody">&quot;#/definitions/CreateTaskBody&quot;</a></span>
   ],
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-  ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;etc&quot;</span>: <span class="hljs-number">0</span>
@@ -9681,10 +9763,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -9716,9 +9798,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -9939,6 +10021,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">start:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -9991,19 +10086,6 @@ https://quire.io/api/user/id/me
                     </div>
                     <div class="prop-value">
                       <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">tags:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -10073,13 +10155,13 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;tasks&quot;</span>: [
     <span class="hljs-string"><a href="#definition-CreateTaskBody">&quot;#/definitions/CreateTaskBody&quot;</a></span>
   ],
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-  ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;etc&quot;</span>: <span class="hljs-number">0</span>
@@ -10149,10 +10231,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -10184,9 +10266,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -10333,10 +10415,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -10368,9 +10450,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -10502,10 +10584,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -10537,9 +10619,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -10701,10 +10783,10 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
     <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+    <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;assignors&quot;</span>: [
       <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
     ],
-    <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;partner&quot;</span>: {
       <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
       <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -10736,9 +10818,9 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+    <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
     <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -10872,10 +10954,10 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
     <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+    <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;assignors&quot;</span>: [
       <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
     ],
-    <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;partner&quot;</span>: {
       <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
       <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -10907,9 +10989,9 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+    <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
     <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -11043,10 +11125,10 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
     <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+    <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;assignors&quot;</span>: [
       <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
     ],
-    <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;partner&quot;</span>: {
       <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
       <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -11078,9 +11160,9 @@ https://quire.io/api/user/id/me
         <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
       }
     ],
-    <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-    <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
     <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+    <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+    <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
     <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
     <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -11654,105 +11736,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeTags:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be removed from this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">addAssignees:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the assignees to be added to this task.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">removeAssignees:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the assignees to be removed from this task.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">addFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the followers to be added to this task.If &quot;me&quot; is specified, it means the current user will follow this task. If the application would like to follow (i.e., receive notifications), it can pass &quot;app&quot; as one of OIDs. In additions, it can pass additional information in one of the following syntaxes.</p>
-                      <p>Syntax 1: &quot;app|team&quot; or &quot;app|team|channel&quot; where team and channel can be any value.</p>
-                      <p>Syntax 2: &quot;app|/path&quot; where &quot;/path&quot; can be any URL path. It will be appended to the hook&#39;s URL when calling the registered hook. For example, if the hook URL is &quot;
-                        <a href="https://super.app/hooks/standard&quot;">https://super.app/hooks/standard&quot;</a> and the follower is &quot;app|/soc1/33456/a7&quot;, then the notification will be sent to &quot;
-                        <a href="https://super.app/hooks/standard/soc1/33456/a7&quot;">https://super.app/hooks/standard/soc1/33456/a7&quot;</a>.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the followers to be removed from this task.Please refer to <code>addFollowers()</code> for more details.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">addSuccessors:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of tasks to be added to the successors of this task.</p>
-                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
-                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">removeSuccessors:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of tasks to be removed from the successors of this task.</p>
-                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
-                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">assignees:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -11856,7 +11839,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">addTags:
+                      <div class="prop-title">removeTags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -11864,7 +11847,106 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be added to this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) OID or names of the tags to be removed from this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">addAssignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the assignees to be added to this task.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeAssignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the assignees to be removed from this task.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">addFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the followers to be added to this task.If &quot;me&quot; is specified, it means the current user will follow this task. If the application would like to follow (i.e., receive notifications), it can pass &quot;app&quot; as one of OIDs. In additions, it can pass additional information in one of the following syntaxes.</p>
+                      <p>Syntax 1: &quot;app|team&quot; or &quot;app|team|channel&quot; where team and channel can be any value.</p>
+                      <p>Syntax 2: &quot;app|/path&quot; where &quot;/path&quot; can be any URL path. It will be appended to the hook&#39;s URL when calling the registered hook. For example, if the hook URL is &quot;
+                        <a href="https://super.app/hooks/standard&quot;">https://super.app/hooks/standard&quot;</a> and the follower is &quot;app|/soc1/33456/a7&quot;, then the notification will be sent to &quot;
+                        <a href="https://super.app/hooks/standard/soc1/33456/a7&quot;">https://super.app/hooks/standard/soc1/33456/a7&quot;</a>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the followers to be removed from this task.Please refer to <code>addFollowers()</code> for more details.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">addSuccessors:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of tasks to be added to the successors of this task.</p>
+                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
+                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeSuccessors:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of tasks to be removed from the successors of this task.</p>
+                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
+                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -11925,7 +12007,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">tags:
+                      <div class="prop-title">addTags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -11933,7 +12015,7 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) OID or names of the tags to be added to this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -11983,6 +12065,24 @@ https://quire.io/api/user/id/me
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;New idea&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
+  <span class="hljs-attr">&quot;assignees&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;recurring&quot;</span>: {
+    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">9</span>,
+    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
+  },
+  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;successors&quot;</span>: [
+    <span class="hljs-string">&quot;string&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;yourField&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,
   <span class="hljs-attr">&quot;removeTags&quot;</span>: [
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
@@ -12004,33 +12104,15 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;removeSuccessors&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;assignees&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;recurring&quot;</span>: {
-    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">9</span>,
-    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
-    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
-  },
-  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;successors&quot;</span>: [
-    <span class="hljs-string">&quot;string&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;yourField&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,
-  <span class="hljs-attr">&quot;addTags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
   ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
+  <span class="hljs-attr">&quot;addTags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">100</span>,
@@ -12101,10 +12183,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -12136,9 +12218,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -12236,105 +12318,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeTags:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be removed from this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">addAssignees:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the assignees to be added to this task.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">removeAssignees:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the assignees to be removed from this task.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">addFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the followers to be added to this task.If &quot;me&quot; is specified, it means the current user will follow this task. If the application would like to follow (i.e., receive notifications), it can pass &quot;app&quot; as one of OIDs. In additions, it can pass additional information in one of the following syntaxes.</p>
-                      <p>Syntax 1: &quot;app|team&quot; or &quot;app|team|channel&quot; where team and channel can be any value.</p>
-                      <p>Syntax 2: &quot;app|/path&quot; where &quot;/path&quot; can be any URL path. It will be appended to the hook&#39;s URL when calling the registered hook. For example, if the hook URL is &quot;
-                        <a href="https://super.app/hooks/standard&quot;">https://super.app/hooks/standard&quot;</a> and the follower is &quot;app|/soc1/33456/a7&quot;, then the notification will be sent to &quot;
-                        <a href="https://super.app/hooks/standard/soc1/33456/a7&quot;">https://super.app/hooks/standard/soc1/33456/a7&quot;</a>.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of the followers to be removed from this task.Please refer to <code>addFollowers()</code> for more details.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">addSuccessors:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of tasks to be added to the successors of this task.</p>
-                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
-                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">removeSuccessors:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) OID or ID of tasks to be removed from the successors of this task.</p>
-                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
-                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">assignees:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -12438,7 +12421,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">addTags:
+                      <div class="prop-title">removeTags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -12446,7 +12429,106 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to be added to this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) OID or names of the tags to be removed from this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">addAssignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the assignees to be added to this task.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeAssignees:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the assignees to be removed from this task.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">addFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the followers to be added to this task.If &quot;me&quot; is specified, it means the current user will follow this task. If the application would like to follow (i.e., receive notifications), it can pass &quot;app&quot; as one of OIDs. In additions, it can pass additional information in one of the following syntaxes.</p>
+                      <p>Syntax 1: &quot;app|team&quot; or &quot;app|team|channel&quot; where team and channel can be any value.</p>
+                      <p>Syntax 2: &quot;app|/path&quot; where &quot;/path&quot; can be any URL path. It will be appended to the hook&#39;s URL when calling the registered hook. For example, if the hook URL is &quot;
+                        <a href="https://super.app/hooks/standard&quot;">https://super.app/hooks/standard&quot;</a> and the follower is &quot;app|/soc1/33456/a7&quot;, then the notification will be sent to &quot;
+                        <a href="https://super.app/hooks/standard/soc1/33456/a7&quot;">https://super.app/hooks/standard/soc1/33456/a7&quot;</a>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of the followers to be removed from this task.Please refer to <code>addFollowers()</code> for more details.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">addSuccessors:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of tasks to be added to the successors of this task.</p>
+                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
+                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeSuccessors:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or ID of tasks to be removed from the successors of this task.</p>
+                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
+                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -12507,7 +12589,7 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">tags:
+                      <div class="prop-title">addTags:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
                           <span class="json-property-range" title="Value limits"></span>
@@ -12515,7 +12597,7 @@ https://quire.io/api/user/id/me
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) OID or names of the tags to be added to this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -12565,6 +12647,24 @@ https://quire.io/api/user/id/me
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;New idea&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
+  <span class="hljs-attr">&quot;assignees&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;recurring&quot;</span>: {
+    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">9</span>,
+    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
+  },
+  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;successors&quot;</span>: [
+    <span class="hljs-string">&quot;string&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;yourField&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,
   <span class="hljs-attr">&quot;removeTags&quot;</span>: [
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
@@ -12586,33 +12686,15 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;removeSuccessors&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;assignees&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;recurring&quot;</span>: {
-    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">9</span>,
-    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
-    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
-  },
-  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;successors&quot;</span>: [
-    <span class="hljs-string">&quot;string&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;yourField&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,
-  <span class="hljs-attr">&quot;addTags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
   ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
+  <span class="hljs-attr">&quot;addTags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">100</span>,
@@ -12683,10 +12765,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -12718,9 +12800,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -12895,8 +12977,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
@@ -12986,8 +13068,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
@@ -13060,8 +13142,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
-    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
     <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
@@ -13135,8 +13217,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
-    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
     <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
@@ -13210,8 +13292,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
     <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
-    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
     <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+    <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
@@ -13224,6 +13306,36 @@ https://quire.io/api/user/id/me
                   <!-- </div> -->
                 </section>
               </div>
+            </div>
+          </div>
+          <h1 id="tag-default" class="swagger-summary-tag" data-traverse-target="tag-default">default</h1>
+          <div id="operation--sublist-id--ownerType---ownerId---id--post" class="operation panel" data-traverse-target="operation--sublist-id--ownerType---ownerId---id--post">
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">POST</span>
+                <span class="operation-path">/sublist/id/{ownerType}/{ownerId}/{id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">owenerType:
+                        <span class="prop-type">
+                          <span class="json-property-type">object </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in </div>
+                    </div>
+                    <div class="prop-value">
+                      <p class="no-description">(no description)</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
             </div>
           </div>
           <h1>Schema Definitions</h1>
@@ -13644,14 +13756,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>The content of the new comment.</p>
                     </dd>
-                    <dt data-property-name="pinned" class="has-description">
-                      <span class="json-property-name">pinned:</span>
-                      <span class="json-property-type">boolean </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Whether to pin this comment. Default: false</p>
-                    </dd>
                     <dt data-property-name="asUser" class="has-description">
                       <span class="json-property-name">asUser:</span>
                       <span class="json-property-type">boolean </span>
@@ -13659,6 +13763,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>(Optional) Specify true if you&#39;d like to make this new comment as created by the app. Default: false -- the comment is marked as created by the user authorizing the app.</p>
+                    </dd>
+                    <dt data-property-name="pinned" class="has-description">
+                      <span class="json-property-name">pinned:</span>
+                      <span class="json-property-type">boolean </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Whether to pin this comment. Default: false</p>
                     </dd>
                   </dl>
                 </section>
@@ -13668,8 +13780,8 @@ https://quire.io/api/user/id/me
                   <h5>Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;Adjust style&quot;</span>,
-  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;pinned&quot;</span>: <span class="hljs-literal">false</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -14112,6 +14224,21 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
+                    <dt data-property-name="tags" class="has-description">
+                      <span class="json-property-name">tags:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
                     <dt data-property-name="start" class="has-description">
                       <span class="json-property-name">start:</span>
                       <span class="json-property-type">string </span>
@@ -14148,21 +14275,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Specify true if you&#39;d like to make this new task as created by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
                     </dd>
-                    <dt data-property-name="tags" class="has-description">
-                      <span class="json-property-name">tags:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) OID or names of the tags to be added to the new created task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
                     <dt data-property-name="priority" class="has-description">
                       <span class="json-property-name">priority:</span>
                       <span class="json-property-type">integer </span>
@@ -14232,25 +14344,25 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;tasks&quot;</span>: [
         <span class="hljs-string"><a href="#definition-CreateTaskBody">&quot;#/definitions/CreateTaskBody&quot;</a></span>
       ],
+      <span class="hljs-attr">&quot;tags&quot;</span>: [
+        <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+      ],
       <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
       <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
       <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
       <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">&quot;tags&quot;</span>: [
-        <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-      ],
       <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
       <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
       <span class="hljs-attr">&quot;etc&quot;</span>: <span class="hljs-number">0</span>
     }
   ],
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
-  ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;etc&quot;</span>: <span class="hljs-number">0</span>
@@ -14309,14 +14421,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>Name but excluding markdown characters.</p>
                     </dd>
-                    <dt data-property-name="email" class="has-description">
-                      <span class="json-property-name">email:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>Email address.</p>
-                    </dd>
                     <dt data-property-name="url" class="has-description">
                       <span class="json-property-name">url:</span>
                       <span class="json-property-type">string </span>
@@ -14324,6 +14428,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>Url of this record on Quire website.</p>
+                    </dd>
+                    <dt data-property-name="email" class="has-description">
+                      <span class="json-property-name">email:</span>
+                      <span class="json-property-type">string </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>Email address.</p>
                     </dd>
                     <dt data-property-name="website" class="has-description">
                       <span class="json-property-name">website:</span>
@@ -14408,8 +14520,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@compony.com&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -14659,14 +14771,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>OID, aka. UUID.</p>
                     </dd>
-                    <dt data-property-name="editedAt" class="has-description">
-                      <span class="json-property-name">editedAt:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>When this record was edited last time.</p>
-                    </dd>
                     <dt data-property-name="archivedAt" class="has-description">
                       <span class="json-property-name">archivedAt:</span>
                       <span class="json-property-type">string </span>
@@ -14674,6 +14778,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>When this project was archived (aka., peekaboo). It is null if not archived.</p>
+                    </dd>
+                    <dt data-property-name="editedAt" class="has-description">
+                      <span class="json-property-name">editedAt:</span>
+                      <span class="json-property-type">string </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>When this record was edited last time.</p>
                     </dd>
                     <dt data-property-name="followers" class="has-description">
                       <span class="json-property-name">followers:</span>
@@ -14754,8 +14866,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://quire.s3.amazonaws.com/oid/image.jpg&quot;</span>,
   <span class="hljs-attr">&quot;oid&quot;</span>: <span class="hljs-string">&quot;Dyh2YkFcu9uLgLFIeN1kB4Ld&quot;</span>,
-  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;archivedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
@@ -16066,6 +16178,14 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).</p>
                     </dd>
+                    <dt data-property-name="partnerBy" class="has-description">
+                      <span class="json-property-name">partnerBy:</span>
+                      <span class="json-property-type"> SimpleIdentity</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>The user who assigned this task to an external team. It is null if this task doesn&#39;t belong to any external team.</p>
+                    </dd>
                     <dt data-property-name="assignors" class="has-description">
                       <span class="json-property-name">assignors:</span>
                       <span class="json-property-type">
@@ -16083,14 +16203,6 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="partnerBy" class="has-description">
-                      <span class="json-property-name">partnerBy:</span>
-                      <span class="json-property-type"> SimpleIdentity</span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>The user who assigned this task to an external team. It is null if this task doesn&#39;t belong to any external team.</p>
-                    </dd>
                     <dt data-property-name="partner" class="has-description">
                       <span class="json-property-name">partner:</span>
                       <span class="json-property-type"> SimpleTaggingEntity</span>
@@ -16191,13 +16303,13 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="toggledAt" class="has-description">
-                      <span class="json-property-name">toggledAt:</span>
+                    <dt data-property-name="editedAt" class="has-description">
+                      <span class="json-property-name">editedAt:</span>
                       <span class="json-property-type">string </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>When this task&#39;s status was changed last time.</p>
+                      <p>When this record was edited last time.</p>
                     </dd>
                     <dt data-property-name="toggledBy" class="has-description">
                       <span class="json-property-name">toggledBy:</span>
@@ -16207,13 +16319,13 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>The user who changed this task&#39;s status.</p>
                     </dd>
-                    <dt data-property-name="editedAt" class="has-description">
-                      <span class="json-property-name">editedAt:</span>
+                    <dt data-property-name="toggledAt" class="has-description">
+                      <span class="json-property-name">toggledAt:</span>
                       <span class="json-property-type">string </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>When this record was edited last time.</p>
+                      <p>When this task&#39;s status was changed last time.</p>
                     </dd>
                     <dt data-property-name="peekaboo" class="has-description">
                       <span class="json-property-name">peekaboo:</span>
@@ -16359,10 +16471,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
+  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;assignors&quot;</span>: [
     <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>
   ],
-  <span class="hljs-attr">&quot;partnerBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;partner&quot;</span>: {
     <span class="hljs-attr">&quot;color&quot;</span>: <span class="hljs-string">&quot;35&quot;</span>,
     <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Foo&quot;</span>,
@@ -16394,9 +16506,9 @@ https://quire.io/api/user/id/me
       <span class="hljs-attr">&quot;task&quot;</span>: <span class="hljs-string">&quot;wrSpgghWFCzPHBqiShSurDeD&quot;</span>
     }
   ],
-  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
-  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
   <span class="hljs-attr">&quot;editedAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;toggledBy&quot;</span>: <span class="hljs-string"><a href="#definition-SimpleIdentity">&quot;#/definitions/SimpleIdentity&quot;</a></span>,
+  <span class="hljs-attr">&quot;toggledAt&quot;</span>: <span class="hljs-string">&quot;2018-12-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/w/my_project/123&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
@@ -16565,6 +16677,21 @@ https://quire.io/api/user/id/me
               <div class="doc-copy">
                 <section class="json-schema-properties">
                   <dl>
+                    <dt data-property-name="followers" class="has-description">
+                      <span class="json-property-name">followers:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) OID of the users to replace the followers of this project. Please refer to <code>addFollowers()</code> for more details.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
                     <dt data-property-name="addFollowers" class="has-description">
                       <span class="json-property-name">addFollowers:</span>
                       <span class="json-property-type">string[] </span>
@@ -16599,21 +16726,6 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="followers" class="has-description">
-                      <span class="json-property-name">followers:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) OID of the users to replace the followers of this project. Please refer to <code>addFollowers()</code> for more details.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
                   </dl>
                 </section>
               </div>
@@ -16621,15 +16733,15 @@ https://quire.io/api/user/id/me
                 <section>
                   <h5>Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
   ],
   <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
   ]
 }
 </code></pre>
@@ -16735,14 +16847,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) An optional description about this task.</p>
                     </dd>
-                    <dt data-property-name="iconColor" class="has-description">
-                      <span class="json-property-name">iconColor:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
-                    </dd>
                     <dt data-property-name="archived" class="has-description">
                       <span class="json-property-name">archived:</span>
                       <span class="json-property-type">boolean </span>
@@ -16751,13 +16855,13 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Specify true to archive this sublist. Or, specify false to undo the previous archiving if any.</p>
                     </dd>
-                    <dt data-property-name="due" class="has-description">
-                      <span class="json-property-name">due:</span>
+                    <dt data-property-name="iconColor" class="has-description">
+                      <span class="json-property-name">iconColor:</span>
                       <span class="json-property-type">string </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>(Optional) When this sublist was aimed to complete. </p>
+                      <p>(Optional) The color of the icon representing this record. It is an index of our predefined color palette. </p>
                     </dd>
                     <dt data-property-name="image" class="has-description">
                       <span class="json-property-name">image:</span>
@@ -16766,6 +16870,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>(Optional) The image representing this record. It shall be one of the predined images: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
+                    </dd>
+                    <dt data-property-name="due" class="has-description">
+                      <span class="json-property-name">due:</span>
+                      <span class="json-property-type">string </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) When this sublist was aimed to complete. </p>
                     </dd>
                     <dt data-property-name="changes" class="has-description">
                       <span class="json-property-name">changes:</span>
@@ -16794,10 +16906,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Sublist 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Sublist101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** sublist to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2020-01-22T02:06:58.158Z&quot;</span>,
   <span class="hljs-attr">&quot;changes&quot;</span>: [
     {
       <span class="hljs-attr">&quot;exclude&quot;</span>: <span class="hljs-literal">false</span>,
@@ -16909,6 +17021,100 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>(Optional) Change the description about this task.</p>
+                    </dd>
+                    <dt data-property-name="assignees" class="has-description">
+                      <span class="json-property-name">assignees:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use &quot;addAssignees&quot; or &quot;removeAssignees&quot;.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
+                    <dt data-property-name="recurring" class="has-description">
+                      <span class="json-property-name">recurring:</span>
+                      <span class="json-property-type"> Recurring</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) The recurring information of this task. It is null if it is not a recurring task.</p>
+                    </dd>
+                    <dt data-property-name="peekaboo" class="has-description">
+                      <span class="json-property-name">peekaboo:</span>
+                      <span class="json-property-type">
+                        <section class="json-schema-anyOf">
+                          <dl>
+                            <dt>
+                              <span class="json-property-type">boolean </span>
+                              <span class="json-property-range" title="Value limits"></span>
+                            </dt>
+                            <dd> </dd>
+                            <dt>
+                              <span class="json-property-type">integer </span>
+                              <span class="json-property-range" title="Value limits"></span>
+                            </dt>
+                            <dd> </dd>
+                          </dl>
+                        </section>
+                      </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any. Or, specify false to undo the previous peekaboo if any.</p>
+                      <p>If a positive integer is specified, it is the number of days to peekaboo a task. If true, it won&#39;t be reshowed automatically.</p>
+                      <p>Default: false.</p>
+                    </dd>
+                    <dt data-property-name="followers" class="has-description">
+                      <span class="json-property-name">followers:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to <code>addFollowers()</code> for more details.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
+                    <dt data-property-name="successors" class="has-description">
+                      <span class="json-property-name">successors:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) OID or ID of tasks to replace the successors of this task.</p>
+                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
+                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
+                    <dt data-property-name="yourField" class="has-description">
+                      <span class="json-property-name">yourField:</span>
+                      <span class="json-property-type">object </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.</p>
+                      <ul>
+                        <li>For Money type, please specify the value directly (without currency).</li>
+                        <li>For User or Task type, please specify the OID.</li>
+                        <li>For Duration type, please specify number of seconds.</li>
+                        <li>For multiple values, you can specify a list of values.</li>
+                      </ul>
                     </dd>
                     <dt data-property-name="removeTags" class="has-description">
                       <span class="json-property-name">removeTags:</span>
@@ -17023,107 +17229,13 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="assignees" class="has-description">
-                      <span class="json-property-name">assignees:</span>
+                    <dt data-property-name="tags" class="has-description">
+                      <span class="json-property-name">tags:</span>
                       <span class="json-property-type">string[] </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>(Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use &quot;addAssignees&quot; or &quot;removeAssignees&quot;.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
-                    <dt data-property-name="recurring" class="has-description">
-                      <span class="json-property-name">recurring:</span>
-                      <span class="json-property-type"> Recurring</span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) The recurring information of this task. It is null if it is not a recurring task.</p>
-                    </dd>
-                    <dt data-property-name="peekaboo" class="has-description">
-                      <span class="json-property-name">peekaboo:</span>
-                      <span class="json-property-type">
-                        <section class="json-schema-anyOf">
-                          <dl>
-                            <dt>
-                              <span class="json-property-type">boolean </span>
-                              <span class="json-property-range" title="Value limits"></span>
-                            </dt>
-                            <dd> </dd>
-                            <dt>
-                              <span class="json-property-type">integer </span>
-                              <span class="json-property-range" title="Value limits"></span>
-                            </dt>
-                            <dd> </dd>
-                          </dl>
-                        </section>
-                      </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any. Or, specify false to undo the previous peekaboo if any.</p>
-                      <p>If a positive integer is specified, it is the number of days to peekaboo a task. If true, it won&#39;t be reshowed automatically.</p>
-                      <p>Default: false.</p>
-                    </dd>
-                    <dt data-property-name="followers" class="has-description">
-                      <span class="json-property-name">followers:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to <code>addFollowers()</code> for more details.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
-                    <dt data-property-name="successors" class="has-description">
-                      <span class="json-property-name">successors:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) OID or ID of tasks to replace the successors of this task.</p>
-                      <p>To specify task&#39;s ID, you can specify as <code>#id</code> or <code>id</code>.</p>
-                      <p>Example, <code>&#39;AMZ0-59R125-35KTK2356G&#39;</code>, <code>&#39;#13&#39;</code>, and <code>135</code>.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
-                    <dt data-property-name="yourField" class="has-description">
-                      <span class="json-property-name">yourField:</span>
-                      <span class="json-property-type">object </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.</p>
-                      <ul>
-                        <li>For Money type, please specify the value directly (without currency).</li>
-                        <li>For User or Task type, please specify the OID.</li>
-                        <li>For Duration type, please specify number of seconds.</li>
-                        <li>For multiple values, you can specify a list of values.</li>
-                      </ul>
-                    </dd>
-                    <dt data-property-name="addTags" class="has-description">
-                      <span class="json-property-name">addTags:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) OID or names of the tags to be added to this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </dd>
                     <dt class="json-inner-schema">
                       <section class="json-schema-array-items">
@@ -17168,13 +17280,13 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Specify true if you&#39;d like to make this task as updated by the app. Default: false -- the task is marked as created by the user authorizing the app.</p>
                     </dd>
-                    <dt data-property-name="tags" class="has-description">
-                      <span class="json-property-name">tags:</span>
+                    <dt data-property-name="addTags" class="has-description">
+                      <span class="json-property-name">addTags:</span>
                       <span class="json-property-type">string[] </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>(Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use &quot;addTags&quot; or &quot;removeTags&quot;. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
+                      <p>(Optional) OID or names of the tags to be added to this task. Note: if tag&#39;s name is specified, it is case-insensitive.</p>
                     </dd>
                     <dt class="json-inner-schema">
                       <section class="json-schema-array-items">
@@ -17216,6 +17328,24 @@ https://quire.io/api/user/id/me
                   <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;New idea&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is a **cool** task.&quot;</span>,
+  <span class="hljs-attr">&quot;assignees&quot;</span>: [
+    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;recurring&quot;</span>: {
+    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">9</span>,
+    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
+  },
+  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;followers&quot;</span>: [
+    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
+    <span class="hljs-string">&quot;app&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;successors&quot;</span>: [
+    <span class="hljs-string">&quot;string&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;yourField&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,
   <span class="hljs-attr">&quot;removeTags&quot;</span>: [
     <span class="hljs-string">&quot;mPAQrYU1qt8wAYAInKRlTnvl&quot;</span>
   ],
@@ -17237,33 +17367,15 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;removeSuccessors&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;assignees&quot;</span>: [
-    <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;recurring&quot;</span>: {
-    <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-number">9</span>,
-    <span class="hljs-attr">&quot;data&quot;</span>: <span class="hljs-number">6</span>,
-    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">&quot;end&quot;</span>: <span class="hljs-string">&quot;2020-12-22T00:00:00.000Z&quot;</span>
-  },
-  <span class="hljs-attr">&quot;peekaboo&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;followers&quot;</span>: [
-    <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
-    <span class="hljs-string">&quot;app&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;successors&quot;</span>: [
-    <span class="hljs-string">&quot;string&quot;</span>
-  ],
-  <span class="hljs-attr">&quot;yourField&quot;</span>: <span class="hljs-string">&quot;object&quot;</span>,
-  <span class="hljs-attr">&quot;addTags&quot;</span>: [
-    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
+  <span class="hljs-attr">&quot;tags&quot;</span>: [
+    <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
   ],
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2018-12-20T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2018-12-22T00:00:00.000Z&quot;</span>,
   <span class="hljs-attr">&quot;section&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;asUser&quot;</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">&quot;tags&quot;</span>: [
-    <span class="hljs-string">&quot;ITaVbkhh3iVcEcV3vuSLeE2k&quot;</span>
+  <span class="hljs-attr">&quot;addTags&quot;</span>: [
+    <span class="hljs-string">&quot;X6nmx9XjEO2wKbqeB1pRT43C&quot;</span>
   ],
   <span class="hljs-attr">&quot;priority&quot;</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-number">100</span>,
@@ -17331,14 +17443,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>Url of this record on Quire website.</p>
                     </dd>
-                    <dt data-property-name="email" class="has-description">
-                      <span class="json-property-name">email:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>Email address.</p>
-                    </dd>
                     <dt data-property-name="website" class="has-description">
                       <span class="json-property-name">website:</span>
                       <span class="json-property-type">string </span>
@@ -17346,6 +17450,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>Website.</p>
+                    </dd>
+                    <dt data-property-name="email" class="has-description">
+                      <span class="json-property-name">email:</span>
+                      <span class="json-property-type">string </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>Email address.</p>
                     </dd>
                     <dt data-property-name="description" class="has-description">
                       <span class="json-property-name">description:</span>
@@ -17407,8 +17519,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/u/john&quot;</span>,
-  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
+  <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;john@gmail.cc&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionHtml&quot;</span>: <span class="hljs-string">&quot;This is &lt;i&gt;cool&lt;/i&gt;!&quot;</span>,
