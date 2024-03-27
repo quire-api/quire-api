@@ -1,5 +1,9 @@
 # CHANGES
 
+## March 27, 2024
+
+* Allow to create sublist for organizations, folders and smart folders.
+
 ## Feburary 16, 2024
 
 * Allow to add or remove successors.
