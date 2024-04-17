@@ -51,10 +51,15 @@ public class CreateSublistBody {
 	public String getPartner() { return null; }
 
 	@ApiModelProperty(value = "(Optional) Whether it is personal. "
-		+ "If omitted, false is assumed.", position = 15)
+		+ "If omitted, false is assumed.",
+		example = "false", position = 15)
 	public boolean getPersonal() { return false; }
 
-	@ApiModelProperty(value = "(Optional) When this sublist was aimed to complete. ",
-		example = "2020-01-22T02:06:58.158Z", position = 50)
+	@ApiModelProperty(value = "(Optional) When this sublist was aimed to start."
+		example = "2024-01-02", position = 50)
+	public String getStart() { return null; }
+
+	@ApiModelProperty(value = "(Optional) When this sublist was aimed to complete.",
+		example = "2024-05-25", position = 50)
 	public String getDue() { return null; }
 }

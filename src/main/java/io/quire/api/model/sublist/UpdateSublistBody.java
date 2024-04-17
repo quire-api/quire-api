@@ -34,8 +34,11 @@ public class UpdateSublistBody {
   +" 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'")
 	public String getImage() {return null;}
 
-	@ApiModelProperty(value = "(Optional) When this sublist was aimed to complete. ",
-		example = "2020-01-22T02:06:58.158Z")
+	@ApiModelProperty(value = "(Optional) When this sublist was aimed to start."
+		example = "2024-01-02")
+	public String getStart() { return null; }
+	@ApiModelProperty(value = "(Optional) When this sublist was aimed to complete.",
+		example = "2024-05-25")
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value = "(Optional) A list of changes to control what tasks to be "
