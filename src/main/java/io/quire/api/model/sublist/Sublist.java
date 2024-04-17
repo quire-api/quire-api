@@ -35,9 +35,14 @@ public class Sublist extends Identity {
 		example = "2020-02-22T02:06:58.158Z", position = 50)
 	public String getArchivedAt() { return null; }
 
+	@ApiModelProperty(value = "When this sublist was aimed to start, "
+		+ "or null if not specified.",
+		example = "2024-01-02", position = 50)
+	public String getStart() { return null; }
+
 	@ApiModelProperty(value = "When this sublist was aimed to complete, "
 		+ "or null if not specified.",
-		example = "2020-01-22T02:06:58.158Z", position = 50)
+		example = "2024-05-25", position = 50)
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value="The project this sublist belongs to.",
