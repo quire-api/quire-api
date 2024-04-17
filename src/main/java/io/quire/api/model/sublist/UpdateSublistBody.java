@@ -34,7 +34,7 @@ public class UpdateSublistBody {
   +" 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'")
 	public String getImage() {return null;}
 
-	@ApiModelProperty(value = "(Optional) When this sublist was aimed to start."
+	@ApiModelProperty(value = "(Optional) When this sublist was aimed to start.",
 		example = "2024-01-02")
 	public String getStart() { return null; }
 	@ApiModelProperty(value = "(Optional) When this sublist was aimed to complete.",

@@ -2,7 +2,6 @@ package io.quire.api.model.project;
 
 import java.util.List;
 
-import io.quire.api.model.Recurring;
 import io.swagger.annotations.ApiModelProperty;
 
 public class UpdateProjectBody {

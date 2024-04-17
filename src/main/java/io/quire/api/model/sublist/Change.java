@@ -1,6 +1,5 @@
 package io.quire.api.model.sublist;
 
-import io.quire.api.model.NamedEntity;
 import io.swagger.annotations.*;
 
 @ApiModel()

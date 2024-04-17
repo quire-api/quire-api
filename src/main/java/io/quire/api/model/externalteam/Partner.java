@@ -4,8 +4,6 @@ import io.quire.api.model.TaggingEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.List;
-
 @ApiModel()
 public class Partner extends TaggingEntity {
     @ApiModelProperty(value = "The name.", example = "UI design team")

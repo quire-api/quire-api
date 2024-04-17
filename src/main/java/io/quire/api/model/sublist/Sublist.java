@@ -3,8 +3,6 @@ package io.quire.api.model.sublist;
 import io.quire.api.model.*;
 import io.swagger.annotations.*;
 
-import java.util.List;
-
 @ApiModel()
 public class Sublist extends Identity {
 	@ApiModelProperty(value="Name.",

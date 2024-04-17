@@ -1,6 +1,5 @@
 package io.quire.api.model.sublist;
 
-import io.quire.api.model.Identity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -55,7 +54,7 @@ public class CreateSublistBody {
 		example = "false", position = 15)
 	public boolean getPersonal() { return false; }
 
-	@ApiModelProperty(value = "(Optional) When this sublist was aimed to start."
+	@ApiModelProperty(value = "(Optional) When this sublist was aimed to start.",
 		example = "2024-01-02", position = 50)
 	public String getStart() { return null; }
 
