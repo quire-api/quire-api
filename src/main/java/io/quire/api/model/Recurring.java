@@ -3,32 +3,51 @@ package io.quire.api.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 @ApiModel()
 public class Recurring {
-	@ApiModelProperty(example = "9",
-		value = "The type of this recurring."
-		+ "It is 0 if it is weekly. "
-		+ "It is 1 if it is monthly. "
-		+ "It is 2 if it is yearly. "
-		+ "It is 3 if it is custom. ")
-    public int getType() { return 0; }
+	@ApiModelProperty(example = "weekly",
+		value = "The frequency of this recurring.")
+    public String getFreq() { return null; }
 
 	@ApiModelProperty(example = "1",
 		value = "How often this recurring shall occur. "
 		+ "If the rate is 2 and the type is weekly, it means it shall "
 		+ "occur every two week. "
 		+ "If the type is custom, it means number of days to repeat.")
-	public int getRate() { return 0; }
+	public int getInterval() { return 0; }
 
 	@ApiModelProperty(value = "When this recurring shall end. "
 		+ "If not specified, it means it is never end.",
-		example = "2020-12-22T00:00:00.000Z", position = 4)
-	public String getEnd() { return null; }
+		example = "2020-12-22", position = 4)
+	public String getUntil() { return null; }
 
 	@ApiModelProperty(
-		value = "It depends on the type of this recurring. "
-		+ "If weekly, bit 0 is Sunday, bit 1 is Monday and so on. "
-   		+ "For example, if the data is 6, it means every Monday and Tuesday.",
-		example = "6")
-	public int getData() { return 0; }
+		value = "It must be an integer or array: 0 for Monday, 1 for Tuesday, and so on. "
+		+ "For weekly, it is a list of integers, such as [1] and [0, 3]. "
+		+ "When given, these values will define the weekdays where the recurrence will be applied. "
+   		+ "For example, if the data is [0,1], it means every Monday and Tuesday.")
+	public List<Integer> getByweekday() { return null; }
+
+	@ApiModelProperty(
+		value = "If given, it must be an integer, meaning the week number, "
+		+ "or `last` meaning the last week. The value starts with 1. "
+		+ "It is supported only for `monthly` and `yearly`.",
+		example = "2")
+	public int getByweekno() { return 0; }
+
+	@ApiModelProperty(
+		value = " If given, it must be an integer, starting from 1, "
+		+ "meaning the day to apply to. It is supported only for `monthly` and `yearly`."
+		+ "Note: `byweekday` and `bydayno` can not be specified at the same time.",
+		example = "25")
+	public int getBydayno() { return 0; }
+
+	@ApiModelProperty(
+		value = "If given, it must be an integer, starting from 1, "
+		+ "meaning the month to apply to. It is supported only if `freq` is `yearly`. "
+		+ "Default: 1 meaning January.",
+		example = "10")
+	public int getBymonth() { return 0; }
 }

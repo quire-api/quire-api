@@ -101,3 +101,8 @@ definitions:
       removeFollowers:
         example:
         - aBuz4MwfZ5CasOae6stnFa2f
+  Recurring:
+    properties:
+      byweekday:
+        example: [1,4]
+
