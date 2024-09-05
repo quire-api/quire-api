@@ -1,5 +1,9 @@
 # CHANGES
 
+## Sept 6, 2024
+
+* The `recurring` field of task is renamed to `recurrence`, and the syntax has been changed too.
+
 ## April 16, 2024
 
 * Sublist supports start and due.
