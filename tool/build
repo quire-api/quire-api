@@ -8,4 +8,5 @@
 #
 # Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 #
+git pull
 mvn clean compile
