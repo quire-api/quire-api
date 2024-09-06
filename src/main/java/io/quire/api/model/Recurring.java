@@ -50,4 +50,15 @@ public class Recurring {
 		+ "Default: 1 meaning January.",
 		example = "10")
 	public int getBymonth() { return 0; }
+
+	@ApiModelProperty(
+		value = "Whether to duplicate the subtasks when the task is completed. Default: true",
+		example = "false")
+	public boolean getDupsubtasks() { return true; }
+	
+	@ApiModelProperty(
+		value = "Whether to repeat it since the last date the task is completed. "
+		+ "It is available only for `daily`. Default: false",
+		example = "true")
+	public boolean getSincelatest() { return false; }
 }

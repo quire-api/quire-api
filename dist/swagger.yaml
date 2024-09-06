@@ -2353,16 +2353,16 @@ definitions:
         type: string
         example: Adjust style
         description: The content of the new comment.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this new comment as created by the app.
           Default: false -- the comment is marked as created by the user authorizing the app.
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
   CreateNotificationBody:
     type: object
     required:
@@ -2475,44 +2475,15 @@ definitions:
         type: string
         example: Design new **logo**
         description: The name of the task.
+      description:
+        type: string
+        example: This is a *cool* task.
+        description: (Optional) An optional description about this task.
       tasks:
         type: array
         description: (Optional) A list of subtasks to create.
         items:
           $ref: '#/definitions/CreateTaskBody'
-      description:
-        type: string
-        example: This is a *cool* task.
-        description: (Optional) An optional description about this task.
-      tags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to the new created task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      assignees:
-        type: array
-        description: (Optional) OID, ID or emails of the users that this task is assigned to.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      recurrence:
-        description: |-
-          (Optional) The recurring information of this task. It is null if it is not a recurring task.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
-          - `interval`: The interval between each freq iteration. Default: 1.
-          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
-          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
-          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
-          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
-          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
-          - Note: `byweekday` and `bydayno` can not be specified at the same time.
-        $ref: '#/definitions/Recurring'
       peekaboo:
         type: object
         example: true
@@ -2527,18 +2498,61 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
-      section:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify whether this task is a section.
-          Default: false.
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this new task as created by the app.
           Default: false -- the task is marked as created by the user authorizing the app.
+      recurrence:
+        description: |-
+          (Optional) The recurring information of this task. It is null if it is not a recurring task.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
+          - `interval`: The interval between each freq iteration. Default: 1.
+          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
+          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
+          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
+          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
+          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
+            - Note: `byweekday` and `bydayno` can not be specified at the same time.
+          - `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.
+          - `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.
+        $ref: '#/definitions/Recurring'
+      assignees:
+        type: array
+        description: (Optional) OID, ID or emails of the users that this task is assigned to.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      followers:
+        type: array
+        description: |-
+          (Optional) OID, ID or emails of users who follow this task.If "me" is specified, it means the current user will follow this task.
+          If the application would like to follow (i.e., receive notifications), it can pass "app" as one of OIDs.
+          In additions, it can pass additional information in one of the following syntaxes.
+
+          Syntax 1:
+          "app|team" or "app|team|channel"
+          where team and channel can be any value.
+
+          Syntax 2:
+          "app|/path"
+          where "/path" can be any URL path. It will be appended to the hook's URL when calling the registered hook. For example, if the hook URL is "https://super.app/hooks/standard" and the follower is "app|/soc1/33456/a7", then the notification will be sent to "https://super.app/hooks/standard/soc1/33456/a7".
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+      yourField:
+        type: object
+        description: |-
+          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
+
+          - For Money type, please specify the value directly (without currency).
+          - For User or Task type, please specify the OID.
+          - For Duration type, please specify number of seconds.
+          - For multiple values, you can specify a list of values.
       successors:
         type: array
         description: |-
@@ -2549,15 +2563,12 @@ definitions:
           Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
         items:
           type: string
-      yourField:
-        type: object
+      section:
+        type: boolean
+        example: true
         description: |-
-          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
-
-          - For Money type, please specify the value directly (without currency).
-          - For User or Task type, please specify the OID.
-          - For Duration type, please specify number of seconds.
-          - For multiple values, you can specify a list of values.
+          (Optional) Specify whether this task is a section.
+          Default: false.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -2578,24 +2589,15 @@ definitions:
           If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
 
           Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
-      followers:
+      tags:
         type: array
         description: |-
-          (Optional) OID, ID or emails of users who follow this task.If "me" is specified, it means the current user will follow this task.
-          If the application would like to follow (i.e., receive notifications), it can pass "app" as one of OIDs.
-          In additions, it can pass additional information in one of the following syntaxes.
-
-          Syntax 1:
-          "app|team" or "app|team|channel"
-          where team and channel can be any value.
-
-          Syntax 2:
-          "app|/path"
-          where "/path" can be any URL path. It will be appended to the hook's URL when calling the registered hook. For example, if the hook URL is "https://super.app/hooks/standard" and the follower is "app|/soc1/33456/a7", then the notification will be sent to "https://super.app/hooks/standard/soc1/33456/a7".
+          (Optional) OID or names of the tags to be added to the new created task.
+          Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - tzufRLqCnud74dARyDSvjWDl
+          - X6nmx9XjEO2wKbqeB1pRT43C
       priority:
         type: integer
         format: int32
@@ -2630,6 +2632,10 @@ definitions:
         example: info@compony.com
         description: Email address.
         allowEmptyValue: true
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Organization
@@ -2638,10 +2644,6 @@ definitions:
         type: string
         example: My Organization
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: Url of this record on Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -2728,6 +2730,10 @@ definitions:
       organization:
         description: The organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: Url of this record on Quire website.
       activeCount:
         type: integer
         format: int32
@@ -2746,10 +2752,6 @@ definitions:
         type: string
         example: My Project
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: Url of this record on Quire website.
       rootCount:
         type: integer
         format: int32
@@ -2780,16 +2782,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID, aka. UUID.
-      archivedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this project was archived (aka., peekaboo). It is null if not archived.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this project was archived (aka., peekaboo). It is null if not archived.
       followers:
         type: array
         position: 60
@@ -2862,6 +2864,14 @@ definitions:
         format: int32
         example: 10
         description: 'If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.'
+      dupsubtasks:
+        type: boolean
+        example: false
+        description: 'Whether to duplicate the subtasks when the task is completed. Default: true'
+      sincelatest:
+        type: boolean
+        example: true
+        description: 'Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false'
       until:
         type: string
         example: '2020-12-22'
@@ -2874,14 +2884,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that refers another task.
-      when:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        description: When this reference is made.
       user:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who made this reference.
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: When this reference is made.
   SimpleIdentity:
     type: object
     properties:
@@ -2997,18 +3007,23 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
-      tags:
-        type: array
-        position: 5
-        description: Tags that are tagged to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
         description: Users who are assigned to this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      tags:
+        type: array
+        position: 5
+        description: Tags that are tagged to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: Url of this task on Quire website.
       peekaboo:
         type: boolean
         example: true
@@ -3019,11 +3034,6 @@ definitions:
         example: true
         position: 50
         description: Whether this task is a section. It is null if it is a normal task
-      url:
-        type: string
-        example: https://quire.io/w/my_project/123
-        position: 50
-        description: Url of this task on Quire website.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -3082,6 +3092,10 @@ definitions:
         type: string
         example: Sublist101
         description: ID.
+      url:
+        type: string
+        example: https://quire.io/w/my_project?sublist=Sublist101
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: Sublist 101
@@ -3090,10 +3104,6 @@ definitions:
         type: string
         example: Sublist 101
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project?sublist=Sublist101
-        description: Url of this record on Quire website.
       description:
         type: string
         example: This is *cool*!
@@ -3265,16 +3275,16 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Description in a form of a HTML fragment converted from markdown.
+      recurrence:
+        position: 4
+        description: The recurring information of this task. It is null if it is not a recurring task.
+        $ref: '#/definitions/Recurring'
       etc:
         type: integer
         format: int32
         example: 500
         position: 4
         description: 'The estimed time to complete, or null if not specified. Unit: seconds.'
-      recurrence:
-        position: 4
-        description: The recurring information of this task. It is null if it is not a recurring task.
-        $ref: '#/definitions/Recurring'
       timelogs:
         type: array
         position: 4
@@ -3303,49 +3313,49 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
-      partnerBy:
-        position: 5
-        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
-        $ref: '#/definitions/SimpleIdentity'
       assignors:
         type: array
         position: 5
         description: Users who have assigned this tasks to a user. For example, the first item of assignees is assigned by the first item of assignors.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      partnerBy:
+        position: 5
+        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
+        $ref: '#/definitions/SimpleIdentity'
       partner:
         position: 5
         description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
         $ref: '#/definitions/SimpleTaggingEntity'
-      tags:
-        type: array
-        position: 5
-        description: Tags that are tagged to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
         description: Users who are assigned to this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      tags:
+        type: array
+        position: 5
+        description: Tags that are tagged to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
       order:
         type: integer
         format: int32
         example: 99
         position: 6
         description: The order of this task shown on the board view. The smaller the number is, the ealier the task is shown. It is meaningless if not in a board view.
-      cover:
-        type: string
-        example: qfqVmUtC
-        position: 8
-        description: The id of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      cover:
+        type: string
+        example: qfqVmUtC
+        position: 8
+        description: The id of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -3372,6 +3382,11 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this record was edited last time.
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: Url of this task on Quire website.
       peekaboo:
         type: boolean
         example: true
@@ -3382,11 +3397,12 @@ definitions:
         example: true
         position: 50
         description: Whether this task is a section. It is null if it is a normal task
-      url:
-        type: string
-        example: https://quire.io/w/my_project/123
-        position: 50
-        description: Url of this task on Quire website.
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       mutes:
         type: array
         position: 60
@@ -3397,12 +3413,6 @@ definitions:
         type: array
         position: 60
         description: Users who favorite this task.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
       project:
@@ -3477,15 +3487,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) OID of the followers to be removed from this project.
-          Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
       followers:
         type: array
         description: |-
@@ -3496,6 +3497,15 @@ definitions:
         example:
           - tzufRLqCnud74dARyDSvjWDl
           - app
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) OID of the followers to be removed from this project.
+          Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
   UpdateStatusBody:
     type: object
     properties:
@@ -3527,6 +3537,16 @@ definitions:
         type: string
         example: '**Great** sublist to start with.'
         description: (Optional) An optional description about this task.
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
+      image:
+        type: string
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
       start:
         type: string
         example: '2024-01-02'
@@ -3544,16 +3564,6 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Specify true to archive this sublist. Or, specify false to undo the previous archiving if any.
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
-      image:
-        type: string
-        example: icon-view-kanban
-        description: |-
-          (Optional) The image representing this record. It shall be one of the predined images:
-           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
   UpdateTagBody:
     type: object
     properties:
@@ -3584,35 +3594,15 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) Change the description about this task.
-      tags:
+      removeTags:
         type: array
         description: |-
-          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
+          (Optional) OID or names of the tags to be removed from this task.
           Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
-      assignees:
-        type: array
-        description: (Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      recurrence:
-        description: |-
-          (Optional) The recurring information of this task. It is null if it is not a recurring task.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
-          - `interval`: The interval between each freq iteration. Default: 1.
-          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
-          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
-          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
-          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
-          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
-          - Note: `byweekday` and `bydayno` can not be specified at the same time.
-        $ref: '#/definitions/Recurring'
+          - mPAQrYU1qt8wAYAInKRlTnvl
       peekaboo:
         type: object
         example: true
@@ -3627,76 +3617,48 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
-      section:
-        type: boolean
-        example: true
-        description: (Optional) Specify whether this task is a section or a normal task.
+      addFollowers:
+        type: array
+        description: |-
+          (Optional) OID or ID of the followers to be added to this task.If "me" is specified, it means the current user will follow this task.
+          If the application would like to follow (i.e., receive notifications), it can pass "app" as one of OIDs.
+          In additions, it can pass additional information in one of the following syntaxes.
+
+          Syntax 1:
+          "app|team" or "app|team|channel"
+          where team and channel can be any value.
+
+          Syntax 2:
+          "app|/path"
+          where "/path" can be any URL path. It will be appended to the hook's URL when calling the registered hook. For example, if the hook URL is "https://super.app/hooks/standard" and the follower is "app|/soc1/33456/a7", then the notification will be sent to "https://super.app/hooks/standard/soc1/33456/a7".
+        items:
+          type: string
+        example:
+          - sfsvLbDVPvi1QMf2GkDn7VSy
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this task as updated by the app.
           Default: false -- the task is marked as created by the user authorizing the app.
-      successors:
+      recurrence:
+        description: |-
+          (Optional) The recurring information of this task. It is null if it is not a recurring task.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
+          - `interval`: The interval between each freq iteration. Default: 1.
+          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
+          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
+          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
+          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
+          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
+            - Note: `byweekday` and `bydayno` can not be specified at the same time.
+          - `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.
+          - `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.
+        $ref: '#/definitions/Recurring'
+      assignees:
         type: array
-        description: |-
-          (Optional) OID or ID of tasks to replace the successors of this task.
-
-          To specify task's ID, you can specify as `#id` or `id`.
-
-          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
-
-          - For Money type, please specify the value directly (without currency).
-          - For User or Task type, please specify the OID.
-          - For Duration type, please specify number of seconds.
-          - For multiple values, you can specify a list of values.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          Note: they must be in UTC time, and we don't support seconds.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
-
-          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          Note: they must be in UTC time, and we don't support seconds.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
-
-          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
-      addTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to this task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      removeTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be removed from this task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      addAssignees:
-        type: array
-        description: (Optional) OID or ID of the assignees to be added to this task.
+        description: (Optional) OID, ID emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
         items:
           type: string
         example:
@@ -3718,6 +3680,60 @@ definitions:
           Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
         items:
           type: string
+      followers:
+        type: array
+        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
+      removeFollowers:
+        type: array
+        description: (Optional) OID or ID of the followers to be removed from this task.Please refer to `addFollowers()` for more details.
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
+      yourField:
+        type: object
+        description: |-
+          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
+
+          - For Money type, please specify the value directly (without currency).
+          - For User or Task type, please specify the OID.
+          - For Duration type, please specify number of seconds.
+          - For multiple values, you can specify a list of values.
+      successors:
+        type: array
+        description: |-
+          (Optional) OID or ID of tasks to replace the successors of this task.
+
+          To specify task's ID, you can specify as `#id` or `id`.
+
+          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
+        items:
+          type: string
+      addAssignees:
+        type: array
+        description: (Optional) OID or ID of the assignees to be added to this task.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      section:
+        type: boolean
+        example: true
+        description: (Optional) Specify whether this task is a section or a normal task.
+      addTags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be added to this task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
       removeSuccessors:
         type: array
         description: |-
@@ -3728,39 +3744,35 @@ definitions:
           Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
         items:
           type: string
-      addFollowers:
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          Note: they must be in UTC time, and we don't support seconds.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
+
+          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          Note: they must be in UTC time, and we don't support seconds.
+
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
+
+          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time.
+      tags:
         type: array
         description: |-
-          (Optional) OID or ID of the followers to be added to this task.If "me" is specified, it means the current user will follow this task.
-          If the application would like to follow (i.e., receive notifications), it can pass "app" as one of OIDs.
-          In additions, it can pass additional information in one of the following syntaxes.
-
-          Syntax 1:
-          "app|team" or "app|team|channel"
-          where team and channel can be any value.
-
-          Syntax 2:
-          "app|/path"
-          where "/path" can be any URL path. It will be appended to the hook's URL when calling the registered hook. For example, if the hook URL is "https://super.app/hooks/standard" and the follower is "app|/soc1/33456/a7", then the notification will be sent to "https://super.app/hooks/standard/soc1/33456/a7".
+          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
+          Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - sfsvLbDVPvi1QMf2GkDn7VSy
-      removeFollowers:
-        type: array
-        description: (Optional) OID or ID of the followers to be removed from this task.Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
-      followers:
-        type: array
-        description: (Optional) OID, ID or emails of the users to replace the followers of this task. Please refer to `addFollowers()` for more details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
+          - ITaVbkhh3iVcEcV3vuSLeE2k
       priority:
         type: integer
         format: int32
@@ -3790,6 +3802,10 @@ definitions:
         type: string
         example: john
         description: ID.
+      url:
+        type: string
+        example: https://quire.io/u/john
+        description: Url of this record on Quire website.
       nameText:
         type: string
         example: John
@@ -3798,10 +3814,6 @@ definitions:
         type: string
         example: John
         description: Name in a form of a HTML fragment converted from markdown.
-      url:
-        type: string
-        example: https://quire.io/u/john
-        description: Url of this record on Quire website.
       email:
         type: string
         example: john@gmail.cc

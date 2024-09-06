@@ -90,7 +90,9 @@ public class UpdateTaskBody {
 		+ "- `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.\n"
 		+ "- `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.\n"
 		+ "- `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.\n"
-		+ "- Note: `byweekday` and `bydayno` can not be specified at the same time.")
+		+ "  - Note: `byweekday` and `bydayno` can not be specified at the same time.\n"
+		+ "- `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.\n"
+		+ "- `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.")
 	public Recurring getRecurrence() { return null; }
 
 	@ApiModelProperty(example = "true",
