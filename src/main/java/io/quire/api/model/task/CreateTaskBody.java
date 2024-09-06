@@ -1,6 +1,6 @@
 package io.quire.api.model.task;
 
-import io.quire.api.model.Recurring;
+import io.quire.api.model.Recurrence;
 import io.swagger.annotations.*;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class CreateTaskBody {
 		+ "  - Note: `byweekday` and `bydayno` can not be specified at the same time.\n"
 		+ "- `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.\n"
 		+ "- `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.")
-	public Recurring getRecurrence() { return null; }
+	public Recurrence getRecurrence() { return null; }
 
 	@ApiModelProperty(example = "true",
 		value = "(Optional) Specify true or a positive integer to peekaboo "

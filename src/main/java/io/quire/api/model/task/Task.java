@@ -11,7 +11,7 @@ public class Task extends SimpleTask {
 	@ApiModelProperty(value = "The recurring information of this task. "
 		+ "It is null if it is not a recurring task.",
 		position = 4)
-	public Recurring getRecurrence() { return null; }
+	public Recurrence getRecurrence() { return null; }
 
 	@ApiModelProperty(value = "The estimed time to complete, or null if not specified. "
 		+ "Unit: seconds.",

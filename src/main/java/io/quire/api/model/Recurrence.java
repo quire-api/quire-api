@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
 @ApiModel()
-public class Recurring {
+public class Recurrence {
 	@ApiModelProperty(example = "weekly",
 		value = "The frequency of this recurring.")
     public String getFreq() { return null; }
