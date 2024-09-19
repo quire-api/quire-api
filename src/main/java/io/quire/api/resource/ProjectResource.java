@@ -198,7 +198,7 @@ public class ProjectResource {
     @ApiOperation(value = "Update a project.",
         notes = "Updates an existing project, and returns the complete updated project record.",
         response = Project.class)
-    public Response updateProject(
+    public Response updateProjectById(
         @ApiParam(value = "ID of project that needs to be updated", required = true)
         @PathParam("id") String id,
         @ApiParam(value = "Project to update", required = true)

@@ -3,6 +3,8 @@ package io.quire.api.model.organization;
 import io.quire.api.model.*;
 import io.swagger.annotations.*;
 
+import java.util.List;
+
 @ApiModel()
 public class Organization extends IdentityX {
 
