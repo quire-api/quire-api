@@ -51,26 +51,26 @@ public class OrganizationResource {
         @PathParam("oid") String oid) { return null; }
 
     @PUT
-    @Path("/{oid}")
-    @ApiOperation(value = "Update an organization",
-        notes = "A specific, existing organization can be updated by making a PUT request on the URL for that organization.\n" +
-                "Returns the complete updated organization record.",
-        response = Organization.class)
-    public Response updateOrganization(
-        @ApiParam(value = "OID of organization that needs to be updated", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Organization to update", required = true)
-        UpdateOrganizationBody data) { return null; }
-
-    @PUT
     @Path("/id/{id}")
-    @ApiOperation(value = "Update an organization",
+    @ApiOperation(value = "Update an organization by its ID.",
         notes = "A specific, existing organization can be updated by making a PUT request on the URL for that organization.\n" +
                 "Returns the complete updated organization record.",
         response = Organization.class)
     public Response updateOrganizationById(
         @ApiParam(value = "ID of organization that needs to be updated", required = true)
         @PathParam("id") String id,
+        @ApiParam(value = "Organization to update", required = true)
+        UpdateOrganizationBody data) { return null; }
+
+    @PUT
+    @Path("/{oid}")
+    @ApiOperation(value = "Update an organization by its OID.",
+        notes = "A specific, existing organization can be updated by making a PUT request on the URL for that organization.\n" +
+                "Returns the complete updated organization record.",
+        response = Organization.class)
+    public Response updateOrganization(
+        @ApiParam(value = "OID of organization that needs to be updated", required = true)
+        @PathParam("oid") String oid,
         @ApiParam(value = "Organization to update", required = true)
         UpdateOrganizationBody data) { return null; }
 

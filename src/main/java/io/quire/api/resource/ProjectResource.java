@@ -183,24 +183,24 @@ public class ProjectResource {
         @PathParam("oid") String oid) { return null; }
 
     @PUT
-    @Path("/{oid}")
-    @ApiOperation(value = "Update a project.",
-        notes = "Updates an existing project, and returns the complete updated project record.",
-        response = Project.class)
-    public Response updateProject(
-        @ApiParam(value = "OID of project that needs to be updated", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Project to update", required = true)
-        UpdateProjectBody data) { return null; }
-
-    @PUT
     @Path("/id/{id}")
-    @ApiOperation(value = "Update a project.",
+    @ApiOperation(value = "Update a project by its ID.",
         notes = "Updates an existing project, and returns the complete updated project record.",
         response = Project.class)
     public Response updateProjectById(
         @ApiParam(value = "ID of project that needs to be updated", required = true)
         @PathParam("id") String id,
+        @ApiParam(value = "Project to update", required = true)
+        UpdateProjectBody data) { return null; }
+
+    @PUT
+    @Path("/{oid}")
+    @ApiOperation(value = "Update a project by its OID.",
+        notes = "Updates an existing project, and returns the complete updated project record.",
+        response = Project.class)
+    public Response updateProject(
+        @ApiParam(value = "OID of project that needs to be updated", required = true)
+        @PathParam("oid") String oid,
         @ApiParam(value = "Project to update", required = true)
         UpdateProjectBody data) { return null; }
 
