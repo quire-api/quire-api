@@ -55,9 +55,9 @@ public class Project extends Identity {
     	position = 99)
     public SimpleIdentity getCreatedBy() { return null; }
 
-	@ApiModelProperty(value = "Users who follow this task.", position = 60)
+	@ApiModelProperty(value = "Users who follow this project.", position = 60)
 	public List<SimpleIdentity> getFollowers() { return null; }
 
-	@ApiModelProperty(value = "The attachments of this task.", position = 60)
+	@ApiModelProperty(value = "The attachments of this project.", position = 60)
 	public List<Attachment> getAttachments() { return null; }
 }

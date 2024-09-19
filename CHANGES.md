@@ -1,5 +1,9 @@
 # CHANGES
 
+## Sept 19, 2024
+
+* Allow to follow or unfollow an organization for WebHook
+
 ## Sept 6, 2024
 
 * *BREAK CHANGE* The `recurring` field of task is renamed to `recurrence`, and the syntax has been changed too.
@@ -86,7 +90,7 @@
 
 * The detailed information will be returned as part of `assignees`, `tags` and other fields. For example, the `project` property of the returned task record will be a map of OID, name, color, image and URL.
   * Note: many APIs are changed. Please adjust your application accordingly.
-* WebHhook added an extra field called `value` to carry the detailed information about a notification. For example, it carries the assignee's ID, name and URL if it is an assignment.
+* WebHook added an extra field called `value` to carry the detailed information about a notification. For example, it carries the assignee's ID, name and URL if it is an assignment.
 
 ## October 13, 2020
 

@@ -29,4 +29,7 @@ public class Organization extends IdentityX {
     public String getCreatedAt() { return null; }
     @ApiModelProperty(value = "The user who created this record.", example = "Dyh2YkFcu9uLgLFIeN1kB4Ld", position = 99)
     public SimpleIdentity getCreatedBy() { return null; }
+
+    @ApiModelProperty(value = "Users who follow this organization.", position = 60)
+    public List<SimpleIdentity> getFollowers() { return null; }
 }

@@ -82,3 +82,10 @@
 | 149 | Removes a status. | Project |
 | 150 | Enables the mailbox (Email-to-Quire) for a project. | Project |
 | 151 | Disables the mailbox for a project. | Project |
+
+## Organization Related Activities
+
+| Type | Description | What | 
+|--|--|--|
+| 204 | Adds a member to an organization. | Organization |
+| 205 | Removes a member from an organization. | Organization |
