@@ -43,7 +43,7 @@
 
 ## Project Related Activities
 
-| Type | Description | What | 
+| Type | Description | `what` | 
 |--|--|--|
 | 100 | Creates a project. | Project |
 | 101 | Removes a project. | Project |
@@ -85,7 +85,7 @@
 
 ## Organization Related Activities
 
-| Type | Description | What | 
+| Type | Description | `what` | 
 |--|--|--|
 | 204 | Adds a member to an organization. | Organization |
 | 205 | Removes a member from an organization. | Organization |
