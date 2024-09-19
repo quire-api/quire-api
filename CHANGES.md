@@ -3,6 +3,7 @@
 ## Sept 19, 2024
 
 * Allow to follow or unfollow an organization for WebHook
+    - [Organization Activities](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#organization-related-activities)
 
 ## Sept 6, 2024
 
