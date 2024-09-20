@@ -111,6 +111,13 @@ To retrieve the access token, you have to post a request to `https://quire.io/oa
 | client\_id | {your-client-ID} |
 | client\_secret | {your-client-secret} |
 
+```bash
+curl -X POST \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=authorization_code&code=Your_code_from_previous_step&client_id=Your_app_client_id&client_secret=Your_app_client_secret" \
+  https://quire.io/oauth/token
+```
+
 Then, the access token will be returned in the response's body.
 
 ```json
