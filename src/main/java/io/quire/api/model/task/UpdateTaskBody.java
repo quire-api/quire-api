@@ -67,7 +67,8 @@ public class UpdateTaskBody {
 		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.\n\n"
 		+ "Also note: for backward compatibility, `2020-10-30T00:00:00` "
 		+ "(all zero and up to second) is considered the same as `2020-10-30`, "
-		+ "i.e., without time.")
+		+ "i.e., without time. OTOH, To specify time at midnight in UTC, "
+		+ "please specify `2020-10-30T00:00` (no second)")
 	public String getStart() { return null; }
 
 	@ApiModelProperty(example = "2018-12-22T00:00:00.000Z",
@@ -78,7 +79,8 @@ public class UpdateTaskBody {
 		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.\n\n"
 		+ "Also note: for backward compatibility, `2020-10-30T00:00:00` "
 		+ "(all zero and up to second) is considered the same as `2020-10-30`, "
-		+ "i.e., without time.")
+		+ "i.e., without time. OTOH, To specify time at midnight in UTC, "
+		+ "please specify `2020-10-30T00:00` (no second)")
 	public String getDue() { return null; }
 
 	@ApiModelProperty(value = "(Optional) The recurring information of this task. "
