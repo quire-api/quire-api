@@ -199,6 +199,24 @@ When the token has been expired or revoked, an event will be sent to your app. Y
 }
 ```
 
+### Host Revocation
+
+When the user revokes the grant to a host (either a project or an organization), an event will be sent to your app. You can clean up your storage if necessary.
+
+```
+{
+  "type": "system",
+  "token": "hook-token-defined-by-you",
+  "secret": "secret-defined-by-you",
+  "data": {
+    "type": "host-revocation",
+    "token": "the-refresh-token",
+    "host": "host-oid",
+    "otype": "host-type",
+  }
+}
+```
+
 ## Notification Events
 
 A notification is the information about a update (aka., an activity). Here is an example:

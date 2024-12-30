@@ -1,5 +1,9 @@
 # CHANGES
 
+## Dec 30, 2024
+
+* A system event, `host-revocation`, for revoking host from a token is added.
+
 ## Sept 19, 2024
 
 * Allow to follow or unfollow an organization for WebHook
