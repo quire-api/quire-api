@@ -34,12 +34,15 @@ public class CreateTaskBody {
 	public int getEtc() { return 0; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID or names of the tags to be added to the new created task.\n"
+		value = "(Optional) A list of OID or names of the tags to be added to the new created task.\n"
 		+ "Note: if tag's name is specified, it is case-insensitive.")
 	public List<String> getTags() { return null; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID, ID or emails of the users that this task is assigned to.")
+		value = "(Optional) A list of OID, ID or emails of the users that this task is assigned to.\n\n"
+		+ "You can specify \"me\" instead of OID to indicate the current user.\n"
+		+ "You can also specify \"inherit\" to include all assignees of the parent task, if any.\n\n"
+		+ "Example: `{\"addAssignees\": [\"me\", \"inherit\", \"foo@domain.com\"]}`")
 	public List<String> getAssignees() { return null; }
 
 	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
@@ -101,9 +104,10 @@ public class CreateTaskBody {
 		+ "the app.")
 	public boolean getAsUser() { return false; }
 
-	@ApiModelProperty(value = "(Optional) OID, ID or emails of users who follow this task."
-		+ "If \"me\" is specified, it means the current user will follow this task.\n"
-		+ "If the application would like to follow (i.e., receive notifications), "
+	@ApiModelProperty(value = "(Optional) A list of OID, ID or emails of users who follow this task."
+		+ "You can specify \"me\" instead of OID to indicate the current user.\n"
+		+ "You can also specify \"inherit\" to include all followers of the parent task, if any.\n\n"
+		+ "If the application itself would like to follow (i.e., receive notifications), "
 		+ "it can pass \"app\" as one of OIDs.\n"
 		+ "In additions, it can pass additional information in one of the following syntaxes.\n\n"
 		+ "Syntax 1:\n"

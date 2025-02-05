@@ -48,15 +48,20 @@ public class UpdateTaskBody {
 	public List<String> getRemoveTags() { return null; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID, ID emails of the users that this task is assigned to. "
+		value = "(Optional) A list of OID, ID or emails of the users that this task is assigned to. "
 		+ "If specified, it will replace any existing assignee(s). "
-		+ "Instead of replacment, you can use \"addAssignees\" or \"removeAssignees\".")
+		+ "Instead of replacment, you can use \"addAssignees\" or \"removeAssignees\".\n\n"
+		+ "Please refer to `addAssignees` for more details.")
 	public List<String> getAssignees() { return null; }
 	@ApiModelProperty(
-		value = "(Optional) OID or ID of the assignees to be added to this task.")
+		value = "(Optional) A list of OID, ID or emails of the assignees to be added to this task.\n\n"
+		+ "You can specify \"me\" instead of OID to indicate the current user.\n"
+		+ "You can also specify \"inherit\" to include all assignees of the parent task, if any.\n\n"
+		+ "Example: `{\"addAssignees\": [\"me\", \"inherit\", \"foo@domain.com\"]}`")
 	public List<String> getAddAssignees() { return null; }
 	@ApiModelProperty(
-		value = "(Optional) OID or ID of the assignees to be removed from this task.")
+		value = "(Optional) A list of OID, ID or emails of the assignees to be removed from this task.\n\n"
+		+ "Please refer to `addAssignees` for more details.")
 	public List<String> getRemoveAssignees() { return null; }
 
 	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
@@ -111,13 +116,14 @@ public class UpdateTaskBody {
 	public boolean getSection() { return false; }
 
 	@ApiModelProperty(
-		value = "(Optional) OID, ID or emails of the users to replace the followers of this task. "
-		+ "Please refer to `addFollowers()` for more details.")
+		value = "(Optional) A list of OID, ID or emails of the users to replace the followers of this task.\n\n"
+		+ "Please refer to `addFollowers` for more details.")
 	public List<String> getFollowers() { return null; }
 	@ApiModelProperty(
-		value = "(Optional) OID or ID of the followers to be added to this task."
-		+ "If \"me\" is specified, it means the current user will follow this task.\n"
-		+ "If the application would like to follow (i.e., receive notifications), "
+		value = "(Optional) A list of OID, ID or emails of the followers to be added to this task."
+		+ "You can specify \"me\" instead of OID to indicate the current user.\n"
+		+ "You can also specify \"inherit\" to include all followers of the parent task, if any.\n\n"
+		+ "If the application itself would like to follow (i.e., receive notifications), "
 		+ "it can pass \"app\" as one of OIDs.\n"
 		+ "In additions, it can pass additional information in one of the following syntaxes.\n\n"
 		+ "Syntax 1:\n"
@@ -132,19 +138,19 @@ public class UpdateTaskBody {
 		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
 	public List<String> getAddFollowers() { return null; }
 	@ApiModelProperty(
-		value = "(Optional) OID or ID of the followers to be removed from this task."
-		+ "Please refer to `addFollowers()` for more details.")
+		value = "(Optional) A list of OID, ID or emails of the followers to be removed from this task.\n\n"
+		+ "Please refer to `addFollowers` for more details.")
 	public List<String> getRemoveFollowers() { return null; }
 
-	@ApiModelProperty(value = "(Optional) OID or ID of tasks to replace the successors of this task.\n\n"
+	@ApiModelProperty(value = "(Optional) A list of OID or ID of tasks to replace the successors of this task.\n\n"
 		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
 		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
 	public List<String> getSuccessors() { return null; }
-	@ApiModelProperty(value = "(Optional) OID or ID of tasks to be added to the successors of this task.\n\n"
+	@ApiModelProperty(value = "(Optional) A list of OID or ID of tasks to be added to the successors of this task.\n\n"
 		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
 		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
 	public List<String> getAddSuccessors() { return null; }
-	@ApiModelProperty(value = "(Optional) OID or ID of tasks to be removed from the successors of this task.\n\n"
+	@ApiModelProperty(value = "(Optional) A list of OID or ID of tasks to be removed from the successors of this task.\n\n"
 		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
 		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
 	public List<String> getRemoveSuccessors() { return null; }

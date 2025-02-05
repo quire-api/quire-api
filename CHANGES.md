@@ -1,5 +1,11 @@
 # CHANGES
 
+## Feb 5, 2005
+
+* Allow to specify `"inherit"` as one of followers and assignees to inherit the parent task's followers and assignees.
+  - For more details, please [refer here](https://quire.io/dev/api/#operation--task-id--projectId--post)
+* Support `interval` for monthly and yearly recurrence
+
 ## Dec 30, 2024
 
 * A system event, `host-revocation`, for revoking host from a token is added.
