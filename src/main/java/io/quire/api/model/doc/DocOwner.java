@@ -1,8 +1,8 @@
-package io.quire.api.model.sublist;
+package io.quire.api.model.doc;
 
 import io.quire.api.model.work.*;
 import io.swagger.annotations.*;
 
 @ApiModel()
-public class SublistOwner extends WorkOwner {
+public class DocOwner extends WorkOwner {
 }

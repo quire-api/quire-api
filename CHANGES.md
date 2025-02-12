@@ -1,6 +1,10 @@
 # CHANGES
 
-## Feb 5, 2005
+## Feb 12, 2025
+
+* API for [doc](https://quire.io/dev/api/#tag-doc) supported
+
+## Feb 5, 2025
 
 * Allow to specify `"inherit"` as one of followers and assignees to inherit the parent task's followers and assignees.
   - For more details, please [refer here](https://quire.io/dev/api/#operation--task-id--projectId--post)
