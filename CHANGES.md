@@ -1,5 +1,9 @@
 # CHANGES
 
+## Mar 13, 2025
+
+* Search API supports the modified and commented parameters for searching tasks modified and/or commented recently.
+
 ## Feb 12, 2025
 
 * API for [doc](https://quire.io/dev/api/#tag-doc) supported

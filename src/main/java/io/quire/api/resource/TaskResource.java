@@ -180,6 +180,20 @@ public class TaskResource {
 			example = "mine=true", required = false)
 		@QueryParam(value = "mine") boolean mine,
 
+		@ApiParam(value = "Whether to return only tasks created or modified recently.\n"
+			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+			+"For example, to search tasks created or modified within 30 days, "
+			+"specify: \"modified=30\"",
+			example = "modified=7", required = false)
+		@QueryParam(value = "modified") String modified,
+
+		@ApiParam(value = "Whether to return only tasks commented recently.\n"
+			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+			+"For example, to search tasks that has a comment posted within 30 days, "
+			+"specify: \"commented=30\"",
+			example = "commented=7", required = false)
+		@QueryParam(value = "commented") String commented,
+
 		@ApiParam(value = "The maximal number of tasks to return.\n"
 			+"Default: 30. That is, at most 30 tasks will be returned.\n"
 			+"You can specify \"no\" to return all matched tasks.\n\n"
@@ -245,6 +259,20 @@ public class TaskResource {
 			+"or tasks that are created by me and scheduled, but not assigned to anyone.",
 			example = "mine=true", required = false)
 		@QueryParam(value = "mine") boolean mine,
+
+		@ApiParam(value = "Whether to return only tasks created or modified recently.\n"
+			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+			+"For example, to search tasks created or modified within 30 days, "
+			+"specify: \"modified=30\"",
+			example = "modified=7", required = false)
+		@QueryParam(value = "modified") String modified,
+
+		@ApiParam(value = "Whether to return only tasks commented recently.\n"
+			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+			+"For example, to search tasks that has a comment posted within 30 days, "
+			+"specify: \"commented=30\"",
+			example = "commented=7", required = false)
+		@QueryParam(value = "commented") String commented,
 
 		@ApiParam(value = "The maximal number of tasks to return.\n"
 			+"Default: 30. That is, at most 30 tasks will be returned.\n"
