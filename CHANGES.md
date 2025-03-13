@@ -2,7 +2,7 @@
 
 ## Mar 13, 2025
 
-* Search API supports the modified and commented parameters for searching tasks modified and/or commented recently.
+* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) supports the modified and commented parameters for searching tasks modified and/or commented recently.
 
 ## Feb 12, 2025
 
