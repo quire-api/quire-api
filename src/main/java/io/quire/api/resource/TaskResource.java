@@ -183,14 +183,18 @@ public class TaskResource {
 		@ApiParam(value = "Whether to return only tasks created or modified recently.\n"
 			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
 			+"For example, to search tasks created or modified within 30 days, "
-			+"specify: \"modified=30\"",
+			+"specify: \"modified=30\"\n"
+			+"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+			+"For example, specify \"modified=8h\" to indicate 8 hours.",
 			example = "modified=7", required = false)
 		@QueryParam(value = "modified") String modified,
 
 		@ApiParam(value = "Whether to return only tasks commented recently.\n"
 			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
 			+"For example, to search tasks that has a comment posted within 30 days, "
-			+"specify: \"commented=30\"",
+			+"specify: \"commented=30\"\n"
+			+"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+			+"For example, specify \"commented=8h\" to indicate 8 hours.",
 			example = "commented=7", required = false)
 		@QueryParam(value = "commented") String commented,
 
@@ -263,14 +267,18 @@ public class TaskResource {
 		@ApiParam(value = "Whether to return only tasks created or modified recently.\n"
 			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
 			+"For example, to search tasks created or modified within 30 days, "
-			+"specify: \"modified=30\"",
+			+"specify: \"modified=30\"\n"
+			+"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+			+"For example, specify \"modified=8h\" to indicate 8 hours.",
 			example = "modified=7", required = false)
 		@QueryParam(value = "modified") String modified,
 
 		@ApiParam(value = "Whether to return only tasks commented recently.\n"
 			+"You can specify an integer as the value. If omitted, 7 is assumed.\n"
 			+"For example, to search tasks that has a comment posted within 30 days, "
-			+"specify: \"commented=30\"",
+			+"specify: \"commented=30\"\n"
+			+"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+			+"For example, specify \"commented=8h\" to indicate 8 hours.",
 			example = "commented=7", required = false)
 		@QueryParam(value = "commented") String commented,
 

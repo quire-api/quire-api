@@ -1,5 +1,9 @@
 # CHANGES
 
+## Mar 15, 2025
+
+* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) allow to specify days, hours and minutes in the modified and commented parameters.
+
 ## Mar 13, 2025
 
 * [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) supports the modified and commented parameters for searching tasks modified and/or commented recently.
