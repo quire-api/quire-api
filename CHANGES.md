@@ -1,8 +1,12 @@
 # CHANGES
 
+## Apr 6, 2025
+
+* [Search API](https://quire.io/dev/api/#operation--task-search-id--organizationId--get) allows to search tasks under an organization or a folder.
+
 ## Mar 15, 2025
 
-* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) allow to specify days, hours and minutes in the modified and commented parameters.
+* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) allows to specify days, hours and minutes in the modified and commented parameters.
 
 ## Mar 13, 2025
 

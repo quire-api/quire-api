@@ -122,6 +122,67 @@ public class TaskResource {
 		@QueryParam(value = "status") String status) { return null; }
 
 	@GET
+	@Path("/{oid}")
+	@ApiOperation(value = "Get an existing task by its OID.",
+		notes = "Returns the full task record for a single task.",
+		response = Task.class)
+	public Response getTask(
+		@ApiParam(value = "OID of the task that needs to be fetched",
+			required = true)
+		@PathParam("oid") String oid) { return null; }
+
+	@GET
+	@Path("/id/{projectId}/{id}")
+	@ApiOperation(value = "Get an existing task by its ID.",
+		notes = "Returns the full task record for a single task.",
+		response = Task.class)
+	public Response getTaskById(
+		@ApiParam(value = "ID of the project that the task belongs to.\n" +
+			"Specify \"-\" if you'd like to retrieve the personal tasks that belong to no specific projects in My Tasks.",
+		required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
+		@PathParam("id") int id) { return null; }
+
+	@PUT
+	@Path("/{oid}")
+	@ApiOperation(value = "Update an existing task by its OID.",
+		notes = "Updates an existing task, and returns the full updated record.",
+		response = Task.class)
+	public Response updateTask(
+		@ApiParam(value = "OID of task that needs to be updated.", required = true)
+		@PathParam("oid") String oid,
+		@ApiParam(value = "The new content of the task to update to.", required = true)
+		UpdateTaskBody data) { return null; }
+
+	@PUT
+	@Path("/id/{projectId}/{id}")
+	@ApiOperation(value = "Update an existing task by its ID.",
+		notes = "Updates an existing task, and returns the full updated record.",
+		response = Task.class)
+	public Response updateTaskById(
+		@ApiParam(value = "ID of the project that the task belongs to.\n" +
+			"Specify \"-\" if you'd like to update the personal tasks that belong to no specific projects in My Tasks.",
+		required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "ID of the task that needs to be updated", required = true)
+		@PathParam("id") int id,
+		@ApiParam(value = "The new content of the task to update to.", required = true)
+		UpdateTaskBody data) { return null; }
+
+	@DELETE
+	@Path("/{oid}")
+	@ApiOperation(value = "Delete a task and all of its subtasks.",
+		notes = "Delete an existing task and all of its subtasks.")
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "ok",
+			examples = @Example({@ExampleProperty(mediaType = "application/json",
+			value = "{'success': true}")}))})
+	public Response deleteTask(
+		@ApiParam(value = "OID of task that needs to be deleted", required = true)
+		@PathParam("oid") String oid) { return null; }
+
+	@GET
 	@Path("/search/{projectOid}")
 	@ApiOperation(value = "Searches tasks in the project of the given OID.",
 		notes = "Returns task records that match the specified criteria in "
@@ -217,7 +278,7 @@ public class TaskResource {
 		@ApiParam(value = "ID of the project to search for the tasks.\n" +
 			"Specify \"-\" if you'd like to search for the personal tasks that belong to no specific projects in My Tasks.",
 		required = true)
-		@PathParam("projectId") String projectOid,
+		@PathParam("projectId") String projectId,
 
 		@ApiParam(value = "Text to do a full-text search against the name, "
 			+ "description, and attachments.\n"
@@ -290,64 +351,329 @@ public class TaskResource {
 			example = "limit=no", required = false)
 		@QueryParam(value = "limit") String limit) { return null; }
 
-	@GET
-	@Path("/{oid}")
-	@ApiOperation(value = "Get an existing task by its OID.",
-		notes = "Returns the full task record for a single task.",
-		response = Task.class)
-	public Response getTask(
-		@ApiParam(value = "OID of the task that needs to be fetched",
-			required = true)
-		@PathParam("oid") String oid) { return null; }
+  @GET
+  @Path("/search-organization/{organizationOid}")
+  @ApiOperation(value = "Searches tasks in the organization of the given OID.",
+    notes = "Returns task records that match the specified criteria in "
+    + "the given organization.\n"
+    + "Tasks in the archived projects are excluded.\n\n"
+    + "> Available for Professional plans and above",
+    response = SimpleTask.class,
+    responseContainer = "List")
+  public Response searchTasksByOrgOid(
+    @ApiParam(value = "OID of the organization to search for the tasks.",
+    required = true)
+    @PathParam("organizationOid") String organizationOid,
 
-	@GET
-	@Path("/id/{projectId}/{id}")
-	@ApiOperation(value = "Get an existing task by its ID.",
-		notes = "Returns the full task record for a single task.",
-		response = Task.class)
-	public Response getTaskById(
-		@ApiParam(value = "ID of the project that the task belongs to.\n" +
-			"Specify \"-\" if you'd like to retrieve the personal tasks that belong to no specific projects in My Tasks.",
-		required = true)
-		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the task that needs to be fetched", required = true)
-		@PathParam("id") int id) { return null; }
+    @ApiParam(value = "Text to do a full-text search against the name, "
+      + "description, and attachments.\n"
+      + "Note: it doesn't include the content and attachment of comments.\n"
+      + "Also note: the update of tasks can take 10 seconds or more before "
+      + "it can be found by the full-text search.",
+      example = "text=important major", required = false)
+    @QueryParam(value = "text") String text,
 
-	@PUT
-	@Path("/{oid}")
-	@ApiOperation(value = "Update an existing task by its OID.",
-		notes = "Updates an existing task, and returns the full updated record.",
-		response = Task.class)
-	public Response updateTask(
-		@ApiParam(value = "OID of task that needs to be updated.", required = true)
-		@PathParam("oid") String oid,
-		@ApiParam(value = "The new content of the task to update to.", required = true)
-		UpdateTaskBody data) { return null; }
+    @ApiParam(value = "Task name to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
+      + "For example, `name=~abc` matches if `abc` is part of the name. "
+      + "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
+      + "To do a full-text search, please use `text` instead.",
+      example = "name=My first task", required = false)
+    @QueryParam(value = "name") String name,
 
-	@PUT
-	@Path("/id/{projectId}/{id}")
-	@ApiOperation(value = "Update an existing task by its ID.",
-		notes = "Updates an existing task, and returns the full updated record.",
-		response = Task.class)
-	public Response updateTaskById(
-		@ApiParam(value = "ID of the project that the task belongs to.\n" +
-			"Specify \"-\" if you'd like to update the personal tasks that belong to no specific projects in My Tasks.",
-		required = true)
-		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the task that needs to be updated", required = true)
-		@PathParam("id") int id,
-		@ApiParam(value = "The new content of the task to update to.", required = true)
-		UpdateTaskBody data) { return null; }
+    @ApiParam(value = "Task's description to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.",
+      example = "description=~john@gooodjob.com", required = false)
+    @QueryParam(value = "description") String description,
 
-	@DELETE
-	@Path("/{oid}")
-	@ApiOperation(value = "Delete a task and all of its subtasks.",
-		notes = "Delete an existing task and all of its subtasks.")
-	@ApiResponses(value = {
-		@ApiResponse(code = 200, message = "ok",
-			examples = @Example({@ExampleProperty(mediaType = "application/json",
-			value = "{'success': true}")}))})
-	public Response deleteTask(
-		@ApiParam(value = "OID of task that needs to be deleted", required = true)
-		@PathParam("oid") String oid) { return null; }
+    @ApiParam(value = "Task's status to match with.\n"
+      +"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+      +"\"completed\" for completed tasks.",
+      example = "status=active", required = false)
+    @QueryParam(value = "status") String status,
+
+    @ApiParam(value = "Whether to return only tasks that are scheduled.\n"
+      +"By scheduled we mean either `start` or `due` is scheduled.\n"
+      +"If `scheduled=false` is specified, it returns only tasks "
+      +"that neither start nor due is scheduled.",
+      example = "scheduled=true", required = false)
+    @QueryParam(value = "scheduled") boolean scheduled,
+
+    @ApiParam(value = "Whether to return only My Tasks.\n"
+      +"By My Tasks we mean tasks that are assigned to me, "
+      +"or tasks that are created by me and scheduled, but not assigned to anyone.",
+      example = "mine=true", required = false)
+    @QueryParam(value = "mine") boolean mine,
+
+    @ApiParam(value = "Whether to return only tasks created or modified recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks created or modified within 30 days, "
+      +"specify: \"modified=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"modified=8h\" to indicate 8 hours.",
+      example = "modified=7", required = false)
+    @QueryParam(value = "modified") String modified,
+
+    @ApiParam(value = "Whether to return only tasks commented recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks that has a comment posted within 30 days, "
+      +"specify: \"commented=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"commented=8h\" to indicate 8 hours.",
+      example = "commented=7", required = false)
+    @QueryParam(value = "commented") String commented,
+
+    @ApiParam(value = "The maximal number of tasks to return.\n"
+      +"Default: 30. That is, at most 30 tasks will be returned.\n"
+      +"You can specify \"no\" to return all matched tasks.\n\n"
+      +"Note: If the organization is on a free plan, the value cannot "
+      +"be larger than 30 or \"no\" (unlimited).",
+      example = "limit=no", required = false)
+    @QueryParam(value = "limit") String limit) { return null; }
+
+  @GET
+  @Path("/search-organization/id/{organizationId}")
+  @ApiOperation(value = "Searches tasks in the organization of the given ID.",
+    notes = "Returns task records that match the specified criteria in "
+    + "the given organization.\n"
+    + "Tasks in the archived projects are excluded.\n\n"
+    + "> Available for Professional plans and above",
+    response = SimpleTask.class,
+    responseContainer = "List")
+  public Response searchTasksByOrgId(
+    @ApiParam(value = "ID of the organization to search for the tasks.",
+    required = true)
+    @PathParam("orgnizationId") String organizationId,
+
+    @ApiParam(value = "Text to do a full-text search against the name, "
+      + "description, and attachments.\n"
+      + "Note: it doesn't include the content and attachment of comments.\n"
+      + "Also note: the update of tasks can take 10 seconds or more before "
+      + "it can be found by the full-text search.",
+      example = "text=important major", required = false)
+    @QueryParam(value = "text") String text,
+
+    @ApiParam(value = "Task name to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
+      + "For example, `name=~abc` matches if `abc` is part of the name. "
+      + "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
+      + "To do a full-text search, please use `text` instead.",
+      example = "name=My first task", required = false)
+    @QueryParam(value = "name") String name,
+
+    @ApiParam(value = "Task's description to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.",
+      example = "description=~john@gooodjob.com", required = false)
+    @QueryParam(value = "description") String description,
+
+    @ApiParam(value = "Task's status to match with.\n"
+      +"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+      +"\"completed\" for completed tasks.",
+      example = "status=active", required = false)
+    @QueryParam(value = "status") String status,
+    @ApiParam(value = "Whether to return only tasks that are scheduled.\n"
+      +"By scheduled we mean either `start` or `due` is scheduled.\n"
+      +"If `scheduled=false` is specified, it returns only tasks "
+      +"that neither start nor due is scheduled.",
+      example = "scheduled=true", required = false)
+    @QueryParam(value = "scheduled") boolean scheduled,
+
+    @ApiParam(value = "Whether to return only My Tasks.\n"
+      +"By My Tasks we mean tasks that are assigned to me, "
+      +"or tasks that are created by me and scheduled, but not assigned to anyone.",
+      example = "mine=true", required = false)
+    @QueryParam(value = "mine") boolean mine,
+
+    @ApiParam(value = "Whether to return only tasks created or modified recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks created or modified within 30 days, "
+      +"specify: \"modified=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"modified=8h\" to indicate 8 hours.",
+      example = "modified=7", required = false)
+    @QueryParam(value = "modified") String modified,
+
+    @ApiParam(value = "Whether to return only tasks commented recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks that has a comment posted within 30 days, "
+      +"specify: \"commented=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"commented=8h\" to indicate 8 hours.",
+      example = "commented=7", required = false)
+    @QueryParam(value = "commented") String commented,
+
+    @ApiParam(value = "The maximal number of tasks to return.\n"
+      +"Default: 30. That is, at most 30 tasks will be returned.\n"
+      +"You can specify \"no\" to return all matched tasks.\n\n"
+      +"Note: If the organization is on a free plan, the value cannot "
+      +"be larger than 30 or \"no\" (unlimited).",
+      example = "limit=no", required = false)
+    @QueryParam(value = "limit") String limit) { return null; }
+
+  @GET
+  @Path("/search-folder/{folderOid}")
+  @ApiOperation(value = "Searches tasks in the folder of the given OID.",
+    notes = "Returns task records that match the specified criteria in "
+    + "the given folder.\n"
+    + "Tasks in the archived projects are excluded.\n\n"
+    + "> Available for Professional plans and above",
+    response = SimpleTask.class,
+    responseContainer = "List")
+  public Response searchTasksByFolderOid(
+    @ApiParam(value = "OID of the folder to search for the tasks.",
+    required = true)
+    @PathParam("folderOid") String folderOid,
+
+    @ApiParam(value = "Text to do a full-text search against the name, "
+      + "description, and attachments.\n"
+      + "Note: it doesn't include the content and attachment of comments.\n"
+      + "Also note: the update of tasks can take 10 seconds or more before "
+      + "it can be found by the full-text search.",
+      example = "text=important major", required = false)
+    @QueryParam(value = "text") String text,
+
+    @ApiParam(value = "Task name to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
+      + "For example, `name=~abc` matches if `abc` is part of the name. "
+      + "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
+      + "To do a full-text search, please use `text` instead.",
+      example = "name=My first task", required = false)
+    @QueryParam(value = "name") String name,
+
+    @ApiParam(value = "Task's description to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.",
+      example = "description=~john@gooodjob.com", required = false)
+    @QueryParam(value = "description") String description,
+
+    @ApiParam(value = "Task's status to match with.\n"
+      +"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+      +"\"completed\" for completed tasks.",
+      example = "status=active", required = false)
+    @QueryParam(value = "status") String status,
+
+    @ApiParam(value = "Whether to return only tasks that are scheduled.\n"
+      +"By scheduled we mean either `start` or `due` is scheduled.\n"
+      +"If `scheduled=false` is specified, it returns only tasks "
+      +"that neither start nor due is scheduled.",
+      example = "scheduled=true", required = false)
+    @QueryParam(value = "scheduled") boolean scheduled,
+
+    @ApiParam(value = "Whether to return only My Tasks.\n"
+      +"By My Tasks we mean tasks that are assigned to me, "
+      +"or tasks that are created by me and scheduled, but not assigned to anyone.",
+      example = "mine=true", required = false)
+    @QueryParam(value = "mine") boolean mine,
+
+    @ApiParam(value = "Whether to return only tasks created or modified recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks created or modified within 30 days, "
+      +"specify: \"modified=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"modified=8h\" to indicate 8 hours.",
+      example = "modified=7", required = false)
+    @QueryParam(value = "modified") String modified,
+
+    @ApiParam(value = "Whether to return only tasks commented recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks that has a comment posted within 30 days, "
+      +"specify: \"commented=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"commented=8h\" to indicate 8 hours.",
+      example = "commented=7", required = false)
+    @QueryParam(value = "commented") String commented,
+
+    @ApiParam(value = "The maximal number of tasks to return.\n"
+      +"Default: 30. That is, at most 30 tasks will be returned.\n"
+      +"You can specify \"no\" to return all matched tasks.\n\n"
+      +"Note: If the folder is on a free plan, the value cannot "
+      +"be larger than 30 or \"no\" (unlimited).",
+      example = "limit=no", required = false)
+    @QueryParam(value = "limit") String limit) { return null; }
+
+  @GET
+  @Path("/search-folder/id/{folderId}")
+  @ApiOperation(value = "Searches tasks in the folder of the given ID.",
+    notes = "Returns task records that match the specified criteria in "
+    + "the given folder.\n"
+    + "Tasks in the archived projects are excluded.\n\n"
+    + "> Available for Professional plans and above",
+    response = SimpleTask.class,
+    responseContainer = "List")
+  public Response searchTasksByFolderId(
+    @ApiParam(value = "ID of the folder to search for the tasks.",
+    required = true)
+    @PathParam("orgnizationId") String folderId,
+
+    @ApiParam(value = "Text to do a full-text search against the name, "
+      + "description, and attachments.\n"
+      + "Note: it doesn't include the content and attachment of comments.\n"
+      + "Also note: the update of tasks can take 10 seconds or more before "
+      + "it can be found by the full-text search.",
+      example = "text=important major", required = false)
+    @QueryParam(value = "text") String text,
+
+    @ApiParam(value = "Task name to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.\n"
+      + "For example, `name=~abc` matches if `abc` is part of the name. "
+      + "`name=~^ab.*ed$` matches if the name starts with `ab` and ends with `ed`.\n"
+      + "To do a full-text search, please use `text` instead.",
+      example = "name=My first task", required = false)
+    @QueryParam(value = "name") String name,
+
+    @ApiParam(value = "Task's description to match with.\n"
+      + "To specify a regular expression, you can precede it with `~`.\n"
+      + "To specify a case-insensitive regular expression, you can precede it with `~*`.",
+      example = "description=~john@gooodjob.com", required = false)
+    @QueryParam(value = "description") String description,
+
+    @ApiParam(value = "Task's status to match with.\n"
+      +"You can specify a value between 0 and 100, or \"active\" for active tasks, "
+      +"\"completed\" for completed tasks.",
+      example = "status=active", required = false)
+    @QueryParam(value = "status") String status,
+    @ApiParam(value = "Whether to return only tasks that are scheduled.\n"
+      +"By scheduled we mean either `start` or `due` is scheduled.\n"
+      +"If `scheduled=false` is specified, it returns only tasks "
+      +"that neither start nor due is scheduled.",
+      example = "scheduled=true", required = false)
+    @QueryParam(value = "scheduled") boolean scheduled,
+
+    @ApiParam(value = "Whether to return only My Tasks.\n"
+      +"By My Tasks we mean tasks that are assigned to me, "
+      +"or tasks that are created by me and scheduled, but not assigned to anyone.",
+      example = "mine=true", required = false)
+    @QueryParam(value = "mine") boolean mine,
+
+    @ApiParam(value = "Whether to return only tasks created or modified recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks created or modified within 30 days, "
+      +"specify: \"modified=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"modified=8h\" to indicate 8 hours.",
+      example = "modified=7", required = false)
+    @QueryParam(value = "modified") String modified,
+
+    @ApiParam(value = "Whether to return only tasks commented recently.\n"
+      +"You can specify an integer as the value. If omitted, 7 is assumed.\n"
+      +"For example, to search tasks that has a comment posted within 30 days, "
+      +"specify: \"commented=30\"\n"
+      +"You can also specify \"d\", \"h\" or \"m\" for days, hours and minutes. "
+      +"For example, specify \"commented=8h\" to indicate 8 hours.",
+      example = "commented=7", required = false)
+    @QueryParam(value = "commented") String commented,
+
+    @ApiParam(value = "The maximal number of tasks to return.\n"
+      +"Default: 30. That is, at most 30 tasks will be returned.\n"
+      +"You can specify \"no\" to return all matched tasks.\n\n"
+      +"Note: If the folder is on a free plan, the value cannot "
+      +"be larger than 30 or \"no\" (unlimited).",
+      example = "limit=no", required = false)
+    @QueryParam(value = "limit") String limit) { return null; }
 }
