@@ -2,23 +2,23 @@
 
 ## Apr 6, 2025
 
-* [Search API](https://quire.io/dev/api/#operation--task-search-id--organizationId--get) allows to search tasks under an organization or a folder.
+* Adds new [Search API](https://quire.io/dev/api/#operation--task-search-id--organizationId--get) for searching tasks under an organization or a folder.
 
 ## Mar 15, 2025
 
-* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) allows to specify days, hours and minutes in the modified and commented parameters.
+* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) allows to specify days, hours and minutes in the `modified` and `commented` parameters.
 
 ## Mar 13, 2025
 
-* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) supports the modified and commented parameters for searching tasks modified and/or commented recently.
+* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) adds the `modified` and `commented` parameters for searching tasks modified and/or commented recently.
 
 ## Feb 12, 2025
 
-* API for [doc](https://quire.io/dev/api/#tag-doc) supported
+* Introduces API for manipulating [documents](https://quire.io/dev/api/#tag-doc).
 
 ## Feb 5, 2025
 
-* Allow to specify `"inherit"` as one of followers and assignees to inherit the parent task's followers and assignees.
+* Allows to specify `"inherit"` as one of followers and assignees to inherit the parent task's followers and assignees.
   - For more details, please [refer here](https://quire.io/dev/api/#operation--task-id--projectId--post)
 * Support `interval` for monthly and yearly recurrence
 
@@ -62,7 +62,7 @@
 
 ## August 12, 2023
 
-* The redirect URL is allowed to be `localhost`.
+* Allows the redirect URL to be `localhost`.
 
 ## July 21, 2023
 
