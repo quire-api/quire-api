@@ -2,7 +2,7 @@
 
 ## Apr 6, 2025
 
-* Adds new [Search API](https://quire.io/dev/api/#operation--task-search-id--organizationId--get) for searching tasks under an organization or a folder.
+* Adds new [Search API](https://quire.io/dev/api/#operation--task-search-organization-id--organizationId--get) for searching tasks under an organization or a folder.
 
 ## Mar 15, 2025
 
