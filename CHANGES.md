@@ -1,5 +1,12 @@
 # CHANGES
 
+## May 8, 2025
+
+* Adds [Chat Channel API](https://quire.io/dev/api/#tag-chat).
+* [Comment API](https://quire.io/dev/api/#tag-comment) supports chat channels.
+* Incompatibility:
+  - Comments can't be posted to a project. Rather, use chat channels instead.
+
 ## Apr 6, 2025
 
 * Adds new [Search API](https://quire.io/dev/api/#operation--task-search-organization-id--organizationId--get) for searching tasks under an organization or a folder.

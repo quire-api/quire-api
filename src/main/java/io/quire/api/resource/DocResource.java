@@ -9,8 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/doc")
-@Api(value = "doc", description =
-		"A document.")
+@Api(value = "doc", description = "A document.")
 @Produces({"application/json"})
 public class DocResource {
 	@POST
@@ -28,7 +27,7 @@ public class DocResource {
 		@ApiParam(value = "OID of the owner that this new doc to be added to.",
 		required = true)
 		@PathParam("ownerOid") String ownerOid,
-		@ApiParam(value = "Doc to create", required = true)
+		@ApiParam(value = "Document to create", required = true)
 		CreateDocBody data) { return null; }
 
 	@POST
@@ -46,7 +45,7 @@ public class DocResource {
 		@ApiParam(value = "ID of owner that this new doc to be added to.",
 		required = true)
 		@PathParam("ownerId") String ownerId,
-		@ApiParam(value = "Doc to create", required = true)
+		@ApiParam(value = "Document to create", required = true)
 		CreateDocBody data) { return null; }
 
 	@GET
@@ -116,7 +115,7 @@ public class DocResource {
 	public Response updateDoc(
 		@ApiParam(value = "OID of doc that needs to be updated", required = true)
 		@PathParam("oid") String oid,
-		@ApiParam(value = "Doc to update", required = true)
+		@ApiParam(value = "Document to update", required = true)
 		UpdateDocBody data) { return null; }
 
 	@PUT
@@ -133,7 +132,7 @@ public class DocResource {
 		@PathParam("ownerType") String ownerType,
 		@ApiParam(value = "ID of the owner.", required = true)
 		@PathParam("ownerId") String ownerId,
-		@ApiParam(value = "Doc to update", required = true)
+		@ApiParam(value = "Document to update", required = true)
 		UpdateDocBody data) { return null; }
 
 	@DELETE

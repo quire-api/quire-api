@@ -9,6 +9,6 @@ public class CommentOwner extends NamedEntity {
     public String getType() { return null; }
 
 	@ApiModelProperty(value = "Url of this record on Quire website.",
-		example = "https://quire.io/u/my_id")
+		example = "https://quire.io/w/my_id")
 	public String getUrl() { return null; }
 }
