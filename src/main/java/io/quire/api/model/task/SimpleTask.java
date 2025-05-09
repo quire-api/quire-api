@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
+@ApiModel()
 public class SimpleTask extends StampedEntity {
-
 	@ApiModelProperty(example = "12", position = 1)
 	public int getId() { return 0; }
 

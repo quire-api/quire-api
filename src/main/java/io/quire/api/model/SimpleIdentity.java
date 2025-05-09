@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel()
 public class SimpleIdentity extends NamedIconEntity {
-	@ApiModelProperty(value = "ID.",
-		example = "my_id")
+	@ApiModelProperty(value = "ID.", example = "my_id")
 	public String getId() { return null; }
 
 	@ApiModelProperty(value = "Url of this record on Quire website.",

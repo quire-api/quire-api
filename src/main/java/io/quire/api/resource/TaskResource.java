@@ -358,7 +358,7 @@ public class TaskResource {
     + "the given organization.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTask.class,
+    response = SimpleTaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByOrgOid(
     @ApiParam(value = "OID of the organization to search for the tasks.",
@@ -440,7 +440,7 @@ public class TaskResource {
     + "the given organization.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTask.class,
+    response = SimpleTaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByOrgId(
     @ApiParam(value = "ID of the organization to search for the tasks.",
@@ -521,7 +521,7 @@ public class TaskResource {
     + "the given folder.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTask.class,
+    response = SimpleTaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByFolderOid(
     @ApiParam(value = "OID of the folder to search for the tasks.",
@@ -603,7 +603,7 @@ public class TaskResource {
     + "the given folder.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTask.class,
+    response = SimpleTaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByFolderId(
     @ApiParam(value = "ID of the folder to search for the tasks.",
