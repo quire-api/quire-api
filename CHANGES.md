@@ -1,6 +1,6 @@
 # CHANGES
 
-## May 8, 2025
+## May 13, 2025
 
 * Adds [Chat Channel API](https://quire.io/dev/api/#tag-chat).
 * [Comment API](https://quire.io/dev/api/#tag-comment) supports chat channels.
