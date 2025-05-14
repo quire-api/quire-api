@@ -16,6 +16,8 @@ info:
 host: quire.io
 basePath: /api
 tags:
+  - name: chat
+    description: A chat channel.
   - name: comment
     description: A comment that an user can put to a task or project.
   - name: doc
@@ -47,19 +49,284 @@ tags:
 schemes:
   - https
 paths:
-  /comment/id/{projectId}:
+  /chat/id/{ownerType}/{ownerId}:
+    post:
+      tags:
+        - chat
+      summary: Add a new chat channel by owner's ID.
+      description: Add a new chat channel by owner's ID.
+      operationId: createChatToProject
+      produces:
+        - application/json
+      parameters:
+        - name: owenerType
+          in: path
+          description: The type of the owner that this new chat channel to be added to. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
+          required: true
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of owner that this new chat channel to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Chat to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateChatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Chat'
+  /chat/id/{ownerType}/{ownerId}/{id}:
+    get:
+      tags:
+        - chat
+      summary: Get an existing chat channel by its ID.
+      description: Returns the full chat channel record of the given ID.
+      operationId: getChatById
+      produces:
+        - application/json
+      parameters:
+        - name: owenerType
+          in: path
+          description: The type of the owner that this chat channel belongs to. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
+          required: true
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of owner that this chat channel belongs to.
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of the chat channel that needs to be fetched
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Chat'
+    put:
+      tags:
+        - chat
+      summary: Update a chat channel by its ID.
+      description: Updates an existing chat channel, and returns the complete updated record.
+      operationId: updateChat
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: The type of the owner. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
+          required: true
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of the owner.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Chat to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateChatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Chat'
+    delete:
+      tags:
+        - chat
+      summary: Delete a chat channel by its ID
+      description: Delete an existing chat channel of the given OID.
+      operationId: deleteChat
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: The type of the owner. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/id/this_is_id` is equivalent to `/id/project/this_is_id`.
+          required: true
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of the owner.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+  /chat/list/id/{ownerType}/{ownerId}:
+    get:
+      tags:
+        - chat
+      summary: Get all chat channels of the given owner by its ID.
+      description: Returns all chat channel records of the given owner by its ID.
+      operationId: getChatsByProjectId
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: The type of the owner. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/list/id/this_is_id` is equivalent to `/list/id/project/this_is_id`.
+          required: true
+          type: string
+        - name: ownerId
+          in: path
+          description: ID of the owner.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Chat'
+  /chat/list/{ownerType}/{ownerOid}:
+    get:
+      tags:
+        - chat
+      summary: Get all chat channels of the given owner by its OID.
+      description: Returns all chat channel records of the given owner by its OID.
+      operationId: getChatsByProjectOid
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: The type of the owner. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/list/this_is_oid` is equivalent to `/list/project/this_is_oid`.
+          required: true
+          type: string
+        - name: ownerOid
+          in: path
+          description: OID of the owner.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Chat'
+  /chat/{oid}:
+    get:
+      tags:
+        - chat
+      summary: Get an existing chat channel by its OID
+      description: Returns the full chat channel record of the given OID.
+      operationId: getChat
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of chat channel that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Chat'
+    put:
+      tags:
+        - chat
+      summary: Update a chat channel by its OID.
+      description: Updates an existing chat channel, and returns the complete updated record.
+      operationId: updateChat
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of chat channel that needs to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Chat to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateChatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Chat'
+    delete:
+      tags:
+        - chat
+      summary: Delete a chat channel by its OID
+      description: Delete an existing chat channel of the given OID.
+      operationId: deleteChat
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of chat channel that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ok
+  /chat/{ownerType}/{ownerOid}:
+    post:
+      tags:
+        - chat
+      summary: Add a new chat channel by owner's OID.
+      description: Add a new chat channel by owner's OID
+      operationId: createChat
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: The type of the owner that this new chat channel to be added to. Currently, only `project` is supported for chat channels. If omitted, `project` is assumed. For example, `/this_is_oid` is equivalent to `/project/this_is_oid`.
+          required: true
+          type: string
+        - name: ownerOid
+          in: path
+          description: OID of the owner that this new chat channel to be added to.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Chat channel to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateChatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Chat'
+  /comment/id/{projectId}/{chatId}:
     post:
       tags:
         - comment
-      summary: Add a new comment to a project.
-      description: Add a new comment to a project.
-      operationId: createCommentToProject
+      summary: Add a new comment to a chat channel.
+      description: Add a new comment to a chat channel.
+      operationId: createCommentToChat
       produces:
         - application/json
       parameters:
         - name: projectId
           in: path
-          description: ID of the project that new comment will be added to
+          description: ID of the project that the chat channel is in
+          required: true
+          type: string
+        - name: chatId
+          in: path
+          description: ID of the chat channel that new comment will be added to
           required: true
           type: string
         - in: body
@@ -73,83 +340,6 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-  /comment/id/{projectId}/{oid}:
-    get:
-      tags:
-        - comment
-      summary: Get a comment with project's ID
-      description: Returns the full comment record of the given OID.
-      operationId: getCommentById
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of the project that the comment is in.
-          required: true
-          type: string
-        - name: oid
-          in: path
-          description: OID of comment that needs to be feteched.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Comment'
-    put:
-      tags:
-        - comment
-      summary: Update an existing comment with project's ID
-      description: Updates an existing comment, and returns the complete updated comment record.
-      operationId: updateCommentById
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of the project that the comment is in.
-          required: true
-          type: string
-        - name: oid
-          in: path
-          description: OID of the comment that needs to be updated.
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: The new content of the comment to update to
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateCommentBody'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Comment'
-    delete:
-      tags:
-        - comment
-      summary: Delete an existing comment with project's ID
-      description: Delete an existing comment.
-      operationId: deleteCommentById
-      produces:
-        - application/json
-      parameters:
-        - name: projectId
-          in: path
-          description: ID of the project that the comment is in.
-          required: true
-          type: string
-        - name: oid
-          in: path
-          description: OID of comment that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '200':
-          description: ok
   /comment/id/{projectId}/{taskId}:
     post:
       tags:
@@ -182,19 +372,24 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-  /comment/list/id/{projectId}:
+  /comment/list/id/{projectId}/{chatId}:
     get:
       tags:
         - comment
-      summary: Get all comments of the given project.
-      description: Returns all comment records of the given project by its ID.
-      operationId: getProjectComments
+      summary: Get all comments of the chat channel.
+      description: Returns all comment records of the chat channel by its ID.
+      operationId: getCommentsOfChat
       produces:
         - application/json
       parameters:
         - name: projectId
           in: path
-          description: ID of project.
+          description: ID of the project.
+          required: true
+          type: string
+        - name: chatId
+          in: path
+          description: ID of the chat channel.
           required: true
           type: string
       responses:
@@ -208,9 +403,9 @@ paths:
     get:
       tags:
         - comment
-      summary: 'Get all comments of the given task. '
-      description: Returns all comment records of the given task by its ID.
-      operationId: getTaskComments
+      summary: 'Get all comments of the task. '
+      description: Returns all comment records of the task by its ID.
+      operationId: getCommentsOfTask
       produces:
         - application/json
       parameters:
@@ -221,7 +416,7 @@ paths:
           type: string
         - name: taskId
           in: path
-          description: ID of the task
+          description: ID of the task.
           required: true
           type: integer
           format: int32
@@ -232,19 +427,19 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
-  /comment/list/{oid}:
+  /comment/list/{chatOid}:
     get:
       tags:
         - comment
-      summary: Get comments added to the given object.
-      description: Returns all comment records of the given object that can be a project or a task.
-      operationId: getComments
+      summary: Get all comments of the chat channel.
+      description: Returns all comment records of the chat channel.
+      operationId: getCommentsOfChatByOid
       produces:
         - application/json
       parameters:
-        - name: oid
+        - name: chatOid
           in: path
-          description: OID of project or task that comments will be be fetched from.
+          description: OID of the chat channel that comments will be be fetched from.
           required: true
           type: string
       responses:
@@ -254,19 +449,41 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Comment'
-  /comment/{oid}:
-    post:
+  /comment/list/{taskOid}:
+    get:
       tags:
         - comment
-      summary: Add a new comment to a task or a project.
-      description: Add a new comment to a task or a project. If the given OID is a project, the comment will be added to a project. If a task, the comment will be added to a task.
-      operationId: createComment
+      summary: Get all comments of the task.
+      description: Returns all comment records of the task.
+      operationId: getCommentsOfTaskByOid
       produces:
         - application/json
       parameters:
-        - name: oid
+        - name: taskOid
           in: path
-          description: OID of the project or task that new comment will be added to
+          description: OID of the task that comments will be be fetched from.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+  /comment/{chatOid}:
+    post:
+      tags:
+        - comment
+      summary: Add a new comment to a chat channel.
+      description: Add a new comment to a chat channel.
+      operationId: createCommentToChatByOid
+      produces:
+        - application/json
+      parameters:
+        - name: chatOid
+          in: path
+          description: OID of the chat channel that new comment will be added to
           required: true
           type: string
         - in: body
@@ -280,46 +497,17 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Comment'
-  /comment/{projectOid}/{oid}:
-    get:
-      tags:
-        - comment
-      summary: Get a comment with project's OID
-      description: Returns the full comment record of the given OID.
-      operationId: getCommentByOid
-      produces:
-        - application/json
-      parameters:
-        - name: projectOid
-          in: path
-          description: OID of the project that the comment is in.
-          required: true
-          type: string
-        - name: oid
-          in: path
-          description: OID of comment that needs to be feteched.
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Comment'
+  /comment/{commentOid}:
     put:
       tags:
         - comment
-      summary: Update an existing comment with project's OID
+      summary: Update an existing comment
       description: Updates an existing comment, and returns the complete updated comment record.
       operationId: updateCommentByOid
       produces:
         - application/json
       parameters:
-        - name: projectOid
-          in: path
-          description: OID of the project that the comment is in.
-          required: true
-          type: string
-        - name: oid
+        - name: commentOid
           in: path
           description: OID of the comment that needs to be updated.
           required: true
@@ -338,18 +526,13 @@ paths:
     delete:
       tags:
         - comment
-      summary: Delete an existing comment with project's OID
+      summary: Delete an existing comment
       description: Delete an existing comment.
       operationId: deleteCommentByOid
       produces:
         - application/json
       parameters:
-        - name: projectOid
-          in: path
-          description: OID of the project that the comment is in.
-          required: true
-          type: string
-        - name: oid
+        - name: commentOid
           in: path
           description: OID of comment that needs to be deleted
           required: true
@@ -357,6 +540,32 @@ paths:
       responses:
         '200':
           description: ok
+  /comment/{taskOid}:
+    post:
+      tags:
+        - comment
+      summary: Add a new comment to a task.
+      description: Add a new comment to a task.
+      operationId: createCommentToTaskByOid
+      produces:
+        - application/json
+      parameters:
+        - name: taskOid
+          in: path
+          description: OID of the task that new comment will be added to
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Comment to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateCommentBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
   /doc/id/{ownerType}/{ownerId}:
     post:
       tags:
@@ -379,7 +588,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: Doc to create
+          description: Document to create
           required: true
           schema:
             $ref: '#/definitions/CreateDocBody'
@@ -439,7 +648,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: Doc to update
+          description: Document to update
           required: true
           schema:
             $ref: '#/definitions/UpdateDocBody'
@@ -560,7 +769,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: Doc to update
+          description: Document to update
           required: true
           schema:
             $ref: '#/definitions/UpdateDocBody'
@@ -608,7 +817,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: Doc to create
+          description: Document to create
           required: true
           schema:
             $ref: '#/definitions/CreateDocBody'
@@ -2273,7 +2482,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/SimpleTask'
+              $ref: '#/definitions/SimpleTaskWithProject'
   /task/search-folder/{folderOid}:
     get:
       tags:
@@ -2384,7 +2593,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/SimpleTask'
+              $ref: '#/definitions/SimpleTaskWithProject'
   /task/search-organization/id/{organizationId}:
     get:
       tags:
@@ -2495,7 +2704,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/SimpleTask'
+              $ref: '#/definitions/SimpleTaskWithProject'
   /task/search-organization/{organizationOid}:
     get:
       tags:
@@ -2606,7 +2815,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/SimpleTask'
+              $ref: '#/definitions/SimpleTaskWithProject'
   /task/search/id/{projectId}:
     get:
       tags:
@@ -3070,6 +3279,10 @@ definitions:
     required:
       - task
     properties:
+      task:
+        type: string
+        example: 2MmYOpJH_ZLeehIjjytH1Rwr
+        description: The task's OID to be included or excluded.
       exclude:
         type: boolean
         example: false
@@ -3083,10 +3296,118 @@ definitions:
           Whether to include or exclude only the task.
           Default: false -- all descendants tasks will be included or excluded too.
           Note: it won't affect descendants that are explicitly excluded or included before this invocation.
-      task:
+  Chat:
+    type: object
+    properties:
+      url:
         type: string
-        example: 2MmYOpJH_ZLeehIjjytH1Rwr
-        description: The task's OID to be included or excluded.
+        example: https://quire.io/w/my_project?chat=Highlight101
+        description: Url of this record on Quire website.
+      name:
+        type: string
+        example: Highlight 101
+        description: Name.
+      id:
+        type: string
+        example: Highlight101
+        description: ID.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is <i>cool</i>!
+        description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
+      image:
+        type: string
+        example: https://quire.s3.amazonaws.com/oid/image.jpg
+        description: The image representing this record.
+        allowEmptyValue: true
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID, aka. UUID.
+      partner:
+        position: 15
+        description: The external team that this record belongs to. It is null if this record can't be accessed by a member of external teams.
+        $ref: '#/definitions/SimpleTaggingEntity'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: When this record was archived. It is null if not archived.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: When this record was aimed to start, or null if not specified.
+      due:
+        type: string
+        example: '2024-05-25'
+        position: 50
+        description: When this record was aimed to complete, or null if not specified.
+      owner:
+        position: 99
+        description: The project this chat channel belongs to.
+        $ref: '#/definitions/ChatOwner'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
+  ChatOwner:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Project
+        description: The type of this object.
+      url:
+        type: string
+        example: https://quire.io/w/prj_id
+        description: Url of this record on Quire website.
+      id:
+        type: string
+        example: my_id
+        description: ID.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
+      image:
+        type: string
+        example: https://quire.s3.amazonaws.com/oid/image.jpg
+        description: The image representing this record.
+        allowEmptyValue: true
+      name:
+        type: string
+        example: Foo
+        description: Name.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID, aka. UUID.
   Comment:
     type: object
     properties:
@@ -3119,6 +3440,15 @@ definitions:
         type: string
         position: 50
         description: Url of this comment on Quire website.
+      editedBy:
+        position: 50
+        description: The user who edited this comment, or null if not edited.
+        $ref: '#/definitions/SimpleIdentity'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this comment was edited, or null if not edited.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -3127,15 +3457,6 @@ definitions:
       pinBy:
         position: 50
         description: The user who pinned this comment, or null if not pinned.
-        $ref: '#/definitions/SimpleIdentity'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this comment was edited, or null if not edited.
-      editedBy:
-        position: 50
-        description: The user who edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
@@ -3159,7 +3480,7 @@ definitions:
         description: The type of this object.
       url:
         type: string
-        example: https://quire.io/u/my_id
+        example: https://quire.io/w/my_id
         description: Url of this record on Quire website.
       name:
         type: string
@@ -3169,25 +3490,67 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: OID, aka. UUID.
+  CreateChatBody:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        example: Highlight 101
+        description: The name of the record.
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) ID of the record. If omitted, Quire will generate one automatically. It must be unquie in the whole project if specified
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) An optional description about this task.
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
+      image:
+        type: string
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 15
+        description: (Optional) OID of the external team that this record belongs to.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: (Optional) When this record was aimed to start.
+      due:
+        type: string
+        example: '2024-05-25'
+        position: 50
+        description: (Optional) When this record was aimed to complete.
   CreateCommentBody:
     type: object
     required:
       - description
     properties:
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false'
+      description:
+        type: string
+        example: Adjust style
+        description: The content of the new comment.
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) Specify true if you'd like to make this new comment as created by the app.
           Default: false -- the comment is marked as created by the user authorizing the app.
-      description:
-        type: string
-        example: Adjust style
-        description: The content of the new comment.
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false'
   CreateDocBody:
     type: object
     required:
@@ -3201,12 +3564,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID of the record. If omitted, Quire will generate one automatically. It must be unquie in the whole project if specified
-      image:
-        type: string
-        example: icon-view-kanban
-        description: |-
-          (Optional) The image representing this record. It shall be one of the predined images:
-           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
       description:
         type: string
         example: '**Great** record to start with.'
@@ -3215,6 +3572,12 @@ definitions:
         type: string
         example: '37'
         description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
+      image:
+        type: string
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3282,12 +3645,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID of the record. If omitted, Quire will generate one automatically. It must be unquie in the whole project if specified
-      image:
-        type: string
-        example: icon-view-kanban
-        description: |-
-          (Optional) The image representing this record. It shall be one of the predined images:
-           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
       description:
         type: string
         example: '**Great** record to start with.'
@@ -3296,6 +3653,12 @@ definitions:
         type: string
         example: '37'
         description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
+      image:
+        type: string
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3342,12 +3705,91 @@ definitions:
         description: (Optional) A list of subtasks to create.
         items:
           $ref: '#/definitions/CreateTaskBody'
-      asUser:
-        type: boolean
+      description:
+        type: string
+        example: This is a *cool* task.
+        description: (Optional) An optional description about this task.
+      assignees:
+        type: array
+        description: |-
+          (Optional) A list of OID, ID or emails of the users that this task is assigned to.
+
+          You can specify "me" instead of OID to indicate the current user.
+          You can also specify "inherit" to include all assignees of the parent task, if any.
+
+          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      recurrence:
+        description: |-
+          (Optional) The recurring information of this task. It is null if it is not a recurring task.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
+          - `interval`: The interval between each freq iteration. Default: 1.
+          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
+          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
+          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
+          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
+          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
+            - Note: `byweekday` and `bydayno` can not be specified at the same time.
+          - `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.
+          - `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.
+        $ref: '#/definitions/Recurrence'
+      peekaboo:
+        type: object
         example: true
         description: |-
-          (Optional) Specify true if you'd like to make this new task as created by the app.
-          Default: false -- the task is marked as created by the user authorizing the app.
+          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.
+          Or, specify false to undo the previous peekaboo if any.
+
+          If a positive integer is specified, it is the number of days to peekaboo a task.
+          If true, it won't be reshowed automatically.
+
+          Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
+      successors:
+        type: array
+        description: |-
+          (Optional) OID or ID of successors of this task.
+
+          To specify task's ID, you can specify as `#id` or `id`.
+
+          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
+
+          - For Money type, please specify the value directly (without currency).
+          - For User or Task type, please specify the OID.
+          - For Duration type, please specify number of seconds.
+          - For multiple values, you can specify a list of values.
+      followers:
+        type: array
+        description: |-
+          (Optional) A list of OID, ID or emails of users who follow this task.You can specify "me" instead of OID to indicate the current user.
+          You can also specify "inherit" to include all followers of the parent task, if any.
+
+          If the application itself would like to follow (i.e., receive notifications), it can pass "app" as one of OIDs.
+          In additions, it can pass additional information in one of the following syntaxes.
+
+          Syntax 1:
+          "app|team" or "app|team|channel"
+          where team and channel can be any value.
+
+          Syntax 2:
+          "app|/path"
+          where "/path" can be any URL path. It will be appended to the hook's URL when calling the registered hook. For example, if the hook URL is "https://super.app/hooks/standard" and the follower is "app|/soc1/33456/a7", then the notification will be sent to "https://super.app/hooks/standard/soc1/33456/a7".
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -3374,6 +3816,12 @@ definitions:
         description: |-
           (Optional) Specify whether this task is a section.
           Default: false.
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) Specify true if you'd like to make this new task as created by the app.
+          Default: false -- the task is marked as created by the user authorizing the app.
       tags:
         type: array
         description: |-
@@ -3383,91 +3831,6 @@ definitions:
           type: string
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
-      description:
-        type: string
-        example: This is a *cool* task.
-        description: (Optional) An optional description about this task.
-      followers:
-        type: array
-        description: |-
-          (Optional) A list of OID, ID or emails of users who follow this task.You can specify "me" instead of OID to indicate the current user.
-          You can also specify "inherit" to include all followers of the parent task, if any.
-
-          If the application itself would like to follow (i.e., receive notifications), it can pass "app" as one of OIDs.
-          In additions, it can pass additional information in one of the following syntaxes.
-
-          Syntax 1:
-          "app|team" or "app|team|channel"
-          where team and channel can be any value.
-
-          Syntax 2:
-          "app|/path"
-          where "/path" can be any URL path. It will be appended to the hook's URL when calling the registered hook. For example, if the hook URL is "https://super.app/hooks/standard" and the follower is "app|/soc1/33456/a7", then the notification will be sent to "https://super.app/hooks/standard/soc1/33456/a7".
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-      peekaboo:
-        type: object
-        example: true
-        description: |-
-          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.
-          Or, specify false to undo the previous peekaboo if any.
-
-          If a positive integer is specified, it is the number of days to peekaboo a task.
-          If true, it won't be reshowed automatically.
-
-          Default: false.
-        anyOf:
-          - type: boolean
-          - type: integer
-      successors:
-        type: array
-        description: |-
-          (Optional) OID or ID of successors of this task.
-
-          To specify task's ID, you can specify as `#id` or `id`.
-
-          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
-        items:
-          type: string
-      assignees:
-        type: array
-        description: |-
-          (Optional) A list of OID, ID or emails of the users that this task is assigned to.
-
-          You can specify "me" instead of OID to indicate the current user.
-          You can also specify "inherit" to include all assignees of the parent task, if any.
-
-          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      yourField:
-        type: object
-        description: |-
-          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
-
-          - For Money type, please specify the value directly (without currency).
-          - For User or Task type, please specify the OID.
-          - For Duration type, please specify number of seconds.
-          - For multiple values, you can specify a list of values.
-      recurrence:
-        description: |-
-          (Optional) The recurring information of this task. It is null if it is not a recurring task.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
-          - `interval`: The interval between each freq iteration. Default: 1.
-          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
-          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
-          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
-          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
-          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
-            - Note: `byweekday` and `bydayno` can not be specified at the same time.
-          - `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.
-          - `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.
-        $ref: '#/definitions/Recurrence'
       priority:
         type: integer
         format: int32
@@ -3521,15 +3884,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -3538,6 +3901,11 @@ definitions:
         position: 15
         description: The external team that this record belongs to. It is null if this record can't be accessed by a member of external teams.
         $ref: '#/definitions/SimpleTaggingEntity'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: When this record was archived. It is null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -3548,11 +3916,6 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: When this record was aimed to complete, or null if not specified.
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: When this record was archived. It is null if not archived.
       owner:
         position: 99
         description: The project this document belongs to.
@@ -3581,15 +3944,15 @@ definitions:
         type: string
         example: my_id
         description: ID.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       name:
         type: string
         example: Foo
@@ -3609,15 +3972,15 @@ definitions:
         type: string
         example: my_organization
         description: ID.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: Url of this record on Quire website.
       email:
         type: string
         example: info@compony.com
         description: Email address.
         allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: Url of this record on Quire website.
       nameText:
         type: string
         example: My Organization
@@ -3643,15 +4006,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -3707,6 +4070,16 @@ definitions:
   Project:
     type: object
     properties:
+      activeCount:
+        type: integer
+        format: int32
+        example: 20
+        description: Number of active tasks in this project.
+      taskCount:
+        type: integer
+        format: int32
+        example: 30
+        description: Total number of tasks in this project.
       name:
         type: string
         example: My Project
@@ -3722,11 +4095,6 @@ definitions:
       organization:
         description: The organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root tasks in this project.
       nameText:
         type: string
         example: My Project
@@ -3735,16 +4103,11 @@ definitions:
         type: string
         example: My Project
         description: Name in a form of a HTML fragment converted from markdown.
-      activeCount:
+      rootCount:
         type: integer
         format: int32
-        example: 20
-        description: Number of active tasks in this project.
-      taskCount:
-        type: integer
-        format: int32
-        example: 30
-        description: Total number of tasks in this project.
+        example: 5
+        description: Number of root tasks in this project.
       description:
         type: string
         example: This is *cool*!
@@ -3757,15 +4120,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -3819,6 +4182,30 @@ definitions:
   Recurrence:
     type: object
     properties:
+      interval:
+        type: integer
+        format: int32
+        example: 1
+        description: How often this recurring shall occur. If the rate is 2 and the type is weekly, it means it shall occur every two week. If the type is custom, it means number of days to repeat.
+      byweekday:
+        type: array
+        description: 'It must be an integer or array: 0 for Monday, 1 for Tuesday, and so on. For weekly, it is a list of integers, such as [1] and [0, 3]. When given, these values will define the weekdays where the recurrence will be applied. For example, if the data is [0,1], it means every Monday and Tuesday.'
+        items:
+          type: integer
+          format: int32
+      byweekno:
+        type: integer
+        format: int32
+        example: 2
+        description: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
+      dupsubtasks:
+        type: boolean
+        example: false
+        description: 'Whether to duplicate the subtasks when the task is completed. Default: true'
+      sincelatest:
+        type: boolean
+        example: true
+        description: 'Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false'
       freq:
         type: string
         example: weekly
@@ -3833,30 +4220,6 @@ definitions:
         format: int32
         example: 10
         description: 'If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.'
-      byweekday:
-        type: array
-        description: 'It must be an integer or array: 0 for Monday, 1 for Tuesday, and so on. For weekly, it is a list of integers, such as [1] and [0, 3]. When given, these values will define the weekdays where the recurrence will be applied. For example, if the data is [0,1], it means every Monday and Tuesday.'
-        items:
-          type: integer
-          format: int32
-      sincelatest:
-        type: boolean
-        example: true
-        description: 'Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false'
-      dupsubtasks:
-        type: boolean
-        example: false
-        description: 'Whether to duplicate the subtasks when the task is completed. Default: true'
-      byweekno:
-        type: integer
-        format: int32
-        example: 2
-        description: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
-      interval:
-        type: integer
-        format: int32
-        example: 1
-        description: How often this recurring shall occur. If the rate is 2 and the type is weekly, it means it shall occur every two week. If the type is custom, it means number of days to repeat.
       until:
         type: string
         example: '2020-12-22'
@@ -3865,6 +4228,10 @@ definitions:
   Referrer:
     type: object
     properties:
+      task:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the task that refers another task.
       user:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
@@ -3873,10 +4240,17 @@ definitions:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         description: When this reference is made.
-      task:
+  SimpleEntityWithId:
+    type: object
+    properties:
+      id:
         type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the task that refers another task.
+        example: my_id
+        description: ID.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID, aka. UUID.
   SimpleIdentity:
     type: object
     properties:
@@ -3888,15 +4262,15 @@ definitions:
         type: string
         example: https://quire.io/u/my_id
         description: Url of this record on Quire website.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       name:
         type: string
         example: Foo
@@ -3992,33 +4366,145 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
-      tags:
-        type: array
-        position: 5
-        description: Tags that are tagged to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
         description: Users who are assigned to this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      tags:
+        type: array
+        position: 5
+        description: Tags that are tagged to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
       url:
         type: string
         example: https://quire.io/w/my_project/123
         position: 50
         description: Url of this task on Quire website.
-      section:
-        type: boolean
-        example: true
-        position: 50
-        description: Whether this task is a section. It is null if it is a normal task
       peekaboo:
         type: boolean
         example: true
         position: 50
         description: Whether this task was peekabooed. It is null if not peekabooed.
+      section:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task is a section. It is null if it is a normal task
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: When this record was created.
+      createdBy:
+        position: 99
+        description: The user who created this record.
+        $ref: '#/definitions/SimpleIdentity'
+  SimpleTaskWithProject:
+    type: object
+    properties:
+      successors:
+        type: array
+        description: |-
+          Successors of this task.
+
+          Example, `['#135', '#26']`
+        items:
+          type: string
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: OID, aka. UUID.
+      id:
+        type: integer
+        format: int32
+        example: 12
+        position: 1
+      name:
+        type: string
+        example: Design new **logo**
+        position: 2
+        description: This task's name.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: This task's name but excluding markdown characters.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: This task's name in a form of a HTML fragment converted from markdown.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Description about this task.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Description but excluding markdown characters.
+      descriptionHtml:
+        type: string
+        example: This is a <i>cool</i> task.
+        position: 3
+        description: Description in a form of a HTML fragment converted from markdown.
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: 'The priority of this task. Its value must be between -1 (lowest) and 2 (highest). Default: 0.'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: The status of this task. Its value must be between 0 and 100. If 100, it means completed.
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: 'When to start this task.Note: if time is specified, the millisecond will be `001`. Otherwise, it is `000` (so are the hour, minute and second fields).'
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        position: 4
+        description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
+      assignees:
+        type: array
+        position: 5
+        description: Users who are assigned to this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      tags:
+        type: array
+        position: 5
+        description: Tags that are tagged to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
+      project:
+        position: 10
+        description: The project that this task belongs to.
+        $ref: '#/definitions/SimpleEntityWithId'
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: Url of this task on Quire website.
+      peekaboo:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task was peekabooed. It is null if not peekabooed.
+      section:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task is a section. It is null if it is a normal task
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -4050,15 +4536,15 @@ definitions:
       latest:
         description: Property name.
         $ref: '#/definitions/StorageMap'
+      currentProject:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: Property name
       myList:
         type: array
         description: Property name.
         items:
           type: string
-      currentProject:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: Property name
   StorageMap:
     type: object
     properties:
@@ -4101,15 +4587,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4118,6 +4604,11 @@ definitions:
         position: 15
         description: The external team that this record belongs to. It is null if this record can't be accessed by a member of external teams.
         $ref: '#/definitions/SimpleTaggingEntity'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: When this record was archived. It is null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -4128,11 +4619,6 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: When this record was aimed to complete, or null if not specified.
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: When this record was archived. It is null if not archived.
       owner:
         position: 99
         description: The project this sublist belongs to.
@@ -4161,15 +4647,15 @@ definitions:
         type: string
         example: my_id
         description: ID.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       name:
         type: string
         example: Foo
@@ -4260,22 +4746,22 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Description in a form of a HTML fragment converted from markdown.
-      etc:
-        type: integer
-        format: int32
-        example: 500
+      recurrence:
         position: 4
-        description: 'The estimed time to complete, or null if not specified. Unit: seconds.'
+        description: The recurring information of this task. It is null if it is not a recurring task.
+        $ref: '#/definitions/Recurrence'
       timelogs:
         type: array
         position: 4
         description: The timelogs of this task if available.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
+      etc:
+        type: integer
+        format: int32
+        example: 500
         position: 4
-        description: The recurring information of this task. It is null if it is not a recurring task.
-        $ref: '#/definitions/Recurrence'
+        description: 'The estimed time to complete, or null if not specified. Unit: seconds.'
       priority:
         type: integer
         format: int32
@@ -4298,18 +4784,24 @@ definitions:
         example: '2018-12-22T00:00:00.000Z'
         position: 4
         description: 'When to complete this task. Note: if time is specified, the millisecond will be 001. Otherwise, it is 000 (so are the hour, minute and second fields).'
-      partner:
-        position: 5
-        description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
-      partnerBy:
-        position: 5
-        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
-        $ref: '#/definitions/SimpleIdentity'
       assignors:
         type: array
         position: 5
         description: Users who have assigned this tasks to a user. For example, the first item of assignees is assigned by the first item of assignors.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      partnerBy:
+        position: 5
+        description: The user who assigned this task to an external team. It is null if this task doesn't belong to any external team.
+        $ref: '#/definitions/SimpleIdentity'
+      partner:
+        position: 5
+        description: The external team that this task belongs to. It is null if this task doesn't belong to any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
+      assignees:
+        type: array
+        position: 5
+        description: Users who are assigned to this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
       tags:
@@ -4318,29 +4810,23 @@ definitions:
         description: Tags that are tagged to this task.
         items:
           $ref: '#/definitions/SimpleTaggingEntity'
-      assignees:
-        type: array
-        position: 5
-        description: Users who are assigned to this task.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       order:
         type: integer
         format: int32
         example: 99
         position: 6
         description: The order of this task shown on the board view. The smaller the number is, the ealier the task is shown. It is meaningless if not in a board view.
-      cover:
-        type: string
-        example: qfqVmUtC
-        position: 8
-        description: The id of the attachment that is used as a cover of this task.
       attachments:
         type: array
         position: 8
         description: The attachments of this task.
         items:
           $ref: '#/definitions/Attachment'
+      cover:
+        type: string
+        example: qfqVmUtC
+        position: 8
+        description: The id of the attachment that is used as a cover of this task.
       childCount:
         type: integer
         format: int32
@@ -4353,39 +4839,39 @@ definitions:
         description: 'A list of referrers that refer this task. Note: some of them might no longer exist.'
         items:
           $ref: '#/definitions/Referrer'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: When this record was edited last time.
-      toggledBy:
-        position: 50
-        description: The user who changed this task's status.
-        $ref: '#/definitions/SimpleIdentity'
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: When this task's status was changed last time.
+      toggledBy:
+        position: 50
+        description: The user who changed this task's status.
+        $ref: '#/definitions/SimpleIdentity'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: When this record was edited last time.
       url:
         type: string
         example: https://quire.io/w/my_project/123
         position: 50
         description: Url of this task on Quire website.
-      section:
-        type: boolean
-        example: true
-        position: 50
-        description: Whether this task is a section. It is null if it is a normal task
       peekaboo:
         type: boolean
         example: true
         position: 50
         description: Whether this task was peekabooed. It is null if not peekabooed.
-      mutes:
+      section:
+        type: boolean
+        example: true
+        position: 50
+        description: Whether this task is a section. It is null if it is a normal task
+      favorites:
         type: array
         position: 60
-        description: Users who don't want any nofications of this task even they're assinged to it.
+        description: Users who favorite this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
       followers:
@@ -4394,10 +4880,10 @@ definitions:
         description: Users who follow this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      favorites:
+      mutes:
         type: array
         position: 60
-        description: Users who favorite this task.
+        description: Users who don't want any nofications of this task even they're assinged to it.
         items:
           $ref: '#/definitions/SimpleIdentity'
       project:
@@ -4440,18 +4926,7 @@ definitions:
         example: A piece of cake
         position: 5
         description: A note.
-  UpdateCommentBody:
-    type: object
-    properties:
-      pinned:
-        type: boolean
-        example: false
-        description: (Optional) Whether to pin this comment.
-      description:
-        type: string
-        example: Adjust style
-        description: (Optional) The new content of the comment.
-  UpdateDocBody:
+  UpdateChatBody:
     type: object
     properties:
       name:
@@ -4462,6 +4937,18 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID of this record.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) An optional description about this task.
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Specify true to archive this record. Or, specify false to undo the previous archiving if any.
       image:
         type: string
         example: icon-view-kanban
@@ -4476,6 +4963,28 @@ definitions:
         type: string
         example: '2024-05-25'
         description: (Optional) When this record was aimed to complete.
+  UpdateCommentBody:
+    type: object
+    properties:
+      description:
+        type: string
+        example: Adjust style
+        description: (Optional) The new content of the comment.
+      pinned:
+        type: boolean
+        example: false
+        description: (Optional) Whether to pin this comment.
+  UpdateDocBody:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Highlight 101
+        description: (Optional) The name of this record.
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) ID of this record.
       description:
         type: string
         example: '**Great** record to start with.'
@@ -4488,6 +4997,20 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Specify true to archive this record. Or, specify false to undo the previous archiving if any.
+      image:
+        type: string
+        example: icon-view-kanban
+        description: |-
+          (Optional) The image representing this record. It shall be one of the predined images:
+           'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o', 'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o', 'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail', 'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o', 'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down', 'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) When this record was aimed to start.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) When this record was aimed to complete.
   UpdateOrganizationBody:
     type: object
     properties:
@@ -4593,6 +5116,18 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID of this record.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) An optional description about this task.
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Specify true to archive this record. Or, specify false to undo the previous archiving if any.
       image:
         type: string
         example: icon-view-kanban
@@ -4607,18 +5142,6 @@ definitions:
         type: string
         example: '2024-05-25'
         description: (Optional) When this record was aimed to complete.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) An optional description about this task.
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) The color of the icon representing this record. It is an index of our predefined color palette. '
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Specify true to archive this record. Or, specify false to undo the previous archiving if any.
   UpdateTagBody:
     type: object
     properties:
@@ -4645,58 +5168,120 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New name of the task.
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) Specify true if you'd like to make this task as updated by the app.
-          Default: false -- the task is marked as created by the user authorizing the app.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          Note: they must be in UTC time, and we don't support seconds.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
-
-          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time. OTOH, To specify time at midnight in UTC, please specify `2020-10-30T00:00` (no second)
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
-          Note: they must be in UTC time, and we don't support seconds.
-
-          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
-
-          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time. OTOH, To specify time at midnight in UTC, please specify `2020-10-30T00:00` (no second)
-      section:
-        type: boolean
-        example: true
-        description: (Optional) Specify whether this task is a section or a normal task.
-      addTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be added to this task.
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      tags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
-          Note: if tag's name is specified, it is case-insensitive.
-        items:
-          type: string
-        example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
       description:
         type: string
         example: This is a **cool** task.
         description: (Optional) Change the description about this task.
+      assignees:
+        type: array
+        description: |-
+          (Optional) A list of OID, ID or emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
+
+          Please refer to `addAssignees` for more details.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      recurrence:
+        description: |-
+          (Optional) The recurring information of this task. It is null if it is not a recurring task.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
+          - `interval`: The interval between each freq iteration. Default: 1.
+          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
+          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
+          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
+          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
+          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
+            - Note: `byweekday` and `bydayno` can not be specified at the same time.
+          - `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.
+          - `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.
+        $ref: '#/definitions/Recurrence'
+      peekaboo:
+        type: object
+        example: true
+        description: |-
+          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.
+          Or, specify false to undo the previous peekaboo if any.
+
+          If a positive integer is specified, it is the number of days to peekaboo a task.
+          If true, it won't be reshowed automatically.
+
+          Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
+      successors:
+        type: array
+        description: |-
+          (Optional) A list of OID or ID of tasks to replace the successors of this task.
+
+          To specify task's ID, you can specify as `#id` or `id`.
+
+          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
+
+          - For Money type, please specify the value directly (without currency).
+          - For User or Task type, please specify the OID.
+          - For Duration type, please specify number of seconds.
+          - For multiple values, you can specify a list of values.
+      removeTags:
+        type: array
+        description: |-
+          (Optional) OID or names of the tags to be removed from this task.
+          Note: if tag's name is specified, it is case-insensitive.
+        items:
+          type: string
+        example:
+          - mPAQrYU1qt8wAYAInKRlTnvl
+      addAssignees:
+        type: array
+        description: |-
+          (Optional) A list of OID, ID or emails of the assignees to be added to this task.
+
+          You can specify "me" instead of OID to indicate the current user.
+          You can also specify "inherit" to include all assignees of the parent task, if any.
+
+          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      removeAssignees:
+        type: array
+        description: |-
+          (Optional) A list of OID, ID or emails of the assignees to be removed from this task.
+
+          Please refer to `addAssignees` for more details.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
+      addSuccessors:
+        type: array
+        description: |-
+          (Optional) A list of OID or ID of tasks to be added to the successors of this task.
+
+          To specify task's ID, you can specify as `#id` or `id`.
+
+          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
+        items:
+          type: string
+      removeSuccessors:
+        type: array
+        description: |-
+          (Optional) A list of OID or ID of tasks to be removed from the successors of this task.
+
+          To specify task's ID, you can specify as `#id` or `id`.
+
+          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
+        items:
+          type: string
       followers:
         type: array
         description: |-
@@ -4738,116 +5323,54 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      removeSuccessors:
-        type: array
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
         description: |-
-          (Optional) A list of OID or ID of tasks to be removed from the successors of this task.
+          (Optional) An optional start time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          Note: they must be in UTC time, and we don't support seconds.
 
-          To specify task's ID, you can specify as `#id` or `id`.
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
 
-          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
-        items:
-          type: string
-      addSuccessors:
-        type: array
+          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time. OTOH, To specify time at midnight in UTC, please specify `2020-10-30T00:00` (no second)
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
         description: |-
-          (Optional) A list of OID or ID of tasks to be added to the successors of this task.
+          (Optional) An optional due time. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`.
+          Note: they must be in UTC time, and we don't support seconds.
 
-          To specify task's ID, you can specify as `#id` or `id`.
+          If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.
 
-          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
-        items:
-          type: string
-      peekaboo:
-        type: object
+          Also note: for backward compatibility, `2020-10-30T00:00:00` (all zero and up to second) is considered the same as `2020-10-30`, i.e., without time. OTOH, To specify time at midnight in UTC, please specify `2020-10-30T00:00` (no second)
+      section:
+        type: boolean
+        example: true
+        description: (Optional) Specify whether this task is a section or a normal task.
+      asUser:
+        type: boolean
         example: true
         description: |-
-          (Optional) Specify true or a positive integer to peekaboo this task and its subtasks, if any.
-          Or, specify false to undo the previous peekaboo if any.
-
-          If a positive integer is specified, it is the number of days to peekaboo a task.
-          If true, it won't be reshowed automatically.
-
-          Default: false.
-        anyOf:
-          - type: boolean
-          - type: integer
-      successors:
+          (Optional) Specify true if you'd like to make this task as updated by the app.
+          Default: false -- the task is marked as created by the user authorizing the app.
+      addTags:
         type: array
         description: |-
-          (Optional) A list of OID or ID of tasks to replace the successors of this task.
-
-          To specify task's ID, you can specify as `#id` or `id`.
-
-          Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.
-        items:
-          type: string
-      assignees:
-        type: array
-        description: |-
-          (Optional) A list of OID, ID or emails of the users that this task is assigned to. If specified, it will replace any existing assignee(s). Instead of replacment, you can use "addAssignees" or "removeAssignees".
-
-          Please refer to `addAssignees` for more details.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      removeTags:
-        type: array
-        description: |-
-          (Optional) OID or names of the tags to be removed from this task.
+          (Optional) OID or names of the tags to be added to this task.
           Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      yourField:
-        type: object
-        description: |-
-          (Optional) Specify a value to your custom field. The name and value depends on your definition of the custom field.
-
-          - For Money type, please specify the value directly (without currency).
-          - For User or Task type, please specify the OID.
-          - For Duration type, please specify number of seconds.
-          - For multiple values, you can specify a list of values.
-      removeAssignees:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+      tags:
         type: array
         description: |-
-          (Optional) A list of OID, ID or emails of the assignees to be removed from this task.
-
-          Please refer to `addAssignees` for more details.
+          (Optional) OID or names of the tags to replace existing tags of to this task. If specified, it will replace any existing tag(s). Instead of replacment, you can use "addTags" or "removeTags".
+          Note: if tag's name is specified, it is case-insensitive.
         items:
           type: string
         example:
-          - Job4NSW9xK6Owcke8iKj7zyH
-      addAssignees:
-        type: array
-        description: |-
-          (Optional) A list of OID, ID or emails of the assignees to be added to this task.
-
-          You can specify "me" instead of OID to indicate the current user.
-          You can also specify "inherit" to include all assignees of the parent task, if any.
-
-          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      recurrence:
-        description: |-
-          (Optional) The recurring information of this task. It is null if it is not a recurring task.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`
-          - `interval`: The interval between each freq iteration. Default: 1.
-          - `until`: The last recurrence is less than or equals to the specified value. Default: never ends.
-          - `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.
-          - `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.
-          - `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.
-          - `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.
-            - Note: `byweekday` and `bydayno` can not be specified at the same time.
-          - `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.
-          - `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.
-        $ref: '#/definitions/Recurrence'
+          - ITaVbkhh3iVcEcV3vuSLeE2k
       priority:
         type: integer
         format: int32
@@ -4911,15 +5434,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description in a form of a HTML fragment converted from markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: The image representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'The color of the icon representing this record. It is an index of our predefined color palette. '
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld

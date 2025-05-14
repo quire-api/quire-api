@@ -1,9 +1,6 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.task.CreateTaskBody;
-import io.quire.api.model.task.SimpleTask;
-import io.quire.api.model.task.Task;
-import io.quire.api.model.task.UpdateTaskBody;
+import io.quire.api.model.task.*;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
