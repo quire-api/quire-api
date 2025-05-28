@@ -167,6 +167,40 @@ public class TaskResource {
 		@ApiParam(value = "The new content of the task to update to.", required = true)
 		UpdateTaskBody data) { return null; }
 
+	@POST
+	@Path("/attach/{taskOid}/{filename}")
+	@ApiOperation(value = "Uploads an attachment to an existing task by its OID",
+		notes = "Uploads an attachment to an existing task.",
+		response = SimpleAttachment.class)
+	public Response attachCommentByOid(
+		@ApiParam(value = "OID of the task to upload an attachment.", required = true)
+		@PathParam("taskOid") String taskOid,
+		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
+			"It is better to provide a meaningful extension so browser can "
+			+ "recognize the mime type properly. "
+			+ "For example, `revenue.pdf` and `contacts.json`.",
+			required = true)
+		String filename) { return null; }
+
+	@POST
+	@Path("/attach/{projectId}/{id}/{filename}")
+	@ApiOperation(value = "Uploads an attachment to an existing task by its ID",
+		notes = "Uploads an attachment to an existing task.",
+		response = SimpleAttachment.class)
+	public Response attachCommentByOid(
+		@ApiParam(value = "ID of the project that the task belongs to.\n" +
+			"Specify \"-\" if you'd like to update the personal tasks that belong to no specific projects in My Tasks.",
+		required = true)
+		@PathParam("projectId") String projectId,
+		@ApiParam(value = "ID of the task to upload an attachment", required = true)
+		@PathParam("id") int id,
+		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
+			"It is better to provide a meaningful extension so browser can "
+			+ "recognize the mime type properly. "
+			+ "For example, `revenue.pdf` and `contacts.json`.",
+			required = true)
+		String filename) { return null; }
+
 	@DELETE
 	@Path("/{oid}")
 	@ApiOperation(value = "Delete a task and all of its subtasks.",
@@ -194,7 +228,7 @@ public class TaskResource {
 
 		@ApiParam(value = "Text to do a full-text search against the name, "
 			+ "description, and attachments.\n"
-			+ "Note: it doesn't include the content and attachment of comments.\n"
+			+ "Note: it doesn't include the content and attachments of comments.\n"
 			+ "Also note: the update of tasks can take 10 seconds or more before "
 			+ "it can be found by the full-text search.",
 			example = "text=important major", required = false)

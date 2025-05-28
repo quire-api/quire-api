@@ -119,6 +119,21 @@ public class CommentResource {
 		@ApiParam(value = "The new content of the comment to update to", required = true)
 		UpdateCommentBody data) { return null; }
 
+	@POST
+	@Path("/attach/{commentOid}/{filename}")
+	@ApiOperation(value = "Uploads an attachment to an existing comment",
+		notes = "Uploads an attachment to an existing comment.",
+		response = SimpleAttachment.class)
+	public Response attachCommentByOid(
+		@ApiParam(value = "OID of the comment to upload an attachment.", required = true)
+		@PathParam("commentOid") String commentOid,
+		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
+			"It is better to provide a meaningful extension so browser can "
+			+ "recognize the mime type properly. "
+			+ "For example, `revenue.pdf` and `contacts.json`.",
+			required = true)
+		String filename) { return null; }
+
 	@DELETE
 	@Path("/{commentOid}")
 	@ApiOperation(value = "Delete an existing comment",
