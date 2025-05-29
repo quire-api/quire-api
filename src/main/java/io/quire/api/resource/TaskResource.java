@@ -291,6 +291,12 @@ public class TaskResource {
 			example = "commented=7", required = false)
 		@QueryParam(value = "commented") String commented,
 
+		@ApiParam(value = "Whether to return only tasks with the given source ref.\n"
+			+"The value must be the key of the source ref to search for.\n\n"
+			+"> Refer to the `sourceRef` parameter [here](https://quire.io/dev/api/#operation--task-id--projectId--post).",
+			example = "sourceRef=git", required = false)
+		@QueryParam(value = "sourceRef") String sourceRef,
+
 		@ApiParam(value = "The maximal number of tasks to return.\n"
 			+"Default: 30. That is, at most 30 tasks will be returned.\n"
 			+"You can specify \"no\" to return all matched tasks.\n\n"
