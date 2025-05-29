@@ -181,7 +181,7 @@ public class TaskResource {
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)
-		String filename,
+		@PathParam("filename") String filename,
 		@ApiParam(value = "The attachment's content.\n\n"
 			+ "For example, if you're uploading an image, the request body "
 			+ "is the image itself.",
@@ -205,7 +205,7 @@ public class TaskResource {
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)
-		String filename,
+		@PathParam("filename") String filename,
 		@ApiParam(value = "The attachment's content.\n\n"
 			+ "For example, if you're uploading an image, the request body "
 			+ "is the image itself.",
