@@ -1,5 +1,6 @@
 package io.quire.api.resource;
 
+import io.quire.api.model.*;
 import io.quire.api.model.task.*;
 import io.swagger.annotations.*;
 
@@ -176,7 +177,7 @@ public class TaskResource {
 		@ApiParam(value = "OID of the task to upload an attachment.", required = true)
 		@PathParam("taskOid") String taskOid,
 		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
-			"It is better to provide a meaningful extension so browser can "
+			+ "It is better to provide a meaningful extension so browser can "
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)
@@ -195,7 +196,7 @@ public class TaskResource {
 		@ApiParam(value = "ID of the task to upload an attachment", required = true)
 		@PathParam("id") int id,
 		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
-			"It is better to provide a meaningful extension so browser can "
+			+ "It is better to provide a meaningful extension so browser can "
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)

@@ -1,8 +1,7 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.comment.Comment;
-import io.quire.api.model.comment.CreateCommentBody;
-import io.quire.api.model.comment.UpdateCommentBody;
+import io.quire.api.model.*;
+import io.quire.api.model.comment.*;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -128,7 +127,7 @@ public class CommentResource {
 		@ApiParam(value = "OID of the comment to upload an attachment.", required = true)
 		@PathParam("commentOid") String commentOid,
 		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
-			"It is better to provide a meaningful extension so browser can "
+			+ "It is better to provide a meaningful extension so browser can "
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)

@@ -26,7 +26,7 @@ public class CodeSampleSwagger extends AbstractSwaggerExtension {
             return;
         }
 
-        List langs = new ArrayList();
+        List<Language> langs = new ArrayList<Language>();
 
         for (CodeSampleLangs l : cs.langs()){
             Language lang = new Language();
