@@ -1,5 +1,11 @@
 # CHANGES
 
+## May 29, 2025
+
+* Allows to upload an attachment and add to a task or a comment.
+  - [Upload API for tasks](https://quire.io/dev/api/#operation--task-attach--taskOid---filename--post)
+  - [Upload API for comments](https://quire.io/dev/api/#operation--comment-attach--commentOid---filename--post)
+
 ## May 13, 2025
 
 * Adds [Chat Channel API](https://quire.io/dev/api/#tag-chat).
@@ -35,7 +41,7 @@
 
 ## Sept 19, 2024
 
-* Allow to follow or unfollow an organization for WebHook
+* Allows to follow or unfollow an organization for WebHook
     - [Organization Activities](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#organization-related-activities)
 
 ## Sept 6, 2024
