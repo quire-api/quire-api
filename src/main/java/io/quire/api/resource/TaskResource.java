@@ -181,7 +181,12 @@ public class TaskResource {
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)
-		String filename) { return null; }
+		String filename,
+		@ApiParam(value = "The attachment's content.\n\n"
+			+ "For example, if you're uploading an image, the request body "
+			+ "is the image itself.",
+			required = true)
+		Object data) { return null; }
 
 	@POST
 	@Path("/attach/{projectId}/{id}/{filename}")
@@ -200,7 +205,12 @@ public class TaskResource {
 			+ "recognize the mime type properly. "
 			+ "For example, `revenue.pdf` and `contacts.json`.",
 			required = true)
-		String filename) { return null; }
+		String filename,
+		@ApiParam(value = "The attachment's content.\n\n"
+			+ "For example, if you're uploading an image, the request body "
+			+ "is the image itself.",
+			required = true)
+		Object data) { return null; }
 
 	@DELETE
 	@Path("/{oid}")
