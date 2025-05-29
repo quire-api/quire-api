@@ -170,4 +170,15 @@ public class UpdateTaskBody {
 		+ "- For Duration type, please specify number of seconds.\n"
 		+ "- For multiple values, you can specify a list of values.")
 	public Object getYourField() { return false; }
+
+	@ApiModelProperty(
+		value = "Specify any data you'd like to store into the task. "
+		+ "It is so-called source ref, and it'll be available when retrieving "
+		+ "the task via API. Thus, you can identify them if necessary.\n\n"
+		+ "NOTE: if you put an entry called 'text', it'll be displayed at client side. "
+		+ "The syntax of the value is Markdown. "
+		+ "It is recommmended to put the source link here, so the end user can find "
+		+ "back the source.",
+		example = "{'text': 'Source: [Gmail](https://gmail.com/link'}", position = 60)
+	public Map<String, Object> getSourceRef() { return null; }
 }

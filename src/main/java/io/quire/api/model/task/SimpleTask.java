@@ -72,4 +72,8 @@ public class SimpleTask extends StampedEntity {
 	@ApiModelProperty(value = "Url of this task on Quire website.",
 		example = "https://quire.io/w/my_project/123", position = 50)
 	public String getUrl() { return null; }
+
+	@ApiModelProperty(value = "The source ref, i.e., the data that was stored by an app.",
+		example = "{'text': 'Source: [Gmail](https://gmail.com/link'}", position = 60)
+	public Map<String, Object> getSourceRef() { return null; }
 }
