@@ -129,7 +129,8 @@ public class CommentResource {
 		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
 			+ "It is better to provide a meaningful extension so browser can "
 			+ "recognize the mime type properly. "
-			+ "For example, `revenue.pdf` and `contacts.json`.",
+			+ "For example, `revenue.pdf` and `contacts.json`.\n\n"
+			+ "Alternatively, you can specify the mime type in the content-type header.",
 			required = true)
 		@PathParam("filename") String filename,
 		@ApiParam(value = "The attachment's content.\n\n"
