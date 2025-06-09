@@ -16,6 +16,8 @@
 | 11 | Changes the status. | Task | |
 | 12 | Peekaboos a task. | Task | All tasks being peekabooed. |
 | 13 | Reshows a task. | Task | All tasks being reshowed. |
+| 14 | Sets a value to task's custom field. | Task | |
+| 15 | Remove the value from task's custom field. | Task | |
 | 16 | Adds a comment. | Task | |
 | 17 | Undo the completing. | Task | All tasks being reopened. |
 | 18 | Undo the removal. | Task | All tasks being un-removed. |
@@ -79,6 +81,8 @@
 | 138 | Removes the Github integration. | Project |
 | 139 | Adds a share link to a project. | Project |
 | 140 | Removes a share link. | Project |
+| 141 | Adds a new doc. | Project |
+| 143 | Removes a doc. | Project |
 | 146 | Adds a new sublist. | Project |
 | 147 | Removes a sublist. | Project |
 | 148 | Adds a new status. | Project |
