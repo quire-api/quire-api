@@ -1,6 +1,6 @@
 package io.quire.api.model.task;
 
-import java.util.List;
+import java.util.*;
 
 import io.quire.api.model.Recurrence;
 import io.swagger.annotations.ApiModelProperty;

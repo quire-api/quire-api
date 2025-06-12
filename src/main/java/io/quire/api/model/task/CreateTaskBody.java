@@ -3,7 +3,7 @@ package io.quire.api.model.task;
 import io.quire.api.model.Recurrence;
 import io.swagger.annotations.*;
 
-import java.util.List;
+import java.util.*;
 
 public class CreateTaskBody {
 
