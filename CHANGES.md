@@ -1,5 +1,11 @@
 # CHANGES
 
+## June 12, 2025
+
+* Adds [The source ref](https://quire.io/dev/api/#operation--task-id--projectId--post) for apps to store app specific data.
+* Output custom fields of the task for WebHook callback.
+* Output the ID of a series of recurring tasks. It can be found in `recurrence.seriesId`.
+
 ## May 29, 2025
 
 * Allows to upload an attachment and add to a task or a comment.
