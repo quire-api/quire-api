@@ -1,5 +1,9 @@
 # CHANGES
 
+## July 4, 2025
+
+* Fixes an issue with the search API where formula fields using parent and ancestors were not evaluated correctly.
+
 ## June 12, 2025
 
 * Adds [The source ref](https://quire.io/dev/api/#operation--task-id--projectId--post) for apps to store app specific data.
