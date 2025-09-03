@@ -92,7 +92,7 @@ public class ProjectResource {
     @Path("/id/{id}")
     @ApiOperation(value = "Get a project by its ID.",
         notes = "Returns the complete project record of the given ID.",
-        response = Project.class)
+        response = ProjectWithPlan.class)
     public Response getProjectById(
         @ApiParam(value = "ID of project that needs to be fetched",
             required = true)
@@ -102,7 +102,7 @@ public class ProjectResource {
     @Path("/{oid}")
     @ApiOperation(value = "Get a project by its OID.",
         notes = "Returns the complete project record of the given OID.",
-        response = Project.class)
+        response = ProjectWithPlan.class)
     public Response getProject(
         @ApiParam(value = "OID of project that needs to be fetched",
             required = true)

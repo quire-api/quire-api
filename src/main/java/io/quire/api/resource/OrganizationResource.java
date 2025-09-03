@@ -34,7 +34,7 @@ public class OrganizationResource {
     @Path("/id/{id}")
     @ApiOperation(value = "Get an organization by its ID.",
         notes = "Returns the complete organization record of the given OID.",
-        response = Organization.class)
+        response = OrganizationWithPlan.class)
     public Response getOrganizationById(
         @ApiParam(value = "ID of organization that needs to be fetched",
             required = true)
@@ -44,7 +44,7 @@ public class OrganizationResource {
     @Path("/{oid}")
     @ApiOperation(value = "Get an organization by its OID.",
         notes = "returns the complete organization record.",
-        response = Organization.class)
+        response = OrganizationWithPlan.class)
     public Response getOrganization(
         @ApiParam(value = "OID of organization that needs to be fetched",
             required = true)

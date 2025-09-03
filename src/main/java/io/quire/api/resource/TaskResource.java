@@ -88,7 +88,10 @@ public class TaskResource {
 	@GET
 	@Path("/list/id/{projectId}")
 	@ApiOperation(value = "Get all root tasks of the given project.",
-		notes = "Returns all root task records of the given project.",
+		notes = "Returns all root task records of the given project.\n\n"
+		"To retrieve all tasks, including all subtasks, you can use "
+		+ "[the search api](https://quire.io/dev/api/#operation--task-search-id--projectId--get), "
+		+ "by specifying `limit=no`.",
 		response = Task.class,
 		responseContainer = "List")
 	public Response getRootTasks(
@@ -321,7 +324,10 @@ public class TaskResource {
 	@Path("/search/id/{projectId}")
 	@ApiOperation(value = "Searches tasks in the project of the given ID.",
 		notes = "Returns task records that match the specified criteria in "
-		+ "the given project.",
+		+ "the given project.\n\n"
+		+ "To retrieve all tasks including subtasks, you can specify nothing but "
+		+ "`limit=no` in the query string, "
+		+ "such as `https//quire.io/api/task/search/id/your_project?limit=no`.",
 		response = SimpleTask.class,
 		responseContainer = "List")
 	public Response searchTasksById(
