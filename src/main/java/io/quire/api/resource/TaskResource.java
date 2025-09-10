@@ -234,7 +234,7 @@ public class TaskResource {
 	@ApiOperation(value = "Searches tasks in the project of the given OID.",
 		notes = "Returns task records that match the specified criteria in "
 		+ "the given project.",
-		response = SimpleTask.class,
+		response = Task.class,
 		responseContainer = "List")
 	public Response searchTasksByOid(
 		@ApiParam(value = "OID of the project to search for the tasks.\n" +
@@ -328,7 +328,7 @@ public class TaskResource {
 		+ "To retrieve all tasks including subtasks, you can specify nothing but "
 		+ "`limit=no` in the query string, "
 		+ "such as `https//quire.io/api/task/search/id/your_project?limit=no`.",
-		response = SimpleTask.class,
+		response = Task.class,
 		responseContainer = "List")
 	public Response searchTasksById(
 		@ApiParam(value = "ID of the project to search for the tasks.\n" +
@@ -414,7 +414,7 @@ public class TaskResource {
     + "the given organization.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTaskWithProject.class,
+    response = TaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByOrgOid(
     @ApiParam(value = "OID of the organization to search for the tasks.",
@@ -496,7 +496,7 @@ public class TaskResource {
     + "the given organization.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTaskWithProject.class,
+    response = TaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByOrgId(
     @ApiParam(value = "ID of the organization to search for the tasks.",
@@ -577,7 +577,7 @@ public class TaskResource {
     + "the given folder.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTaskWithProject.class,
+    response = TaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByFolderOid(
     @ApiParam(value = "OID of the folder to search for the tasks.",
@@ -659,7 +659,7 @@ public class TaskResource {
     + "the given folder.\n"
     + "Tasks in the archived projects are excluded.\n\n"
     + "> Available for Professional plans and above",
-    response = SimpleTaskWithProject.class,
+    response = TaskWithProject.class,
     responseContainer = "List")
   public Response searchTasksByFolderId(
     @ApiParam(value = "ID of the folder to search for the tasks.",

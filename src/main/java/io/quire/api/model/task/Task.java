@@ -73,8 +73,4 @@ public class Task extends SimpleTask {
 
 	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
-
-	@ApiModelProperty(value="The project this task belongs to.",
-		position = 99)
-	public SimpleIdentity getProject() { return null; }
 }
