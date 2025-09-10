@@ -89,7 +89,7 @@ public class TaskResource {
 	@Path("/list/id/{projectId}")
 	@ApiOperation(value = "Get all root tasks of the given project.",
 		notes = "Returns all root task records of the given project.\n\n"
-		"To retrieve all tasks, including all subtasks, you can use "
+		+ "To retrieve all tasks, including all subtasks, you can use "
 		+ "[the search api](https://quire.io/dev/api/#operation--task-search-id--projectId--get), "
 		+ "by specifying `limit=no`.",
 		response = Task.class,

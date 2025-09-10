@@ -15,7 +15,7 @@ public class Subscription {
 
 	@ApiModelProperty(
 		value = "Whether this subscription is expired.\n\n"
-		"> This value is available only if there is a due date.",
+		+ "> This value is available only if there is a due date.",
 		example = "false")
 	public boolean getExpired() { return false; }
 }
