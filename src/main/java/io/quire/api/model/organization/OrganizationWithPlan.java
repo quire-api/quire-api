@@ -5,9 +5,11 @@ import io.swagger.annotations.*;
 
 import java.util.List;
 
-@ApiModel()
 public class OrganizationWithPlan extends Organization {
-	@ApiModelProperty(value = "The subscription of this organization.",
-		position = 9)
-	public Subscription getSubscription() { return null; }
+
+    @ApiModelProperty(
+        value = "Subscription details for this organization.",
+        position = 9
+    )
+    public Subscription getSubscription() { return null; }
 }

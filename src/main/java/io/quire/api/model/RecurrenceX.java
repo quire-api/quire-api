@@ -5,11 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
-@ApiModel()
 public class RecurrenceX extends Recurrence {
-	@ApiModelProperty(example = "j47xvxul26",
-		value = "The ID of a series of recurring tasks.\n\n"
-		+ "If two tasks have the same series ID, they shall belong to "
-		+ "the same series of recurring tasks.")
+
+    @ApiModelProperty(
+        value = "Identifier for the recurrence series this task belongs to. "
+              + "Tasks that share the same seriesId are part of the same recurring series.",
+        example = "j47xvxul26"
+    )
     public String getSeriesId() { return null; }
 }

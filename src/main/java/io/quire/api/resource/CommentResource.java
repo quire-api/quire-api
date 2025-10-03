@@ -8,146 +8,195 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/comment")
-@Api(value = "comment", description =
-	"A comment that an user can put to a task or project.")
+@Api(
+    value = "comment",
+    description = "A comment that a user can add to a chat channel or a task."
+)
 @Produces({"application/json"})
 public class CommentResource {
 
-	@POST
-	@Path("/{chatOid}")
-	@ApiOperation(value = "Add a new comment to a chat channel.",
-		notes = "Add a new comment to a chat channel.",
-		response = Comment.class)
-	public Response createCommentToChatByOid(
-		@ApiParam(value = "OID of the chat channel that new comment will be added to",
-			required = true)
-		@PathParam("chatOid") String chatOid,
-		@ApiParam(value = "Comment to create", required = true)
-		CreateCommentBody data) { return null; }
+    // -------- Create --------
 
-	@POST
-	@Path("/{taskOid}")
-	@ApiOperation(value = "Add a new comment to a task.",
-		notes = "Add a new comment to a task.",
-		response = Comment.class)
-	public Response createCommentToTaskByOid(
-		@ApiParam(value = "OID of the task that new comment will be added to",
-			required = true)
-		@PathParam("taskOid") String taskOid,
-		@ApiParam(value = "Comment to create", required = true)
-		CreateCommentBody data) { return null; }
+    @POST
+    @Path("/chat/{chatOid}")
+    @ApiOperation(
+        value = "Add a new comment to a chat channel (by chat OID).",
+        notes = "Adds a new comment to the specified chat channel.",
+        response = Comment.class
+    )
+    public Response createCommentToChatByOid(
+        @ApiParam(value = "OID of the chat channel.", required = true)
+        @PathParam("chatOid") String chatOid,
+        @ApiParam(value = "Comment to create.", required = true)
+        CreateCommentBody data
+    ) { return null; }
 
-	@POST
-	@Path("/id/{projectId}/{chatId}")
-	@ApiOperation(value = "Add a new comment to a chat channel.",
-		notes = "Add a new comment to a chat channel.",
-		response = Comment.class)
-	public Response createCommentToChat(
-		@ApiParam(value = "ID of the project that the chat channel is in", required = true)
-		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the chat channel that new comment will be added to", required = true)
-		@PathParam("chatId") String chatId,
-		@ApiParam(value = "Comment to create", required = true)
-		CreateCommentBody data) { return null; }
+    @POST
+    @Path("/task/{taskOid}")
+    @ApiOperation(
+        value = "Add a new comment to a task (by task OID).",
+        notes = "Adds a new comment to the specified task.",
+        response = Comment.class
+    )
+    public Response createCommentToTaskByOid(
+        @ApiParam(value = "OID of the task.", required = true)
+        @PathParam("taskOid") String taskOid,
+        @ApiParam(value = "Comment to create.", required = true)
+        CreateCommentBody data
+    ) { return null; }
 
-	@POST
-	@Path("/id/{projectId}/{taskId}")
-	@ApiOperation(value = "Add a new comment to a task.",
-		notes = "Add a new comment to a task.",
-		response = Comment.class)
-	public Response createCommentToTask(
-		@ApiParam(value = "ID of the project that the task is in", required = true)
-		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the task that new comment will be added to", required = true)
-		@PathParam("taskId") int taskId,
-		@ApiParam(value = "Comment to create", required = true)
-		CreateCommentBody data) { return null; }
+    @POST
+    @Path("/id/{projectId}/chat/{chatId}")
+    @ApiOperation(
+        value = "Add a new comment to a chat channel (by project ID and chat ID).",
+        notes = "Adds a new comment to the specified chat channel.",
+        response = Comment.class
+    )
+    public Response createCommentToChatById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Chat channel ID.", required = true)
+        @PathParam("chatId") String chatId,
+        @ApiParam(value = "Comment to create.", required = true)
+        CreateCommentBody data
+    ) { return null; }
 
-	@GET
-	@Path("/list/{chatOid}")
-	@ApiOperation(value = "Get all comments of the chat channel.",
-		notes = "Returns all comment records of the chat channel.",
-		response = Comment.class,
-		responseContainer = "List")
-	public Response getCommentsOfChatByOid(
-		@ApiParam(value = "OID of the chat channel that comments will be be fetched from.", required = true)
-		@PathParam("chatOid") String chatOid) { return null; }
+    @POST
+    @Path("/id/{projectId}/task/{taskId}")
+    @ApiOperation(
+        value = "Add a new comment to a task (by project ID and task ID).",
+        notes = "Adds a new comment to the specified task.",
+        response = Comment.class
+    )
+    public Response createCommentToTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId,
+        @ApiParam(value = "Comment to create.", required = true)
+        CreateCommentBody data
+    ) { return null; }
 
-	@GET
-	@Path("/list/{taskOid}")
-	@ApiOperation(value = "Get all comments of the task.",
-		notes = "Returns all comment records of the task.",
-		response = Comment.class,
-		responseContainer = "List")
-	public Response getCommentsOfTaskByOid(
-		@ApiParam(value = "OID of the task that comments will be be fetched from.", required = true)
-		@PathParam("taskOid") String taskOid) { return null; }
+    // -------- List --------
 
-	@GET
-	@Path("/list/id/{projectId}/{chatId}")
-	@ApiOperation(value = "Get all comments of the chat channel.",
-		notes = "Returns all comment records of the chat channel by its ID.",
-		response = Comment.class,
-        responseContainer = "List")
-	public Response getCommentsOfChat(
-		@ApiParam(value = "ID of the project.", required = true)
-		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the chat channel.", required = true)
-		@PathParam("chatId") String chatId) { return null; }
+    @GET
+    @Path("/list/chat/{chatOid}")
+    @ApiOperation(
+        value = "Get all comments of a chat channel (by chat OID).",
+        notes = "Returns all comments of the specified chat channel.",
+        response = Comment.class,
+        responseContainer = "List"
+    )
+    public Response getCommentsOfChatByOid(
+        @ApiParam(value = "OID of the chat channel.", required = true)
+        @PathParam("chatOid") String chatOid
+    ) { return null; }
 
-	@GET
-	@Path("/list/id/{projectId}/{taskId}")
-	@ApiOperation(value = "Get all comments of the task. ",
-		notes = "Returns all comment records of the task by its ID.",
-		response = Comment.class,
-        responseContainer = "List")
-	public Response getCommentsOfTask(
-		@ApiParam(value = "ID of the project.", required = true)
-		@PathParam("projectId") String projectId,
-		@ApiParam(value = "ID of the task.", required = true)
-		@PathParam("taskId") int taskId) { return null; }
+    @GET
+    @Path("/list/task/{taskOid}")
+    @ApiOperation(
+        value = "Get all comments of a task (by task OID).",
+        notes = "Returns all comments of the specified task.",
+        response = Comment.class,
+        responseContainer = "List"
+    )
+    public Response getCommentsOfTaskByOid(
+        @ApiParam(value = "OID of the task.", required = true)
+        @PathParam("taskOid") String taskOid
+    ) { return null; }
 
-	@PUT
-	@Path("/{commentOid}")
-	@ApiOperation(value = "Update an existing comment",
-		notes = "Updates an existing comment, and returns the complete updated comment record.",
-		response = Comment.class)
-	public Response updateCommentByOid(
-		@ApiParam(value = "OID of the comment that needs to be updated.", required = true)
-		@PathParam("commentOid") String commentOid,
-		@ApiParam(value = "The new content of the comment to update to", required = true)
-		UpdateCommentBody data) { return null; }
+    @GET
+    @Path("/list/id/{projectId}/chat/{chatId}")
+    @ApiOperation(
+        value = "Get all comments of a chat channel (by project ID and chat ID).",
+        notes = "Returns all comments of the specified chat channel.",
+        response = Comment.class,
+        responseContainer = "List"
+    )
+    public Response getCommentsOfChatById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Chat channel ID.", required = true)
+        @PathParam("chatId") String chatId
+    ) { return null; }
 
-	@POST
-	@Path("/attach/{commentOid}/{filename}")
-	@ApiOperation(value = "Uploads an attachment to an existing comment",
-		notes = "Uploads an attachment to an existing comment.",
-		response = SimpleAttachment.class)
-	public Response attachCommentByOid(
-		@ApiParam(value = "OID of the comment to upload an attachment.", required = true)
-		@PathParam("commentOid") String commentOid,
-		@ApiParam(value = "The attachment's name, such as `readme.txt`.\n\n"
-			+ "It is better to provide a meaningful extension so browser can "
-			+ "recognize the mime type properly. "
-			+ "For example, `revenue.pdf` and `contacts.json`.\n\n"
-			+ "Alternatively, you can specify the mime type in the content-type header.",
-			required = true)
-		@PathParam("filename") String filename,
-		@ApiParam(value = "The attachment's content.\n\n"
-			+ "For example, if you're uploading an image, the request body "
-			+ "is the image itself.",
-			required = true)
-		Object data) { return null; }
+    @GET
+    @Path("/list/id/{projectId}/task/{taskId}")
+    @ApiOperation(
+        value = "Get all comments of a task (by project ID and task ID).",
+        notes = "Returns all comments of the specified task.",
+        response = Comment.class,
+        responseContainer = "List"
+    )
+    public Response getCommentsOfTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId
+    ) { return null; }
 
-	@DELETE
-	@Path("/{commentOid}")
-	@ApiOperation(value = "Delete an existing comment",
-		notes = "Delete an existing comment.")
-	@ApiResponses(value = {
-		@ApiResponse(code = 200, message = "ok",
-			examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-				"{'success': true}")}))})
-	public Response deleteCommentByOid(
-		@ApiParam(value = "OID of comment that needs to be deleted", required = true)
-		@PathParam("commentOid") String commentOid) { return null; }
+    // -------- Update --------
+
+    @PUT
+    @Path("/{commentOid}")
+    @ApiOperation(
+        value = "Update an existing comment (by comment OID).",
+        notes = "Updates an existing comment and returns the updated record.",
+        response = Comment.class
+    )
+    public Response updateCommentByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid,
+        @ApiParam(value = "Fields to update.", required = true)
+        UpdateCommentBody data
+    ) { return null; }
+
+    // -------- Attachments --------
+
+    @POST
+    @Path("/attach/{commentOid}/{filename}")
+    @ApiOperation(
+        value = "Upload an attachment to a comment (by comment OID).",
+        notes = "Uploads an attachment to an existing comment.",
+        response = SimpleAttachment.class
+    )
+    public Response attachToCommentByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid,
+        @ApiParam(
+            value = "Attachment file name, e.g., `readme.txt`.\n\n"
+                  + "Provide a meaningful extension so the browser can recognize the MIME type "
+                  + "(e.g., `revenue.pdf`, `contacts.json`).\n\n"
+                  + "Alternatively, set the MIME type via the `Content-Type` header.",
+            required = true
+        )
+        @PathParam("filename") String filename,
+        @ApiParam(
+            value = "Attachment content (raw bytes). For images, the request body is the image itself.",
+            required = true
+        )
+        Object data
+    ) { return null; }
+
+    // -------- Delete --------
+
+    @DELETE
+    @Path("/{commentOid}")
+    @ApiOperation(
+        value = "Delete an existing comment (by comment OID).",
+        notes = "Deletes an existing comment."
+    )
+    @ApiResponses({
+        @ApiResponse(
+            code = 200,
+            message = "ok",
+            examples = @Example({
+                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
+            })
+        )
+    })
+    public Response deleteCommentByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid
+    ) { return null; }
 }

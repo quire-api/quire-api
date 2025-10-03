@@ -5,7 +5,6 @@ import io.swagger.annotations.*;
 
 import java.util.List;
 
-@ApiModel()
 public class Task extends SimpleTask {
 
 	@ApiModelProperty(value = "Contains the recurrence details of this task. "

@@ -1,167 +1,210 @@
 package io.quire.api.resource;
 
-import io.quire.api.model.doc.Doc;
-import io.quire.api.model.doc.CreateDocBody;
-import io.quire.api.model.doc.UpdateDocBody;
+import io.quire.api.model.*;
+import io.quire.api.model.doc.*;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/doc")
-@Api(value = "doc", description = "A document.")
+@Api(value = "doc", description = "Documents.")
 @Produces({"application/json"})
 public class DocResource {
-	@POST
-	@Path("/{ownerType}/{ownerOid}")
-	@ApiOperation(value = "Add a new doc by owner's OID.",
-		notes = "Add a new doc by owner's OID",
-		response = Doc.class)
-	public Response createDoc(
-		@ApiParam(value = "The type of the owner that this new doc to be added to. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/this_is_oid` is "
-		+ "equivalent to `/project/this_is_oid`.",
-		required = false)
-		@PathParam("ownerType") String ownerType,
-		@ApiParam(value = "OID of the owner that this new doc to be added to.",
-		required = true)
-		@PathParam("ownerOid") String ownerOid,
-		@ApiParam(value = "Document to create", required = true)
-		CreateDocBody data) { return null; }
 
-	@POST
-	@Path("/id/{ownerType}/{ownerId}")
-	@ApiOperation(value = "Add a new doc by owner's ID.",
-		notes = "Add a new doc by owner's ID.",
-		response = Doc.class)
-	public Response createDocToProject(
-		@ApiParam(value = "The type of the owner that this new doc to be added to. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/id/this_is_id` is "
-		+ "equivalent to `/id/project/this_is_id`.",
-		required = false)
-		@PathParam("owenerType") String ownerType,
-		@ApiParam(value = "ID of owner that this new doc to be added to.",
-		required = true)
-		@PathParam("ownerId") String ownerId,
-		@ApiParam(value = "Document to create", required = true)
-		CreateDocBody data) { return null; }
+    // -------- Create --------
 
-	@GET
-	@Path("/{oid}")
-	@ApiOperation(value = "Get an existing doc by its OID",
-		notes = "Returns the full doc record of the given OID.",
-		response = Doc.class)
-	public Response getDoc(
-		@ApiParam(value = "OID of doc that needs to be fetched.", required = true)
-		@PathParam("oid") String oid) { return null; }
+    @POST
+    @Path("/{ownerType}/{ownerOid}")
+    @ApiOperation(
+        value = "Create a document by owner OID.",
+        notes = "Adds a new document to the specified owner (`project`, `organization`, `folder`, or `smart-folder`).",
+        response = Doc.class
+    )
+    public Response createDoc(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/abc123` is equivalent to `/project/abc123`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner OID.", required = true)
+        @PathParam("ownerOid") String ownerOid,
+        @ApiParam(value = "Document to create.", required = true)
+        CreateDocBody data
+    ) { return null; }
 
-	@GET
-	@Path("/id/{ownerType}/{ownerId}/{id}")
-	@ApiOperation(value = "Get an existing doc by its ID.",
-		notes = "Returns the full doc record of the given ID.",
-		response = Doc.class)
-	public Response getDocById(
-		@ApiParam(value = "The type of the owner that this doc belongs to. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/id/this_is_id` is "
-		+ "equivalent to `/id/project/this_is_id`.",
-		required = false)
-		@PathParam("owenerType") String ownerType,
-		@ApiParam(value = "ID of owner that this doc belongs to.",
-		required = true)
-		@PathParam("ownerId") String ownerId,
-		@ApiParam(value = "ID of the doc that needs to be fetched", required = true)
-		@PathParam("id") String id) { return null; }
+    @POST
+    @Path("/id/{ownerType}/{ownerId}")
+    @ApiOperation(
+        value = "Create a document by owner ID.",
+        notes = "Adds a new document to the specified owner by ID (`project`, `organization`, `folder`, or `smart-folder`).",
+        response = Doc.class
+    )
+    public Response createDocById(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Document to create.", required = true)
+        CreateDocBody data
+    ) { return null; }
 
-	@GET
-	@Path("/list/{ownerType}/{ownerOid}")
-	@ApiOperation(value = "Get all docs of the given owner by its OID.",
-		notes = "Returns all doc records of the given owner by its OID.",
-		response = Doc.class,
-		responseContainer = "List")
-	public Response getDocsByProjectOid(
-		@ApiParam(value = "The type of the owner. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/list/this_is_oid` is "
-		+ "equivalent to `/list/project/this_is_oid`.",
-		required = false)
-		@PathParam("ownerType") String ownerType,
-		@ApiParam(value = "OID of the owner.", required = true)
-		@PathParam("ownerOid") String ownerOid) { return null; }
+    // -------- Read --------
 
-	@GET
-	@Path("/list/id/{ownerType}/{ownerId}")
-	@ApiOperation(value = "Get all docs of the given owner by its ID.",
-		notes = "Returns all doc records of the given owner by its ID.",
-		response = Doc.class,
-		responseContainer = "List")
-	public Response getDocsByProjectId(
-		@ApiParam(value = "The type of the owner. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/list/id/this_is_id` is "
-		+ "equivalent to `/list/id/project/this_is_id`.",
-		required = false)
-		@PathParam("ownerType") String ownerType,
-		@ApiParam(value = "ID of the owner.", required = true)
-		@PathParam("ownerId") String ownerId) { return null; }
+    @GET
+    @Path("/{oid}")
+    @ApiOperation(
+        value = "Get a document by OID.",
+        notes = "Returns the full document record.",
+        response = Doc.class
+    )
+    public Response getDoc(
+        @ApiParam(value = "Document OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
 
-	@PUT
-	@Path("/{oid}")
-	@ApiOperation(value = "Update a doc by its OID.",
-		notes = "Updates an existing doc, and returns the complete updated record.",
-		response = Doc.class)
-	public Response updateDoc(
-		@ApiParam(value = "OID of doc that needs to be updated", required = true)
-		@PathParam("oid") String oid,
-		@ApiParam(value = "Document to update", required = true)
-		UpdateDocBody data) { return null; }
+    @GET
+    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @ApiOperation(
+        value = "Get a document by ID.",
+        notes = "Returns the full document record for the given owner and document ID.",
+        response = Doc.class
+    )
+    public Response getDocById(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Document ID.", required = true)
+        @PathParam("id") String id
+    ) { return null; }
 
-	@PUT
-	@Path("/id/{ownerType}/{ownerId}/{id}")
-	@ApiOperation(value = "Update a doc by its ID.",
-		notes = "Updates an existing doc, and returns the complete updated record.",
-		response = Doc.class)
-	public Response updateDoc(
-		@ApiParam(value = "The type of the owner. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/id/this_is_id` is "
-		+ "equivalent to `/id/project/this_is_id`.",
-		required = false)
-		@PathParam("ownerType") String ownerType,
-		@ApiParam(value = "ID of the owner.", required = true)
-		@PathParam("ownerId") String ownerId,
-		@ApiParam(value = "Document to update", required = true)
-		UpdateDocBody data) { return null; }
+    @GET
+    @Path("/list/{ownerType}/{ownerOid}")
+    @ApiOperation(
+        value = "List documents by owner OID.",
+        notes = "Returns all documents for the specified owner.",
+        response = Doc.class,
+        responseContainer = "List"
+    )
+    public Response getDocsByOwnerOid(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/list/abc123` is equivalent to `/list/project/abc123`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner OID.", required = true)
+        @PathParam("ownerOid") String ownerOid
+    ) { return null; }
 
-	@DELETE
-	@Path("/{oid}")
-	@ApiOperation(value = "Delete a doc by its OID",
-		notes = "Delete an existing doc of the given OID.")
-	@ApiResponses(value = {
-		@ApiResponse(code = 200, message = "ok",
-			examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-				"{'Success': 'true'}")}))})
-	public Response deleteDoc(
-		@ApiParam(value = "OID of doc that needs to be deleted", required = true)
-		@PathParam("oid") String oid) { return null; }
+    @GET
+    @Path("/list/id/{ownerType}/{ownerId}")
+    @ApiOperation(
+        value = "List documents by owner ID.",
+        notes = "Returns all documents for the specified owner.",
+        response = Doc.class,
+        responseContainer = "List"
+    )
+    public Response getDocsByOwnerId(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/list/id/foo` is equivalent to `/list/id/project/foo`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId
+    ) { return null; }
 
-	@DELETE
-	@Path("/id/{ownerType}/{ownerId}/{id}")
-	@ApiOperation(value = "Delete a doc by its ID",
-		notes = "Delete an existing doc of the given OID.")
-	@ApiResponses(value = {
-		@ApiResponse(code = 200, message = "ok",
-			examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-				"{'Success': 'true'}")}))})
-	public Response deleteDoc(
-		@ApiParam(value = "The type of the owner. "
-		+ "It can be `project`, `organization`, `folder` or `smart-folder`. "
-		+ "If omitted, `project` is assumed. For example, `/id/this_is_id` is "
-		+ "equivalent to `/id/project/this_is_id`.",
-		required = false)
-		@PathParam("ownerType") String ownerType,
-		@ApiParam(value = "ID of the owner.", required = true)
-		@PathParam("ownerId") String ownerId) { return null; }
+    // -------- Update --------
+
+    @PUT
+    @Path("/{oid}")
+    @ApiOperation(
+        value = "Update a document by OID.",
+        notes = "Updates an existing document and returns the updated record.",
+        response = Doc.class
+    )
+    public Response updateDocByOid(
+        @ApiParam(value = "Document OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Fields to update.", required = true)
+        UpdateDocBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @ApiOperation(
+        value = "Update a document by ID.",
+        notes = "Updates an existing document and returns the updated record.",
+        response = Doc.class
+    )
+    public Response updateDocById(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Document ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Fields to update.", required = true)
+        UpdateDocBody data
+    ) { return null; }
+
+    // -------- Delete --------
+
+    @DELETE
+    @Path("/{oid}")
+    @ApiOperation(
+        value = "Delete a document by OID.",
+        notes = "Deletes the specified document."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "ok",
+            examples = @Example({
+                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
+            }))
+    })
+    public Response deleteDocByOid(
+        @ApiParam(value = "Document OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    @DELETE
+    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @ApiOperation(
+        value = "Delete a document by ID.",
+        notes = "Deletes the specified document."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "ok",
+            examples = @Example({
+                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
+            }))
+    })
+    public Response deleteDocById(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Document ID.", required = true)
+        @PathParam("id") String id
+    ) { return null; }
 }

@@ -7,215 +7,284 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/project")
-@Api(value = "project", description =
-    "A project represents a prioritized list of tasks in Quire. " +
-    "It exists in a single organization and is accessible to a subset of " +
-    "users in that organization, depending on its permissions.")
+@Api(
+    value = "project",
+    description =
+        "A project represents a prioritized list of tasks in Quire. "
+      + "It belongs to a single organization and is accessible to a subset of users in that organization, "
+      + "depending on its permissions."
+)
 @Produces({"application/json"})
 public class ProjectResource {
+
 /* Not supported yet (security concern)
     @POST
-    @ApiOperation(value = "Create a project.",
+    @ApiOperation(
+        value = "Create a project.",
         notes = "Creates a new project in an organization.",
-        response = Project.class)
+        response = Project.class
+    )
     public Response createProject(
-        @ApiParam(value = "Project to create", required = true)
-        CreateProjectBody data) { return null; }
+        @ApiParam(value = "Project to create.", required = true)
+        CreateProjectBody data
+    ) { return null; }
 */
+
+    // -------- List --------
+
     @GET
     @Path("/list")
-    @ApiOperation(value = "Get all granted projects.",
-        notes = "Returns the project records for all projects "
-        + "that the current user can grant to this application.",
+    @ApiOperation(
+        value = "Get all authorized projects.",
+        notes = "Returns projects that the current user has authorized for this application.",
         response = Project.class,
-        responseContainer = "List")
+        responseContainer = "List"
+    )
     public Response getProjects(
-        @ApiParam(value = "Whether to return archived projects.\n"
-        + "By default, archived projects won't be returned.\n"
-        + "If the parameter is specified without value, `true` is assumed.",
-        example = "archived=true", required = false)
-        @QueryParam(value = "archived") boolean archived,
+        @ApiParam(
+            value = "Whether to include archived projects.\n"
+                  + "By default, archived projects are excluded.\n"
+                  + "If the parameter is present without a value, `true` is assumed.",
+            example = "archived=true",
+            required = false
+        )
+        @QueryParam("archived") boolean archived,
 
-        @ApiParam(value = "Whether to return only projects that you can "
-        + "add tasks to. Default: `false`.\n"
-        + "If the parameter is specified without value, `true` is assumed.",
-        example = "add-task=true", required = false)
-        @QueryParam(value = "add-task") boolean addTask) { return null; }
+        @ApiParam(
+            value = "Whether to return only projects to which you can add tasks. Default: `false`.\n"
+                  + "If the parameter is present without a value, `true` is assumed.",
+            example = "add-task=true",
+            required = false
+        )
+        @QueryParam("add-task") boolean addTask
+    ) { return null; }
 
     @GET
     @Path("/list/{organizationOid}")
-    @ApiOperation(value = "Get all granted projects of the organization by its OID.",
-        notes = "Returns all project records of the given organization. "
-        + "Only granted projects will be returned.",
+    @ApiOperation(
+        value = "Get authorized projects by organization OID.",
+        notes = "Returns projects in the specified organization (by OID) that the current user has authorized.",
         response = Project.class,
-        responseContainer = "List")
+        responseContainer = "List"
+    )
     public Response getProjectsByOrganizationOid(
-        @ApiParam(value = "OID of the organization.", required = true)
+        @ApiParam(value = "Organization OID.", required = true)
         @PathParam("organizationOid") String organizationOid,
 
-        @ApiParam(value = "Whether to return archived projects.\n"
-        + "By default, archived projects won't be returned.\n"
-        + "If the parameter is specified without value, `true` is assumed.",
-        example = "archived=true", required = false)
-        @QueryParam(value = "archived") boolean archived,
+        @ApiParam(
+            value = "Whether to include archived projects.\n"
+                  + "By default, archived projects are excluded.\n"
+                  + "If the parameter is present without a value, `true` is assumed.",
+            example = "archived=true",
+            required = false
+        )
+        @QueryParam("archived") boolean archived,
 
-        @ApiParam(value = "Whether to return only projects that you can "
-        + "add tasks to. Default: `false`.\n"
-        + "If the parameter is specified without value, `true` is assumed.",
-        example = "add-task=true", required = false)
-        @QueryParam(value = "add-task") boolean addTask) { return null; }
+        @ApiParam(
+            value = "Whether to return only projects to which you can add tasks. Default: `false`.\n"
+                  + "If the parameter is present without a value, `true` is assumed.",
+            example = "add-task=true",
+            required = false
+        )
+        @QueryParam("add-task") boolean addTask
+    ) { return null; }
 
     @GET
     @Path("/list/id/{organizationId}")
-    @ApiOperation(value = "Get all granted projects of the organization by its ID.",
-        notes = "Returns all project records of the given organization. "
-        + "Only granted projects will be returned.",
+    @ApiOperation(
+        value = "Get authorized projects by organization ID.",
+        notes = "Returns projects in the specified organization (by ID) that the current user has authorized.",
         response = Project.class,
-        responseContainer = "List")
+        responseContainer = "List"
+    )
     public Response getProjectsByOrganizationId(
-        @ApiParam(value = "ID of the organization", required = true)
+        @ApiParam(value = "Organization ID.", required = true)
         @PathParam("organizationId") String organizationId,
 
-        @ApiParam(value = "Whether to return archived projects.\n"
-        + "By default, archived projects won't be returned.\n"
-        + "If the parameter is specified without value, `true` is assumed.",
-        example = "archived=true", required = false)
-        @QueryParam(value = "archived") boolean archived,
+        @ApiParam(
+            value = "Whether to include archived projects.\n"
+                  + "By default, archived projects are excluded.\n"
+                  + "If the parameter is present without a value, `true` is assumed.",
+            example = "archived=true",
+            required = false
+        )
+        @QueryParam("archived") boolean archived,
 
-        @ApiParam(value = "Whether to return only projects that you can "
-        + "add tasks to. Default: `false`.\n"
-        + "If the parameter is specified without value, `true` is assumed.",
-        example = "add-task=true", required = false)
-        @QueryParam(value = "add-task") boolean addTask) { return null; }
+        @ApiParam(
+            value = "Whether to return only projects to which you can add tasks. Default: `false`.\n"
+                  + "If the parameter is present without a value, `true` is assumed.",
+            example = "add-task=true",
+            required = false
+        )
+        @QueryParam("add-task") boolean addTask
+    ) { return null; }
+
+    // -------- Read --------
 
     @GET
     @Path("/id/{id}")
-    @ApiOperation(value = "Get a project by its ID.",
-        notes = "Returns the complete project record of the given ID.",
-        response = ProjectWithPlan.class)
+    @ApiOperation(
+        value = "Get a project by ID.",
+        notes = "Returns the complete project record for the given ID.",
+        response = ProjectWithPlan.class
+    )
     public Response getProjectById(
-        @ApiParam(value = "ID of project that needs to be fetched",
-            required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id
+    ) { return null; }
 
     @GET
     @Path("/{oid}")
-    @ApiOperation(value = "Get a project by its OID.",
-        notes = "Returns the complete project record of the given OID.",
-        response = ProjectWithPlan.class)
-    public Response getProject(
-        @ApiParam(value = "OID of project that needs to be fetched",
-            required = true)
-        @PathParam("oid") String oid) { return null; }
+    @ApiOperation(
+        value = "Get a project by OID.",
+        notes = "Returns the complete project record for the given OID.",
+        response = ProjectWithPlan.class
+    )
+    public Response getProjectByOid(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    // -------- Export (CSV) --------
 
     @GET
     @Path("/export-csv/id/{id}")
-    @ApiOperation(value = "Export a project into a CSV string by the given ID.",
-        notes = "Returns a CSV string containing the project, tasks, and so on.\n"
-            + "Note: it is allowed only for projects with professional plan or above.\n"
-            + "Also notice that the allowed number of invocation of this API is more restricted.",
-        response = String.class)
+    @ApiOperation(
+        value = "Export a project to CSV by ID.",
+        notes = "Returns a CSV string containing the project, tasks, and related data.\n"
+              + "Available on the Professional plan and above.\n"
+              + "Note: The number of allowed invocations may be more restricted.",
+        response = String.class
+    )
     public Response getProjectCsvById(
-        @ApiParam(value = "ID of project that needs to be exported",
-            required = true)
+        @ApiParam(value = "Project ID.", required = true)
         @PathParam("id") String id,
 
-        @ApiParam(value = "Task's status to match with.\n"
-            +"You can specify a value \"active\" for active tasks, "
-            +"\"completed\" for completed tasks, or \"all\" for all tasks.\n"
-            +"Default: all.",
-            example = "status=active", required = false)
-        @QueryParam(value = "status") String status,
+        @ApiParam(
+            value = "Task status filter.\n"
+                  + "Use `active` for active tasks, `completed` for completed tasks, or `all` for all tasks.\n"
+                  + "Default: `all`.",
+            example = "status=active",
+            required = false
+        )
+        @QueryParam("status") String status,
 
-        @ApiParam(value = "Whether to merge all values of the same header into one column.\n"
-            +"Example: All values for tags will be put in the same column.\n"
-            +"Default: false.",
-            example = "merge=true", required = false)
-        @QueryParam(value = "merge") boolean merge) { return null; }
+        @ApiParam(
+            value = "Whether to merge multiple values of the same header into one column (e.g., all tags in a single column).\n"
+                  + "Default: `false`.",
+            example = "merge=true",
+            required = false
+        )
+        @QueryParam("merge") boolean merge
+    ) { return null; }
 
     @GET
     @Path("/export-csv/{oid}")
-    @ApiOperation(value = "Export a project into a CSV string by the given OID.",
-        notes = "Returns a CSV string containing the project, tasks, and so on.\n"
-            + "Note: it is allowed only for projects with professional plan or above.\n"
-            + "Also notice that the allowed number of invocation of this API is more restricted.",
-        response = String.class)
-    public Response getProjectCsv(
-        @ApiParam(value = "OID of project that needs to be exported",
-            required = true)
+    @ApiOperation(
+        value = "Export a project to CSV by OID.",
+        notes = "Returns a CSV string containing the project, tasks, and related data.\n"
+              + "Available on the Professional plan and above.\n"
+              + "Note: The number of allowed invocations may be more restricted.",
+        response = String.class
+    )
+    public Response getProjectCsvByOid(
+        @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
 
-        @ApiParam(value = "Task's status to match with.\n"
-            +"You can specify a value \"active\" for active tasks, "
-            +"\"completed\" for completed tasks, or \"all\" for all tasks.\n"
-            +"Default: all.",
-            example = "status=active", required = false)
-        @QueryParam(value = "status") String status,
+        @ApiParam(
+            value = "Task status filter.\n"
+                  + "Use `active` for active tasks, `completed` for completed tasks, or `all` for all tasks.\n"
+                  + "Default: `all`.",
+            example = "status=active",
+            required = false
+        )
+        @QueryParam("status") String status,
 
-        @ApiParam(value = "Whether to merge all values of the same header into one column.\n"
-            +"Example: All values for tags will be put in the same column.\n"
-            +"Default: false.",
-            example = "merge=true", required = false)
-        @QueryParam(value = "merge") boolean merge) { return null; }
+        @ApiParam(
+            value = "Whether to merge multiple values of the same header into one column (e.g., all tags in a single column).\n"
+                  + "Default: `false`.",
+            example = "merge=true",
+            required = false
+        )
+        @QueryParam("merge") boolean merge
+    ) { return null; }
+
+    // -------- Export (JSON) --------
 
     @GET
     @Path("/export-json/id/{id}")
-    @ApiOperation(value = "Export a project into a JSON map by the given ID.",
-        notes = "Returns a JSON map containing the project, all tasks, and so on.\n"
-            + "Note: it is allowed only for projects with professional plan or above.\n"
-            + "Also notice that the allowed number of invocation of this API is more restricted.",
-        response = ProjectJsonMap.class)
+    @ApiOperation(
+        value = "Export a project to JSON by ID.",
+        notes = "Returns a JSON map containing the project, all tasks, and related data.\n"
+              + "Available on the Professional plan and above.\n"
+              + "Note: The number of allowed invocations may be more restricted.",
+        response = ProjectJsonMap.class
+    )
     public Response getProjectJsonById(
-        @ApiParam(value = "ID of project that needs to be exported",
-            required = true)
-        @PathParam("id") String id) { return null; }
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id
+    ) { return null; }
 
     @GET
     @Path("/export-json/{oid}")
-    @ApiOperation(value = "Export a project into a JSON map by the given OID.",
-        notes = "Returns a JSON map containing the project, all tasks, and so on.\n"
-            + "Note: it is allowed only for projects with professional plan or above.\n"
-            + "Also notice that the allowed number of invocation of this API is more restricted.",
-        response = ProjectJsonMap.class)
-    public Response getProjectJson(
-        @ApiParam(value = "OID of project that needs to be exported",
-            required = true)
-        @PathParam("oid") String oid) { return null; }
+    @ApiOperation(
+        value = "Export a project to JSON by OID.",
+        notes = "Returns a JSON map containing the project, all tasks, and related data.\n"
+              + "Available on the Professional plan and above.\n"
+              + "Note: The number of allowed invocations may be more restricted.",
+        response = ProjectJsonMap.class
+    )
+    public Response getProjectJsonByOid(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    // -------- Update --------
 
     @PUT
     @Path("/id/{id}")
-    @ApiOperation(value = "Update a project by its ID.",
-        notes = "Updates an existing project, and returns the complete updated project record.",
-        response = Project.class)
+    @ApiOperation(
+        value = "Update a project by ID.",
+        notes = "Updates an existing project and returns the complete updated record.",
+        response = Project.class
+    )
     public Response updateProjectById(
-        @ApiParam(value = "ID of project that needs to be updated", required = true)
+        @ApiParam(value = "Project ID.", required = true)
         @PathParam("id") String id,
-        @ApiParam(value = "Project to update", required = true)
-        UpdateProjectBody data) { return null; }
+        @ApiParam(value = "Fields to update.", required = true)
+        UpdateProjectBody data
+    ) { return null; }
 
     @PUT
     @Path("/{oid}")
-    @ApiOperation(value = "Update a project by its OID.",
-        notes = "Updates an existing project, and returns the complete updated project record.",
-        response = Project.class)
-    public Response updateProject(
-        @ApiParam(value = "OID of project that needs to be updated", required = true)
+    @ApiOperation(
+        value = "Update a project by OID.",
+        notes = "Updates an existing project and returns the complete updated record.",
+        response = Project.class
+    )
+    public Response updateProjectByOid(
+        @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Project to update", required = true)
-        UpdateProjectBody data) { return null; }
+        @ApiParam(value = "Fields to update.", required = true)
+        UpdateProjectBody data
+    ) { return null; }
 
 /* Not supported yet (security concern)
     @DELETE
     @Path("/{oid}")
-    @ApiOperation(value = "Delete a project",
-        notes = "A specific, existing project can be deleted by making a DELETE request " +
-                "on the URL for that project.")
-    @ApiResponses(value = {
+    @ApiOperation(
+        value = "Delete a project.",
+        notes = "Deletes the specified project."
+    )
+    @ApiResponses({
         @ApiResponse(code = 200, message = "ok",
-            examples = @Example({@ExampleProperty(mediaType = "application/json", value =
-                "{'success': true}")}))})
+            examples = @Example({
+                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
+            }))
+    })
     public Response deleteProject(
-        @ApiParam(value = "OID of project that needs to be deleted", required = true)
-        @PathParam("oid") String oid) { return null; }
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
 */
 }

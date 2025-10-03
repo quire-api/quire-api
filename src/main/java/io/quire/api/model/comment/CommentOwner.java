@@ -3,12 +3,17 @@ package io.quire.api.model.comment;
 import io.quire.api.model.NamedEntity;
 import io.swagger.annotations.*;
 
-@ApiModel()
 public class CommentOwner extends NamedEntity {
-    @ApiModelProperty(value = "The type of this object.", example = "Project")
+
+    @ApiModelProperty(
+        value = "Type of the owning object (e.g., Project).",
+        example = "Project"
+    )
     public String getType() { return null; }
 
-	@ApiModelProperty(value = "Url of this record on Quire website.",
-		example = "https://quire.io/w/my_id")
-	public String getUrl() { return null; }
+    @ApiModelProperty(
+        value = "URL of this owner on the Quire website.",
+        example = "https://quire.io/w/my_id"
+    )
+    public String getUrl() { return null; }
 }

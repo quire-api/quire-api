@@ -2,16 +2,23 @@ package io.quire.api.model.project;
 
 import io.swagger.annotations.*;
 
-@ApiModel()
 public class ProjectJsonMap {
-    @ApiModelProperty(value="OID, aka. UUID.", example = "Dyh2YkFcu9uLgLFIeN1kB4Ld")
+
+    @ApiModelProperty(
+        value = "Object identifier (OID), a UUID-like unique string.",
+        example = "Dyh2YkFcu9uLgLFIeN1kB4Ld"
+    )
     public String getOid() { return null; }
 
-    @ApiModelProperty(value="ID.",
-        example = "My_Project")
+    @ApiModelProperty(
+        value = "Project ID.",
+        example = "My_Project"
+    )
     public String getId() { return null; }
 
-    @ApiModelProperty(value="Name.",
-        example = "My Project")
+    @ApiModelProperty(
+        value = "Display name of the project.",
+        example = "My Project"
+    )
     public String getName() { return null; }
 }

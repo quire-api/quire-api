@@ -2,15 +2,18 @@ package io.quire.api.model.task;
 
 import io.swagger.annotations.*;
 
-@ApiModel()
 class Priority {
-    @ApiModelProperty(value="Name.", example = "Urgent")
+
+    @ApiModelProperty(
+        value = "Display name of the priority.",
+        example = "Urgent"
+    )
     public String getName() { return null; }
 
-	@ApiModelProperty(value = "The priority. "
-		+ "Its value is between -1 and 2. "
-		+ "The higher the value, the higher the priority.\n"
-		+ "Default: 0",
-		example = "0", position = 4)
-	public int getValue() { return 0; }
+    @ApiModelProperty(
+        value = "Numeric priority level. Integer from -1 (lowest) to 2 (highest). A higher value indicates a higher priority. Default: 0.",
+        example = "0",
+        position = 4
+    )
+    public int getValue() { return 0; }
 }

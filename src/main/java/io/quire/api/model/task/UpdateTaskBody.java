@@ -6,179 +6,204 @@ import io.quire.api.model.Recurrence;
 import io.swagger.annotations.ApiModelProperty;
 
 public class UpdateTaskBody {
-	@ApiModelProperty(example = "New idea",
-		value = "(Optional) New name of the task.")
-	public String getName() { return null; }
 
-	@ApiModelProperty(value = "(Optional) Change the description about this task.",
-	example = "This is a **cool** task.")
-	public String getDescription() { return null; }
+    @ApiModelProperty(
+        example = "New idea",
+        value = "(Optional) New task name."
+    )
+    public String getName() { return null; }
 
-	@ApiModelProperty(value = "(Optional) Change the priority of this task. "
-		+ "Its value must be between -1 (lowest) and 2 (highest). ",
-		example = "0", position = 4)
-	public int getPriority() { return 0; }
+    @ApiModelProperty(
+        example = "This is a **cool** task.",
+        value = "(Optional) New task description."
+    )
+    public String getDescription() { return null; }
 
-	@ApiModelProperty(value = "(Optional) An optional status to change to. "
-		+ "Its value must be between 0 and 100. "
-		+ "To complete a task, specify 100.",
-		example = "100", position = 4)
-	public int getStatus() { return 0; }
+    @ApiModelProperty(
+        value = "(Optional) New priority. Must be between -1 (lowest) and 2 (highest).",
+        example = "0",
+        position = 4
+    )
+    public int getPriority() { return 0; }
 
-	@ApiModelProperty(value = "(Optional) The estimated time to complete. "
-		+ "If specified, it must be non-negative or null. "
-		+ "If null is specified, it means to clear the value."
-		+ "Unit: seconds.",
-		example = "0", position = 4)
-	public int getEtc() { return 0; }
+    @ApiModelProperty(
+        value = "(Optional) New status, between 0 and 100. Specify 100 to complete the task.",
+        example = "100",
+        position = 4
+    )
+    public int getStatus() { return 0; }
 
-	@ApiModelProperty(
-		value = "(Optional) OID or names of the tags to replace existing tags of to this task. "
-		+ "If specified, it will replace any existing tag(s). "
-		+ "Instead of replacment, you can use \"addTags\" or \"removeTags\".\n"
-		+ "Note: if tag's name is specified, it is case-insensitive.")
-	public List<String> getTags() { return null; }
-	@ApiModelProperty(
-		value = "(Optional) OID or names of the tags to be added to this task.\n"
-		+ "Note: if tag's name is specified, it is case-insensitive.")
-	public List<String> getAddTags() { return null; }
-	@ApiModelProperty(
-		value = "(Optional) OID or names of the tags to be removed from this task.\n"
-		+ "Note: if tag's name is specified, it is case-insensitive.")
-	public List<String> getRemoveTags() { return null; }
+    @ApiModelProperty(
+        value = "(Optional) Estimated time to complete, in seconds. Must be non-negative or `null`.\n"
+              + "Specify `null` to clear the value.",
+        example = "0",
+        position = 4
+    )
+    public int getEtc() { return 0; }
 
-	@ApiModelProperty(
-		value = "(Optional) A list of OID, ID or emails of the users that this task is assigned to. "
-		+ "If specified, it will replace any existing assignee(s). "
-		+ "Instead of replacment, you can use \"addAssignees\" or \"removeAssignees\".\n\n"
-		+ "Please refer to `addAssignees` for more details.")
-	public List<String> getAssignees() { return null; }
-	@ApiModelProperty(
-		value = "(Optional) A list of OID, ID or emails of the assignees to be added to this task.\n\n"
-		+ "You can specify \"me\" instead of OID to indicate the current user.\n"
-		+ "You can also specify \"inherit\" to include all assignees of the parent task, if any.\n\n"
-		+ "Example: `{\"addAssignees\": [\"me\", \"inherit\", \"foo@domain.com\"]}`")
-	public List<String> getAddAssignees() { return null; }
-	@ApiModelProperty(
-		value = "(Optional) A list of OID, ID or emails of the assignees to be removed from this task.\n\n"
-		+ "Please refer to `addAssignees` for more details.")
-	public List<String> getRemoveAssignees() { return null; }
+    @ApiModelProperty(
+        value = "(Optional) Tags to replace the current tags on this task (OID or name).\n"
+              + "This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.\n"
+              + "Tag names are case-insensitive."
+    )
+    public List<String> getTags() { return null; }
 
-	@ApiModelProperty(example = "2018-12-20T00:00:00.000Z",
-		value = "(Optional) An optional start time. "
-		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
-		+ "e.g., `2020-10-30T09:30Z`.\n"
-		+ "Note: they must be in UTC time, and we don't support seconds.\n\n"
-		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.\n\n"
-		+ "Also note: for backward compatibility, `2020-10-30T00:00:00` "
-		+ "(all zero and up to second) is considered the same as `2020-10-30`, "
-		+ "i.e., without time. OTOH, To specify time at midnight in UTC, "
-		+ "please specify `2020-10-30T00:00` (no second)")
-	public String getStart() { return null; }
+    @ApiModelProperty(
+        value = "(Optional) Tags to add to this task (OID or name).\n"
+              + "Tag names are case-insensitive."
+    )
+    public List<String> getAddTags() { return null; }
 
-	@ApiModelProperty(example = "2018-12-22T00:00:00.000Z",
-		value = "(Optional) An optional due time. "
-		+ "If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, "
-		+ "e.g., `2020-10-30T09:30Z`.\n"
-		+ "Note: they must be in UTC time, and we don't support seconds.\n\n"
-		+ "If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`.\n\n"
-		+ "Also note: for backward compatibility, `2020-10-30T00:00:00` "
-		+ "(all zero and up to second) is considered the same as `2020-10-30`, "
-		+ "i.e., without time. OTOH, To specify time at midnight in UTC, "
-		+ "please specify `2020-10-30T00:00` (no second)")
-	public String getDue() { return null; }
+    @ApiModelProperty(
+        value = "(Optional) Tags to remove from this task (OID or name).\n"
+              + "Tag names are case-insensitive."
+    )
+    public List<String> getRemoveTags() { return null; }
 
-	@ApiModelProperty(value = "(Optional) The recurring information of this task. "
-		+ "It is null if it is not a recurring task.\n\n"
-		+ "- `freq`: `daily`, `weekly`, `monthly`, `yearly`\n"
-		+ "- `interval`: The interval between each freq iteration. Default: 1.\n"
-		+ "- `until`: The last recurrence is less than or equals to the specified value. Default: never ends.\n"
-		+ "- `bymonth`: If given, it must be an integer, starting from 1, meaning the month to apply to. It is supported only if `freq` is `yearly`. Default: 1 meaning January.\n"
-		+ "- `byweekno`: If given, it must be an integer, meaning the week number, or `last` meaning the last week. The value starts with 1. It is supported only for `monthly` and `yearly`.\n"
-		+ "- `byweekday`:  If given, it must be an integer: 0 for Monday, 1 for Tuesday, and so on. For `weekly`, it is a list of integers, such as `[1]` and `[0, 3]`. When given, these values will define the weekdays where the recurrence will be applied.\n"
-		+ "- `bydayno`: If given, it must be an integer, starting from 1, meaning the day to apply to. It is supported only for `monthly` and `yearly`.\n"
-		+ "  - Note: `byweekday` and `bydayno` can not be specified at the same time.\n"
-		+ "- `dupsubtasks`: Whether to duplicate the subtasks when the task is completed. Default: true.\n"
-		+ "- `sincelatest`: Whether to repeat it since the last date the task is completed. It is available only for `daily`. Default: false.")
-	public Recurrence getRecurrence() { return null; }
+    @ApiModelProperty(
+        value = "(Optional) Assignees to replace the current assignees (OID, ID, or email).\n"
+              + "This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.\n\n"
+              + "See `addAssignees` for special values."
+    )
+    public List<String> getAssignees() { return null; }
 
-	@ApiModelProperty(example = "true",
-		value = "(Optional) Specify true or a positive integer to peekaboo "
-		+ "this task and its subtasks, if any.\n"
-		+ "Or, specify false to undo the previous peekaboo if any.\n\n"
-		+ "If a positive integer is specified, it is the number of days to peekaboo a task.\n"
-		+ "If true, it won't be reshowed automatically.\n\n"
-		+ "Default: false.")
-	public Object getPeekaboo() { return false; }
+    @ApiModelProperty(
+        value = "(Optional) Assignees to add (OID, ID, or email).\n"
+              + "Special values:\n"
+              + "- \"me\": the current user\n"
+              + "- \"inherit\": include all assignees of the parent task\n\n"
+              + "Example: `{\"addAssignees\": [\"me\", \"inherit\", \"foo@domain.com\"]}`"
+    )
+    public List<String> getAddAssignees() { return null; }
 
-	@ApiModelProperty(example = "true",
-		value = "(Optional) Specify whether this task is a section or a normal task.")
-	public boolean getSection() { return false; }
+    @ApiModelProperty(
+        value = "(Optional) Assignees to remove (OID, ID, or email).\n\n"
+              + "See `addAssignees` for details on special values."
+    )
+    public List<String> getRemoveAssignees() { return null; }
 
-	@ApiModelProperty(
-		value = "(Optional) A list of OID, ID or emails of the users to replace the followers of this task.\n\n"
-		+ "Please refer to `addFollowers` for more details.")
-	public List<String> getFollowers() { return null; }
-	@ApiModelProperty(
-		value = "(Optional) A list of OID, ID or emails of the followers to be added to this task."
-		+ "You can specify \"me\" instead of OID to indicate the current user.\n"
-		+ "You can also specify \"inherit\" to include all followers of the parent task, if any.\n\n"
-		+ "If the application itself would like to follow (i.e., receive notifications), "
-		+ "it can pass \"app\" as one of OIDs.\n"
-		+ "In additions, it can pass additional information in one of the following syntaxes.\n\n"
-		+ "Syntax 1:\n"
-		+ "\"app|team\" or \"app|team|channel\"\n"
-		+ "where team and channel can be any value.\n\n"
-		+ "Syntax 2:\n"
-		+ "\"app|/path\"\n"
-		+ "where \"/path\" can be any URL path. It will be appended to the hook's URL "
-		+ "when calling the registered hook. For example, if the hook URL is "
-		+ "\"https://super.app/hooks/standard\" and the follower is "
-		+ "\"app|/soc1/33456/a7\", then the notification will be sent to "
-		+ "\"https://super.app/hooks/standard/soc1/33456/a7\".")
-	public List<String> getAddFollowers() { return null; }
-	@ApiModelProperty(
-		value = "(Optional) A list of OID, ID or emails of the followers to be removed from this task.\n\n"
-		+ "Please refer to `addFollowers` for more details.")
-	public List<String> getRemoveFollowers() { return null; }
+    @ApiModelProperty(
+        example = "2018-12-20T00:00:00.000Z",
+        value = "(Optional) Start date/time in UTC.\n\n"
+              + "- With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).\n"
+              + "- Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).\n\n"
+              + "Notes:\n"
+              + "- Seconds are not supported.\n"
+              + "- `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).\n"
+              + "- To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds)."
+    )
+    public String getStart() { return null; }
 
-	@ApiModelProperty(value = "(Optional) A list of OID or ID of tasks to replace the successors of this task.\n\n"
-		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
-		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
-	public List<String> getSuccessors() { return null; }
-	@ApiModelProperty(value = "(Optional) A list of OID or ID of tasks to be added to the successors of this task.\n\n"
-		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
-		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
-	public List<String> getAddSuccessors() { return null; }
-	@ApiModelProperty(value = "(Optional) A list of OID or ID of tasks to be removed from the successors of this task.\n\n"
-		+ "To specify task's ID, you can specify as `#id` or `id`.\n\n"
-		+ "Example, `'AMZ0-59R125-35KTK2356G'`, `'#13'`, and `135`.")
-	public List<String> getRemoveSuccessors() { return null; }
+    @ApiModelProperty(
+        example = "2018-12-22T00:00:00.000Z",
+        value = "(Optional) Due date/time in UTC.\n\n"
+              + "- With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).\n"
+              + "- Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).\n\n"
+              + "Notes:\n"
+              + "- Seconds are not supported.\n"
+              + "- `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).\n"
+              + "- To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds)."
+    )
+    public String getDue() { return null; }
 
-	@ApiModelProperty(example = "true",
-		value = "(Optional) Specify true if you'd like to make "
-		+ "this task as updated by the app.\n"
-		+ "Default: false -- the task is marked as created by the user authorizing "
-		+ "the app.")
-	public boolean getAsUser() { return false; }
+    @ApiModelProperty(
+        value = "(Optional) Recurrence details. `null` if the task is not recurring.\n\n"
+              + "- `freq`: `daily`, `weekly`, `monthly`, `yearly`.\n"
+              + "- `interval`: Interval between occurrences. Default: 1.\n"
+              + "- `until`: End date. Default: never ends.\n"
+              + "- `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.\n"
+              + "- `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.\n"
+              + "- `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).\n"
+              + "- `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.\n"
+              + "  Note: `byweekday` and `bydayno` cannot both be specified.\n"
+              + "- `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.\n"
+              + "- `sincelatest`: Daily only. Repeat based on the last completion date. Default: false."
+    )
+    public Recurrence getRecurrence() { return null; }
 
-	@ApiModelProperty(
-		value = "(Optional) Specify a value to your custom field. "
-		+ "The name and value depends on your definition of the custom field.\n\n"
-		+ "- For Money type, please specify the value directly (without currency).\n"
-		+ "- For User or Task type, please specify the OID.\n"
-		+ "- For Duration type, please specify number of seconds.\n"
-		+ "- For multiple values, you can specify a list of values.")
-	public Object getYourField() { return false; }
+    @ApiModelProperty(
+        example = "true",
+        value = "(Optional) Peekaboo setting.\n\n"
+              + "- `true`: Hide indefinitely (task and subtasks).\n"
+              + "- Positive integer: Number of days to hide.\n"
+              + "- `false`: Undo previous peekaboo.\n\n"
+              + "Default: false."
+    )
+    public Object getPeekaboo() { return false; }
 
-	@ApiModelProperty(
-		value = "Specify any data you'd like to store into the task. "
-		+ "It is so-called source ref, and it'll be available when retrieving "
-		+ "the task via API. Thus, you can identify them if necessary.\n\n"
-		+ "NOTE: if you put an entry called 'text', it'll be displayed at client side. "
-		+ "The syntax of the value is Markdown. "
-		+ "It is recommmended to put the source link here, so the end user can find "
-		+ "back the source.",
-		example = "{'text': 'Source: [Gmail](https://gmail.com/link'}", position = 60)
-	public Map<String, Object> getSourceRef() { return null; }
+    @ApiModelProperty(
+        example = "true",
+        value = "(Optional) Whether this task is a section. Default: false."
+    )
+    public boolean getSection() { return false; }
+
+    @ApiModelProperty(
+        value = "(Optional) Followers to replace the current followers (OID, ID, or email).\n\n"
+              + "See `addFollowers` for details."
+    )
+    public List<String> getFollowers() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Followers to add (OID, ID, or email).\n"
+              + "Special values:\n"
+              + "- \"me\": the current user\n"
+              + "- \"inherit\": include followers of the parent task\n"
+              + "- \"app\": the application follows (receives notifications)\n\n"
+              + "App follower syntax:\n"
+              + "- `app|team` or `app|team|channel`\n"
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`)."
+    )
+    public List<String> getAddFollowers() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Followers to remove (OID, ID, or email).\n\n"
+              + "See `addFollowers` for details on special values."
+    )
+    public List<String> getRemoveFollowers() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Successors to replace the current successors (task OID or ID).\n\n"
+              + "IDs can be specified as `#id` or `id`.\n\n"
+              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+    )
+    public List<String> getSuccessors() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Successors to add (task OID or ID).\n\n"
+              + "IDs can be specified as `#id` or `id`.\n\n"
+              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+    )
+    public List<String> getAddSuccessors() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Successors to remove (task OID or ID).\n\n"
+              + "IDs can be specified as `#id` or `id`.\n\n"
+              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+    )
+    public List<String> getRemoveSuccessors() { return null; }
+
+    @ApiModelProperty(
+        example = "true",
+        value = "(Optional) If true, marks this update as performed by the app.\n"
+              + "Default: false (updated by the authorizing user)."
+    )
+    public boolean getAsUser() { return false; }
+
+    @ApiModelProperty(
+        value = "(Optional) Value for a custom field. Type depends on field definition.\n\n"
+              + "- Money: numeric value only (no currency).\n"
+              + "- User/Task: OID.\n"
+              + "- Duration: number of seconds.\n"
+              + "- Multi-value: provide a list."
+    )
+    public Object getYourField() { return false; }
+
+    @ApiModelProperty(
+        value = "(Optional) Arbitrary source reference data to store with the task. Available via API on retrieval.\n\n"
+              + "If the map contains `text`, its value will be displayed client-side and should be Markdown. "
+              + "Including a source link is recommended.",
+        example = "{'text': 'Source: [Gmail](https://gmail.com/link)'}",
+        position = 60
+    )
+    public Map<String, Object> getSourceRef() { return null; }
 }

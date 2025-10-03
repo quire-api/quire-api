@@ -6,9 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
-@ApiModel()
 public class CreateSublistBody extends CreateWorkBody {
-	@ApiModelProperty(value = "(Optional) A list of tasks' OID that belong to this sublist.\n"
-		+ "Note: all of descendants will be included too.")
-	public List<String> getIncludes() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) List of task OIDs to include in this sublist. "
+              + "All descendants of the specified tasks will be included as well."
+    )
+    public List<String> getIncludes() { return null; }
 }

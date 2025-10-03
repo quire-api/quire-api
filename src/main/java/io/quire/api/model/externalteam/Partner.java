@@ -4,11 +4,18 @@ import io.quire.api.model.TaggingEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel()
 public class Partner extends TaggingEntity {
-    @ApiModelProperty(value = "The name.", example = "UI design team")
+
+    @ApiModelProperty(
+        value = "Display name of the external team.",
+        example = "UI design team"
+    )
     public String getName() { return null; }
-    @ApiModelProperty(example = "https://quire.s3.amazonaws.com/oid/image.jpg",
-    	position = 2)
+
+    @ApiModelProperty(
+        value = "Image URL representing this team.",
+        example = "https://quire.s3.amazonaws.com/oid/image.jpg",
+        position = 2
+    )
     public String getImage() { return null; }
 }
