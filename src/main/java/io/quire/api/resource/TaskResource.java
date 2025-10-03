@@ -44,8 +44,9 @@ public class TaskResource {
     )
     public Response createTaskByProject(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to add it to My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -111,8 +112,9 @@ public class TaskResource {
     )
     public Response getRootTasks(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to retrieve My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId
@@ -129,8 +131,9 @@ public class TaskResource {
     )
     public Response getSubtasks(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to retrieve My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -166,8 +169,9 @@ public class TaskResource {
     )
     public Response getTaskById(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to retrieve My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -198,8 +202,9 @@ public class TaskResource {
     )
     public Response updateTaskById(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to update tasks in My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -243,8 +248,9 @@ public class TaskResource {
     )
     public Response attachCommentById(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to update tasks in My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -380,8 +386,9 @@ public class TaskResource {
     )
     public Response searchTasksById(
         @ApiParam(
-            value = "Project ID. "
-                  + "Specify \"-\" to search in My Tasks (no specific project).",
+            value = "ID of the project to which this new task will be added. "
+                  + "The task will be created as a root task. Specify \"-\" "
+                  + "to add it to personal tasks (in My Tasks).",
             required = true
         )
         @PathParam("projectId") String projectId,
