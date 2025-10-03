@@ -1,5 +1,9 @@
 # CHANGES
 
+## Oct 3, 2025
+
+* Tasks API: Responses now include `commentedAt` when a task has at least one comment.
+
 ## July 4, 2025
 
 * Fixes an issue with the search API where formula fields using parent and ancestors were not evaluated correctly.

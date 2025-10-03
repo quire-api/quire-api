@@ -8,69 +8,75 @@ import java.util.List;
 @ApiModel()
 public class Task extends SimpleTask {
 
-	@ApiModelProperty(value = "The recurring information of this task. "
-		+ "It is null if it is not a recurring task.",
+	@ApiModelProperty(value = "Contains the recurrence details of this task. "
+		+ "If `null`, the task does not repeat.",
 		position = 4)
 	public RecurrenceX getRecurrence() { return null; }
 
-	@ApiModelProperty(value = "The estimed time to complete, or null if not specified. "
-		+ "Unit: seconds.",
+	@ApiModelProperty(value = "The estimated time to complete the task, expressed in seconds. "
+		+ "If null, no estimate has been specified.",
 		example = "500", position = 4)
 	public int getEtc() { return 0; }
-	@ApiModelProperty(value = "The timelogs of this task if available.",
+	@ApiModelProperty(value = "The time log entries associated with this task.",
 		position = 4)
 	public List<Timelog> getTimelogs() { return null; }
 
-	@ApiModelProperty(value = "Users who have assigned this tasks to a user. "
-		+ "For example, the first item of assignees is assigned by the first item of "
-		+ "assignors.", position = 5)
+	@ApiModelProperty(value = "A list of users who assigned this task. "
+		+ "Each item in assignors corresponds by index to the matching item in assignees "
+		+ "(e.g., the first assignee was assigned by the first assignor).", position = 5)
 	public List<SimpleIdentity> getAssignors() { return null; }
 
-	@ApiModelProperty(value = "The external team that this task belongs to. "
-		+ "It is null if this task doesn't belong to any external team.",
+	@ApiModelProperty(value = "The external team to which this task belongs. "
+		+ "If `null`, this task is not associated with any external team.",
 		position = 5)
 	public SimpleTaggingEntity getPartner() { return null; }
 
-	@ApiModelProperty(value = "The user who assigned this task to an external team. "
-		+ "It is null if this task doesn't belong to any external team.",
+	@ApiModelProperty(value = "The user who assigned this task to the external team. "
+		+ "If `null`, the task is not associated with any external team.",
 		position = 5)
 	public SimpleIdentity getPartnerBy() { return null; }
 
-	@ApiModelProperty(value = "The order of this task shown on the board view. "
-		+ "The smaller the number is, the ealier the task is shown. "
-		+ "It is meaningless if not in a board view.",
+	@ApiModelProperty(value = "Indicates the display order of this task in the board view. "
+		+ "A smaller value means the task appears earlier. "
+		+ "This field is only relevant in board view and has no meaning elsewhere.",
 		example = "99", position = 6)
 	public int getOrder() { return 0; }
 
-	@ApiModelProperty(value = "The attachments of this task.", position = 8)
+	@ApiModelProperty(value = "The list of files attached to this task.", position = 8)
 	public List<Attachment> getAttachments() { return null; }
-	@ApiModelProperty(value = "The id of the attachment that is used "
-		+ "as a cover of this task.",
+	@ApiModelProperty(value = "The ID of the attachment used as the cover image for this task.",
 		example = "qfqVmUtC",position = 8)
 	public String getCover() { return null; }
 
-	@ApiModelProperty(value = "Number of subtasks of this task. "
-		+ "To retrieve these subtasks, make the GET request to \"/task/list/{oid}\".",
+	@ApiModelProperty(value = "The number of subtasks belonging to this task. "
+		+ "To retrieve the subtasks, send a GET request to \"/task/list/{oid}\".",
 		example = "5", position = 10)
 	public int getChildCount() { return 0; }
 
-	@ApiModelProperty(value = "A list of referrers that refer this task. "
-		+ "Note: some of them might no longer exist.", position = 20)
+	@ApiModelProperty(value = "A list of items that reference this task. "
+		+ "Note: Some referrers may no longer exist.", position = 20)
 	public List<Referrer> getReferrers() { return null; }
 
-	@ApiModelProperty(value = "When this task's status was changed last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
+	@ApiModelProperty(value = "The timestamp of the most recent status change for this task.",
+		example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getToggledAt() { return null; }
-	@ApiModelProperty(value = "The user who changed this task's status.",
+	@ApiModelProperty(value = "The user who last changed the status of this task.",
 		position = 50)
 	public SimpleIdentity getToggledBy() { return null; }
 
-	@ApiModelProperty(value = "Users who follow this task.", position = 60)
+	@ApiModelProperty(value = "The list of users who are following this task.", position = 60)
 	public List<SimpleIdentity> getFollowers() { return null; }
-	@ApiModelProperty(value = "Users who don't want any nofications of this task even they're assinged to it.", position = 60)
+	@ApiModelProperty(value = "The list of users who have muted this task and will not receive notifications about it, even if they are assigned.", position = 60)
 	public List<SimpleIdentity> getMutes() { return null; }
-	@ApiModelProperty(value = "Users who favorite this task.", position = 60)
+	@ApiModelProperty(value = "The list of users who have marked this task as a favorite.", position = 60)
 	public List<SimpleIdentity> getFavorites() { return null; }
 
-	@ApiModelProperty(value = "When this record was edited last time.", example = "2018-12-22T02:06:58.158Z", position = 50)
+	@ApiModelProperty(value = "Represents the timestamp of the most recent edit to this record.", example = "2018-12-22T02:06:58.158Z", position = 50)
 	public String getEditedAt() { return null; }
+
+	@ApiModelProperty(value = "Indicates the timestamp of the most recent comment posted on this record.\n\n"
+		+ "If `null`, the record has never had a comment.\n\n"
+		+ "Since comments can be removed, this value may not always match the current set of comments.",
+		example = "2023-12-22T09:06:28.253Z", position = 50)
+	public String getCommentedAt() { return null; }
 }
