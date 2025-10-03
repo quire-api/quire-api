@@ -1,164 +1,134 @@
-# CHANGES
+# Changelog
 
 ## Oct 3, 2025
+- **Tasks API:** Responses now include `commentedAt` when a task has at least one comment.
 
-* Tasks API: Responses now include `commentedAt` when a task has at least one comment.
+## Jul 4, 2025
+- Fixed an issue in the Search API where formula fields that reference parent or ancestor values were not evaluated correctly.
 
-## July 4, 2025
-
-* Fixes an issue with the search API where formula fields using parent and ancestors were not evaluated correctly.
-
-## June 12, 2025
-
-* Adds [The source ref](https://quire.io/dev/api/#operation--task-id--projectId--post) for apps to store app specific data.
-* Output custom fields of the task for WebHook callback.
-* Output the ID of a series of recurring tasks. It can be found in `recurrence.seriesId`.
+## Jun 12, 2025
+- Added “[sourceRef](https://quire.io/dev/api/#operation--task-id--projectId--post)” so apps can store app-specific data on tasks.
+- Webhook callbacks now include the task’s custom fields.
+- Added the series identifier for recurring tasks at `recurrence.seriesId`.
 
 ## May 29, 2025
-
-* Allows to upload an attachment and add to a task or a comment.
+- You can upload an attachment and add it to a task or a comment.
   - [Upload API for tasks](https://quire.io/dev/api/#operation--task-attach--taskOid---filename--post)
   - [Upload API for comments](https://quire.io/dev/api/#operation--comment-attach--commentOid---filename--post)
 
 ## May 13, 2025
-
-* Adds [Chat Channel API](https://quire.io/dev/api/#tag-chat).
-* [Comment API](https://quire.io/dev/api/#tag-comment) supports chat channels.
-* Incompatibility:
-  - Comments can't be posted to a project. Rather, use chat channels instead.
+- Added the [Chat Channel API](https://quire.io/dev/api/#tag-chat).
+- The [Comment API](https://quire.io/dev/api/#tag-comment) now supports chat channels.
+- **Incompatibility:** Comments can no longer be posted to a project directly. Use chat channels instead.
 
 ## Apr 6, 2025
-
-* Adds new [Search API](https://quire.io/dev/api/#operation--task-search-organization-id--organizationId--get) for searching tasks under an organization or a folder.
+- Added a new [Search API](https://quire.io/dev/api/#operation--task-search-organization-id--organizationId--get) for searching tasks across an organization or a folder.
 
 ## Mar 15, 2025
-
-* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) allows to specify days, hours and minutes in the `modified` and `commented` parameters.
+- The [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) now accepts days, hours, and minutes in the `modified` and `commented` parameters.
 
 ## Mar 13, 2025
-
-* [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) adds the `modified` and `commented` parameters for searching tasks modified and/or commented recently.
+- The [Search API](https://quire.io/dev/api/#operation--task-search-id--projectId--get) introduced `modified` and `commented` parameters for finding tasks updated and/or commented on recently.
 
 ## Feb 12, 2025
-
-* Introduces API for manipulating [documents](https://quire.io/dev/api/#tag-doc).
+- Introduced APIs for manipulating [documents](https://quire.io/dev/api/#tag-doc).
 
 ## Feb 5, 2025
-
-* Allows to specify `"inherit"` as one of followers and assignees to inherit the parent task's followers and assignees.
-  - For more details, please [refer here](https://quire.io/dev/api/#operation--task-id--projectId--post)
-* Support `interval` for monthly and yearly recurrence
+- You can specify `"inherit"` in followers and assignees to inherit from the parent task.  
+  See details [here](https://quire.io/dev/api/#operation--task-id--projectId--post).
+- Added support for `interval` in monthly and yearly recurrences.
 
 ## Dec 30, 2024
+- Added a system event `host-revocation` for revoking a host from a token.
 
-* A system event, `host-revocation`, for revoking host from a token is added.
+## Sep 19, 2024
+- Webhooks: support following/unfollowing an organization.  
+  See [Organization Activities](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#organization-related-activities).
 
-## Sept 19, 2024
+## Sep 6, 2024
+- **Breaking change:** The task field `recurring` was renamed to `recurrence`, and its syntax changed.
 
-* Allows to follow or unfollow an organization for WebHook
-    - [Organization Activities](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#organization-related-activities)
+## Apr 16, 2024
+- Sublist now supports `start` and `due` dates.
 
-## Sept 6, 2024
+## Mar 27, 2024
+- You can create sublists for organizations, folders, and smart folders.
 
-* *BREAK CHANGE* The `recurring` field of task is renamed to `recurrence`, and the syntax has been changed too.
+## Feb 16, 2024
+- Added ability to add or remove successors.
 
-## April 16, 2024
+## Sep 26, 2023
+- You can add a follower who receives only notifications that match the user’s notification settings: `app|team|channel|mine`.
 
-* Sublist supports start and due.
+## Sep 1, 2023
+- Activity **84** (see [details](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md)) was replaced by **11**.
+  - Activities 5, 6, and 11 now include two extra fields—`status` and `previousStatus`—to indicate the new and previous status.
 
-## March 27, 2024
+## Aug 23, 2023
+- Added support for custom fields.
 
-* Allow to create sublist for organizations, folders and smart folders.
+## Aug 12, 2023
+- The redirect URL may now be `localhost`.
 
-## Feburary 16, 2024
+## Jul 21, 2023
+- Added an extra field `tasks` to [Webhook Notification Events](https://quire.io/dev/api/#webhook) for activities that affect multiple tasks. See [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
 
-* Allow to add or remove successors.
+## Jul 13, 2023
+- `peekaboo=false` means the task will **not** be reshown automatically.
 
-## September 26, 2023
+## Apr 10, 2023
+- Added support for **sections**.
 
-* Allow to add a follower that receives only notifications that match the notification setting of the user: `app|team|channel|mine`
+## Mar 26, 2023
+- Content size is limited to **1 MB**.
 
-## September 1, 2023
+## Feb 24, 2023
+- Added **Timelogs**.
+- Added **`etc`** (estimated time to complete).
 
-* Activity 84, [detail](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md), replaced with 11.
-  * Also, there are two extra fields, `status` and `previousStatus`, are added for Activity 5, 6 and 11 to indicate the new and previous status.
+## Mar 22, 2022
+- Added API to export a project to CSV: `GET /project/export-csv`.
 
-## August 23, 2023
+## Feb 25, 2022
+- Added API to export a project to a JSON map: `GET /project/export-json`.
 
-* Support custom fields
+## Jan 17, 2022
+- Storage API `GET`: now returns **404** if not found.  
+  _Previously returned 200 with an empty body._
 
-## August 12, 2023
+## Apr 27, 2021
+- Changed URLs for getting, updating, or deleting a comment.  
+  The caller must specify the project’s ID or OID (e.g., `comment/id/{projectId}/{commentOid}`).
 
-* Allows the redirect URL to be `localhost`.
+## Nov 2020
+- Added APIs to manage sublists.
 
-## July 21, 2023
+## Oct 30, 2020
+- Simplified `due` and `start` formats.  
+  - With time: `yyyy-mm-ddThh:mmZ` (e.g., `2020-10-30T09:30Z`)  
+  - Date only: `yyyy-mm-dd` (e.g., `2020-10-30`)  
+  - **Note:** All times must be UTC.
 
-* An addition field called `tasks` is added to [Notification Events](https://quire.io/dev/api/#webhook) for activities that can affect multiple tasks. Refer to [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
+## Oct 22, 2020
+- Responses now inline detailed information for fields like `assignees`, `tags`, etc.  
+  For example, a task’s `project` property includes OID, name, color, image, and URL.  
+  - **Note:** Many APIs changed—please update your application accordingly.
+- Webhook added field `value` to carry detailed information (e.g., an assignee’s ID, name, and URL for assignment events).
 
-## July 13, 2023
+## Oct 13, 2020
+- You can search tasks by matching `name` and/or `description` with a regular expression.  
+  - Case-insensitive: prefix with `~*`  
+  - Case-sensitive: prefix with `~`  
+  - Example:  
+    `https://quire.io/api/task/search/id/your-project?name=~Foo[s]&description=~*(green|blue)`
 
-* `peekaboo=false` means it won't be reshowed automatically.
-
-## April 10, 2023
-
-* `Section` supported
-
-## March 26, 2023
-
-* Content's size is limited to 1MB
-
-## Feburary 24, 2023
-
-* `Timelogs` supported
-* `etc` supported
-
-## March 22, 2022
-
-* API to export project into a CSV string is added
-  * `GET /project/export-csv`
-
-## February 25, 2022
-
-* API to export project into a JSON map is added
-  * `GET /project/export-json`
-
-## January 17, 2022
-
-* Storage API's GET: It returns 404 if not found.
-    * Old Spec: it returns 200 with an empty body.
-
-## April 27, 2021
-
-* URL to get, update or delete a comment has been changed.
-   * The caller must specify project's ID or OID. For example, `comment/id/projectId/commentOid`.
-
-## November, 2020
-
-* APIs to manange sublists are added.
-
-## October 30, 2020
-
-* We simplified the format of `due` and `start`. If you'd like to specify time, use `yyyy-mm-ddThh:mmZ`, e.g., `2020-10-30T09:30Z`. If you don't like to set time, use `yyyy-mm-dd`, e.g., `2020-10-30`. Note: they must be in UTC time.
-
-## October 22, 2020
-
-* The detailed information will be returned as part of `assignees`, `tags` and other fields. For example, the `project` property of the returned task record will be a map of OID, name, color, image and URL.
-  * Note: many APIs are changed. Please adjust your application accordingly.
-* WebHook added an extra field called `value` to carry the detailed information about a notification. For example, it carries the assignee's ID, name and URL if it is an assignment.
-
-## October 13, 2020
-
-* You can search tasks by matching the name and/or description with a regular expression. For case-insensitive matching, you can prefix the regular expression with `~*`. For case senstive, prefix with `~`.
-  * Example: `https://quire.io/api/task/search/id/your-project?name=~Foo[s]&description=~*(green|blue)`
-
-## October 8, 2020
-
-* You can add a task to My Tasks by specifying `-` as the project's ID.
-  * Example: `https://quire.io/api/task/id/-`
-* You can add a tag to My Tasks by specifying `-`  as the project's ID too.
+## Oct 8, 2020
+- You can add a task to **My Tasks** by specifying `-` as the project ID:  
+  `https://quire.io/api/task/id/-`.
+- You can add a tag to **My Tasks** by specifying `-` as the project ID as well.
 
 ## May 27, 2020
-
-* To retrieve only the projects that the current user can add tasks to, you can specify `add-task=true`.
-  * Example: `https://quire.io/api/project/list?add-task=true`
-* To retrieve archived projects, you can specify `archived=true`. Unlike `add-task`, non-archived projects will be returned too.
+- To retrieve only the projects that the current user can add tasks to, use `add-task=true`.  
+  Example: `https://quire.io/api/project/list?add-task=true`
+- To include archived projects, use `archived=true`.  
+  Unlike `add-task`, non-archived projects are included as well.
