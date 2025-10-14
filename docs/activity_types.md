@@ -108,10 +108,6 @@
 | 168 | Clears a sublist start date. | Project |
 | 169 | Sets a sublist due date. | Project |
 | 170 | Clears a sublist due date. | Project |
-| 171 | Sets a document start date. | Project |
-| 172 | Clears a document start date. | Project |
-| 173 | Sets a document due date. | Project |
-| 174 | Clears a document due date. | Project |
 | 175 | Archives a sublist. | Project |
 | 176 | Unarchives a sublist. | Project |
 | 177 | Archives a document. | Project |
