@@ -36,5 +36,17 @@ public class User extends IdentityX {
     )
     public String getUrl() { return null; }
 
+    @ApiModelProperty(
+        value = "The locale of the current user, or null if the user is not the current one.",
+        example = "en_GB"
+    )
+    public String getLocale() { return null; }
+
+    @ApiModelProperty(
+        value = "The time zone of the current user, or null if the user is not the current one.",
+        example = "`{'offset': 0, 'name': 'Europe/London'}`"
+    )
+    public Map<String, Object> getTimeZone() { return null; }
+
     // For privacy, createdAt/createdBy are not exposed.
 }

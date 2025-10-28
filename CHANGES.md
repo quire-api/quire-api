@@ -1,5 +1,8 @@
 # Changelog
 
+## Oct 30, 2005
+- **User API:** Responses from the `/api/user/me` endpoint now return the current user's locale and timeZone information.
+
 ## Oct 3, 2025
 - **Tasks API:** Responses now include `commentedAt` when a task has at least one comment.
 
