@@ -1,13 +1,33 @@
 paths:
+  '/chat/id/{ownerType}/{ownerId}':
+    post:
+      parameters:
+        - name: ownerType
+          required: false
+  '/chat/{ownerType}/{ownerOid}':
+    post:
+      parameters:
+        - name: ownerType
+          required: false
+  '/doc/id/{ownerType}/{ownerId}':
+    post:
+      parameters:
+        - name: ownerType
+          required: false
+  '/doc/{ownerType}/{ownerOid}':
+    post:
+      parameters:
+        - name: ownerType
+          required: false
   '/sublist/id/{ownerType}/{ownerId}':
     post:
       parameters:
-        - name: owenerType
+        - name: ownerType
           required: false
-  '/sublist/id/{ownerType}/{ownerId}/{id}':
+  '/sublist/{ownerType}/{ownerOid}':
     post:
       parameters:
-        - name: owenerType
+        - name: ownerType
           required: false
   '/project/export-csv/id/{id}':
     get:

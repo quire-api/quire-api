@@ -133,7 +133,7 @@ public class SublistResource {
         notes = "Updates an existing sublist and returns the complete updated record.",
         response = Sublist.class
     )
-    public Response updateSublist(
+    public Response updateSublistByOid(
         @ApiParam(value = "OID of the sublist to update.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Sublist updates", required = true)
@@ -147,7 +147,7 @@ public class SublistResource {
         notes = "Updates an existing sublist and returns the complete updated record.",
         response = Sublist.class
     )
-    public Response updateSublist(
+    public Response updateSublistById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
                   + "If omitted, `project` is assumed. For example, `/id/foo` is equivalent to `/id/project/foo`.",
@@ -180,7 +180,7 @@ public class SublistResource {
             })
         )
     })
-    public Response deleteSublist(
+    public Response deleteSublistByOid(
         @ApiParam(value = "OID of the sublist to delete.", required = true)
         @PathParam("oid") String oid
     ) { return null; }
@@ -203,7 +203,7 @@ public class SublistResource {
             })
         )
     })
-    public Response deleteSublist(
+    public Response deleteSublistById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
                   + "If omitted, `project` is assumed. For example, `/id/foo` is equivalent to `/id/project/foo`.",
