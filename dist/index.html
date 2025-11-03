@@ -2300,6 +2300,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">archived:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -2313,15 +2326,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">archived:
+                      <div class="prop-title">image:
                         <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -2350,19 +2363,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Target due date for this record.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">image:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -2372,11 +2372,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -2543,6 +2543,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">archived:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -2556,15 +2569,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">archived:
+                      <div class="prop-title">image:
                         <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -2593,19 +2606,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Target due date for this record.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">image:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -2615,11 +2615,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -5621,6 +5621,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">archived:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -5634,15 +5647,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">archived:
+                      <div class="prop-title">image:
                         <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5671,19 +5684,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Target due date for this record.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">image:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -5693,11 +5693,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -5864,6 +5864,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">archived:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -5877,15 +5890,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">archived:
+                      <div class="prop-title">image:
                         <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -5914,19 +5927,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Target due date for this record.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">image:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -5936,11 +5936,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -6371,8 +6371,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -6485,8 +6485,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -6582,8 +6582,8 @@ https://quire.io/api/user/id/me
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
     <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
     <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
     <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
     <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
     <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -6673,19 +6673,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Followers to remove from this organization (user OIDs). See <code>addFollowers()</code> for details on special values.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -6706,6 +6693,19 @@ https://quire.io/api/user/id/me
                       </ul>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Followers to remove from this organization (user OIDs). See <code>addFollowers()</code> for details on special values.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -6715,10 +6715,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+  <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ]
 }
@@ -6759,8 +6759,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -6849,19 +6849,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Followers to remove from this organization (user OIDs). See <code>addFollowers()</code> for details on special values.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -6882,6 +6869,19 @@ https://quire.io/api/user/id/me
                       </ul>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Followers to remove from this organization (user OIDs). See <code>addFollowers()</code> for details on special values.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -6891,10 +6891,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+  <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ]
 }
@@ -6935,8 +6935,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -8433,19 +8433,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Followers to remove from this project (user OIDs). See <code>getAddFollowers()</code> for details on special values.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -8466,6 +8453,19 @@ https://quire.io/api/user/id/me
                       </ul>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Followers to remove from this project (user OIDs). See <code>getAddFollowers()</code> for details on special values.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -8476,11 +8476,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
     <span class="hljs-string">&quot;app&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
-    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ]
 }
 </code></pre>
@@ -8624,19 +8624,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Followers to remove from this project (user OIDs). See <code>getAddFollowers()</code> for details on special values.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -8657,6 +8644,19 @@ https://quire.io/api/user/id/me
                       </ul>
                     </div>
                   </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Followers to remove from this project (user OIDs). See <code>getAddFollowers()</code> for details on special values.</p>
+                    </div>
+                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -8667,11 +8667,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
     <span class="hljs-string">&quot;app&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
-    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ]
 }
 </code></pre>
@@ -11476,6 +11476,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">archived:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -11489,15 +11502,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">archived:
+                      <div class="prop-title">image:
                         <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -11526,19 +11539,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Target due date for this record.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">image:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -11555,11 +11555,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -11741,6 +11741,19 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">archived:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">iconColor:
                         <span class="prop-type">
                           <span class="json-property-type">string </span>
@@ -11754,15 +11767,15 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">archived:
+                      <div class="prop-title">image:
                         <span class="prop-type">
-                          <span class="json-property-type">boolean </span>
+                          <span class="json-property-type">string </span>
                           <span class="json-property-range" title="Value limits"></span>
                         </span>
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -11791,19 +11804,6 @@ https://quire.io/api/user/id/me
                       <p>(Optional) Target due date for this record.</p>
                     </div>
                   </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">image:
-                        <span class="prop-type">
-                          <span class="json-property-type">string </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </div>
-                  </div>
                 </section>
               </div>
               <div class="doc-examples">
@@ -11820,11 +11820,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -18298,20 +18298,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Followers to remove (OID, ID, or email).</p>
-                      <p>See <code>addFollowers</code> for details on special values.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -18331,6 +18317,20 @@ https://quire.io/api/user/id/me
                         <li><code>app|team</code> or <code>app|team|channel</code></li>
                         <li><code>app|/path</code> → appended to the hook URL (e.g., <code>.../standard/soc1/33456/a7</code>).</li>
                       </ul>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Followers to remove (OID, ID, or email).</p>
+                      <p>See <code>addFollowers</code> for details on special values.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -18677,11 +18677,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
     <span class="hljs-string">&quot;app&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
-    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ],
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
@@ -18957,20 +18957,6 @@ https://quire.io/api/user/id/me
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">removeFollowers:
-                        <span class="prop-type">
-                          <span class="json-property-type">string[] </span>
-                          <span class="json-property-range" title="Value limits"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>(Optional) Followers to remove (OID, ID, or email).</p>
-                      <p>See <code>addFollowers</code> for details on special values.</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
                       <div class="prop-title">addFollowers:
                         <span class="prop-type">
                           <span class="json-property-type">string[] </span>
@@ -18990,6 +18976,20 @@ https://quire.io/api/user/id/me
                         <li><code>app|team</code> or <code>app|team|channel</code></li>
                         <li><code>app|/path</code> → appended to the hook URL (e.g., <code>.../standard/soc1/33456/a7</code>).</li>
                       </ul>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">removeFollowers:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[] </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>(Optional) Followers to remove (OID, ID, or email).</p>
+                      <p>See <code>addFollowers</code> for details on special values.</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -19336,11 +19336,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
     <span class="hljs-string">&quot;app&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
-    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ],
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>
@@ -22041,14 +22041,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>Organization name with Markdown removed.</p>
                     </dd>
-                    <dt data-property-name="url" class="has-description">
-                      <span class="json-property-name">url:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>URL of this organization on the Quire website.</p>
-                    </dd>
                     <dt data-property-name="email" class="has-description">
                       <span class="json-property-name">email:</span>
                       <span class="json-property-type">string </span>
@@ -22056,6 +22048,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>Organization email address.</p>
+                    </dd>
+                    <dt data-property-name="url" class="has-description">
+                      <span class="json-property-name">url:</span>
+                      <span class="json-property-type">string </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>URL of this organization on the Quire website.</p>
                     </dd>
                     <dt data-property-name="website" class="has-description">
                       <span class="json-property-name">website:</span>
@@ -22157,8 +22157,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -22233,14 +22233,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>Organization name with Markdown removed.</p>
                     </dd>
-                    <dt data-property-name="url" class="has-description">
-                      <span class="json-property-name">url:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>URL of this organization on the Quire website.</p>
-                    </dd>
                     <dt data-property-name="email" class="has-description">
                       <span class="json-property-name">email:</span>
                       <span class="json-property-type">string </span>
@@ -22248,6 +22240,14 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>Organization email address.</p>
+                    </dd>
+                    <dt data-property-name="url" class="has-description">
+                      <span class="json-property-name">url:</span>
+                      <span class="json-property-type">string </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>URL of this organization on the Quire website.</p>
                     </dd>
                     <dt data-property-name="website" class="has-description">
                       <span class="json-property-name">website:</span>
@@ -22357,8 +22357,8 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;my_organization&quot;</span>,
   <span class="hljs-attr">&quot;nameHtml&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
   <span class="hljs-attr">&quot;nameText&quot;</span>: <span class="hljs-string">&quot;My Organization&quot;</span>,
-  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;email&quot;</span>: <span class="hljs-string">&quot;info@company.com&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;https://quire.io/c/my_organization&quot;</span>,
   <span class="hljs-attr">&quot;website&quot;</span>: <span class="hljs-string">&quot;https://coolwebsites.com&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;This is *cool*!&quot;</span>,
   <span class="hljs-attr">&quot;descriptionText&quot;</span>: <span class="hljs-string">&quot;This is cool!&quot;</span>,
@@ -25425,6 +25425,14 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) New description for this record (Markdown supported).</p>
                     </dd>
+                    <dt data-property-name="archived" class="has-description">
+                      <span class="json-property-name">archived:</span>
+                      <span class="json-property-type">boolean </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </dd>
                     <dt data-property-name="iconColor" class="has-description">
                       <span class="json-property-name">iconColor:</span>
                       <span class="json-property-type">string </span>
@@ -25433,13 +25441,13 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Icon color index from Quire’s predefined palette.</p>
                     </dd>
-                    <dt data-property-name="archived" class="has-description">
-                      <span class="json-property-name">archived:</span>
-                      <span class="json-property-type">boolean </span>
+                    <dt data-property-name="image" class="has-description">
+                      <span class="json-property-name">image:</span>
+                      <span class="json-property-type">string </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </dd>
                     <dt data-property-name="start" class="has-description">
                       <span class="json-property-name">start:</span>
@@ -25457,14 +25465,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Target due date for this record.</p>
                     </dd>
-                    <dt data-property-name="image" class="has-description">
-                      <span class="json-property-name">image:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </dd>
                   </dl>
                 </section>
               </div>
@@ -25475,11 +25475,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -25575,6 +25575,14 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) New description for this record (Markdown supported).</p>
                     </dd>
+                    <dt data-property-name="archived" class="has-description">
+                      <span class="json-property-name">archived:</span>
+                      <span class="json-property-type">boolean </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </dd>
                     <dt data-property-name="iconColor" class="has-description">
                       <span class="json-property-name">iconColor:</span>
                       <span class="json-property-type">string </span>
@@ -25583,13 +25591,13 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Icon color index from Quire’s predefined palette.</p>
                     </dd>
-                    <dt data-property-name="archived" class="has-description">
-                      <span class="json-property-name">archived:</span>
-                      <span class="json-property-type">boolean </span>
+                    <dt data-property-name="image" class="has-description">
+                      <span class="json-property-name">image:</span>
+                      <span class="json-property-type">string </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </dd>
                     <dt data-property-name="start" class="has-description">
                       <span class="json-property-name">start:</span>
@@ -25607,14 +25615,6 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Target due date for this record.</p>
                     </dd>
-                    <dt data-property-name="image" class="has-description">
-                      <span class="json-property-name">image:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
-                    </dd>
                   </dl>
                 </section>
               </div>
@@ -25625,11 +25625,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -25668,21 +25668,6 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="removeFollowers" class="has-description">
-                      <span class="json-property-name">removeFollowers:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Followers to remove from this organization (user OIDs). See <code>addFollowers()</code> for details on special values.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
                     <dt data-property-name="addFollowers" class="has-description">
                       <span class="json-property-name">addFollowers:</span>
                       <span class="json-property-type">string[] </span>
@@ -25707,6 +25692,21 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
+                    <dt data-property-name="removeFollowers" class="has-description">
+                      <span class="json-property-name">removeFollowers:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Followers to remove from this organization (user OIDs). See <code>addFollowers()</code> for details on special values.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
                   </dl>
                 </section>
               </div>
@@ -25717,10 +25717,10 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;followers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+  <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ],
-  <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
     <span class="hljs-string">&quot;string&quot;</span>
   ]
 }
@@ -25761,21 +25761,6 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="removeFollowers" class="has-description">
-                      <span class="json-property-name">removeFollowers:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Followers to remove from this project (user OIDs). See <code>getAddFollowers()</code> for details on special values.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
                     <dt data-property-name="addFollowers" class="has-description">
                       <span class="json-property-name">addFollowers:</span>
                       <span class="json-property-type">string[] </span>
@@ -25800,6 +25785,21 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
+                    <dt data-property-name="removeFollowers" class="has-description">
+                      <span class="json-property-name">removeFollowers:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Followers to remove from this project (user OIDs). See <code>getAddFollowers()</code> for details on special values.</p>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
                   </dl>
                 </section>
               </div>
@@ -25811,11 +25811,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
     <span class="hljs-string">&quot;app&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
-    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ]
 }
 </code></pre>
@@ -25938,6 +25938,14 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) New description for this record (Markdown supported).</p>
                     </dd>
+                    <dt data-property-name="archived" class="has-description">
+                      <span class="json-property-name">archived:</span>
+                      <span class="json-property-type">boolean </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                    </dd>
                     <dt data-property-name="iconColor" class="has-description">
                       <span class="json-property-name">iconColor:</span>
                       <span class="json-property-type">string </span>
@@ -25946,13 +25954,13 @@ https://quire.io/api/user/id/me
                     <dd>
                       <p>(Optional) Icon color index from Quire’s predefined palette.</p>
                     </dd>
-                    <dt data-property-name="archived" class="has-description">
-                      <span class="json-property-name">archived:</span>
-                      <span class="json-property-type">boolean </span>
+                    <dt data-property-name="image" class="has-description">
+                      <span class="json-property-name">image:</span>
+                      <span class="json-property-type">string </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                     <dd>
-                      <p>(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.</p>
+                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </dd>
                     <dt data-property-name="start" class="has-description">
                       <span class="json-property-name">start:</span>
@@ -25969,14 +25977,6 @@ https://quire.io/api/user/id/me
                     </dt>
                     <dd>
                       <p>(Optional) Target due date for this record.</p>
-                    </dd>
-                    <dt data-property-name="image" class="has-description">
-                      <span class="json-property-name">image:</span>
-                      <span class="json-property-type">string </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Icon image for this record. Must be one of the predefined identifiers: &#39;icon-view-list&#39;, &#39;icon-view-kanban&#39;, &#39;icon-briefcase-o&#39;, &#39;icon-rocket-o&#39;, &#39;icon-bug-o&#39;, &#39;icon-leaf-o&#39;, &#39;icon-clapperboard&#39;, &#39;icon-sitemap-o&#39;, &#39;icon-flash-on-o&#39;, &#39;icon-piggy-bank-o&#39;, &#39;icon-graduation-cap-o&#39;, &#39;icon-paper-plane-o&#39;, &#39;icon-globe-o&#39;, &#39;icon-music-o&#39;, &#39;icon-detail&#39;, &#39;icon-beach-o&#39;, &#39;icon-paper&#39;, &#39;icon-home-o&#39;, &#39;icon-building&#39;, &#39;icon-database-o&#39;, &#39;icon-microscope-o&#39;, &#39;icon-hamburger-o&#39;, &#39;icon-trophy-o&#39;, &#39;icon-thumbs-o-up&#39;, &#39;icon-thumbs-o-down&#39;, &#39;icon-smile-o&#39;, &#39;icon-frown-o&#39;, &#39;icon-meh-o&#39;, &#39;icon-bullseye&#39;, &#39;icon-square-dotted-o&#39;</p>
                     </dd>
                   </dl>
                 </section>
@@ -25995,11 +25995,11 @@ https://quire.io/api/user/id/me
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Highlight 101&quot;</span>,
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;Highlight101&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;**Great** record to start with.&quot;</span>,
-  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
   <span class="hljs-attr">&quot;archived&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">&quot;iconColor&quot;</span>: <span class="hljs-string">&quot;37&quot;</span>,
+  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>,
   <span class="hljs-attr">&quot;start&quot;</span>: <span class="hljs-string">&quot;2024-01-02&quot;</span>,
-  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>,
-  <span class="hljs-attr">&quot;image&quot;</span>: <span class="hljs-string">&quot;icon-view-kanban&quot;</span>
+  <span class="hljs-attr">&quot;due&quot;</span>: <span class="hljs-string">&quot;2024-05-25&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->
@@ -26121,22 +26121,6 @@ https://quire.io/api/user/id/me
                         <div class="json-inner-schema"> </div>
                       </section>
                     </dt>
-                    <dt data-property-name="removeFollowers" class="has-description">
-                      <span class="json-property-name">removeFollowers:</span>
-                      <span class="json-property-type">string[] </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>(Optional) Followers to remove (OID, ID, or email).</p>
-                      <p>See <code>addFollowers</code> for details on special values.</p>
-                    </dd>
-                    <dt class="json-inner-schema">
-                      <section class="json-schema-array-items">
-                        <span class="json-property-type">string </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <div class="json-inner-schema"> </div>
-                      </section>
-                    </dt>
                     <dt data-property-name="addFollowers" class="has-description">
                       <span class="json-property-name">addFollowers:</span>
                       <span class="json-property-type">string[] </span>
@@ -26154,6 +26138,22 @@ https://quire.io/api/user/id/me
                         <li><code>app|team</code> or <code>app|team|channel</code></li>
                         <li><code>app|/path</code> → appended to the hook URL (e.g., <code>.../standard/soc1/33456/a7</code>).</li>
                       </ul>
+                    </dd>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">string </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
+                    <dt data-property-name="removeFollowers" class="has-description">
+                      <span class="json-property-name">removeFollowers:</span>
+                      <span class="json-property-type">string[] </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>(Optional) Followers to remove (OID, ID, or email).</p>
+                      <p>See <code>addFollowers</code> for details on special values.</p>
                     </dd>
                     <dt class="json-inner-schema">
                       <section class="json-schema-array-items">
@@ -26470,11 +26470,11 @@ https://quire.io/api/user/id/me
     <span class="hljs-string">&quot;tzufRLqCnud74dARyDSvjWDl&quot;</span>,
     <span class="hljs-string">&quot;app&quot;</span>
   ],
-  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
-    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
-  ],
   <span class="hljs-attr">&quot;addFollowers&quot;</span>: [
     <span class="hljs-string">&quot;sfsvLbDVPvi1QMf2GkDn7VSy&quot;</span>
+  ],
+  <span class="hljs-attr">&quot;removeFollowers&quot;</span>: [
+    <span class="hljs-string">&quot;aBuz4MwfZ5CasOae6stnFa2f&quot;</span>
   ],
   <span class="hljs-attr">&quot;assignees&quot;</span>: [
     <span class="hljs-string">&quot;6QMKkEPBVWETLWrXqws94ALU&quot;</span>

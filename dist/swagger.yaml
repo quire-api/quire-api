@@ -3991,15 +3991,15 @@ definitions:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
       email:
         type: string
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -4065,15 +4065,15 @@ definitions:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
       email:
         type: string
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -5235,22 +5235,14 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
       archived:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
-      start:
+      iconColor:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
       image:
         type: string
         example: icon-view-kanban
@@ -5262,6 +5254,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
   UpdateCommentBody:
     type: object
     properties:
@@ -5288,22 +5288,14 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
       archived:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
-      start:
+      iconColor:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
       image:
         type: string
         example: icon-view-kanban
@@ -5315,6 +5307,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
   UpdateOrganizationBody:
     type: object
     properties:
@@ -5323,13 +5323,6 @@ definitions:
         description: |-
           (Optional) Followers to replace the current followers of this organization (user OIDs).
           This replaces all existing followers. To modify incrementally, use `addFollowers()` or `removeFollowers()`.
-        items:
-          type: string
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove from this organization (user OIDs).
-          See `addFollowers()` for details on special values.
         items:
           type: string
       addFollowers:
@@ -5347,6 +5340,13 @@ definitions:
             → `https://super.app/hooks/standard/soc1/33456/a7`
         items:
           type: string
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove from this organization (user OIDs).
+          See `addFollowers()` for details on special values.
+        items:
+          type: string
   UpdateProjectBody:
     type: object
     properties:
@@ -5360,15 +5360,6 @@ definitions:
         example:
           - tzufRLqCnud74dARyDSvjWDl
           - app
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove from this project (user OIDs).
-          See `getAddFollowers()` for details on special values.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
       addFollowers:
         type: array
         description: |-
@@ -5386,6 +5377,15 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove from this project (user OIDs).
+          See `getAddFollowers()` for details on special values.
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
   UpdateStatusBody:
     type: object
     properties:
@@ -5422,22 +5422,14 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
       archived:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
-      start:
+      iconColor:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
       image:
         type: string
         example: icon-view-kanban
@@ -5449,6 +5441,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
   UpdateTagBody:
     type: object
     properties:
@@ -5490,16 +5490,6 @@ definitions:
         example:
           - tzufRLqCnud74dARyDSvjWDl
           - app
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove (OID, ID, or email).
-
-          See `addFollowers` for details on special values.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
       addFollowers:
         type: array
         description: |-
@@ -5516,6 +5506,16 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove (OID, ID, or email).
+
+          See `addFollowers` for details on special values.
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
       assignees:
         type: array
         description: |-

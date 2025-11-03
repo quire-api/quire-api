@@ -1437,8 +1437,10 @@ html, body {
   bottom: 0;
   height: auto; }
 
-#header-icons .item > a {
-  display: inline-block; }
+#header-icons .item {
+  line-height: normal; }
+  #header-icons .item > a {
+    display: inline-block; }
 
 .navbar-toggle {
   float: right; }
