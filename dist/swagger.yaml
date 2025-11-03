@@ -3424,15 +3424,15 @@ definitions:
         description: Attachments associated with this comment.
         items:
           $ref: '#/definitions/Attachment'
-      editedBy:
-        position: 50
-        description: User who last edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
+      editedBy:
+        position: 50
+        description: User who last edited this comment, or null if not edited.
+        $ref: '#/definitions/SimpleIdentity'
       url:
         type: string
         position: 50
@@ -3534,14 +3534,14 @@ definitions:
         type: string
         example: Adjust style
         description: Content of the new comment (Markdown supported).
-      asUser:
-        type: boolean
-        example: true
-        description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
       pinned:
         type: boolean
         example: false
         description: '(Optional) Whether to pin this comment. Default: false.'
+      asUser:
+        type: boolean
+        example: true
+        description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
   CreateDocBody:
     type: object
     required:
@@ -3703,6 +3703,22 @@ definitions:
         type: string
         example: This is a *cool* task.
         description: (Optional) A description of the task.
+      followers:
+        type: array
+        description: |-
+          (Optional) List of user identifiers (OID, ID, or email) who follow this task.
+
+          - Use "me" for the current user.
+          - Use "inherit" to include followers of the parent task.
+          - Use "app" for the application itself to follow (receive notifications).
+
+          For app followers, additional syntaxes are supported:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
       assignees:
         type: array
         description: |-
@@ -3764,22 +3780,6 @@ definitions:
           - User/Task: specify the OID.
           - Duration: specify number of seconds.
           - Multi-value: specify a list.
-      followers:
-        type: array
-        description: |-
-          (Optional) List of user identifiers (OID, ID, or email) who follow this task.
-
-          - Use "me" for the current user.
-          - Use "inherit" to include followers of the parent task.
-          - Use "app" for the application itself to follow (receive notifications).
-
-          For app followers, additional syntaxes are supported:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
       tasks:
         type: array
         description: (Optional) List of subtasks to create along with this task.
@@ -3991,15 +3991,15 @@ definitions:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
       email:
         type: string
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -4065,15 +4065,15 @@ definitions:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
       email:
         type: string
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
       website:
         type: string
         example: https://coolwebsites.com
@@ -4181,6 +4181,11 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root (top-level) tasks in this project.
       nameHtml:
         type: string
         example: My Project
@@ -4189,11 +4194,6 @@ definitions:
         type: string
         example: My Project
         description: Project name with Markdown removed.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root (top-level) tasks in this project.
       url:
         type: string
         example: https://quire.io/w/my_project
@@ -4223,16 +4223,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      archivedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was last edited.
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       followers:
         type: array
         position: 60
@@ -4293,6 +4293,11 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root (top-level) tasks in this project.
       nameHtml:
         type: string
         example: My Project
@@ -4301,11 +4306,6 @@ definitions:
         type: string
         example: My Project
         description: Project name with Markdown removed.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root (top-level) tasks in this project.
       url:
         type: string
         example: https://quire.io/w/my_project
@@ -4339,16 +4339,16 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      archivedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was last edited.
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       followers:
         type: array
         position: 60
@@ -4707,10 +4707,6 @@ definitions:
   Subscription:
     type: object
     properties:
-      due:
-        type: string
-        example: '2038-02-22T02:06:58Z'
-        description: Subscription due/renewal timestamp in UTC (ISO 8601).
       plan:
         type: string
         example: Professional
@@ -4719,6 +4715,10 @@ definitions:
         type: boolean
         example: false
         description: Whether the subscription is expired. Available only when a due date is present.
+      due:
+        type: string
+        example: '2038-02-22T02:06:58Z'
+        description: Subscription due/renewal timestamp in UTC (ISO 8601).
   Tag:
     type: object
     properties:
@@ -4897,6 +4897,11 @@ definitions:
         description: 'A list of items that reference this task. Note: Some referrers may no longer exist.'
         items:
           $ref: '#/definitions/Referrer'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Represents the timestamp of the most recent edit to this record.
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -4916,11 +4921,6 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Represents the timestamp of the most recent edit to this record.
       peekaboo:
         type: boolean
         example: true
@@ -4936,16 +4936,16 @@ definitions:
         example: true
         position: 50
         description: Whether this task is a section.
-      favorites:
-        type: array
-        position: 60
-        description: The list of users who have marked this task as a favorite.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       followers:
         type: array
         position: 60
         description: The list of users who are following this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      favorites:
+        type: array
+        position: 60
+        description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
       mutes:
@@ -5120,6 +5120,11 @@ definitions:
         description: 'A list of items that reference this task. Note: Some referrers may no longer exist.'
         items:
           $ref: '#/definitions/Referrer'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Represents the timestamp of the most recent edit to this record.
       toggledAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -5139,11 +5144,6 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Represents the timestamp of the most recent edit to this record.
       peekaboo:
         type: boolean
         example: true
@@ -5159,16 +5159,16 @@ definitions:
         example: true
         position: 50
         description: Whether this task is a section.
-      favorites:
-        type: array
-        position: 60
-        description: The list of users who have marked this task as a favorite.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       followers:
         type: array
         position: 60
         description: The list of users who are following this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      favorites:
+        type: array
+        position: 60
+        description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
       mutes:
@@ -5235,14 +5235,14 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
         description: (Optional) Icon color index from Quire’s predefined palette.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       start:
         type: string
         example: '2024-01-02'
@@ -5288,14 +5288,14 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
         description: (Optional) Icon color index from Quire’s predefined palette.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       start:
         type: string
         example: '2024-01-02'
@@ -5325,6 +5325,13 @@ definitions:
           This replaces all existing followers. To modify incrementally, use `addFollowers()` or `removeFollowers()`.
         items:
           type: string
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove from this organization (user OIDs).
+          See `addFollowers()` for details on special values.
+        items:
+          type: string
       addFollowers:
         type: array
         description: |-
@@ -5340,13 +5347,6 @@ definitions:
             → `https://super.app/hooks/standard/soc1/33456/a7`
         items:
           type: string
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove from this organization (user OIDs).
-          See `addFollowers()` for details on special values.
-        items:
-          type: string
   UpdateProjectBody:
     type: object
     properties:
@@ -5360,6 +5360,15 @@ definitions:
         example:
           - tzufRLqCnud74dARyDSvjWDl
           - app
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove from this project (user OIDs).
+          See `getAddFollowers()` for details on special values.
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
       addFollowers:
         type: array
         description: |-
@@ -5377,15 +5386,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove from this project (user OIDs).
-          See `getAddFollowers()` for details on special values.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
   UpdateStatusBody:
     type: object
     properties:
@@ -5422,14 +5422,14 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
         description: (Optional) Icon color index from Quire’s predefined palette.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       start:
         type: string
         example: '2024-01-02'
@@ -5479,6 +5479,43 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description.
+      followers:
+        type: array
+        description: |-
+          (Optional) Followers to replace the current followers (OID, ID, or email).
+
+          See `addFollowers` for details.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove (OID, ID, or email).
+
+          See `addFollowers` for details on special values.
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
+      addFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include followers of the parent task
+          - "app": the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+        example:
+          - sfsvLbDVPvi1QMf2GkDn7VSy
       assignees:
         type: array
         description: |-
@@ -5590,43 +5627,6 @@ definitions:
           Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
         items:
           type: string
-      followers:
-        type: array
-        description: |-
-          (Optional) Followers to replace the current followers (OID, ID, or email).
-
-          See `addFollowers` for details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-      addFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include followers of the parent task
-          - "app": the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-        example:
-          - sfsvLbDVPvi1QMf2GkDn7VSy
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove (OID, ID, or email).
-
-          See `addFollowers` for details on special values.
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
