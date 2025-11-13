@@ -1060,6 +1060,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle #sidebar .close-button {
       opacity: 0.5;
       display: none; }
+  #spectacle #docs > article > *,
+  #spectacle #docs > article > .introduction h1,
   #spectacle .definition .panel-title > a {
     scroll-margin-top: 70px; }
   #spectacle .doc-content, #spectacle article h1.doc-title, #spectacle article > h1, #spectacle article > h2, #spectacle article .panel > h2, #spectacle article .panel > h3, #spectacle article .doc-copy, #spectacle article .doc-examples {
