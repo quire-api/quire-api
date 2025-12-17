@@ -1,41 +1,38 @@
-var oatts = require('oatts');
-var spectacleDoc = require('spectacle-docs');
-var gulp = require( 'gulp' );
-var del = require('del');
-var mocha = require('gulp-mocha');
-var jsToYaml = require('js-yaml');
-var fs = require('fs');
-var merge = require('lodash.merge');
-var swaggerYaml = './dist/swagger.yaml';
-//npx gulp build
-var options = {
-    "scheme": "http",
-    "host": "localhost:8080",
-    "writeTo": "./generated/test",
-    "customValuesFile": "./src/main/resources/test_template.json"
-};
+const spectacleDoc = require('spectacle-docs');
+const { series } = require('gulp');
+const del = require('del');
+const jsToYaml = require('js-yaml');
+const fs = require('fs');
+const merge = require('lodash.merge');
+const swaggerYaml = './dist/swagger.yaml';
 
-gulp.task('clean', function(cb){
-  del(['./generated/test'], cb);
-});
+// Removes generated test artifacts (gulp v4 expects a returned promise/stream)
+function clean() {
+    return del(['./generated/test']);
+}
 
-gulp.task('build', function () {
-    var swaggerMain = jsToYaml.load(
+// Builds merged swagger.yaml then renders docs via spectacle
+function build(done) {
+    const swaggerMain = jsToYaml.load(
         fs.readFileSync('./generated/swagger.yaml', 'utf8'));
-    var swaggerExamples = jsToYaml.load(
+    const swaggerExamples = jsToYaml.load(
         fs.readFileSync('./src/main/resources/examples.yaml', 'utf8'));
     merge(swaggerMain, swaggerExamples);
 
-    fs.writeFileSync(swaggerYaml, jsToYaml.dump(swaggerMain, {lineWidth: -1}))
+    fs.writeFileSync(swaggerYaml, jsToYaml.dump(swaggerMain, { lineWidth: -1 }));
 
     spectacleDoc({
-        "specFile": swaggerYaml,
-        "targetDir": "./dist",
-        "configFile": "./doc_template/config.js"})
+        specFile: swaggerYaml,
+        targetDir: './dist',
+        configFile: './doc_template/config.js',
+    });
 
-//  var tests = oatts.generate(swaggerYaml, options);
-//  console.log(tests)
-});
+    done();
+}
+
+exports.clean = clean;
+exports.build = build;
+exports.default = series(clean, build);
 
 //gulp.task('test', () =>
 //  gulp.src(['./generated/test/*.js'], {read: false})

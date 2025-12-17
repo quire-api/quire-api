@@ -239,11 +239,11 @@ table.table {
 }
 
 .json-property-discriminator {
-  @include named-label($msg-json-discriminator)
+  @include named-label($msg-json-discriminator);
 }
 
 .json-property-required {
-  @include named-label($msg-json-required)
+  @include named-label($msg-json-required);
   &:before {
     background-color: #FFF5F5;
     color: #EE5F5B;

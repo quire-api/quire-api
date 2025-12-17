@@ -425,7 +425,7 @@ article {
 
     .swagger-response-headers {
 
-      @include inset-panel()
+      @include inset-panel();
       margin-bottom: 1.5rem;
 
       thead {
