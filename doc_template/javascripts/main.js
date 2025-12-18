@@ -171,4 +171,17 @@ $(function() {
     _updateNonLoginUser();
     _showHeaderIcon();
   });
+
+  $(document).find('h1,h2,h3').each(function() {
+    const item = $(this);
+    const id = item.attr('id');
+
+    if (id)
+      item.append(`<a href="#${id}" class="i-btn x28 icon-link copy-link-btn"></a>`);
+  });
+
+  $('.copy-link-btn').on('click', function(_) {
+    setTimeout(() => 
+      navigator.clipboard.writeText(window.location.href), 100);
+  });
 });
