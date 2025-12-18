@@ -12,11 +12,15 @@
     {{#if anchor}}
       <h2 class="panel-title">
         <a name="/definitions/{{title}}"></a>{{title}}:
+        <a href="#definition-{{htmlId @key}}" class="i-btn x28 icon-link copy-link-btn"></a>
         {{type}}
         <!-- <span class="json-property-type">{{>json-schema/datatype}}</span> -->
       </h2>
     {{else}}
-      <h2 class="panel-title">{{title}}</h2>
+      <h2 class="panel-title">
+        {{title}}
+        <a href="#definition-{{htmlId @key}}" class="i-btn x28 icon-link copy-link-btn"></a>
+      </h2>
     {{/if}}
   {{/if}}
 
