@@ -3245,10 +3245,6 @@ definitions:
         format: int32
         example: 2
         description: Attachment source type. 1 = Google Drive, 2 = Quire storage.
-      url:
-        type: string
-        example: https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png
-        description: Direct URL to access this attachment.
       name:
         type: string
         example: file.txt
@@ -3258,6 +3254,10 @@ definitions:
         format: int32
         example: 20000
         description: Size of the attachment in bytes.
+      url:
+        type: string
+        example: https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png
+        description: Direct URL to access this attachment.
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -3272,6 +3272,10 @@ definitions:
     required:
       - task
     properties:
+      task:
+        type: string
+        example: 2MmYOpJH_ZLeehIjjytH1Rwr
+        description: OID of the task to include or exclude.
       exclude:
         type: boolean
         example: false
@@ -3280,10 +3284,6 @@ definitions:
         type: boolean
         example: false
         description: 'Whether the operation applies only to the specified task. Default: false — all descendant tasks are also included or excluded. Note: this does not change descendants that were explicitly included or excluded in prior operations.'
-      task:
-        type: string
-        example: 2MmYOpJH_ZLeehIjjytH1Rwr
-        description: OID of the task to include or exclude.
   Chat:
     type: object
     properties:
@@ -3291,14 +3291,6 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?chat=Highlight101
         description: URL of this chat on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -3307,6 +3299,18 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -3315,10 +3319,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -3336,6 +3336,11 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -3346,11 +3351,6 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       owner:
         position: 99
         description: Project this chat channel belongs to.
@@ -3367,14 +3367,14 @@ definitions:
   ChatOwner:
     type: object
     properties:
-      url:
-        type: string
-        example: https://quire.io/w/prj_id
-        description: URL of this owner on the Quire website.
       type:
         type: string
         example: Project
         description: Type of the owning object (e.g., Project).
+      url:
+        type: string
+        example: https://quire.io/w/prj_id
+        description: URL of this owner on the Quire website.
       id:
         type: string
         example: my_id
@@ -3403,6 +3403,11 @@ definitions:
         type: string
         example: iDsPd.QP_qM.hN.Trymukn8b
         description: Object identifier (OID), a UUID-like unique string.
+      description:
+        type: string
+        example: It is *cool*!
+        position: 1
+        description: Comment content (Markdown supported).
       descriptionText:
         type: string
         example: It is cool!
@@ -3413,17 +3418,16 @@ definitions:
         example: It is <i>cool</i>!
         position: 1
         description: Comment content rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: It is *cool*!
-        position: 1
-        description: Comment content (Markdown supported).
       attachments:
         type: array
         position: 8
         description: Attachments associated with this comment.
         items:
           $ref: '#/definitions/Attachment'
+      url:
+        type: string
+        position: 50
+        description: URL of this comment on the Quire website.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -3442,10 +3446,6 @@ definitions:
         position: 50
         description: User who last edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
-      url:
-        type: string
-        position: 50
-        description: URL of this comment on the Quire website.
       owner:
         position: 99
         description: Object this comment was added to.
@@ -3462,14 +3462,14 @@ definitions:
   CommentOwner:
     type: object
     properties:
-      url:
-        type: string
-        example: https://quire.io/w/my_id
-        description: URL of this owner on the Quire website.
       type:
         type: string
         example: Project
         description: Type of the owning object (e.g., Project).
+      url:
+        type: string
+        example: https://quire.io/w/my_id
+        description: URL of this owner on the Quire website.
       name:
         type: string
         example: Foo
@@ -3483,6 +3483,18 @@ definitions:
     required:
       - name
     properties:
+      name:
+        type: string
+        example: Highlight 101
+        description: Display name of the record (Markdown supported).
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -3498,18 +3510,6 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
-      name:
-        type: string
-        example: Highlight 101
-        description: Display name of the record (Markdown supported).
-      id:
-        type: string
-        example: Highlight101
-        description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3530,6 +3530,10 @@ definitions:
     required:
       - description
     properties:
+      description:
+        type: string
+        example: Adjust style
+        description: Content of the new comment (Markdown supported).
       pinned:
         type: boolean
         example: false
@@ -3538,15 +3542,23 @@ definitions:
         type: boolean
         example: true
         description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
-      description:
-        type: string
-        example: Adjust style
-        description: Content of the new comment (Markdown supported).
   CreateDocBody:
     type: object
     required:
       - name
     properties:
+      name:
+        type: string
+        example: Highlight 101
+        description: Display name of the record (Markdown supported).
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -3562,18 +3574,6 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
-      name:
-        type: string
-        example: Highlight 101
-        description: Display name of the record (Markdown supported).
-      id:
-        type: string
-        example: Highlight101
-        description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3594,24 +3594,20 @@ definitions:
     required:
       - message
     properties:
-      url:
-        type: string
-        example: https://superheros.com/sync
-        description: (Optional) URL associated with the message. When provided, the client may render the message as a hyperlink.
       message:
         type: string
         example: Unable to synchronize
         description: Notification message.
+      url:
+        type: string
+        example: https://superheros.com/sync
+        description: (Optional) URL associated with the message. When provided, the client may render the message as a hyperlink.
   CreateStatusBody:
     type: object
     required:
       - name
       - value
     properties:
-      color:
-        type: string
-        example: '35'
-        description: '(Optional) Status color index from Quire’s predefined palette. If omitted, a color will be generated automatically. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `35`).'
       name:
         type: string
         example: Doing
@@ -3621,6 +3617,10 @@ definitions:
         format: int32
         example: 50
         description: Non-negative integer indicating progress. Must be unique within its context (e.g., project). Values ≥ 100 are treated as completed.
+      color:
+        type: string
+        example: '35'
+        description: '(Optional) Status color index from Quire’s predefined palette. If omitted, a color will be generated automatically. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `35`).'
   CreateSublistBody:
     type: object
     required:
@@ -3631,6 +3631,18 @@ definitions:
         description: (Optional) List of task OIDs to include in this sublist. All descendants of the specified tasks will be included as well.
         items:
           type: string
+      name:
+        type: string
+        example: Highlight 101
+        description: Display name of the record (Markdown supported).
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -3646,18 +3658,6 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
-      name:
-        type: string
-        example: Highlight 101
-        description: Display name of the record (Markdown supported).
-      id:
-        type: string
-        example: Highlight101
-        description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3678,10 +3678,6 @@ definitions:
     required:
       - name
     properties:
-      color:
-        type: string
-        example: '35'
-        description: '(Optional) Tag color index from Quire’s predefined palette. If omitted, a color will be generated automatically. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `35`).'
       name:
         type: string
         example: Later
@@ -3690,17 +3686,69 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Whether this tag is global (available across projects). If omitted, the tag is not global.
+      color:
+        type: string
+        example: '35'
+        description: '(Optional) Tag color index from Quire’s predefined palette. If omitted, a color will be generated automatically. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `35`).'
   CreateTaskBody:
     type: object
     required:
       - name
     properties:
+      name:
+        type: string
+        example: Design new **logo**
+        description: The name of the task.
+      tasks:
+        type: array
+        description: (Optional) List of subtasks to create along with this task.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
+      description:
+        type: string
+        example: This is a *cool* task.
+        description: (Optional) A description of the task.
+      tags:
+        type: array
+        description: |-
+          (Optional) A list of tag OIDs or names to be added to the new task.
+          Tag names are case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) If true, marks this task as created by the app.
           Default: false (created by the authorizing user).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) Start date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) Due date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       assignees:
         type: array
         description: |-
@@ -3782,72 +3830,24 @@ definitions:
           - User/Task: specify the OID.
           - Duration: specify number of seconds.
           - Multi-value: specify a list.
-      tags:
-        type: array
-        description: |-
-          (Optional) A list of tag OIDs or names to be added to the new task.
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) Start date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) Due date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      tasks:
-        type: array
-        description: (Optional) List of subtasks to create along with this task.
-        items:
-          $ref: '#/definitions/CreateTaskBody'
-      description:
-        type: string
-        example: This is a *cool* task.
-        description: (Optional) A description of the task.
-      name:
-        type: string
-        example: Design new **logo**
-        description: The name of the task.
-      etc:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: (Optional) Estimated time to complete, in seconds. Must be non-negative.
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: '(Optional) Task status. Must be between 0 and 100. Default: 0.'
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: '(Optional) Task priority. Must be between -1 (lowest) and 2 (highest). Default: 0.'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: '(Optional) Task status. Must be between 0 and 100. Default: 0.'
+      etc:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: (Optional) Estimated time to complete, in seconds. Must be non-negative.
       sourceRef:
         type: object
         example: '{''text'': ''Source: [Gmail](https://gmail.com/link)''}'
@@ -3867,14 +3867,6 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?doc=Highlight101
         description: URL of this document on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -3883,6 +3875,18 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -3891,10 +3895,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -3912,6 +3912,11 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -3922,11 +3927,6 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       owner:
         position: 99
         description: Project this document belongs to.
@@ -3943,14 +3943,14 @@ definitions:
   DocOwner:
     type: object
     properties:
-      url:
-        type: string
-        example: https://quire.io/w/prj_id
-        description: URL of this owner on the Quire website.
       type:
         type: string
         example: Project
         description: Type of the owning object (e.g., Project).
+      url:
+        type: string
+        example: https://quire.io/w/prj_id
+        description: URL of this owner on the Quire website.
       id:
         type: string
         example: my_id
@@ -3975,23 +3975,6 @@ definitions:
   Organization:
     type: object
     properties:
-      nameText:
-        type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
-      email:
-        type: string
-        example: info@company.com
-        description: Organization email address.
-        allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
       name:
         type: string
         example: My Organization
@@ -4000,11 +3983,32 @@ definitions:
         type: string
         example: my_organization
         description: Organization ID.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
+      nameHtml:
+        type: string
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
+      email:
+        type: string
+        example: info@company.com
+        description: Organization email address.
+        allowEmptyValue: true
       website:
         type: string
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4013,10 +4017,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -4049,23 +4049,6 @@ definitions:
   OrganizationWithPlan:
     type: object
     properties:
-      nameText:
-        type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
-      email:
-        type: string
-        example: info@company.com
-        description: Organization email address.
-        allowEmptyValue: true
-      url:
-        type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
       name:
         type: string
         example: My Organization
@@ -4074,11 +4057,32 @@ definitions:
         type: string
         example: my_organization
         description: Organization ID.
+      url:
+        type: string
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
+      nameHtml:
+        type: string
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
+      email:
+        type: string
+        example: info@company.com
+        description: Organization email address.
+        allowEmptyValue: true
       website:
         type: string
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4087,10 +4091,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -4160,26 +4160,6 @@ definitions:
   Project:
     type: object
     properties:
-      organization:
-        description: Organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Project
-        description: Project name rendered as an HTML fragment converted from Markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
       activeCount:
         type: integer
         format: int32
@@ -4198,6 +4178,30 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
+      organization:
+        description: Organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
+      nameHtml:
+        type: string
+        example: My Project
+        description: Project name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root (top-level) tasks in this project.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4206,10 +4210,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -4223,16 +4223,16 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       attachments:
         type: array
         position: 60
@@ -4257,10 +4257,6 @@ definitions:
   ProjectJsonMap:
     type: object
     properties:
-      oid:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: Object identifier (OID), a UUID-like unique string.
       name:
         type: string
         example: My Project
@@ -4269,29 +4265,13 @@ definitions:
         type: string
         example: My_Project
         description: Project ID.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: Object identifier (OID), a UUID-like unique string.
   ProjectWithPlan:
     type: object
     properties:
-      organization:
-        description: Organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Project
-        description: Project name rendered as an HTML fragment converted from Markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
       activeCount:
         type: integer
         format: int32
@@ -4310,6 +4290,30 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
+      organization:
+        description: Organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
+      nameHtml:
+        type: string
+        example: My Project
+        description: Project name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root (top-level) tasks in this project.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4318,10 +4322,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -4339,16 +4339,16 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       attachments:
         type: array
         position: 60
@@ -4373,15 +4373,29 @@ definitions:
   Recurrence:
     type: object
     properties:
-      freq:
-        type: string
-        example: weekly
-        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
-      interval:
+      sincelatest:
+        type: boolean
+        example: true
+        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
+      dupsubtasks:
+        type: boolean
+        example: false
+        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
+      bymonth:
         type: integer
         format: int32
-        example: 1
-        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
+        example: 10
+        description: Month number (1–12) used with `yearly` frequency.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
+      byweekno:
+        type: integer
+        format: int32
+        example: 2
+        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
       byweekday:
         type: array
         example: '[1,3]'
@@ -4389,29 +4403,15 @@ definitions:
         items:
           type: integer
           format: int32
-      byweekno:
+      interval:
         type: integer
         format: int32
-        example: 2
-        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
-      bymonth:
-        type: integer
-        format: int32
-        example: 10
-        description: Month number (1–12) used with `yearly` frequency.
-      dupsubtasks:
-        type: boolean
-        example: false
-        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
-      sincelatest:
-        type: boolean
-        example: true
-        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
+        example: 1
+        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
+      freq:
+        type: string
+        example: weekly
+        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
       until:
         type: string
         example: '2020-12-22'
@@ -4424,15 +4424,29 @@ definitions:
         type: string
         example: j47xvxul26
         description: Identifier for the recurrence series this task belongs to. Tasks that share the same seriesId are part of the same recurring series.
-      freq:
-        type: string
-        example: weekly
-        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
-      interval:
+      sincelatest:
+        type: boolean
+        example: true
+        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
+      dupsubtasks:
+        type: boolean
+        example: false
+        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
+      bymonth:
         type: integer
         format: int32
-        example: 1
-        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
+        example: 10
+        description: Month number (1–12) used with `yearly` frequency.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
+      byweekno:
+        type: integer
+        format: int32
+        example: 2
+        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
       byweekday:
         type: array
         example: '[1,3]'
@@ -4440,29 +4454,15 @@ definitions:
         items:
           type: integer
           format: int32
-      byweekno:
+      interval:
         type: integer
         format: int32
-        example: 2
-        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
-      bymonth:
-        type: integer
-        format: int32
-        example: 10
-        description: Month number (1–12) used with `yearly` frequency.
-      dupsubtasks:
-        type: boolean
-        example: false
-        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
-      sincelatest:
-        type: boolean
-        example: true
-        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
+        example: 1
+        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
+      freq:
+        type: string
+        example: weekly
+        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
       until:
         type: string
         example: '2020-12-22'
@@ -4471,25 +4471,21 @@ definitions:
   Referrer:
     type: object
     properties:
-      user:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the user who created this reference.
-      when:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        description: Timestamp (UTC, ISO 8601) when this reference was created.
       task:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that references another task (the referrer task).
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: Timestamp (UTC, ISO 8601) when this reference was created.
+      user:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the user who created this reference.
   SimpleAttachment:
     type: object
     properties:
-      url:
-        type: string
-        example: https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png
-        description: Direct URL to access this attachment.
       name:
         type: string
         example: file.txt
@@ -4499,6 +4495,10 @@ definitions:
         format: int32
         example: 20000
         description: Size of the attachment in bytes.
+      url:
+        type: string
+        example: https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png
+        description: Direct URL to access this attachment.
   SimpleEntityWithId:
     type: object
     properties:
@@ -4513,14 +4513,14 @@ definitions:
   SimpleIdentity:
     type: object
     properties:
-      url:
-        type: string
-        example: https://quire.io/u/my_id
-        description: URL of this record on the Quire website.
       id:
         type: string
         example: my_id
         description: Identifier for this record.
+      url:
+        type: string
+        example: https://quire.io/u/my_id
+        description: URL of this record on the Quire website.
       iconColor:
         type: string
         example: '37'
@@ -4556,10 +4556,6 @@ definitions:
   Status:
     type: object
     properties:
-      color:
-        type: string
-        example: '35'
-        description: 'Color index from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `35`).'
       name:
         type: string
         example: Doing
@@ -4569,15 +4565,13 @@ definitions:
         format: int32
         example: 50
         description: Non-negative integer indicating progress. Must be unique within its context (e.g., project). Values ≥ 100 are treated as completed.
+      color:
+        type: string
+        example: '35'
+        description: 'Color index from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `35`).'
   StorageList:
     type: object
     properties:
-      myList:
-        type: array
-        example: '["alpha", "beta", "gamma"]'
-        description: List stored under the key `myList`.
-        items:
-          type: string
       currentProject:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4585,6 +4579,12 @@ definitions:
       latest:
         description: Object stored under the key `latest` (key–value map of properties).
         $ref: '#/definitions/StorageMap'
+      myList:
+        type: array
+        example: '["alpha", "beta", "gamma"]'
+        description: List stored under the key `myList`.
+        items:
+          type: string
   StorageMap:
     type: object
     properties:
@@ -4599,14 +4599,6 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?sublist=Highlight101
         description: URL of this sublist on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -4615,6 +4607,18 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4623,10 +4627,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -4644,6 +4644,11 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -4654,11 +4659,6 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       owner:
         position: 99
         description: Project this sublist belongs to.
@@ -4675,14 +4675,14 @@ definitions:
   SublistOwner:
     type: object
     properties:
-      url:
-        type: string
-        example: https://quire.io/w/prj_id
-        description: URL of this owner on the Quire website.
       type:
         type: string
         example: Project
         description: Type of the owning object (e.g., Project).
+      url:
+        type: string
+        example: https://quire.io/w/prj_id
+        description: URL of this owner on the Quire website.
       id:
         type: string
         example: my_id
@@ -4707,6 +4707,10 @@ definitions:
   Subscription:
     type: object
     properties:
+      due:
+        type: string
+        example: '2038-02-22T02:06:58Z'
+        description: Subscription due/renewal timestamp in UTC (ISO 8601).
       plan:
         type: string
         example: Professional
@@ -4715,10 +4719,6 @@ definitions:
         type: boolean
         example: false
         description: Whether the subscription is expired. Available only when a due date is present.
-      due:
-        type: string
-        example: '2038-02-22T02:06:58Z'
-        description: Subscription due/renewal timestamp in UTC (ISO 8601).
   Tag:
     type: object
     properties:
@@ -4726,14 +4726,14 @@ definitions:
         type: boolean
         example: true
         description: Whether this tag is global (available across projects). May be omitted in responses when false.
-      color:
-        type: string
-        example: '35'
-        description: Color index from Quire’s predefined color palette. Two-digit code where the first digit is 0–5 and the second digit is 0–7 (e.g., `35`). The palette is available in Quire’s color picker.
       name:
         type: string
         example: Later
         description: Display name of the tag.
+      color:
+        type: string
+        example: '35'
+        description: Color index from Quire’s predefined color palette. Two-digit code where the first digit is 0–5 and the second digit is 0–7 (e.g., `35`). The palette is available in Quire’s color picker.
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4754,17 +4754,17 @@ definitions:
   Task:
     type: object
     properties:
+      tags:
+        type: array
+        description: Tags applied to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
       successors:
         type: array
         example: '[''#135'', ''#26'']'
         description: Successor task identifiers.
         items:
           type: string
-      tags:
-        type: array
-        description: Tags applied to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4774,21 +4774,26 @@ definitions:
         format: int32
         example: 12
         position: 1
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -4799,11 +4804,6 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       etc:
         type: integer
         format: int32
@@ -4820,6 +4820,18 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: Task status, from 0 to 100. `100` indicates the task is completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -4836,18 +4848,10 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: Task status, from 0 to 100. `100` indicates the task is completed.
-      priority:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -4858,10 +4862,6 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -4921,6 +4921,11 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: URL of this task on the Quire website.
       peekaboo:
         type: boolean
         example: true
@@ -4931,11 +4936,6 @@ definitions:
         example: true
         position: 50
         description: Whether this task is a section.
-      url:
-        type: string
-        example: https://quire.io/w/my_project/123
-        position: 50
-        description: URL of this task on the Quire website.
       followers:
         type: array
         position: 60
@@ -4973,17 +4973,17 @@ definitions:
   TaskWithProject:
     type: object
     properties:
+      tags:
+        type: array
+        description: Tags applied to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
       successors:
         type: array
         example: '[''#135'', ''#26'']'
         description: Successor task identifiers.
         items:
           type: string
-      tags:
-        type: array
-        description: Tags applied to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4993,21 +4993,26 @@ definitions:
         format: int32
         example: 12
         position: 1
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -5018,11 +5023,6 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       etc:
         type: integer
         format: int32
@@ -5039,6 +5039,18 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: Task status, from 0 to 100. `100` indicates the task is completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -5055,18 +5067,10 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: Task status, from 0 to 100. `100` indicates the task is completed.
-      priority:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -5077,10 +5081,6 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -5144,6 +5144,11 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
+      url:
+        type: string
+        example: https://quire.io/w/my_project/123
+        position: 50
+        description: URL of this task on the Quire website.
       peekaboo:
         type: boolean
         example: true
@@ -5154,11 +5159,6 @@ definitions:
         example: true
         position: 50
         description: Whether this task is a section.
-      url:
-        type: string
-        example: https://quire.io/w/my_project/123
-        position: 50
-        description: URL of this task on the Quire website.
       followers:
         type: array
         position: 60
@@ -5223,6 +5223,18 @@ definitions:
   UpdateChatBody:
     type: object
     properties:
+      name:
+        type: string
+        example: Highlight 101
+        description: (Optional) New display name for this record.
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) New ID for this record.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -5250,32 +5262,32 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
-      name:
-        type: string
-        example: Highlight 101
-        description: (Optional) New display name for this record.
-      id:
-        type: string
-        example: Highlight101
-        description: (Optional) New ID for this record.
   UpdateCommentBody:
     type: object
     properties:
-      pinned:
-        type: boolean
-        example: false
-        description: (Optional) Whether the comment is pinned.
       description:
         type: string
         example: Adjust style
         description: (Optional) New comment content (Markdown supported).
+      pinned:
+        type: boolean
+        example: false
+        description: (Optional) Whether the comment is pinned.
   UpdateDocBody:
     type: object
     properties:
+      name:
+        type: string
+        example: Highlight 101
+        description: (Optional) New display name for this record.
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) New ID for this record.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -5303,18 +5315,6 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
-      name:
-        type: string
-        example: Highlight 101
-        description: (Optional) New display name for this record.
-      id:
-        type: string
-        example: Highlight101
-        description: (Optional) New ID for this record.
   UpdateOrganizationBody:
     type: object
     properties:
@@ -5389,10 +5389,6 @@ definitions:
   UpdateStatusBody:
     type: object
     properties:
-      color:
-        type: string
-        example: '35'
-        description: '(Optional) Status color index from Quire’s predefined palette (two digits: first 0–5, second 0–7; e.g., `35`).'
       name:
         type: string
         example: Later
@@ -5402,6 +5398,10 @@ definitions:
         format: int32
         example: 50
         description: (Optional) New numeric status value. Non-negative integer indicating progress. Must be unique within the context (e.g., project). Values ≥ 100 are treated as completed.
+      color:
+        type: string
+        example: '35'
+        description: '(Optional) Status color index from Quire’s predefined palette (two digits: first 0–5, second 0–7; e.g., `35`).'
   UpdateSublistBody:
     type: object
     properties:
@@ -5410,6 +5410,18 @@ definitions:
         description: (Optional) List of changes that add or remove tasks from this sublist. See `Change` for the operation schema.
         items:
           $ref: '#/definitions/Change'
+      name:
+        type: string
+        example: Highlight 101
+        description: (Optional) New display name for this record.
+      id:
+        type: string
+        example: Highlight101
+        description: (Optional) New ID for this record.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -5437,29 +5449,9 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
-      name:
-        type: string
-        example: Highlight 101
-        description: (Optional) New display name for this record.
-      id:
-        type: string
-        example: Highlight101
-        description: (Optional) New ID for this record.
   UpdateTagBody:
     type: object
     properties:
-      project:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: (Optional) Project OID that this tag is limited to. Used only when `global` is explicitly set to false; ignored otherwise.
-      color:
-        type: string
-        example: '35'
-        description: (Optional) Tag color (palette index or hex, depending on your client).
       name:
         type: string
         example: Later
@@ -5468,15 +5460,67 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Whether the tag is global (available across projects). If set to false, you must also provide `project`.
+      color:
+        type: string
+        example: '35'
+        description: (Optional) Tag color (palette index or hex, depending on your client).
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: (Optional) Project OID that this tag is limited to. Used only when `global` is explicitly set to false; ignored otherwise.
   UpdateTaskBody:
     type: object
     properties:
+      name:
+        type: string
+        example: New idea
+        description: (Optional) New task name.
+      description:
+        type: string
+        example: This is a **cool** task.
+        description: (Optional) New task description.
+      tags:
+        type: array
+        description: |-
+          (Optional) Tags to replace the current tags on this task (OID or name).
+          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
+          Tag names are case-insensitive.
+        items:
+          type: string
+        example:
+          - ITaVbkhh3iVcEcV3vuSLeE2k
       asUser:
         type: boolean
         example: true
         description: |-
           (Optional) If true, marks this update as performed by the app.
           Default: false (updated by the authorizing user).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) Start date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) Due date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       assignees:
         type: array
         description: |-
@@ -5638,50 +5682,18 @@ definitions:
           Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
         items:
           type: string
-      tags:
-        type: array
-        description: |-
-          (Optional) Tags to replace the current tags on this task (OID or name).
-          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) Start date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) Due date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      description:
-        type: string
-        example: This is a **cool** task.
-        description: (Optional) New task description.
-      name:
-        type: string
-        example: New idea
-        description: (Optional) New task name.
+      priority:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: (Optional) New priority. Must be between -1 (lowest) and 2 (highest).
+      status:
+        type: integer
+        format: int32
+        example: 100
+        position: 4
+        description: (Optional) New status, between 0 and 100. Specify 100 to complete the task.
       etc:
         type: integer
         format: int32
@@ -5690,18 +5702,6 @@ definitions:
         description: |-
           (Optional) Estimated time to complete, in seconds. Must be non-negative or `null`.
           Specify `null` to clear the value.
-      status:
-        type: integer
-        format: int32
-        example: 100
-        position: 4
-        description: (Optional) New status, between 0 and 100. Specify 100 to complete the task.
-      priority:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: (Optional) New priority. Must be between -1 (lowest) and 2 (highest).
       sourceRef:
         type: object
         example: '{''text'': ''Source: [Gmail](https://gmail.com/link)''}'
@@ -5715,18 +5715,6 @@ definitions:
   User:
     type: object
     properties:
-      nameText:
-        type: string
-        example: John
-        description: User name with Markdown removed.
-      nameHtml:
-        type: string
-        example: John
-        description: User name rendered as an HTML fragment converted from Markdown.
-      url:
-        type: string
-        example: https://quire.io/u/john
-        description: URL of this user on the Quire website.
       name:
         type: string
         example: John
@@ -5745,16 +5733,32 @@ definitions:
         type: string
         example: en_GB
         description: The locale of the current user, or null if the user is not the current one.
-      website:
+      url:
         type: string
-        example: https://coolwebsites.com
-        description: Website URL.
-        allowEmptyValue: true
+        example: https://quire.io/u/john
+        description: URL of this user on the Quire website.
+      nameHtml:
+        type: string
+        example: John
+        description: User name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: John
+        description: User name with Markdown removed.
       email:
         type: string
         example: john@gmail.com
         description: Email address.
         allowEmptyValue: true
+      website:
+        type: string
+        example: https://coolwebsites.com
+        description: Website URL.
+        allowEmptyValue: true
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -5763,10 +5767,6 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
