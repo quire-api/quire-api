@@ -13,7 +13,7 @@
         <swagger-maven-plugin.version>3.1.8</swagger-maven-plugin.version>
         <swagger-core-version>1.5.21</swagger-core-version>
 
-        <jackson-version>2.13.0</jackson-version>
+        <jackson-version>2.15.0</jackson-version>
         <jackson-databind-version>2.12.7.1</jackson-databind-version>
         <jackson-threetenbp-version>2.6.4</jackson-threetenbp-version>
         <client-lib-version>0.0.1</client-lib-version>
