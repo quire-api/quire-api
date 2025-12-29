@@ -400,6 +400,7 @@ The size of each request can't be larger than 1MB. Requests that hit this limit 
 | 200  | Success                | Request successful
 | 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.
 | 401  | Unauthorized           | Invalid or expired token.
+| 402  | Payment required       | The organization’s subscription does not permit use of this app.
 | 403  | Forbidden              | Not authorized to access the resource.
 | 404  | Not Found              | The specified resource could not be found.
 | 405  | Method not allowed     | Method not allowed or supported.
