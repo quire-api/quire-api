@@ -1426,6 +1426,8 @@
 }
 #spectacle #docs > article > *,
 #spectacle #docs > article > .introduction h1,
+#spectacle #docs > article > .introduction h2,
+#spectacle #docs > article > .introduction h3,
 #spectacle .definition .panel-title > a {
   scroll-margin-top: 70px;
 }
