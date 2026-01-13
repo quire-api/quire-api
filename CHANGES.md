@@ -1,6 +1,10 @@
 # Changelog
 
-## Oct 30, 2005
+## Jan 13, 2026
+
+- **Task API:** added support for **milestones**.
+
+## Oct 30, 2025
 - **User API:** Responses from the `/api/user/me` endpoint now return the current user's locale and timeZone information.
 
 ## Oct 3, 2025

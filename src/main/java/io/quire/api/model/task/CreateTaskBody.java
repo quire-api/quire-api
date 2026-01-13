@@ -112,6 +112,12 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         example = "true",
+        value = "(Optional) Whether this task is a milestone. Default: false."
+    )
+    public boolean getMilestone() { return false; }
+
+    @ApiModelProperty(
+        example = "true",
         value = "(Optional) If true, marks this task as created by the app.\n"
               + "Default: false (created by the authorizing user)."
     )

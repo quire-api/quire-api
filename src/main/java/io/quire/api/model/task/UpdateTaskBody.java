@@ -138,6 +138,12 @@ public class UpdateTaskBody {
     public boolean getSection() { return false; }
 
     @ApiModelProperty(
+        example = "true",
+        value = "(Optional) Whether this task is a milestone. Default: false."
+    )
+    public boolean getMilestone() { return false; }
+
+    @ApiModelProperty(
         value = "(Optional) Followers to replace the current followers (OID, ID, or email).\n\n"
               + "See `addFollowers` for details."
     )

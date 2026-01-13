@@ -118,7 +118,13 @@ public class SimpleTask extends StampedEntity {
         position = 50
     )
     public boolean getSection() { return false; }
-    // Same note as above if you intend nullability.
+
+    @ApiModelProperty(
+        value = "Whether this task is a milestone.",
+        example = "true",
+        position = 50
+    )
+    public boolean getMilestone() { return false; }
 
     @ApiModelProperty(
         value = "URL of this task on the Quire website.",
