@@ -57,10 +57,10 @@ public class Task extends SimpleTask {
 	public List<Referrer> getReferrers() { return null; }
 
 	@ApiModelProperty(value = "The timestamp of the most recent status change for this task.",
-		example = "2018-12-22T02:06:58.158Z", position = 50)
+		example = "2018-12-22T02:06:58.158Z", position = 70)
 	public String getToggledAt() { return null; }
 	@ApiModelProperty(value = "The user who last changed the status of this task.",
-		position = 50)
+		position = 71)
 	public SimpleIdentity getToggledBy() { return null; }
 
 	@ApiModelProperty(value = "The list of users who are following this task.", position = 60)
@@ -70,12 +70,12 @@ public class Task extends SimpleTask {
 	@ApiModelProperty(value = "The list of users who have marked this task as a favorite.", position = 60)
 	public List<SimpleIdentity> getFavorites() { return null; }
 
-	@ApiModelProperty(value = "Represents the timestamp of the most recent edit to this record.", example = "2018-12-22T02:06:58.158Z", position = 50)
+	@ApiModelProperty(value = "Represents the timestamp of the most recent edit to this record.", example = "2018-12-22T02:06:58.158Z", position = 72)
 	public String getEditedAt() { return null; }
 
 	@ApiModelProperty(value = "Indicates the timestamp of the most recent comment posted on this record.\n\n"
 		+ "If `null`, the record has never had a comment.\n\n"
 		+ "Since comments can be removed, this value may not always match the current set of comments.",
-		example = "2023-12-22T09:06:28.253Z", position = 50)
+		example = "2023-12-22T09:06:28.253Z", position = 73)
 	public String getCommentedAt() { return null; }
 }

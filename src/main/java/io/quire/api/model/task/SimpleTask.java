@@ -115,21 +115,21 @@ public class SimpleTask extends StampedEntity {
     @ApiModelProperty(
         value = "Whether this task is a section.",
         example = "true",
-        position = 50
+        position = 51
     )
     public boolean getSection() { return false; }
 
     @ApiModelProperty(
         value = "Whether this task is a milestone.",
         example = "true",
-        position = 50
+        position = 52
     )
     public boolean getMilestone() { return false; }
 
     @ApiModelProperty(
         value = "URL of this task on the Quire website.",
         example = "https://quire.io/w/my_project/123",
-        position = 50
+        position = 53
     )
     public String getUrl() { return null; }
 
