@@ -18,6 +18,8 @@ You can find the <a href="https://github.com/quire-api/quire-api/blob/master/CHA
 
 # Authentication
 
+> For full setup instructions, see our [Complete Setup Guide](https://quire.io/blog/p/Create-Your-Quire-App-with-Quire-API.html) on the Quire blog.
+
 ## OAuth v2.0
 
 Quire uses <a href="https://tools.ietf.org/html/rfc6749">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.
@@ -179,6 +181,8 @@ When one event on Quire is triggered, the system will send a payload to the webh
 > A webhook is used by Quire to call an app, while Quire API is used by an app to call Quire.
 > To receive these events, you have to specify a valid URL for Webhooks when configuring your app.
 
+For a complete guide, see our [blog post](https://quire.io/blog/p/webhook.html).
+
 ## System Events
 
 A system event is used to notify your app about system or app's activities.
@@ -255,6 +259,8 @@ A notification is the information about a update (aka., an activity). Here is an
     - Please refer to [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
 
 ## Registration for Notifications
+
+> For instructions on updating a project, see [Update a project by OID](#operation--project--oid--put).
 
 If the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:
 
@@ -365,9 +371,7 @@ For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object 
 
 When receiving the notification, your Web Hook shall return a status code between 200 and 299 to indicate success.
 
-If 403 or 404 is returned, the registration will be removed, so called *unfollow*. That is, you won't receive further notifications for the same task or project your app *follows*.
-
-If a status code other than above is returned, we will retry 10 minutes later, then 1 hour later, 1 day later and 3 days later.
+If a status code other than above is returned, we will retry 15 minutes later, then 1 hour later and 1 day later.
 
 ## Activities Types
 
