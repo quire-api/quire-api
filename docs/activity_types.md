@@ -68,6 +68,12 @@ For example, suppose there are two tasks, `A` and `B`, where `B` is a subtask of
 ]
 ```
 
+**Available fields**
+
+- `id`, `name`, `description`, `type`, `priority`, `status`, `start`, `due`, `recurrence`, `toggledAt`, `toggledBy`, `archivedAt`, `editedAt`, `createdAt`,
+    `assignees`, `assignors`, `tags`, `successors`, and custom fields.
+  - If the field is not present, it means the value is not set.
+
 ---
 
 ## Project-related activities
