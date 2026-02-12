@@ -22,7 +22,7 @@ You can find the <a href="https://github.com/quire-api/quire-api/blob/master/CHA
 
 ## OAuth v2.0
 
-Quire uses <a href="https://tools.ietf.org/html/rfc6749">OAuth v2.0</a> to authenticate your app to access the Quire REST API on behalf of users without getting their password.
+Quire uses <a href="https://tools.ietf.org/html/rfc6749">OAuth v2.0</a> to authenticate your app and access the Quire REST API on a user’s behalf—without requiring the user’s password.
 
 Authenticating via OAuth2 requires the following steps:
 
@@ -250,13 +250,12 @@ A notification is the information about a update (aka., an activity). Here is an
 }
 ```
 
-* There is an optional field called `value` in the map of the `data` field. It contains the detailed information in a map instance. For example, it contains the assignee's ID, name and URL if it is an assignment.
+* The `data` map may also include an optional `value` field, which contains detailed information as a map. For example, for an assignment notification, value includes the assignee’s ID, name, and URL.
 
-* Also, if the notification is about *start* or *due*, there will be another field called `due` in the map of the `data` field. It is the date time formatted in user's locale and time zone.
+* Also, if the notification is about a *start* or *due* change, the `data` map will include an additional `due` field. This value is a date/time formatted in the user’s locale and time zone.
 
-* There is an addition field called `tasks` for activities that can affect multiple tasks. The field is a collection of OIDs of tasks that were changed.
-    - For example, completing a task will complete its subtasks too. And, you can find all of them from the `tasks` field.
-    - Please refer to [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
+* There is an additional field, `taskSummaries`, for activities that can affect multiple tasks (for example, removing a task that has subtasks). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
+    - Please refer to [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries).
 
 ## Registration for Notifications
 

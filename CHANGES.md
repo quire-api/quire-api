@@ -1,5 +1,9 @@
 # Changelog
 
+## Feb 12, 2026
+
+* An addition `taskSummaries` field is field is included in the data sent to a web hook, when applicable. See [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries) for more informaion.
+
 ## Jan 13, 2026
 
 - **Task API:** added support for **milestones**.

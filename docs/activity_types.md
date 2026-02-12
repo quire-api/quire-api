@@ -2,9 +2,9 @@
 
 ## Task-related activities
 
-| Type | Description | `what` | `tasks` |
+| Type | Description | `what` | [`taskSummaries`](#tasksummaries) |
 |--:|--|--|--|
-| 0 | Adds a task. | Task | |
+| 0 | Adds a task. | Task | All tasks being added. |
 | 1 | Removes a task. | Task | All tasks being removed. |
 | 3 | Edits a task’s details. | Task | |
 | 5 | Completes a task. | Task | All tasks being completed. |
@@ -31,9 +31,9 @@
 | 28 | Adds a tag to a task. | Task | |
 | 29 | Removes a tag from a task. | Task | |
 | 30 | Transfers a task to another project. | Task | |
-| 31 | Duplicates a task. | Task | |
+| 31 | Duplicates a task. | Task | All tasks being added. |
 | 32 | Mentions a member in a comment or description. | Task | |
-| 33 | Duplicates a recurring task automatically upon completion. | Task | |
+| 33 | Duplicates a recurring task automatically upon completion. | Task | All tasks being added. |
 | 34 | Edits a time log. | Task | |
 | 35 | Sets the priority. | Task | |
 | 36 | Changes the task type. | Task | |
@@ -43,8 +43,30 @@
 
 **Notes**
 
-- For types **5**, **6**, and **11**, two extra fields are included:  
+- For types `5`, `6`, and `11`, two extra fields are included:  
   `status` (new value) and `previousStatus` (prior value).
+
+### taskSummaries
+
+An addition field for for activities that can affect multiple tasks -- for example, removing a task that has subtasks (`1`). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
+
+For example, suppose there are two tasks, `A` and `B`, where `B` is a subtask of `A`. When `A` is removed, the hook will receive the following content in `taskSummaries`.
+
+```
+[
+  {
+    "id": 1,
+    "name": "A",
+    "tasks": [
+      {
+        "id": 2,
+        "name": "B",
+        "due": "2026-05-25"
+      }
+    ]
+  }
+]
+```
 
 ---
 
