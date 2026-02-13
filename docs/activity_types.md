@@ -81,7 +81,7 @@ The target project will receive a duplicate-task event (`31`). You can find the 
 
 **Case 2: Transferring *without* making a copy**
 
-The source project will receive a remove-task event (1), and the target project will receive an add-task event (0). You can find the content of all transferred tasks  —including all subtasks—  in the [`taskSummaries`](#tasksummaries) field.
+The source project will receive a remove-task event (`1`), and the target project will receive an add-task event (`0`). You can find the content of all transferred tasks  —including all subtasks—  in the [`taskSummaries`](#tasksummaries) field.
 
 ---
 

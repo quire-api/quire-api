@@ -230,15 +230,29 @@ A notification is the information about a update (aka., an activity). Here is an
   "type": "notification",
   "token": "hook-token-defined-by-you",
   "secret": "secret-defined-by-you",
-  "project": "project-where-event-occurred",
-  "organization": "organization-where-event-ccurred",
+  "projectSummary": {
+    "oid": "project-oid-where-event-occurred",
+    "id": "project-id"
+  },
+  "organizationSummary": {
+    "oid": "organization-where-event-ccurred",
+    "id": "organization-id"
+  },
   "data": {
     "type": 0, //activity's type
     "when": "2019-09-30T08:20:12.000Z",
     "what": {
       "oid": "YxjapXXRCOYxoaiCT4tT3OQm", //OID of a task, project, or organization depending on type
       "id": 101,
-      "name": "Brand new start"
+      "name": "Brand new start",
+      "parent": {
+        "oid": "parent-oid",
+        "id": "parent-id",
+        "parent": {
+          "oid": "grand-parent-oid",
+          "id": "grand-parent-id",
+        }
+      }
     },
     "user": {
       "oid": "1AbDEFed2A5031BEDDweqmde", //OID of the user
@@ -252,9 +266,13 @@ A notification is the information about a update (aka., an activity). Here is an
 }
 ```
 
-* The `data` map may also include an optional `value` field, which contains detailed information as a map. For example, for an assignment notification, value includes the assignee’s ID, name, and URL.
+* The `data` map may also include an optional `value` field, which provides detailed information as a map. For example, for an assignment notification, `value` includes the assignee’s ID, name, and URL.
 
-* Also, if the notification is about a *start* or *due* change, the `data` map will include an additional `due` field. This value is a date/time formatted in the user’s locale and time zone.
+* If the notification is about a *start* or *due* change, the `data` map will include an additional `due` field. This value is a date/time formatted in the user’s locale and time zone.
+
+* If the event notifies a task update and the task has a parent, the parent information is included in the `parent` field. The `parent` field is a `map` containing the task’s oid and id. If the task’s parent also has a parent, the map includes a nested `parent` field as well.
+
+* The `projectSummary` and `organizationSummary` fields provide information about the project and organization where the event occurred.
 
 * There is an additional field, `taskSummaries`, for activities that can affect multiple tasks (for example, removing a task that has subtasks). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
     - Please refer to [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries).

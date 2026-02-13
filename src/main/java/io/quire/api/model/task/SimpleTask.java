@@ -8,6 +8,7 @@ import java.util.*;
 public class SimpleTask extends StampedEntity {
 
     @ApiModelProperty(
+        value = "Task id.",
         example = "12",
         position = 1
     )

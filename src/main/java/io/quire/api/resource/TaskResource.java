@@ -153,7 +153,7 @@ public class TaskResource {
     @ApiOperation(
         value = "Get an existing task by its OID.",
         notes = "Returns the full task record.",
-        response = Task.class
+        response = TaskWithParentInfo.class
     )
     public Response getTask(
         @ApiParam(value = "Task OID.", required = true)
@@ -165,7 +165,7 @@ public class TaskResource {
     @ApiOperation(
         value = "Get an existing task by its ID.",
         notes = "Returns the full task record.",
-        response = Task.class
+        response = TaskWithParentInfo.class
     )
     public Response getTaskById(
         @ApiParam(
@@ -299,7 +299,7 @@ public class TaskResource {
     @ApiOperation(
         value = "Search tasks in a project by project OID.",
         notes = "Returns tasks that match the specified criteria in the project.",
-        response = Task.class,
+        response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
     public Response searchTasksByOid(
@@ -381,7 +381,7 @@ public class TaskResource {
     @ApiOperation(
         value = "Search tasks in a project by project ID.",
         notes = "Returns tasks that match the specified criteria in the project.",
-        response = Task.class,
+        response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
     public Response searchTasksById(
@@ -460,7 +460,7 @@ public class TaskResource {
         notes = "Returns tasks that match the specified criteria in the given organization. "
               + "Tasks in archived projects are excluded.\n\n"
               + "> Available for Professional plans and above",
-        response = TaskWithProject.class,
+        response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     public Response searchTasksByOrgOid(
@@ -529,7 +529,7 @@ public class TaskResource {
         notes = "Returns tasks that match the specified criteria in the given organization. "
               + "Tasks in archived projects are excluded.\n\n"
               + "> Available for Professional plans and above",
-        response = TaskWithProject.class,
+        response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     public Response searchTasksByOrgId(
@@ -598,7 +598,7 @@ public class TaskResource {
         notes = "Returns tasks that match the specified criteria in the given folder. "
               + "Tasks in archived projects are excluded.\n\n"
               + "> Available for Professional plans and above",
-        response = TaskWithProject.class,
+        response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     public Response searchTasksByFolderOid(
@@ -667,7 +667,7 @@ public class TaskResource {
         notes = "Returns tasks that match the specified criteria in the given folder. "
               + "Tasks in archived projects are excluded.\n\n"
               + "> Available for Professional plans and above",
-        response = TaskWithProject.class,
+        response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     public Response searchTasksByFolderId(
