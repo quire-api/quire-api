@@ -30,7 +30,7 @@
 | 27 | Removes a comment from a task. | Task | |
 | 28 | Adds a tag to a task. | Task | |
 | 29 | Removes a tag from a task. | Task | |
-| 30 | Transfers a task to another project. | Task | |
+| [30](#transfer-task) | Transfers a task to another project. | Task | |
 | 31 | Duplicates a task. | Task | All tasks being added. |
 | 32 | Mentions a member in a comment or description. | Task | |
 | 33 | Duplicates a recurring task automatically upon completion. | Task | All tasks being added. |
@@ -68,11 +68,20 @@ For example, suppose there are two tasks, `A` and `B`, where `B` is a subtask of
 ]
 ```
 
-**Available fields**
+### Transfer Task
 
-- `id`, `name`, `description`, `type`, `priority`, `status`, `start`, `due`, `recurrence`, `toggledAt`, `toggledBy`, `archivedAt`, `editedAt`, `createdAt`,
-    `assignees`, `assignors`, `tags`, `successors`, and custom fields.
-  - If the field is not present, it means the value is not set.
+When tasks are transferred, additional activities are sent.
+
+**Case 1: Transferring a copy**
+
+The target project will receive a duplicate-task event (`31`). You can find the content of all copied tasks —including all subtasks— in the [`taskSummaries`](#tasksummaries) field.
+
+> Note: In this case, you won’t receive the transfer-task event (`30`).
+> Quire treats this as duplication rather than a transfer.
+
+**Case 2: Transferring *without* making a copy**
+
+The source project will receive a remove-task event (1), and the target project will receive an add-task event (0). You can find the content of all transferred tasks  —including all subtasks—  in the [`taskSummaries`](#tasksummaries) field.
 
 ---
 
