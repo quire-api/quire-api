@@ -230,6 +230,8 @@ A notification is the information about a update (aka., an activity). Here is an
   "type": "notification",
   "token": "hook-token-defined-by-you",
   "secret": "secret-defined-by-you",
+  "project": "project-where-event-occurred",
+  "organization": "organization-where-event-ccurred",
   "data": {
     "type": 0, //activity's type
     "when": "2019-09-30T08:20:12.000Z",
@@ -358,8 +360,8 @@ For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object 
 
 ```
 {
-  "type": "notification"
-  "channel": "box51"
+  "type": "notification",
+  "channel": "box51",
   "data": {
     //refer the Notifications section for details
   }

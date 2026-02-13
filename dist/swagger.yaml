@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently do repetitive or tedious tasks.\n  * Chain a process together for your team’s process and workflow.\n    * Pull information from other locations such as email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Push information from Quire to other locations such as email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your thoughts on how Quire API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n> For full setup instructions, see our [Complete Setup Guide](https://quire.io/blog/p/Create-Your-Quire-App-with-Quire-API.html) on the Quire blog.\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app and access the Quire REST API on a user’s behalf—without requiring the user’s password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n![Quire API](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/openAPI.png)\n\n**1. Give your app a cool name**\n\nYour app deserves a cool name that lives up to its wide broad of great features. \n\nAll of the app users will see this name in public, so think carefully!\n\n**2. Choose the Quire Organization that your app belongs to**\n\nYou can choose an organization in Quire that your app belongs to.\n\nIf one day you decide to leave the organization, you will lose the authority to manage the app. \n\n**3. Redirect URL**\n\nWhen users grant your app authorization request, users will be directed to the configured URL that you’ve set. \n\n**4. Choose permission scopes** \n\nYou can set permission on what your app can do with Quire. There are several options for you to choose from. \n\n*Note: If none of the options is selected, the app can only read user’s data.*\n \n**5. Development Client ID and Client Secret**\n\n![Quire Open API](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/client-id-client-secret.png)\n\nThe Client ID and Client secret will be automatically generated as you create an app. \n\nThe Client ID is a unique ID to identify your app.\n\nYou should keep your client secret safe, which means you should never share your client secret with anyone. If you choose to regenerate the client secret, the old one will immediately become invalid. \n\n**6. Update your App**\n\nIf your app hasn't been published to Quire App Directory, it will remain as unpublished status. You can still use the configured shareable link in the Developer App Console Distribution to share the app with other users for testing or integration. \n\nWhen you make changes to the app, you can use the shareable link to access the development copy as well. Working on your development copy will not affect your live App Directory app. When your updated app is ready to be published and replaced the old version on Quire App Directory, your published app will have a different Client ID to the unpublished one.\n\nThere are two sets of Client ID and Client Secret. \n\n * `Development set` - should be used during developing and testing internally of the app. \n * `Production set` - should be used once your app is ready and published on Quire App Directory.\n\n## Fulfill Authorization Request\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nThe authorization endpoint lets users grant your app access to the requested permissions. \n\nThe authorization endpoint should look like this:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n![Quire Grant Access](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Authorization.png)\n\nAfter your user clicks `Allow`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter with an authorization code provided as a query parameter called `code`.\n\nAfter your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.\n\n| Parameter | Value |\n| --- | --- |\n| client\\_id | {your-client-ID} |\n| redirect\\_uri | Optional. The redirect URL after granted. If specified, it must match the redirect URL specified in your app's config. Otherwise, the configured URL will be used. |\n| state | Optional. A random string generated by your app to protect from XSRF. |\n\n### Retrieve Access Token\n\nTo retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:\n\n| Parameter | Value |\n| --- | --- |\n| grant\\_type | authorization\\_code |\n| code | {your-authorization-code} |\n| client\\_id | {your-client-ID} |\n| client\\_secret | {your-client-secret} |\n\n```bash\ncurl -X POST \\\n  -H \"Content-Type: application/x-www-form-urlencoded\" \\\n  -d \"grant_type=authorization_code&code=Your_code_from_previous_step&client_id=Your_app_client_id&client_secret=Your_app_client_secret\" \\\n  https://quire.io/oauth/token\n```\n\nThen, the access token will be returned in the response's body.\n\n```json\n{\n  \"access_token\":\"ACCESS_TOKEN\",\n  \"token_type\": \"bearer\",\n  \"expires_in\":2592000,\n  \"refresh_token\":\"REFRESH_TOKEN\"\n}\n```\nThe token should be kept carefully and permanently since you need it to access every Quire API.\n\n### Use Access Token to Access Quire API\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`.\n\nAfter you exchange the access token, your app can make requests to Quire API on behalf of the authorized users.\n\n```bash\ncurl -H 'Authorization: Bearer {access_token}' \\\nhttps://quire.io/api/user/id/me\n```\n```json\n{\n  \"email\": \"john@gmail.cc\",\n  \"website\": \"https://coolwebsites.com\",\n  \"id\": \"My_ID\",\n  \"description\": \"This is *cool*!\",\n  \"url\": \"https://quire.io/u/My_ID\",\n  \"nameText\": \"My Name\",\n  \"nameHtml\": \"My Name\",\n  \"descriptionText\": \"This is cool!\",\n  \"descriptionHtml\": \"This is <i>cool</i>!\",\n  \"image\": \"https://quire.s3.amazonaws.com/oid/image.jpg\",\n  \"iconColor\": \"37\",\n  \"name\": \"My Name\",\n  \"oid\": \"Dyh2YkFcu9uLgLFIeN1kB4Ld\"\n}\n```\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 6 months.\n\n# Publish App\n\n![Quire Publish App](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Publish-App.png)\n\nBy default, your app will be set as Private. You can change the app distribution to Public so that other Quire users can install your app to their workspace as well.\n\nIf your app is made available on Quire App Directory and you want to delete the app, you should communicate with your users first before depreciating the app.\n\n# WebHook\n\nWhen one event on Quire is triggered, the system will send a payload to the webhook's configured URL.\n\n> A webhook is used by Quire to call an app, while Quire API is used by an app to call Quire.\n> To receive these events, you have to specify a valid URL for Webhooks when configuring your app.\n\nFor a complete guide, see our [blog post](https://quire.io/blog/p/webhook.html).\n\n## System Events\n\nA system event is used to notify your app about system or app's activities.\n\n### Token Expiration\n\nWhen the token has been expired or revoked, an event will be sent to your app. You can clean up your storage if necessary.\n\n```\n{\n  \"type\": \"system\",\n  \"token\": \"hook-token-defined-by-you\",\n  \"secret\": \"secret-defined-by-you\",\n  \"data\": {\n    \"type\": \"token-revocation\",\n    \"token\": \"the-refresh-token\"\n  }\n}\n```\n\n### Host Revocation\n\nWhen the user revokes the grant to a host (either a project or an organization), an event will be sent to your app. You can clean up your storage if necessary.\n\n```\n{\n  \"type\": \"system\",\n  \"token\": \"hook-token-defined-by-you\",\n  \"secret\": \"secret-defined-by-you\",\n  \"data\": {\n    \"type\": \"host-revocation\",\n    \"token\": \"the-refresh-token\",\n    \"host\": \"host-oid\",\n    \"otype\": \"host-type\",\n  }\n}\n```\n\n## Notification Events\n\nA notification is the information about a update (aka., an activity). Here is an example:\n\n```\n{\n  \"type\": \"notification\",\n  \"token\": \"hook-token-defined-by-you\",\n  \"secret\": \"secret-defined-by-you\",\n  \"data\": {\n    \"type\": 0, //activity's type\n    \"when\": \"2019-09-30T08:20:12.000Z\",\n    \"what\": {\n      \"oid\": \"YxjapXXRCOYxoaiCT4tT3OQm\", //OID of a task, project, or organization depending on type\n      \"id\": 101,\n      \"name\": \"Brand new start\"\n    },\n    \"user\": {\n      \"oid\": \"1AbDEFed2A5031BEDDweqmde\", //OID of the user\n      \"id\": \"john.doer\",\n      \"name\": \"John Doer\"\n    },\n    \"message\": \"<a href=\\\"https://quire.io/u/john.doer\\\">John Doer</a> added <a href=\\\"https://quire.io/w/MyProjects/101\\\">Brand new start</a>\",\n    \"text\": \"John Doer added Brand new start\",\n    \"url\": \"https://quire.io/w/MyProjects/101\"\n  } \n}\n```\n\n* The `data` map may also include an optional `value` field, which contains detailed information as a map. For example, for an assignment notification, value includes the assignee’s ID, name, and URL.\n\n* Also, if the notification is about a *start* or *due* change, the `data` map will include an additional `due` field. This value is a date/time formatted in the user’s locale and time zone.\n\n* There is an additional field, `taskSummaries`, for activities that can affect multiple tasks (for example, removing a task that has subtasks). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.\n    - Please refer to [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries).\n\n## Registration for Notifications\n\n> For instructions on updating a project, see [Update a project by OID](#operation--project--oid--put).\n\nIf the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:\n\n**Syntax 1**\n\n```\n{\n  \"addFollowers\": [\"app\"]\n}\n```\n\nwhere `app` is a keyword. It indicates that the app would like to receives the notifications about the given target (a project or a task). That is, it'll add the app into the target's followers.\n\n**Syntax 2**\n\nIn additions, you can specify additional information that will be passed as part of a notification in the following syntax.\n\n```\n\"app|team|channel\"\n```\n\nwhere `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`.\n\n> Note: `team` and `channel` can not contain `'|'`.\n\nFor example,\n\n```\n{\n  \"addFollowers\": [\"app|extra101\"]\n}\n```\n\nThen, the notification will carry additional field called `team` with the value `\"extra101\"`:\n\n```\n{\n  \"type\": \"notification\",\n  \"team\": \"extra101\",\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\nAnother example:\n\n```\n{\n  \"addFollowers\": [\"app|extra101|channel9\"]\n}\n```\n\nYou'll get:\n\n```\n{\n  \"type\": \"notification\",\n  \"team\": \"extra101\",\n  \"channel\": \"channel9\",\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n**Syntax 3**\n\n```\n\"app|team|channel|mine\"\n```\n\nwhere both `app` and `mine` are keywords. It is similar to *Syntax 2*, except it receives only notifications that match the notification setting of the user.\n\nIf you don't need both `team` and `channel`, you can specify: `\"app|||mine`.\n\n> The notification setting can be found at `https://quire.io/w/YourProject?view=setting&tab=options#notifications`\n\n**Syntax 4**\n\n```\n\"app|/path\"\n```\n\nwhere `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `\"https://super.app/hooks/standard\"`, and the follower \"app|/soc/id279/channel51\". Then, the notification will be posted the following URL: `\"https://super.app/hooks/standard/soc/id279/channel51\"`.\n\n**Syntax 5**\n\nIf you'd like to pass additional information in this syntax, you can append it as follows.\n\n```\n\"app|/path|channel\"\n```\n\nFor example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object sent to the hook URL.\n\n```\n{\n  \"type\": \"notification\"\n  \"channel\": \"box51\"\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n## Responding and Retries\n\nWhen receiving the notification, your Web Hook shall return a status code between 200 and 299 to indicate success.\n\nIf a status code other than above is returned, we will retry 15 minutes later, then 1 hour later and 1 day later.\n\n## Activities Types\n\n* [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md)\n\n\n# Rate Limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\nHere are the limits for free plans.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 25  | 120\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n> For more quota, please refer to [Pricing](/pricing).\n\n## Size limits\n\nThe size of each request can't be larger than 1MB. Requests that hit this limit will receive a `413 Content too large` response.\n\n# Status Codes\n\n| Code | Meaning                | Description\n|------|------------------------|--------------------------------\n| 200  | Success                | Request successful\n| 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized           | Invalid or expired token.\n| 402  | Payment required       | The organization’s subscription does not permit use of this app.\n| 403  | Forbidden              | Not authorized to access the resource.\n| 404  | Not Found              | The specified resource could not be found.\n| 405  | Method not allowed     | Method not allowed or supported.\n| 409  | Conflict               | There is already a resource with the same criteria.\n| 413  | Content too large      | The request's content is larger than 1MB.\n| 418  | Not valid JSON content | The request's content doesn't appear to be JSON.\n| 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls\n| 500  | Internal Server Error  | There is an unexpected error.\n| 503  | Service Unavailable    | Server is down for maintenance.\n\n## Error Responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 401 | Invalid or expired token.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 469 | Quota exceeded, such as number of projects and number of members.\n| 500 | General invocation error. Most likely, an internal error.\n"
+  description: "# Introduction\nWelcome to the reference for the Quire REST API!\n\nThe Quire REST API provides a broad set of operations and resources that:\n\n  * Consistently do repetitive or tedious tasks.\n  * Chain a process together for your team’s process and workflow.\n    * Pull information from other locations such as email and <a href=\"https://evernote.com/\" target=\"_blank\">Evernote</a> into Quire.\n    * Push information from Quire to other locations such as email and <a href=\"https://zapier.com/\" target=\"_blank\">Zapier</a>. \n\nWant to share your thoughts on how Quire API works for you? <a href=\"/feedback\">Tell us how you feel </a>about using our API and what we can do to make it better.\n\n> <a href=\"http://en.wikipedia.org/wiki/REST_API\" target=\"_blank\">REST</a> is a web-service protocol for rapid development by using HTTP and JSON technology.\n\n# API Changelog\n\nYou can find the <a href=\"https://github.com/quire-api/quire-api/blob/master/CHANGES.md\" target=\"_blank\">Changelog</a> of the API Reference in the Quire Community.\n\n# Authentication\n\n> For full setup instructions, see our [Complete Setup Guide](https://quire.io/blog/p/Create-Your-Quire-App-with-Quire-API.html) on the Quire blog.\n\n## OAuth v2.0\n\nQuire uses <a href=\"https://tools.ietf.org/html/rfc6749\">OAuth v2.0</a> to authenticate your app and access the Quire REST API on a user’s behalf—without requiring the user’s password.\n\nAuthenticating via OAuth2 requires the following steps:\n\n1. Register Your Application on Quire\n2. Ask a Quire User to Grant Access to Your Application\n3. Retrieve an Access Token\n4. Make Authenticated Requests\n\n### Register Your Application on Quire\n\n![Quire API](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/openAPI.png)\n\n**1. Give your app a cool name**\n\nYour app deserves a cool name that lives up to its wide broad of great features. \n\nAll of the app users will see this name in public, so think carefully!\n\n**2. Choose the Quire Organization that your app belongs to**\n\nYou can choose an organization in Quire that your app belongs to.\n\nIf one day you decide to leave the organization, you will lose the authority to manage the app. \n\n**3. Redirect URL**\n\nWhen users grant your app authorization request, users will be directed to the configured URL that you’ve set. \n\n**4. Choose permission scopes** \n\nYou can set permission on what your app can do with Quire. There are several options for you to choose from. \n\n*Note: If none of the options is selected, the app can only read user’s data.*\n \n**5. Development Client ID and Client Secret**\n\n![Quire Open API](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/client-id-client-secret.png)\n\nThe Client ID and Client secret will be automatically generated as you create an app. \n\nThe Client ID is a unique ID to identify your app.\n\nYou should keep your client secret safe, which means you should never share your client secret with anyone. If you choose to regenerate the client secret, the old one will immediately become invalid. \n\n**6. Update your App**\n\nIf your app hasn't been published to Quire App Directory, it will remain as unpublished status. You can still use the configured shareable link in the Developer App Console Distribution to share the app with other users for testing or integration. \n\nWhen you make changes to the app, you can use the shareable link to access the development copy as well. Working on your development copy will not affect your live App Directory app. When your updated app is ready to be published and replaced the old version on Quire App Directory, your published app will have a different Client ID to the unpublished one.\n\nThere are two sets of Client ID and Client Secret. \n\n * `Development set` - should be used during developing and testing internally of the app. \n * `Production set` - should be used once your app is ready and published on Quire App Directory.\n\n## Fulfill Authorization Request\n\n### Ask a Quire User to Grant Access to Your Application\n\nOnce registering your application, you can ask your user to grant access to your application.\n\nThe authorization endpoint lets users grant your app access to the requested permissions. \n\nThe authorization endpoint should look like this:\n\n`https://quire.io/oauth?client_id=your-client-ID&redirect_uri=your-redirect-uri`\n\n![Quire Grant Access](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Authorization.png)\n\nAfter your user clicks `Allow`, the access will be granted, and he will be redirected to the URL you specified in the `redirect_uri` parameter with an authorization code provided as a query parameter called `code`.\n\nAfter your app is granted, you can have an authorization code to exchange access token for access Quire API. The `redirect_uri` is optional. If not being specified, we will automatically use the one that is previously detected in the app. If specified, the redirect URL must start with the prefix of the one that was previously detected in the app.\n\n| Parameter | Value |\n| --- | --- |\n| client\\_id | {your-client-ID} |\n| redirect\\_uri | Optional. The redirect URL after granted. If specified, it must match the redirect URL specified in your app's config. Otherwise, the configured URL will be used. |\n| state | Optional. A random string generated by your app to protect from XSRF. |\n\n### Retrieve Access Token\n\nTo retrieve the access token, you have to post a request to `https://quire.io/oauth/token` with the following data:\n\n| Parameter | Value |\n| --- | --- |\n| grant\\_type | authorization\\_code |\n| code | {your-authorization-code} |\n| client\\_id | {your-client-ID} |\n| client\\_secret | {your-client-secret} |\n\n```bash\ncurl -X POST \\\n  -H \"Content-Type: application/x-www-form-urlencoded\" \\\n  -d \"grant_type=authorization_code&code=Your_code_from_previous_step&client_id=Your_app_client_id&client_secret=Your_app_client_secret\" \\\n  https://quire.io/oauth/token\n```\n\nThen, the access token will be returned in the response's body.\n\n```json\n{\n  \"access_token\":\"ACCESS_TOKEN\",\n  \"token_type\": \"bearer\",\n  \"expires_in\":2592000,\n  \"refresh_token\":\"REFRESH_TOKEN\"\n}\n```\nThe token should be kept carefully and permanently since you need it to access every Quire API.\n\n### Use Access Token to Access Quire API\n\nIn each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`.\n\nAfter you exchange the access token, your app can make requests to Quire API on behalf of the authorized users.\n\n```bash\ncurl -H 'Authorization: Bearer {access_token}' \\\nhttps://quire.io/api/user/id/me\n```\n```json\n{\n  \"email\": \"john@gmail.cc\",\n  \"website\": \"https://coolwebsites.com\",\n  \"id\": \"My_ID\",\n  \"description\": \"This is *cool*!\",\n  \"url\": \"https://quire.io/u/My_ID\",\n  \"nameText\": \"My Name\",\n  \"nameHtml\": \"My Name\",\n  \"descriptionText\": \"This is cool!\",\n  \"descriptionHtml\": \"This is <i>cool</i>!\",\n  \"image\": \"https://quire.s3.amazonaws.com/oid/image.jpg\",\n  \"iconColor\": \"37\",\n  \"name\": \"My Name\",\n  \"oid\": \"Dyh2YkFcu9uLgLFIeN1kB4Ld\"\n}\n```\n### Token Expiration\n\nA refresh token might stop working for one of these reasons:\n\n* The user has revoked your app's access.\n* The refresh token has not been used for 6 months.\n\n# Publish App\n\n![Quire Publish App](https://d12y7sg0iam4lc.cloudfront.net/s/img/tutorial/Quire-API-Publish-App.png)\n\nBy default, your app will be set as Private. You can change the app distribution to Public so that other Quire users can install your app to their workspace as well.\n\nIf your app is made available on Quire App Directory and you want to delete the app, you should communicate with your users first before depreciating the app.\n\n# WebHook\n\nWhen one event on Quire is triggered, the system will send a payload to the webhook's configured URL.\n\n> A webhook is used by Quire to call an app, while Quire API is used by an app to call Quire.\n> To receive these events, you have to specify a valid URL for Webhooks when configuring your app.\n\nFor a complete guide, see our [blog post](https://quire.io/blog/p/webhook.html).\n\n## System Events\n\nA system event is used to notify your app about system or app's activities.\n\n### Token Expiration\n\nWhen the token has been expired or revoked, an event will be sent to your app. You can clean up your storage if necessary.\n\n```\n{\n  \"type\": \"system\",\n  \"token\": \"hook-token-defined-by-you\",\n  \"secret\": \"secret-defined-by-you\",\n  \"data\": {\n    \"type\": \"token-revocation\",\n    \"token\": \"the-refresh-token\"\n  }\n}\n```\n\n### Host Revocation\n\nWhen the user revokes the grant to a host (either a project or an organization), an event will be sent to your app. You can clean up your storage if necessary.\n\n```\n{\n  \"type\": \"system\",\n  \"token\": \"hook-token-defined-by-you\",\n  \"secret\": \"secret-defined-by-you\",\n  \"data\": {\n    \"type\": \"host-revocation\",\n    \"token\": \"the-refresh-token\",\n    \"host\": \"host-oid\",\n    \"otype\": \"host-type\",\n  }\n}\n```\n\n## Notification Events\n\nA notification is the information about a update (aka., an activity). Here is an example:\n\n```\n{\n  \"type\": \"notification\",\n  \"token\": \"hook-token-defined-by-you\",\n  \"secret\": \"secret-defined-by-you\",\n  \"project\": \"project-where-event-occurred\",\n  \"organization\": \"organization-where-event-ccurred\",\n  \"data\": {\n    \"type\": 0, //activity's type\n    \"when\": \"2019-09-30T08:20:12.000Z\",\n    \"what\": {\n      \"oid\": \"YxjapXXRCOYxoaiCT4tT3OQm\", //OID of a task, project, or organization depending on type\n      \"id\": 101,\n      \"name\": \"Brand new start\"\n    },\n    \"user\": {\n      \"oid\": \"1AbDEFed2A5031BEDDweqmde\", //OID of the user\n      \"id\": \"john.doer\",\n      \"name\": \"John Doer\"\n    },\n    \"message\": \"<a href=\\\"https://quire.io/u/john.doer\\\">John Doer</a> added <a href=\\\"https://quire.io/w/MyProjects/101\\\">Brand new start</a>\",\n    \"text\": \"John Doer added Brand new start\",\n    \"url\": \"https://quire.io/w/MyProjects/101\"\n  } \n}\n```\n\n* The `data` map may also include an optional `value` field, which contains detailed information as a map. For example, for an assignment notification, value includes the assignee’s ID, name, and URL.\n\n* Also, if the notification is about a *start* or *due* change, the `data` map will include an additional `due` field. This value is a date/time formatted in the user’s locale and time zone.\n\n* There is an additional field, `taskSummaries`, for activities that can affect multiple tasks (for example, removing a task that has subtasks). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.\n    - Please refer to [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries).\n\n## Registration for Notifications\n\n> For instructions on updating a project, see [Update a project by OID](#operation--project--oid--put).\n\nIf the app wants to receive notifications of a specific projects or tasks, it can *follow* the projects or apps by sending a `PUT` request to the URL. To add a follower, the body of the request can be:\n\n**Syntax 1**\n\n```\n{\n  \"addFollowers\": [\"app\"]\n}\n```\n\nwhere `app` is a keyword. It indicates that the app would like to receives the notifications about the given target (a project or a task). That is, it'll add the app into the target's followers.\n\n**Syntax 2**\n\nIn additions, you can specify additional information that will be passed as part of a notification in the following syntax.\n\n```\n\"app|team|channel\"\n```\n\nwhere `app` is a keyword while `team` and `channel` are application specific. That is, you can pass any value to `team` and `channel`.\n\n> Note: `team` and `channel` can not contain `'|'`.\n\nFor example,\n\n```\n{\n  \"addFollowers\": [\"app|extra101\"]\n}\n```\n\nThen, the notification will carry additional field called `team` with the value `\"extra101\"`:\n\n```\n{\n  \"type\": \"notification\",\n  \"team\": \"extra101\",\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\nAnother example:\n\n```\n{\n  \"addFollowers\": [\"app|extra101|channel9\"]\n}\n```\n\nYou'll get:\n\n```\n{\n  \"type\": \"notification\",\n  \"team\": \"extra101\",\n  \"channel\": \"channel9\",\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n**Syntax 3**\n\n```\n\"app|team|channel|mine\"\n```\n\nwhere both `app` and `mine` are keywords. It is similar to *Syntax 2*, except it receives only notifications that match the notification setting of the user.\n\nIf you don't need both `team` and `channel`, you can specify: `\"app|||mine`.\n\n> The notification setting can be found at `https://quire.io/w/YourProject?view=setting&tab=options#notifications`\n\n**Syntax 4**\n\n```\n\"app|/path\"\n```\n\nwhere `app` is a keyword, and `/path` is application specific. The path will be appended to the app's hook URL. For example, assume the app's hook URL is `\"https://super.app/hooks/standard\"`, and the follower \"app|/soc/id279/channel51\". Then, the notification will be posted the following URL: `\"https://super.app/hooks/standard/soc/id279/channel51\"`.\n\n**Syntax 5**\n\nIf you'd like to pass additional information in this syntax, you can append it as follows.\n\n```\n\"app|/path|channel\"\n```\n\nFor example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object sent to the hook URL.\n\n```\n{\n  \"type\": \"notification\",\n  \"channel\": \"box51\",\n  \"data\": {\n    //refer the Notifications section for details\n  }\n}\n```\n\n## Responding and Retries\n\nWhen receiving the notification, your Web Hook shall return a status code between 200 and 299 to indicate success.\n\nIf a status code other than above is returned, we will retry 15 minutes later, then 1 hour later and 1 day later.\n\n## Activities Types\n\n* [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md)\n\n\n# Rate Limits\n\nTo protect the stability of the API and keep it available to all users, Quire enforces multiple kinds of rate limiting. \nRequests that hit any of our rate limits will receive a `429 Too Many Requests` response.\nWe may change these quotas or add new quotas in the future.\n\nHere are the limits for free plans.\n\n| Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*\n|---------|------|-------\n| Free | 25  | 120\n\n> Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.\n> For more quota, please refer to [Pricing](/pricing).\n\n## Size limits\n\nThe size of each request can't be larger than 1MB. Requests that hit this limit will receive a `413 Content too large` response.\n\n# Status Codes\n\n| Code | Meaning                | Description\n|------|------------------------|--------------------------------\n| 200  | Success                | Request successful\n| 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.\n| 401  | Unauthorized           | Invalid or expired token.\n| 402  | Payment required       | The organization’s subscription does not permit use of this app.\n| 403  | Forbidden              | Not authorized to access the resource.\n| 404  | Not Found              | The specified resource could not be found.\n| 405  | Method not allowed     | Method not allowed or supported.\n| 409  | Conflict               | There is already a resource with the same criteria.\n| 413  | Content too large      | The request's content is larger than 1MB.\n| 418  | Not valid JSON content | The request's content doesn't appear to be JSON.\n| 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls\n| 500  | Internal Server Error  | There is an unexpected error.\n| 503  | Service Unavailable    | Server is down for maintenance.\n\n## Error Responses\n\nThe following JSON data is returned in the response body when an error occurs.\n\n```json\n{\n\t\"code\": a_number,\n  \"message\": \"an error message here\"\n}\n```\n\n| Error Code | Meaning\n|-----|-----------------------\n| 100 | General authentication error.\n| 400 | Bad request including wrong request body, wrong parameter and so on.\n| 401 | Invalid or expired token.\n| 403 | Forbidden.\n| 404 | Resource not found.\n| 405 | Method not allowed.\n| 413 | Request too large.\n| 429 | Too many invocations.\n| 469 | Quota exceeded, such as number of projects and number of members.\n| 500 | General invocation error. Most likely, an internal error.\n"
   version: 1.0.0
   title: Quire API
   termsOfService: https://quire.io/terms
@@ -3307,10 +3307,6 @@ definitions:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -3319,15 +3315,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -3379,15 +3379,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -3403,11 +3403,6 @@ definitions:
         type: string
         example: iDsPd.QP_qM.hN.Trymukn8b
         description: Object identifier (OID), a UUID-like unique string.
-      description:
-        type: string
-        example: It is *cool*!
-        position: 1
-        description: Comment content (Markdown supported).
       descriptionText:
         type: string
         example: It is cool!
@@ -3418,25 +3413,17 @@ definitions:
         example: It is <i>cool</i>!
         position: 1
         description: Comment content rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: It is *cool*!
+        position: 1
+        description: Comment content (Markdown supported).
       attachments:
         type: array
         position: 8
         description: Attachments associated with this comment.
         items:
           $ref: '#/definitions/Attachment'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
-      editedBy:
-        position: 50
-        description: User who last edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
-      url:
-        type: string
-        position: 50
-        description: URL of this comment on the Quire website.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -3446,6 +3433,19 @@ definitions:
         position: 50
         description: User who pinned this comment, or null if not pinned.
         $ref: '#/definitions/SimpleIdentity'
+      editedBy:
+        position: 50
+        description: User who last edited this comment, or null if not edited.
+        $ref: '#/definitions/SimpleIdentity'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
+      url:
+        type: string
+        position: 50
+        description: URL of this comment on the Quire website.
       owner:
         position: 99
         description: Object this comment was added to.
@@ -3491,14 +3491,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
       image:
         type: string
         example: icon-view-kanban
@@ -3510,6 +3502,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3530,14 +3530,14 @@ definitions:
     required:
       - description
     properties:
-      description:
-        type: string
-        example: Adjust style
-        description: Content of the new comment (Markdown supported).
       pinned:
         type: boolean
         example: false
         description: '(Optional) Whether to pin this comment. Default: false.'
+      description:
+        type: string
+        example: Adjust style
+        description: Content of the new comment (Markdown supported).
       asUser:
         type: boolean
         example: true
@@ -3555,14 +3555,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
       image:
         type: string
         example: icon-view-kanban
@@ -3574,6 +3566,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3639,14 +3639,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
       image:
         type: string
         example: icon-view-kanban
@@ -3658,6 +3650,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       partner:
         type: string
         example: rcBHBYXZSiyDRrHrWPutatfF
@@ -3703,19 +3703,33 @@ definitions:
         type: string
         example: This is a *cool* task.
         description: (Optional) A description of the task.
-      assignees:
+      tasks:
+        type: array
+        description: (Optional) List of subtasks to create along with this task.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
+      tags:
         type: array
         description: |-
-          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
-
-          - Use "me" to indicate the current user.
-          - Use "inherit" to include all assignees of the parent task.
-
-          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+          (Optional) A list of tag OIDs or names to be added to the new task.
+          Tag names are case-insensitive.
         items:
           type: string
         example:
-          - 6QMKkEPBVWETLWrXqws94ALU
+          - X6nmx9XjEO2wKbqeB1pRT43C
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) Start date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       recurrence:
         description: |-
           (Optional) Recurrence details. Null if the task is not recurring.
@@ -3745,10 +3759,52 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) Due date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this task as created by the app.
+          Default: false (created by the authorizing user).
       milestone:
         type: boolean
         example: true
         description: '(Optional) Whether this task is a milestone. Default: false.'
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
+      yourField:
+        type: object
+        description: |-
+          (Optional) Value for a custom field, depending on field definition.
+
+          - Money: specify the numeric value only (no currency).
+          - User/Task: specify the OID.
+          - Duration: specify number of seconds.
+          - Multi-value: specify a list.
+      successors:
+        type: array
+        description: |-
+          (Optional) List of successor task identifiers (OID or ID).
+
+          IDs can be specified as `#id` or `id`.
+
+          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
+        items:
+          type: string
       followers:
         type: array
         description: |-
@@ -3765,75 +3821,19 @@ definitions:
           type: string
         example:
           - tzufRLqCnud74dARyDSvjWDl
-      successors:
+      assignees:
         type: array
         description: |-
-          (Optional) List of successor task identifiers (OID or ID).
+          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
 
-          IDs can be specified as `#id` or `id`.
+          - Use "me" to indicate the current user.
+          - Use "inherit" to include all assignees of the parent task.
 
-          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          (Optional) Value for a custom field, depending on field definition.
-
-          - Money: specify the numeric value only (no currency).
-          - User/Task: specify the OID.
-          - Duration: specify number of seconds.
-          - Multi-value: specify a list.
-      tasks:
-        type: array
-        description: (Optional) List of subtasks to create along with this task.
-        items:
-          $ref: '#/definitions/CreateTaskBody'
-      tags:
-        type: array
-        description: |-
-          (Optional) A list of tag OIDs or names to be added to the new task.
-          Tag names are case-insensitive.
+          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
         items:
           type: string
         example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) Start date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) Due date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this task as created by the app.
-          Default: false (created by the authorizing user).
+          - 6QMKkEPBVWETLWrXqws94ALU
       priority:
         type: integer
         format: int32
@@ -3887,10 +3887,6 @@ definitions:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -3899,15 +3895,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -3959,15 +3959,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -4009,10 +4009,6 @@ definitions:
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4021,15 +4017,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4083,10 +4083,6 @@ definitions:
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4095,15 +4091,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4182,9 +4182,6 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
-      organization:
-        description: Organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
       nameText:
         type: string
         example: My Project
@@ -4193,19 +4190,18 @@ definitions:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
+      organization:
+        description: Organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4214,15 +4210,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4237,18 +4237,18 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this project.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       attachments:
         type: array
         position: 60
         description: Attachments associated with this project.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this project.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -4294,9 +4294,6 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
-      organization:
-        description: Organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
       nameText:
         type: string
         example: My Project
@@ -4305,19 +4302,18 @@ definitions:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
+      organization:
+        description: Organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4326,15 +4322,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4353,18 +4353,18 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this project.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       attachments:
         type: array
         position: 60
         description: Attachments associated with this project.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this project.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -4377,23 +4377,6 @@ definitions:
   Recurrence:
     type: object
     properties:
-      interval:
-        type: integer
-        format: int32
-        example: 1
-        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
-      byweekday:
-        type: array
-        example: '[1,3]'
-        description: Days of the week to apply the recurrence. Integers where 0=Mon, 1=Tue, …, 6=Sun. For weekly recurrences, provide a list (e.g., `[1]`, `[0,3]`). When provided, these days define when the recurrence occurs.
-        items:
-          type: integer
-          format: int32
-      byweekno:
-        type: integer
-        format: int32
-        example: 2
-        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
       dupsubtasks:
         type: boolean
         example: false
@@ -4402,20 +4385,37 @@ definitions:
         type: boolean
         example: true
         description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
-      freq:
-        type: string
-        example: weekly
-        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
       bymonth:
         type: integer
         format: int32
         example: 10
         description: Month number (1–12) used with `yearly` frequency.
+      byweekno:
+        type: integer
+        format: int32
+        example: 2
+        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
+      freq:
+        type: string
+        example: weekly
+        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
+      byweekday:
+        type: array
+        example: '[1,3]'
+        description: Days of the week to apply the recurrence. Integers where 0=Mon, 1=Tue, …, 6=Sun. For weekly recurrences, provide a list (e.g., `[1]`, `[0,3]`). When provided, these days define when the recurrence occurs.
+        items:
+          type: integer
+          format: int32
+      interval:
+        type: integer
+        format: int32
+        example: 1
+        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
       until:
         type: string
         example: '2020-12-22'
@@ -4428,23 +4428,6 @@ definitions:
         type: string
         example: j47xvxul26
         description: Identifier for the recurrence series this task belongs to. Tasks that share the same seriesId are part of the same recurring series.
-      interval:
-        type: integer
-        format: int32
-        example: 1
-        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
-      byweekday:
-        type: array
-        example: '[1,3]'
-        description: Days of the week to apply the recurrence. Integers where 0=Mon, 1=Tue, …, 6=Sun. For weekly recurrences, provide a list (e.g., `[1]`, `[0,3]`). When provided, these days define when the recurrence occurs.
-        items:
-          type: integer
-          format: int32
-      byweekno:
-        type: integer
-        format: int32
-        example: 2
-        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
       dupsubtasks:
         type: boolean
         example: false
@@ -4453,20 +4436,37 @@ definitions:
         type: boolean
         example: true
         description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
-      freq:
-        type: string
-        example: weekly
-        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
       bymonth:
         type: integer
         format: int32
         example: 10
         description: Month number (1–12) used with `yearly` frequency.
+      byweekno:
+        type: integer
+        format: int32
+        example: 2
+        description: Week number (1-based) used with `monthly` or `yearly` frequencies.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
+      freq:
+        type: string
+        example: weekly
+        description: 'Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.'
+      byweekday:
+        type: array
+        example: '[1,3]'
+        description: Days of the week to apply the recurrence. Integers where 0=Mon, 1=Tue, …, 6=Sun. For weekly recurrences, provide a list (e.g., `[1]`, `[0,3]`). When provided, these days define when the recurrence occurs.
+        items:
+          type: integer
+          format: int32
+      interval:
+        type: integer
+        format: int32
+        example: 1
+        description: 'Interval between occurrences. For example, `2` with `weekly` means every 2 weeks. Default: 1.'
       until:
         type: string
         example: '2020-12-22'
@@ -4479,14 +4479,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that references another task (the referrer task).
-      user:
-        type: string
-        example: wrSpgghWFCzPHBqiShSurDeD
-        description: OID of the user who created this reference.
       when:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         description: Timestamp (UTC, ISO 8601) when this reference was created.
+      user:
+        type: string
+        example: wrSpgghWFCzPHBqiShSurDeD
+        description: OID of the user who created this reference.
   SimpleAttachment:
     type: object
     properties:
@@ -4525,15 +4525,15 @@ definitions:
         type: string
         example: https://quire.io/u/my_id
         description: URL of this record on the Quire website.
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -4576,13 +4576,13 @@ definitions:
   StorageList:
     type: object
     properties:
+      latest:
+        description: Object stored under the key `latest` (key–value map of properties).
+        $ref: '#/definitions/StorageMap'
       currentProject:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Value stored under the key `currentProject` (e.g., a project OID).
-      latest:
-        description: Object stored under the key `latest` (key–value map of properties).
-        $ref: '#/definitions/StorageMap'
       myList:
         type: array
         example: '["alpha", "beta", "gamma"]'
@@ -4619,10 +4619,6 @@ definitions:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -4631,15 +4627,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4691,15 +4691,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -4711,10 +4711,6 @@ definitions:
   Subscription:
     type: object
     properties:
-      due:
-        type: string
-        example: '2038-02-22T02:06:58Z'
-        description: Subscription due/renewal timestamp in UTC (ISO 8601).
       plan:
         type: string
         example: Professional
@@ -4723,6 +4719,10 @@ definitions:
         type: boolean
         example: false
         description: Whether the subscription is expired. Available only when a due date is present.
+      due:
+        type: string
+        example: '2038-02-22T02:06:58Z'
+        description: Subscription due/renewal timestamp in UTC (ISO 8601).
   Tag:
     type: object
     properties:
@@ -4758,17 +4758,17 @@ definitions:
   Task:
     type: object
     properties:
+      tags:
+        type: array
+        description: Tags applied to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
       successors:
         type: array
         example: '[''#135'', ''#26'']'
         description: Successor task identifiers.
         items:
           type: string
-      tags:
-        type: array
-        description: Tags applied to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4793,11 +4793,6 @@ definitions:
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -4808,16 +4803,21 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -4852,6 +4852,10 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -4862,10 +4866,6 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -4921,10 +4921,10 @@ definitions:
         example: https://quire.io/w/my_project/123
         position: 53
         description: URL of this task on the Quire website.
-      followers:
+      mutes:
         type: array
         position: 60
-        description: The list of users who are following this task.
+        description: The list of users who have muted this task and will not receive notifications about it, even if they are assigned.
         items:
           $ref: '#/definitions/SimpleIdentity'
       favorites:
@@ -4933,10 +4933,10 @@ definitions:
         description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      mutes:
+      followers:
         type: array
         position: 60
-        description: The list of users who have muted this task and will not receive notifications about it, even if they are assigned.
+        description: The list of users who are following this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
       sourceRef:
@@ -4982,17 +4982,17 @@ definitions:
   TaskWithProject:
     type: object
     properties:
+      tags:
+        type: array
+        description: Tags applied to this task.
+        items:
+          $ref: '#/definitions/SimpleTaggingEntity'
       successors:
         type: array
         example: '[''#135'', ''#26'']'
         description: Successor task identifiers.
         items:
           type: string
-      tags:
-        type: array
-        description: Tags applied to this task.
-        items:
-          $ref: '#/definitions/SimpleTaggingEntity'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -5017,11 +5017,6 @@ definitions:
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -5032,16 +5027,21 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -5076,6 +5076,10 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -5086,10 +5090,6 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -5149,10 +5149,10 @@ definitions:
         example: https://quire.io/w/my_project/123
         position: 53
         description: URL of this task on the Quire website.
-      followers:
+      mutes:
         type: array
         position: 60
-        description: The list of users who are following this task.
+        description: The list of users who have muted this task and will not receive notifications about it, even if they are assigned.
         items:
           $ref: '#/definitions/SimpleIdentity'
       favorites:
@@ -5161,10 +5161,10 @@ definitions:
         description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      mutes:
+      followers:
         type: array
         position: 60
-        description: The list of users who have muted this task and will not receive notifications about it, even if they are assigned.
+        description: The list of users who are following this task.
         items:
           $ref: '#/definitions/SimpleIdentity'
       sourceRef:
@@ -5245,18 +5245,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) New ID for this record.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       image:
         type: string
         example: icon-view-kanban
@@ -5268,6 +5256,18 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       start:
         type: string
         example: '2024-01-02'
@@ -5279,14 +5279,14 @@ definitions:
   UpdateCommentBody:
     type: object
     properties:
-      description:
-        type: string
-        example: Adjust style
-        description: (Optional) New comment content (Markdown supported).
       pinned:
         type: boolean
         example: false
         description: (Optional) Whether the comment is pinned.
+      description:
+        type: string
+        example: Adjust style
+        description: (Optional) New comment content (Markdown supported).
   UpdateDocBody:
     type: object
     properties:
@@ -5298,18 +5298,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) New ID for this record.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       image:
         type: string
         example: icon-view-kanban
@@ -5321,6 +5309,18 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       start:
         type: string
         example: '2024-01-02'
@@ -5432,18 +5432,6 @@ definitions:
         type: string
         example: Highlight101
         description: (Optional) New ID for this record.
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
-      iconColor:
-        type: string
-        example: '37'
-        description: (Optional) Icon color index from Quire’s predefined palette.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       image:
         type: string
         example: icon-view-kanban
@@ -5455,6 +5443,18 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      iconColor:
+        type: string
+        example: '37'
+        description: (Optional) Icon color index from Quire’s predefined palette.
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       start:
         type: string
         example: '2024-01-02'
@@ -5474,14 +5474,14 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Whether the tag is global (available across projects). If set to false, you must also provide `project`.
-      project:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: (Optional) Project OID that this tag is limited to. Used only when `global` is explicitly set to false; ignored otherwise.
       color:
         type: string
         example: '35'
         description: (Optional) Tag color (palette index or hex, depending on your client).
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: (Optional) Project OID that this tag is limited to. Used only when `global` is explicitly set to false; ignored otherwise.
   UpdateTaskBody:
     type: object
     properties:
@@ -5493,17 +5493,29 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description.
-      assignees:
+      tags:
         type: array
         description: |-
-          (Optional) Assignees to replace the current assignees (OID, ID, or email).
-          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
-
-          See `addAssignees` for special values.
+          (Optional) Tags to replace the current tags on this task (OID or name).
+          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
+          Tag names are case-insensitive.
         items:
           type: string
         example:
-          - 6QMKkEPBVWETLWrXqws94ALU
+          - ITaVbkhh3iVcEcV3vuSLeE2k
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) Start date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       recurrence:
         description: |-
           (Optional) Recurrence details. `null` if the task is not recurring.
@@ -5533,10 +5545,52 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
+      due:
+        type: string
+        example: '2018-12-22T00:00:00.000Z'
+        description: |-
+          (Optional) Due date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
       milestone:
         type: boolean
         example: true
         description: '(Optional) Whether this task is a milestone. Default: false.'
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
+      yourField:
+        type: object
+        description: |-
+          (Optional) Value for a custom field. Type depends on field definition.
+
+          - Money: numeric value only (no currency).
+          - User/Task: OID.
+          - Duration: number of seconds.
+          - Multi-value: provide a list.
+      successors:
+        type: array
+        description: |-
+          (Optional) Successors to replace the current successors (task OID or ID).
+
+          IDs can be specified as `#id` or `id`.
+
+          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
+        items:
+          type: string
       followers:
         type: array
         description: |-
@@ -5548,57 +5602,6 @@ definitions:
         example:
           - tzufRLqCnud74dARyDSvjWDl
           - app
-      successors:
-        type: array
-        description: |-
-          (Optional) Successors to replace the current successors (task OID or ID).
-
-          IDs can be specified as `#id` or `id`.
-
-          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          (Optional) Value for a custom field. Type depends on field definition.
-
-          - Money: numeric value only (no currency).
-          - User/Task: OID.
-          - Duration: number of seconds.
-          - Multi-value: provide a list.
-      removeTags:
-        type: array
-        description: |-
-          (Optional) Tags to remove from this task (OID or name).
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      addAssignees:
-        type: array
-        description: |-
-          (Optional) Assignees to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include all assignees of the parent task
-
-          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      removeAssignees:
-        type: array
-        description: |-
-          (Optional) Assignees to remove (OID, ID, or email).
-
-          See `addAssignees` for details on special values.
-        items:
-          type: string
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
       addFollowers:
         type: array
         description: |-
@@ -5625,6 +5628,38 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
+      removeAssignees:
+        type: array
+        description: |-
+          (Optional) Assignees to remove (OID, ID, or email).
+
+          See `addAssignees` for details on special values.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
+      addAssignees:
+        type: array
+        description: |-
+          (Optional) Assignees to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include all assignees of the parent task
+
+          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      removeTags:
+        type: array
+        description: |-
+          (Optional) Tags to remove from this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+        example:
+          - mPAQrYU1qt8wAYAInKRlTnvl
       addSuccessors:
         type: array
         description: |-
@@ -5635,6 +5670,26 @@ definitions:
           Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
         items:
           type: string
+      addTags:
+        type: array
+        description: |-
+          (Optional) Tags to add to this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+      assignees:
+        type: array
+        description: |-
+          (Optional) Assignees to replace the current assignees (OID, ID, or email).
+          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
+
+          See `addAssignees` for special values.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
       removeSuccessors:
         type: array
         description: |-
@@ -5645,61 +5700,6 @@ definitions:
           Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
         items:
           type: string
-      tags:
-        type: array
-        description: |-
-          (Optional) Tags to replace the current tags on this task (OID or name).
-          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) Start date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      due:
-        type: string
-        example: '2018-12-22T00:00:00.000Z'
-        description: |-
-          (Optional) Due date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
-      addTags:
-        type: array
-        description: |-
-          (Optional) Tags to add to this task (OID or name).
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
       priority:
         type: integer
         format: int32
@@ -5773,10 +5773,6 @@ definitions:
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -5785,15 +5781,19 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
-      iconColor:
+      description:
         type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+        example: This is *cool*!
+        description: Description (Markdown supported).
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
