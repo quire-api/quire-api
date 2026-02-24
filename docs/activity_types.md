@@ -40,6 +40,18 @@
 | 37 | Edits a comment. | Task | |
 | 38 | Sets a start date for a task. | Task | |
 | 39 | Clears the start date. | Task | |
+| 40 | Adds a successor to a task. | Task | |
+| 41 | Removes a successor from a task. | Task | |
+| 42 | Adds a predecessor to a task. | Task | |
+| 43 | Removes a predecessor from a task. | Task | |
+| 44 | Requests approval for a task. | Task | |
+| 45 | Approves an approval request for a task. | Task | |
+| 46 | Rejects an approval request for a task. | Task | |
+| 47 | Requests changes to an approval request for a task. | Task | |
+| 48 | Revokes an approval request for a task. | Task | |
+| 49 | Revokes an approval for a task. | Task | |
+| 50 | Revokes an approval rejection for a task. | Task | |
+| 51 | Revokes a change request for a task. | Task | |
 
 **Notes**
 
@@ -152,6 +164,8 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 179 | Archives a chat channel. | Project |
 | 180 | Unarchives a chat channel. | Project |
 | 181 | Edits a chat message. | Project |
+| 182 | Adds a field to an insight view of a project. | Project |
+| 183 | Removes a field from an insight view of a project. | Project |
 
 ---
 
