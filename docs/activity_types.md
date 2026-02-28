@@ -30,7 +30,6 @@
 | 27 | Removes a comment from a task. | Task | |
 | 28 | Adds a tag to a task. | Task | |
 | 29 | Removes a tag from a task. | Task | |
-| [30](#transfer-task) | Transfers a task to another project. | Task | |
 | 31 | Duplicates a task. | Task | All tasks being added. |
 | 32 | Mentions a member in a comment or description. | Task | |
 | 33 | Duplicates a recurring task automatically upon completion. | Task | All tasks being added. |
@@ -52,6 +51,7 @@
 | 49 | Revokes an approval for a task. | Task | |
 | 50 | Revokes an approval rejection for a task. | Task | |
 | 51 | Revokes a change request for a task. | Task | |
+| [52](#transfer-task) | Transfers a task to another project. | Task | |
 
 **Notes**
 
@@ -88,7 +88,7 @@ When tasks are transferred, additional activities are sent.
 
 The target project will receive a duplicate-task event (`31`). You can find the content of all copied tasks —including all subtasks— in the [`taskSummaries`](#tasksummaries) field.
 
-> Note: In this case, you won’t receive the transfer-task event (`30`).
+> Note: In this case, you won’t receive the transfer-task event (`52`).
 > Quire treats this as duplication rather than a transfer.
 
 **Case 2: Transferring *without* making a copy**
@@ -109,7 +109,7 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 105 | Removes a member from a project. | Project |
 | 106 | Adds a member to an external team. | Project |
 | 107 | Removes a member from an external team. | Project |
-| 108 | Transfers a project to another organization. | Project |
+| 109 | Transfers a project to another organization. | Project |
 | 110 | Adds an attachment. | Project |
 | 111 | Removes an attachment. | Project |
 | 114 | Adds a new tag. | Project |
