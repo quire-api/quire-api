@@ -112,9 +112,8 @@ public class TaskResource {
     )
     public Response getRootTasks(
         @ApiParam(
-            value = "ID of the project to which this new task will be added. "
-                  + "The task will be created as a root task. Specify \"-\" "
-                  + "to add it to personal tasks (in My Tasks).",
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
             required = true
         )
         @PathParam("projectId") String projectId
@@ -131,9 +130,8 @@ public class TaskResource {
     )
     public Response getSubtasks(
         @ApiParam(
-            value = "ID of the project to which this new task will be added. "
-                  + "The task will be created as a root task. Specify \"-\" "
-                  + "to add it to personal tasks (in My Tasks).",
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -169,9 +167,8 @@ public class TaskResource {
     )
     public Response getTaskById(
         @ApiParam(
-            value = "ID of the project to which this new task will be added. "
-                  + "The task will be created as a root task. Specify \"-\" "
-                  + "to add it to personal tasks (in My Tasks).",
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -184,7 +181,7 @@ public class TaskResource {
     @ApiOperation(
         value = "Update an existing task by its OID.",
         notes = "Updates an existing task and returns the updated record.",
-        response = Task.class
+        response = TaskWithParentInfo.class
     )
     public Response updateTask(
         @ApiParam(value = "Task OID.", required = true)
@@ -198,13 +195,12 @@ public class TaskResource {
     @ApiOperation(
         value = "Update an existing task by its ID.",
         notes = "Updates an existing task and returns the updated record.",
-        response = Task.class
+        response = TaskWithParentInfo.class
     )
     public Response updateTaskById(
         @ApiParam(
-            value = "ID of the project to which this new task will be added. "
-                  + "The task will be created as a root task. Specify \"-\" "
-                  + "to add it to personal tasks (in My Tasks).",
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -212,6 +208,57 @@ public class TaskResource {
         @PathParam("id") int id,
         @ApiParam(value = "Updated task content.", required = true)
         UpdateTaskBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/move/{oid}")
+    @ApiOperation(
+        value = "Move an existing task by its OID.",
+        notes = "Moves an existing task under another task as a subtask, "
+            + "or to the root level. "
+            + "Returns the updated task record.",
+        response = TaskWithParentInfo.class
+    )
+    public Response moveTask(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "The task that will become the new parent of the moved task. "
+                + "If `root` is specified, the moved task becomes a root task.",
+            example = "0Mg3VQ8kWeiVbLH1JjvzUcP7"
+        )
+        @QueryParam("task") String task,
+
+    ) { return null; }
+
+    @PUT
+    @Path("/move/id/{projectId}/{id}")
+    @ApiOperation(
+        value = "Move an existing task by its ID.",
+        notes = "Moves an existing task under another task as a subtask, "
+            + "or to the root level. "
+            + "Returns the updated task record.",
+        response = TaskWithParentInfo.class
+    )
+    public Response moveTask(
+        @ApiParam(
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
+            required = true
+        )
+        @PathParam("projectId") String projectId,
+
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("id") int id,
+
+        @ApiParam(
+            value = "ID of the task that will become the new parent of the moved task. "
+                + "If `root` is specified, the moved task becomes a root task.",
+            example = "253"
+        )
+        @QueryParam("task") String task,
+
     ) { return null; }
 
     @POST
@@ -248,9 +295,8 @@ public class TaskResource {
     )
     public Response attachCommentById(
         @ApiParam(
-            value = "ID of the project to which this new task will be added. "
-                  + "The task will be created as a root task. Specify \"-\" "
-                  + "to add it to personal tasks (in My Tasks).",
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -386,9 +432,8 @@ public class TaskResource {
     )
     public Response searchTasksById(
         @ApiParam(
-            value = "ID of the project to which this new task will be added. "
-                  + "The task will be created as a root task. Specify \"-\" "
-                  + "to add it to personal tasks (in My Tasks).",
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
             required = true
         )
         @PathParam("projectId") String projectId,
