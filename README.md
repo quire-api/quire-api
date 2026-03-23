@@ -9,6 +9,7 @@ The Quire API project compiles annotated source and documentation into a browsab
 ### Other Documents
 
 * [Activity Types](docs/activity_types.md)
+* [Change Log](CHANGES.md)
 
 ---
 

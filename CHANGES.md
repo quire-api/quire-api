@@ -1,5 +1,10 @@
 # Changelog
 
+## Mar 21, 2026
+
+- **Task API:** Added support [for moving tasks](https://quire.io/dev/api/#operation--task-move-id--projectId---id--put).
+- An additional `parent` field is included in the return value of the Task [PUT](https://quire.io/dev/api/#operation--task-move-id--projectId---id--put) too.
+
 ## Feb 28, 2026
 
 - The transfer task event type has been updated to `52` (previously `30`). For this event, the `value` field represents the source project, and the `projectSummary` field represents the target project.
@@ -17,7 +22,7 @@
 
 ## Jan 13, 2026
 
-- **Task API:** added support for **milestones**.
+- **Task API:** Added support for **milestones**.
 
 ## Oct 30, 2025
 - **User API:** Responses from the `/api/user/me` endpoint now return the current user's locale and timeZone information.
