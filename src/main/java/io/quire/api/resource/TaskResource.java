@@ -277,7 +277,7 @@ public class TaskResource {
             value = "OID of the target project to which the task will be transferred. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
             example = "0Mg3VQ8kWeiVbLH1PrjzUc89"
-        ),
+        )
         @QueryParam("project") String project,
 
         @ApiParam(
@@ -293,28 +293,28 @@ public class TaskResource {
                 + "are not already members.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("invite") String invite,
         @ApiParam(
             value = "Whether to add tags to the target project if they are not "
                 + "already present.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("tag") String tag,
         @ApiParam(
             value = "Whether to add statuses to the target project if they are "
                 + "not already present.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("status") String status,
         @ApiParam(
             value = "Whether to add non-empty custom fields to the target project "
                 + "if they are not already present.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("custom-field") String customField
 
     ) { return null; }
@@ -342,7 +342,7 @@ public class TaskResource {
             value = "ID of the target project to which the task will be transferred. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
             example = "MyArchived"
-        ),
+        )
         @QueryParam("project") String project,
 
         @ApiParam(
@@ -358,28 +358,28 @@ public class TaskResource {
                 + "are not already members.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("invite") String invite,
         @ApiParam(
             value = "Whether to add tags to the target project if they are not "
                 + "already present.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("tag") String tag,
         @ApiParam(
             value = "Whether to add statuses to the target project if they are "
                 + "not already present.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("status") String status,
         @ApiParam(
             value = "Whether to add non-empty custom fields to the target project "
                 + "if they are not already present.\n\n"
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
-        ),
+        )
         @QueryParam("custom-field") String customField
 
     ) { return null; }
