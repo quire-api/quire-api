@@ -261,6 +261,129 @@ public class TaskResource {
 
     ) { return null; }
 
+    @PUT
+    @Path("/transfer/{oid}")
+    @ApiOperation(
+        value = "Transfer an existing task by its OID to another project.",
+        notes = "Transfers an existing task to another project. "
+            + "Returns the updated task record.",
+        response = TaskWithParentInfo.class
+    )
+    public Response transferTask(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "OID of the target project to which the task will be transferred. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
+            example = "0Mg3VQ8kWeiVbLH1PrjzUc89"
+        ),
+        @QueryParam("project") String project,
+
+        @ApiParam(
+            value = "Optional. OID of the task that will become the new parent "
+                + "of the transferred task. If omitted, the transferred task "
+                + "becomes a root task in the target project.",
+            example = "0Mg3VQ8kWeiVbLH1JjvzUcP7"
+        )
+        @QueryParam("task") String task,
+
+        @ApiParam(
+            value = "Whether to invite assignees to the target project if they "
+                + "are not already members.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("invite") String invite,
+        @ApiParam(
+            value = "Whether to add tags to the target project if they are not "
+                + "already present.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("tag") String tag,
+        @ApiParam(
+            value = "Whether to add statuses to the target project if they are "
+                + "not already present.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("status") String status,
+        @ApiParam(
+            value = "Whether to add non-empty custom fields to the target project "
+                + "if they are not already present.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("custom-field") String customField
+
+    ) { return null; }
+
+    @PUT
+    @Path("/transfer/id/{projectId}/{id}")
+    @ApiOperation(
+        value = "Transfer an existing task by its ID to another project.",
+        notes = "Transfers an existing task to another project. "
+            + "Returns the updated task record.",
+        response = TaskWithParentInfo.class
+    )
+    public Response transferTaskById(
+        @ApiParam(
+            value = "ID of the task's project. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
+            required = true
+        )
+        @PathParam("projectId") String projectId,
+
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("id") int id,
+
+        @ApiParam(
+            value = "ID of the target project to which the task will be transferred. "
+                  + "Specify \"-\" for personal tasks in My Tasks.",
+            example = "MyArchived"
+        ),
+        @QueryParam("project") String project,
+
+        @ApiParam(
+            value = "Optional. ID of the task that will become the new parent "
+                + "of the transferred task. If omitted, the transferred task "
+                + "becomes a root task in the target project.",
+            example = "253"
+        )
+        @QueryParam("task") String task,
+
+        @ApiParam(
+            value = "Whether to invite assignees to the target project if they "
+                + "are not already members.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("invite") String invite,
+        @ApiParam(
+            value = "Whether to add tags to the target project if they are not "
+                + "already present.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("tag") String tag,
+        @ApiParam(
+            value = "Whether to add statuses to the target project if they are "
+                + "not already present.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("status") String status,
+        @ApiParam(
+            value = "Whether to add non-empty custom fields to the target project "
+                + "if they are not already present.\n\n"
+                + "If omitted, `true` is assumed. Specify `false` to disable this.",
+            example = "true"
+        ),
+        @QueryParam("custom-field") String customField
+
+    ) { return null; }
+
     @POST
     @Path("/attach/{taskOid}/{filename}")
     @ApiOperation(
