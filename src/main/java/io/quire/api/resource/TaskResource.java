@@ -228,7 +228,7 @@ public class TaskResource {
                 + "If `root` is specified, the moved task becomes a root task.",
             example = "0Mg3VQ8kWeiVbLH1JjvzUcP7"
         )
-        @QueryParam("task") String task,
+        @QueryParam("task") String task
 
     ) { return null; }
 
@@ -241,7 +241,7 @@ public class TaskResource {
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
-    public Response moveTask(
+    public Response moveTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
@@ -257,7 +257,7 @@ public class TaskResource {
                 + "If `root` is specified, the moved task becomes a root task.",
             example = "253"
         )
-        @QueryParam("task") String task,
+        @QueryParam("task") String task
 
     ) { return null; }
 
