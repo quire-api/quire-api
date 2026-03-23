@@ -226,6 +226,7 @@ public class TaskResource {
         @ApiParam(
             value = "The task that will become the new parent of the moved task. "
                 + "If `root` is specified, the moved task becomes a root task.",
+            required = true,
             example = "0Mg3VQ8kWeiVbLH1JjvzUcP7"
         )
         @QueryParam("task") String task
@@ -255,6 +256,7 @@ public class TaskResource {
         @ApiParam(
             value = "ID of the task that will become the new parent of the moved task. "
                 + "If `root` is specified, the moved task becomes a root task.",
+            required = true,
             example = "253"
         )
         @QueryParam("task") String task
@@ -276,6 +278,7 @@ public class TaskResource {
         @ApiParam(
             value = "OID of the target project to which the task will be transferred. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
+            required = true,
             example = "0Mg3VQ8kWeiVbLH1PrjzUc89"
         )
         @QueryParam("project") String project,
@@ -341,6 +344,7 @@ public class TaskResource {
         @ApiParam(
             value = "ID of the target project to which the task will be transferred. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
+            required = true,
             example = "MyArchived"
         )
         @QueryParam("project") String project,

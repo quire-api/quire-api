@@ -1,5 +1,9 @@
 # Changelog
 
+## Mar 23, 2026
+
+- **Task API:** Added support [for transferring tasks](https://quire.io/dev/api/#operation--task-transfer-id--projectId---id--put).
+
 ## Mar 21, 2026
 
 - **Task API:** Added support [for moving tasks](https://quire.io/dev/api/#operation--task-move-id--projectId---id--put).
