@@ -100,13 +100,18 @@ public class SimpleTask extends StampedEntity {
     public List<SimpleIdentity> getAssignees() { return null; }
 
     @ApiModelProperty(
-        value = "Successor task identifiers.",
+        value = "IDs of tasks that depend on this task.",
         example = "['#135', '#26']"
     )
     public List<String> getSuccessors() { return null; }
+    @ApiModelProperty(
+        value = "IDs of tasks that this task depends on.",
+        example = "['#17', '#66', '#91']"
+    )
+    public List<String> getPredecessors() { return null; }
 
     @ApiModelProperty(
-        value = "Whether the task is currently peekabooed (hidden).",
+        value = "Whether the task is currently peekabooed (arhived).",
         example = "true",
         position = 50
     )
