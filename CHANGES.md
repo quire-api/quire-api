@@ -1,5 +1,9 @@
 # Changelog
 
+## Mar 27, 2026
+
+- An additional `predecessors` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-id--projectId---id--get) APIs.
+
 ## Mar 23, 2026
 
 - **Task API:** Added support [for transferring tasks](https://quire.io/dev/api/#operation--task-transfer-id--projectId---id--put).
