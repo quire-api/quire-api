@@ -3499,26 +3499,26 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       description:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -3608,31 +3608,22 @@ definitions:
         example: It is *cool*!
         position: 1
         description: Comment content (Markdown supported).
-      descriptionText:
-        type: string
-        example: It is cool!
-        position: 1
-        description: Comment content with Markdown removed.
       descriptionHtml:
         type: string
         example: It is <i>cool</i>!
         position: 1
         description: Comment content rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: It is cool!
+        position: 1
+        description: Comment content with Markdown removed.
       attachments:
         type: array
         position: 8
         description: Attachments associated with this comment.
         items:
           $ref: '#/definitions/Attachment'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
-      editedBy:
-        position: 50
-        description: User who last edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
       url:
         type: string
         position: 50
@@ -3645,6 +3636,15 @@ definitions:
       pinBy:
         position: 50
         description: User who pinned this comment, or null if not pinned.
+        $ref: '#/definitions/SimpleIdentity'
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
+      editedBy:
+        position: 50
+        description: User who last edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
@@ -3730,6 +3730,10 @@ definitions:
     required:
       - description
     properties:
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false.'
       description:
         type: string
         example: Adjust style
@@ -3738,10 +3742,6 @@ definitions:
         type: boolean
         example: true
         description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false.'
   CreateDocBody:
     type: object
     required:
@@ -3899,10 +3899,40 @@ definitions:
         type: string
         example: Design new **logo**
         description: The name of the task.
+      tasks:
+        type: array
+        description: (Optional) List of subtasks to create along with this task.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
+      tags:
+        type: array
+        description: |-
+          (Optional) A list of tag OIDs or names to be added to the new task.
+          Tag names are case-insensitive.
+        items:
+          type: string
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
       description:
         type: string
         example: This is a *cool* task.
         description: (Optional) A description of the task.
+      followers:
+        type: array
+        description: |-
+          (Optional) List of user identifiers (OID, ID, or email) who follow this task.
+
+          - Use "me" for the current user.
+          - Use "inherit" to include followers of the parent task.
+          - Use "app" for the application itself to follow (receive notifications).
+
+          For app followers, additional syntaxes are supported:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
       assignees:
         type: array
         description: |-
@@ -3949,22 +3979,6 @@ definitions:
         type: boolean
         example: true
         description: '(Optional) Whether this task is a milestone. Default: false.'
-      followers:
-        type: array
-        description: |-
-          (Optional) List of user identifiers (OID, ID, or email) who follow this task.
-
-          - Use "me" for the current user.
-          - Use "inherit" to include followers of the parent task.
-          - Use "app" for the application itself to follow (receive notifications).
-
-          For app followers, additional syntaxes are supported:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
       successors:
         type: array
         description: |-
@@ -3984,11 +3998,6 @@ definitions:
           - User/Task: specify the OID.
           - Duration: specify number of seconds.
           - Multi-value: specify a list.
-      tasks:
-        type: array
-        description: (Optional) List of subtasks to create along with this task.
-        items:
-          $ref: '#/definitions/CreateTaskBody'
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -4015,15 +4024,6 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      tags:
-        type: array
-        description: |-
-          (Optional) A list of tag OIDs or names to be added to the new task.
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
       section:
         type: boolean
         example: true
@@ -4079,26 +4079,26 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       description:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -4187,23 +4187,23 @@ definitions:
         type: string
         example: my_organization
         description: Organization ID.
-      nameText:
+      url:
         type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
       email:
         type: string
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      url:
+      nameHtml:
         type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
       website:
         type: string
         example: https://coolwebsites.com
@@ -4213,14 +4213,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -4261,23 +4261,23 @@ definitions:
         type: string
         example: my_organization
         description: Organization ID.
-      nameText:
+      url:
         type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
+        example: https://quire.io/c/my_organization
+        description: URL of this organization on the Quire website.
       email:
         type: string
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      url:
+      nameHtml:
         type: string
-        example: https://quire.io/c/my_organization
-        description: URL of this organization on the Quire website.
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
       website:
         type: string
         example: https://coolwebsites.com
@@ -4287,14 +4287,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -4382,6 +4382,10 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
@@ -4390,30 +4394,26 @@ definitions:
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
       nameHtml:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
-      url:
+      nameText:
         type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
+        example: My Project
+        description: Project name with Markdown removed.
       description:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -4437,18 +4437,18 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
-      attachments:
-        type: array
-        position: 60
-        description: Attachments associated with this project.
-        items:
-          $ref: '#/definitions/Attachment'
       followers:
         type: array
         position: 60
         description: Users who follow this project.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      attachments:
+        type: array
+        position: 60
+        description: Attachments associated with this project.
+        items:
+          $ref: '#/definitions/Attachment'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -4494,6 +4494,10 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
@@ -4502,30 +4506,26 @@ definitions:
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
       nameHtml:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
-      url:
+      nameText:
         type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
+        example: My Project
+        description: Project name with Markdown removed.
       description:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -4553,18 +4553,18 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
-      attachments:
-        type: array
-        position: 60
-        description: Attachments associated with this project.
-        items:
-          $ref: '#/definitions/Attachment'
       followers:
         type: array
         position: 60
         description: Users who follow this project.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      attachments:
+        type: array
+        position: 60
+        description: Attachments associated with this project.
+        items:
+          $ref: '#/definitions/Attachment'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -4776,13 +4776,13 @@ definitions:
   StorageList:
     type: object
     properties:
+      latest:
+        description: Object stored under the key `latest` (key–value map of properties).
+        $ref: '#/definitions/StorageMap'
       currentProject:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Value stored under the key `currentProject` (e.g., a project OID).
-      latest:
-        description: Object stored under the key `latest` (key–value map of properties).
-        $ref: '#/definitions/StorageMap'
       myList:
         type: array
         example: '["alpha", "beta", "gamma"]'
@@ -4811,26 +4811,26 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       description:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -4911,10 +4911,6 @@ definitions:
   Subscription:
     type: object
     properties:
-      due:
-        type: string
-        example: '2038-02-22T02:06:58Z'
-        description: Subscription due/renewal timestamp in UTC (ISO 8601).
       plan:
         type: string
         example: Professional
@@ -4923,6 +4919,10 @@ definitions:
         type: boolean
         example: false
         description: Whether the subscription is expired. Available only when a due date is present.
+      due:
+        type: string
+        example: '2038-02-22T02:06:58Z'
+        description: Subscription due/renewal timestamp in UTC (ISO 8601).
   Tag:
     type: object
     properties:
@@ -4958,17 +4958,23 @@ definitions:
   Task:
     type: object
     properties:
-      successors:
-        type: array
-        example: '[''#135'', ''#26'']'
-        description: Successor task identifiers.
-        items:
-          type: string
       tags:
         type: array
         description: Tags applied to this task.
         items:
           $ref: '#/definitions/SimpleTaggingEntity'
+      successors:
+        type: array
+        example: '[''#135'', ''#26'']'
+        description: IDs of tasks that depend on this task.
+        items:
+          type: string
+      predecessors:
+        type: array
+        example: '[''#17'', ''#66'', ''#91'']'
+        description: IDs of tasks that this task depends on.
+        items:
+          type: string
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -4984,41 +4990,41 @@ definitions:
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       description:
         type: string
         example: This is a *cool* task.
         position: 3
         description: Task description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Task description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Task description with Markdown removed.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -5106,7 +5112,7 @@ definitions:
         type: boolean
         example: true
         position: 50
-        description: Whether the task is currently peekabooed (hidden).
+        description: Whether the task is currently peekabooed (arhived).
       section:
         type: boolean
         example: true
@@ -5122,16 +5128,16 @@ definitions:
         example: https://quire.io/w/my_project/123
         position: 53
         description: URL of this task on the Quire website.
-      favorites:
-        type: array
-        position: 60
-        description: The list of users who have marked this task as a favorite.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       followers:
         type: array
         position: 60
         description: The list of users who are following this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      favorites:
+        type: array
+        position: 60
+        description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
       mutes:
@@ -5199,17 +5205,23 @@ definitions:
   TaskWithParentInfo:
     type: object
     properties:
-      successors:
-        type: array
-        example: '[''#135'', ''#26'']'
-        description: Successor task identifiers.
-        items:
-          type: string
       tags:
         type: array
         description: Tags applied to this task.
         items:
           $ref: '#/definitions/SimpleTaggingEntity'
+      successors:
+        type: array
+        example: '[''#135'', ''#26'']'
+        description: IDs of tasks that depend on this task.
+        items:
+          type: string
+      predecessors:
+        type: array
+        example: '[''#17'', ''#66'', ''#91'']'
+        description: IDs of tasks that this task depends on.
+        items:
+          type: string
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -5225,41 +5237,41 @@ definitions:
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       description:
         type: string
         example: This is a *cool* task.
         position: 3
         description: Task description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Task description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Task description with Markdown removed.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -5347,7 +5359,7 @@ definitions:
         type: boolean
         example: true
         position: 50
-        description: Whether the task is currently peekabooed (hidden).
+        description: Whether the task is currently peekabooed (arhived).
       section:
         type: boolean
         example: true
@@ -5363,16 +5375,16 @@ definitions:
         example: https://quire.io/w/my_project/123
         position: 53
         description: URL of this task on the Quire website.
-      favorites:
-        type: array
-        position: 60
-        description: The list of users who have marked this task as a favorite.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       followers:
         type: array
         position: 60
         description: The list of users who are following this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      favorites:
+        type: array
+        position: 60
+        description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
       mutes:
@@ -5432,17 +5444,23 @@ definitions:
   TaskWithProjectParentInfo:
     type: object
     properties:
-      successors:
-        type: array
-        example: '[''#135'', ''#26'']'
-        description: Successor task identifiers.
-        items:
-          type: string
       tags:
         type: array
         description: Tags applied to this task.
         items:
           $ref: '#/definitions/SimpleTaggingEntity'
+      successors:
+        type: array
+        example: '[''#135'', ''#26'']'
+        description: IDs of tasks that depend on this task.
+        items:
+          type: string
+      predecessors:
+        type: array
+        example: '[''#17'', ''#66'', ''#91'']'
+        description: IDs of tasks that this task depends on.
+        items:
+          type: string
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -5458,41 +5476,41 @@ definitions:
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       description:
         type: string
         example: This is a *cool* task.
         position: 3
         description: Task description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Task description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Task description with Markdown removed.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -5580,7 +5598,7 @@ definitions:
         type: boolean
         example: true
         position: 50
-        description: Whether the task is currently peekabooed (hidden).
+        description: Whether the task is currently peekabooed (arhived).
       section:
         type: boolean
         example: true
@@ -5596,16 +5614,16 @@ definitions:
         example: https://quire.io/w/my_project/123
         position: 53
         description: URL of this task on the Quire website.
-      favorites:
-        type: array
-        position: 60
-        description: The list of users who have marked this task as a favorite.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       followers:
         type: array
         position: 60
         description: The list of users who are following this task.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      favorites:
+        type: array
+        position: 60
+        description: The list of users who have marked this task as a favorite.
         items:
           $ref: '#/definitions/SimpleIdentity'
       mutes:
@@ -5738,14 +5756,14 @@ definitions:
   UpdateCommentBody:
     type: object
     properties:
-      description:
-        type: string
-        example: Adjust style
-        description: (Optional) New comment content (Markdown supported).
       pinned:
         type: boolean
         example: false
         description: (Optional) Whether the comment is pinned.
+      description:
+        type: string
+        example: Adjust style
+        description: (Optional) New comment content (Markdown supported).
   UpdateDocBody:
     type: object
     properties:
@@ -5791,6 +5809,13 @@ definitions:
   UpdateOrganizationBody:
     type: object
     properties:
+      followers:
+        type: array
+        description: |-
+          (Optional) Followers to replace the current followers of this organization (user OIDs).
+          This replaces all existing followers. To modify incrementally, use `addFollowers()` or `removeFollowers()`.
+        items:
+          type: string
       addFollowers:
         type: array
         description: |-
@@ -5813,16 +5838,19 @@ definitions:
           See `addFollowers()` for details on special values.
         items:
           type: string
-      followers:
-        type: array
-        description: |-
-          (Optional) Followers to replace the current followers of this organization (user OIDs).
-          This replaces all existing followers. To modify incrementally, use `addFollowers()` or `removeFollowers()`.
-        items:
-          type: string
   UpdateProjectBody:
     type: object
     properties:
+      followers:
+        type: array
+        description: |-
+          (Optional) Followers to replace the current followers of this project (user OIDs).
+          This replaces all existing followers. To modify incrementally, use `getAddFollowers()` or `getRemoveFollowers()`.
+        items:
+          type: string
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -5849,16 +5877,6 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      followers:
-        type: array
-        description: |-
-          (Optional) Followers to replace the current followers of this project (user OIDs).
-          This replaces all existing followers. To modify incrementally, use `getAddFollowers()` or `getRemoveFollowers()`.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
   UpdateStatusBody:
     type: object
     properties:
@@ -5948,42 +5966,31 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New task name.
-      description:
-        type: string
-        example: This is a **cool** task.
-        description: (Optional) New task description.
-      removeTags:
+      tags:
         type: array
         description: |-
-          (Optional) Tags to remove from this task (OID or name).
+          (Optional) Tags to replace the current tags on this task (OID or name).
+          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
           Tag names are case-insensitive.
         items:
           type: string
         example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
-      addAssignees:
+          - ITaVbkhh3iVcEcV3vuSLeE2k
+      description:
+        type: string
+        example: This is a **cool** task.
+        description: (Optional) New task description.
+      followers:
         type: array
         description: |-
-          (Optional) Assignees to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include all assignees of the parent task
+          (Optional) Followers to replace the current followers (OID, ID, or email).
 
-          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+          See `addFollowers` for details.
         items:
           type: string
         example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-      removeAssignees:
-        type: array
-        description: |-
-          (Optional) Assignees to remove (OID, ID, or email).
-
-          See `addAssignees` for details on special values.
-        items:
-          type: string
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -6010,26 +6017,6 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      addSuccessors:
-        type: array
-        description: |-
-          (Optional) Successors to add (task OID or ID).
-
-          IDs can be specified as `#id` or `id`.
-
-          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
-        items:
-          type: string
-      removeSuccessors:
-        type: array
-        description: |-
-          (Optional) Successors to remove (task OID or ID).
-
-          IDs can be specified as `#id` or `id`.
-
-          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
-        items:
-          type: string
       assignees:
         type: array
         description: |-
@@ -6074,17 +6061,6 @@ definitions:
         type: boolean
         example: true
         description: '(Optional) Whether this task is a milestone. Default: false.'
-      followers:
-        type: array
-        description: |-
-          (Optional) Followers to replace the current followers (OID, ID, or email).
-
-          See `addFollowers` for details.
-        items:
-          type: string
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
       successors:
         type: array
         description: |-
@@ -6104,6 +6080,58 @@ definitions:
           - User/Task: OID.
           - Duration: number of seconds.
           - Multi-value: provide a list.
+      removeTags:
+        type: array
+        description: |-
+          (Optional) Tags to remove from this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+        example:
+          - mPAQrYU1qt8wAYAInKRlTnvl
+      addAssignees:
+        type: array
+        description: |-
+          (Optional) Assignees to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include all assignees of the parent task
+
+          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      removeAssignees:
+        type: array
+        description: |-
+          (Optional) Assignees to remove (OID, ID, or email).
+
+          See `addAssignees` for details on special values.
+        items:
+          type: string
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
+      addSuccessors:
+        type: array
+        description: |-
+          (Optional) Successors to add (task OID or ID).
+
+          IDs can be specified as `#id` or `id`.
+
+          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
+        items:
+          type: string
+      removeSuccessors:
+        type: array
+        description: |-
+          (Optional) Successors to remove (task OID or ID).
+
+          IDs can be specified as `#id` or `id`.
+
+          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
+        items:
+          type: string
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -6130,16 +6158,6 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      tags:
-        type: array
-        description: |-
-          (Optional) Tags to replace the current tags on this task (OID or name).
-          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
-          Tag names are case-insensitive.
-        items:
-          type: string
-        example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
       section:
         type: boolean
         example: true
@@ -6210,18 +6228,18 @@ definitions:
         type: string
         example: en_GB
         description: The locale of the current user, or null if the user is not the current one.
-      nameText:
-        type: string
-        example: John
-        description: User name with Markdown removed.
-      nameHtml:
-        type: string
-        example: John
-        description: User name rendered as an HTML fragment converted from Markdown.
       url:
         type: string
         example: https://quire.io/u/john
         description: URL of this user on the Quire website.
+      nameHtml:
+        type: string
+        example: John
+        description: User name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: John
+        description: User name with Markdown removed.
       email:
         type: string
         example: john@gmail.com
@@ -6236,14 +6254,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
