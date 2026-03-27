@@ -11,8 +11,10 @@ public class TaskInfo extends Entity {
     public int getId() { return 0; }
 
     @ApiModelProperty(
-      value = "The parent information, if this task has a parent.",
-      position = 10
+        value = "Parent task information, if this task has a parent.\n\n"
+            + "At most 10 levels of ancestors are returned. "
+            + "If exceeded, the 10th ancestor contains only the OID to indicate this case.",
+        position = 10
     )
     public TaskInfo getParent() { return null; }
 }
