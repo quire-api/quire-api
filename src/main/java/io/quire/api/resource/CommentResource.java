@@ -46,7 +46,7 @@ public class CommentResource {
     ) { return null; }
 
     @POST
-    @Path("/id/{projectId}/chat/{chatId}")
+    @Path("/id/{projectId}/{chatId}")
     @ApiOperation(
         value = "Add a new comment to a chat channel (by project ID and chat ID).",
         notes = "Adds a new comment to the specified chat channel.",
@@ -62,7 +62,7 @@ public class CommentResource {
     ) { return null; }
 
     @POST
-    @Path("/id/{projectId}/task/{taskId}")
+    @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Add a new comment to a task (by project ID and task ID).",
         notes = "Adds a new comment to the specified task.",
@@ -106,7 +106,7 @@ public class CommentResource {
     ) { return null; }
 
     @GET
-    @Path("/list/id/{projectId}/chat/{chatId}")
+    @Path("/list/id/{projectId}/{chatId}")
     @ApiOperation(
         value = "Get all comments of a chat channel (by project ID and chat ID).",
         notes = "Returns all comments of the specified chat channel.",
@@ -121,7 +121,7 @@ public class CommentResource {
     ) { return null; }
 
     @GET
-    @Path("/list/id/{projectId}/task/{taskId}")
+    @Path("/list/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Get all comments of a task (by project ID and task ID).",
         notes = "Returns all comments of the specified task.",
