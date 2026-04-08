@@ -4,7 +4,7 @@
 
 - **Task API:** Adjusted API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
     - Example: `POST /task/id/MyPrj/357?position=before`
-- **TASK API:** Added support for [or deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
+- **TASK API:** Added support for [deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
 
 ## Mar 27, 2026
 
