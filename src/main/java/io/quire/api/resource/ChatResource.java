@@ -163,7 +163,8 @@ public class ChatResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a chat channel by OID.",
-        notes = "Deletes the specified chat channel."
+        notes = "Deletes the specified chat channel.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the channel exists."
     )
     @ApiResponses({
         @ApiResponse(
@@ -180,7 +181,8 @@ public class ChatResource {
     @Path("/id/{ownerType}/{ownerId}/{id}")
     @ApiOperation(
         value = "Delete a chat channel by ID.",
-        notes = "Deletes the specified chat channel."
+        notes = "Deletes the specified chat channel.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the channel exists."
     )
     @ApiResponses({
         @ApiResponse(

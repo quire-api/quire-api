@@ -96,7 +96,8 @@ public class OrganizationResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete an organization.",
-        notes = "Deletes the specified organization."
+        notes = "Deletes the specified organization.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the organization exists."
     )
     @ApiResponses({
         @ApiResponse(

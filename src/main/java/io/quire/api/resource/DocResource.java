@@ -170,7 +170,8 @@ public class DocResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a document by OID.",
-        notes = "Deletes the specified document."
+        notes = "Deletes the specified document.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the document exists."
     )
     @ApiResponses({
         @ApiResponse(
@@ -187,7 +188,8 @@ public class DocResource {
     @Path("/id/{ownerType}/{ownerId}/{id}")
     @ApiOperation(
         value = "Delete a document by ID.",
-        notes = "Deletes the specified document."
+        notes = "Deletes the specified document.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the document exists."
     )
     @ApiResponses({
         @ApiResponse(

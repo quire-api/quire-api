@@ -473,7 +473,8 @@ public class TaskResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a task and all of its subtasks by its OID.",
-        notes = "Deletes an existing task and all of its subtasks."
+        notes = "Deletes an existing task and all of its subtasks.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the task exists."
     )
     @ApiResponses({
         @ApiResponse(
@@ -492,7 +493,8 @@ public class TaskResource {
     @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Delete a task and all of its subtasks by its ID.",
-        notes = "Deletes an existing task and all of its subtasks."
+        notes = "Deletes an existing task and all of its subtasks.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the task exists."
     )
     @ApiResponses({
         @ApiResponse(

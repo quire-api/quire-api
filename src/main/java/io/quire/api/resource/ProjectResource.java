@@ -274,7 +274,8 @@ public class ProjectResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a project.",
-        notes = "Deletes the specified project."
+        notes = "Deletes the specified project.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the project exists."
     )
     @ApiResponses({
         @ApiResponse(

@@ -80,10 +80,9 @@ public class StorageResource {
     @ApiOperation(
         value = "Delete a stored value.",
         notes =
-            "Deletes the value stored under the given name.\n"
-          + "Returns `{ \"success\": true }` if the key existed and was deleted,\n"
-          + "or `{ \"success\": false }` if the key did not exist.\n"
-          + "Note: values are scoped per access token."
+            "Deletes the value stored under the given name.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the value exists.\n"
+            + "> Also note: values are scoped per access token."
     )
     @ApiResponses({
         @ApiResponse(

@@ -166,7 +166,8 @@ public class SublistResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a sublist by OID",
-        notes = "Deletes the sublist with the given OID."
+        notes = "Deletes the sublist with the given OID.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
     )
     @ApiResponses({
         @ApiResponse(
@@ -183,7 +184,8 @@ public class SublistResource {
     @Path("/id/{ownerType}/{ownerId}/{id}")
     @ApiOperation(
         value = "Delete a sublist by ID",
-        notes = "Deletes the sublist with the given ID."
+        notes = "Deletes the sublist with the given ID.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
     )
     @ApiResponses({
         @ApiResponse(

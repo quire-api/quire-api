@@ -116,7 +116,8 @@ public class TagResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a tag",
-        notes = "Deletes the tag with the given OID."
+        notes = "Deletes the tag with the given OID.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the tag exists."
     )
     @ApiResponses({
         @ApiResponse(

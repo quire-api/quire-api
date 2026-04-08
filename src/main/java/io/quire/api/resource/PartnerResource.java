@@ -57,7 +57,8 @@ public class PartnerResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete an external team.",
-        notes = "Deletes the specified external team."
+        notes = "Deletes the specified external team.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the external team exists."
     )
     @ApiResponses({
         @ApiResponse(
