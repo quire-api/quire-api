@@ -18,31 +18,44 @@ public class TaskResource {
     @POST
     @Path("/{oid}")
     @ApiOperation(
-        value = "Add a new task.",
-        notes = "Adds a new task to a project or to another task.",
+        value = "Add a new root task, or relative to another task.",
+        notes = "Adds a new task to a project, under another task, or before or after another task.",
         response = Task.class
     )
     public Response createTask(
         @ApiParam(
-            value = "OID of the project or task to add the new task to. "
+            value = "OID of the project or task to which the new task will be added. "
                   + "If the OID refers to a project, the new task becomes a root task. "
                   + "If it refers to a task, the new task becomes its subtask. "
-                  + "Specify \"-\" to add it to My Tasks (no specific project).",
+                  + "Specify \"-\" to add the task to My Tasks.",
             required = true
         )
         @PathParam("oid") String oid,
-        @ApiParam(value = "Task to create", required = true)
-        CreateTaskBody data
+
+        @ApiParam(value = "Task to create.", required = true)
+        CreateTaskBody data,
+
+        @ApiParam(
+            value = "Position of the new task relative to the task specified by `oid`. "
+                + "Allowed values are `before`, `after`, and `parent`. "
+                + "If omitted, `parent` is assumed. "
+                + "This parameter applies only when `oid` refers to a task.\n\n"
+                + "- `before`: before the specified task\n"
+                + "- `after`: after the specified task\n"
+                + "- `parent`: under the specified task",
+            example = "before"
+        )
+        @QueryParam("position") String position
     ) { return null; }
 
     @POST
     @Path("/id/{projectId}")
     @ApiOperation(
-        value = "Add a new task.",
+        value = "Add a new root task.",
         notes = "Adds a new root task to a project.",
         response = Task.class
     )
-    public Response createTaskByProject(
+    public Response createTaskByProjectId(
         @ApiParam(
             value = "ID of the project to which this new task will be added. "
                   + "The task will be created as a root task. Specify \"-\" "
@@ -55,31 +68,36 @@ public class TaskResource {
     ) { return null; }
 
     @POST
-    @Path("/before/{oid}")
+    @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
-        value = "Add a new task before the given task.",
-        notes = "Inserts a new task before the specified task.",
+        value = "Add a new task relative to another task.",
+        notes = "Adds a new task under another task, or before or after another task.",
         response = Task.class
     )
-    public Response createTaskBefore(
-        @ApiParam(value = "OID of the task to insert before.", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Task to create", required = true)
-        CreateTaskBody data
-    ) { return null; }
+    public Response createTaskByTaskId(
+        @ApiParam(
+            value = "ID of the project to which the new task will be added. "
+                  + "Specify \"-\" to add it to personal tasks in My Tasks.",
+            required = true
+        )
+        @PathParam("projectId") String projectId,
 
-    @POST
-    @Path("/after/{oid}")
-    @ApiOperation(
-        value = "Add a new task after the given task.",
-        notes = "Inserts a new task after the specified task.",
-        response = Task.class
-    )
-    public Response createTaskAfter(
-        @ApiParam(value = "OID of the task to insert after.", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Task to create", required = true)
-        CreateTaskBody data
+        @ApiParam(value = "ID of the referenced task.", required = true)
+        @PathParam("taskId") int taskId,
+
+        @ApiParam(value = "Task to create.", required = true)
+        CreateTaskBody data,
+
+        @ApiParam(
+            value = "Position of the new task relative to the task specified by `taskId`. "
+                + "Allowed values are `before`, `after`, and `parent`. "
+                + "If omitted, `parent` is assumed.\n\n"
+                + "- `before`: before the specified task\n"
+                + "- `after`: after the specified task\n"
+                + "- `parent`: under the specified task",
+            example = "before"
+        )
+        @QueryParam("position") String position
     ) { return null; }
 
     @GET
@@ -135,8 +153,10 @@ public class TaskResource {
             required = true
         )
         @PathParam("projectId") String projectId,
+
         @ApiParam(value = "Parent task ID.", required = true)
         @PathParam("taskId") int taskId,
+
         @ApiParam(
             value = "Task status filter. "
                   + "Specify a value 0–100, or use \"active\" for active tasks or \"completed\" for completed tasks.",
@@ -414,7 +434,7 @@ public class TaskResource {
     ) { return null; }
 
     @POST
-    @Path("/attach/{projectId}/{id}/{filename}")
+    @Path("/attach/id/{projectId}/{id}/{filename}")
     @ApiOperation(
         value = "Upload an attachment to a task by ID.",
         notes = "Uploads an attachment to an existing task.",

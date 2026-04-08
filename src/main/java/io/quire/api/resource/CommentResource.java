@@ -18,21 +18,7 @@ public class CommentResource {
     // -------- Create --------
 
     @POST
-    @Path("/chat/{chatOid}")
-    @ApiOperation(
-        value = "Add a new comment to a chat channel (by chat OID).",
-        notes = "Adds a new comment to the specified chat channel.",
-        response = Comment.class
-    )
-    public Response createCommentToChatByOid(
-        @ApiParam(value = "OID of the chat channel.", required = true)
-        @PathParam("chatOid") String chatOid,
-        @ApiParam(value = "Comment to create.", required = true)
-        CreateCommentBody data
-    ) { return null; }
-
-    @POST
-    @Path("/task/{taskOid}")
+    @Path("/{taskOid}")
     @ApiOperation(
         value = "Add a new comment to a task (by task OID).",
         notes = "Adds a new comment to the specified task.",
@@ -46,17 +32,15 @@ public class CommentResource {
     ) { return null; }
 
     @POST
-    @Path("/id/{projectId}/{chatId}")
+    @Path("/chat/{chatOid}")
     @ApiOperation(
-        value = "Add a new comment to a chat channel (by project ID and chat ID).",
+        value = "Add a new comment to a chat channel (by chat OID).",
         notes = "Adds a new comment to the specified chat channel.",
         response = Comment.class
     )
-    public Response createCommentToChatById(
-        @ApiParam(value = "Project ID.", required = true)
-        @PathParam("projectId") String projectId,
-        @ApiParam(value = "Chat channel ID.", required = true)
-        @PathParam("chatId") String chatId,
+    public Response createCommentToChatByOid(
+        @ApiParam(value = "OID of the chat channel.", required = true)
+        @PathParam("chatOid") String chatOid,
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data
     ) { return null; }
@@ -77,6 +61,22 @@ public class CommentResource {
         CreateCommentBody data
     ) { return null; }
 
+    @POST
+    @Path("/chat/id/{projectId}/{chatId}")
+    @ApiOperation(
+        value = "Add a new comment to a chat channel (by project ID and chat ID).",
+        notes = "Adds a new comment to the specified chat channel.",
+        response = Comment.class
+    )
+    public Response createCommentToChatById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Chat channel ID.", required = true)
+        @PathParam("chatId") String chatId,
+        @ApiParam(value = "Comment to create.", required = true)
+        CreateCommentBody data
+    ) { return null; }
+
     // -------- List --------
 
     @GET
@@ -93,7 +93,7 @@ public class CommentResource {
     ) { return null; }
 
     @GET
-    @Path("/list/task/{taskOid}")
+    @Path("/list/{taskOid}")
     @ApiOperation(
         value = "Get all comments of a task (by task OID).",
         notes = "Returns all comments of the specified task.",
@@ -106,7 +106,7 @@ public class CommentResource {
     ) { return null; }
 
     @GET
-    @Path("/list/id/{projectId}/{chatId}")
+    @Path("/list/chat/id/{projectId}/{chatId}")
     @ApiOperation(
         value = "Get all comments of a chat channel (by project ID and chat ID).",
         notes = "Returns all comments of the specified chat channel.",
