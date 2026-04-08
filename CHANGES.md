@@ -5,6 +5,8 @@
 - **Task API:** Adjusted API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
     - Example: `POST /task/id/MyPrj/357?position=before`
 - **TASK API:** Added support for [deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
+- `DELETE` endpoints now return `204 No Content` instead of `200 OK`
+- **Storage API:** `PUT` endpoints now return `204 No Content` instead of `200 OK`
 
 ## Mar 27, 2026
 
@@ -134,8 +136,8 @@
 - Added API to export a project to a JSON map: `GET /project/export-json`.
 
 ## Jan 17, 2022
-- Storage API `GET`: now returns **404** if not found.  
-  _Previously returned 200 with an empty body._
+- **Storage API:** `GET` endpoints return `404` if not found.  
+      - _Previously returned 200 with an empty body._
 
 ## Apr 27, 2021
 - Changed URLs for getting, updating, or deleting a comment.  
