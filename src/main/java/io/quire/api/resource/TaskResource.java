@@ -179,7 +179,7 @@ public class TaskResource {
     ) { return null; }
 
     @GET
-    @Path("/id/{projectId}/{id}")
+    @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Get an existing task by its ID.",
         notes = "Returns the full task record.",
@@ -192,8 +192,9 @@ public class TaskResource {
             required = true
         )
         @PathParam("projectId") String projectId,
+
         @ApiParam(value = "Task ID.", required = true)
-        @PathParam("id") int id
+        @PathParam("taskId") int taskId
     ) { return null; }
 
     @PUT
@@ -211,7 +212,7 @@ public class TaskResource {
     ) { return null; }
 
     @PUT
-    @Path("/id/{projectId}/{id}")
+    @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Update an existing task by its ID.",
         notes = "Updates an existing task and returns the updated record.",
@@ -225,7 +226,8 @@ public class TaskResource {
         )
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Task ID.", required = true)
-        @PathParam("id") int id,
+
+        @PathParam("taskId") int taskId,
         @ApiParam(value = "Updated task content.", required = true)
         UpdateTaskBody data
     ) { return null; }
@@ -254,7 +256,7 @@ public class TaskResource {
     ) { return null; }
 
     @PUT
-    @Path("/move/id/{projectId}/{id}")
+    @Path("/move/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Move an existing task by its ID.",
         notes = "Moves an existing task under another task as a subtask, "
@@ -271,7 +273,7 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
 
         @ApiParam(value = "Task ID.", required = true)
-        @PathParam("id") int id,
+        @PathParam("taskId") int taskId,
 
         @ApiParam(
             value = "ID of the task that will become the new parent of the moved task. "
@@ -343,7 +345,7 @@ public class TaskResource {
     ) { return null; }
 
     @PUT
-    @Path("/transfer/id/{projectId}/{id}")
+    @Path("/transfer/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Transfer an existing task by its ID to another project.",
         notes = "Transfers an existing task to another project. "
@@ -359,7 +361,7 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
 
         @ApiParam(value = "Task ID.", required = true)
-        @PathParam("id") int id,
+        @PathParam("taskId") int taskId,
 
         @ApiParam(
             value = "ID of the target project to which the task will be transferred. "
@@ -434,7 +436,7 @@ public class TaskResource {
     ) { return null; }
 
     @POST
-    @Path("/attach/id/{projectId}/{id}/{filename}")
+    @Path("/attach/id/{projectId}/{taskId}/{filename}")
     @ApiOperation(
         value = "Upload an attachment to a task by ID.",
         notes = "Uploads an attachment to an existing task.",
@@ -447,8 +449,10 @@ public class TaskResource {
             required = true
         )
         @PathParam("projectId") String projectId,
+
         @ApiParam(value = "Task ID.", required = true)
-        @PathParam("id") int id,
+        @PathParam("taskId") int taskId,
+
         @ApiParam(
             value = "Attachment file name, e.g., `readme.txt`.\n\n"
                   + "Provide a meaningful extension so the browser can recognize the MIME type "
@@ -457,6 +461,7 @@ public class TaskResource {
             required = true
         )
         @PathParam("filename") String filename,
+
         @ApiParam(
             value = "Attachment content (raw bytes). For images, the body is the image itself.",
             required = true
