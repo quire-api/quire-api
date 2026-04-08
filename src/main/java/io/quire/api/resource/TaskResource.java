@@ -472,7 +472,7 @@ public class TaskResource {
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
-        value = "Delete a task and all of its subtasks.",
+        value = "Delete a task and all of its subtasks by its OID.",
         notes = "Deletes an existing task and all of its subtasks."
     )
     @ApiResponses({
@@ -482,15 +482,48 @@ public class TaskResource {
             examples = @Example({
                 @ExampleProperty(
                     mediaType = "application/json",
-                    value = "{'success': true}"
+                    value = "{\"success\": true}"
                 )
             })
         )
     })
-    public Response deleteTask(
+    public Response deleteTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid
-    ) { return null; }
+    ) {
+        return null;
+    }
+
+    @DELETE
+    @Path("/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Delete a task and all of its subtasks by its ID.",
+        notes = "Deletes an existing task and all of its subtasks."
+    )
+    @ApiResponses({
+        @ApiResponse(
+            code = 200,
+            message = "ok",
+            examples = @Example({
+                @ExampleProperty(
+                    mediaType = "application/json",
+                    value = "{\"success\": true}"
+                )
+            })
+        )
+    })
+    public Response deleteTaskById(
+        @ApiParam(
+            value = "Project ID. Specify \"-\" to remove from personal tasks in My Tasks.",
+            required = true
+        )
+        @PathParam("projectId") String projectId,
+
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId
+    ) {
+        return null;
+    }
 
     @GET
     @Path("/search/{projectOid}")
