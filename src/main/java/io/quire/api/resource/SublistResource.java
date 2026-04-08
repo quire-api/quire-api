@@ -69,7 +69,7 @@ public class SublistResource {
     ) { return null; }
 
     @GET
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
         value = "Get a sublist by ID",
         notes = "Returns the complete sublist record for the given ID.",
@@ -85,7 +85,7 @@ public class SublistResource {
         @ApiParam(value = "ID of the owner the sublist belongs to.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "ID of the sublist.", required = true)
-        @PathParam("id") String id
+        @PathParam("sublistId") String sublistId
     ) { return null; }
 
     @GET
@@ -141,7 +141,7 @@ public class SublistResource {
     ) { return null; }
 
     @PUT
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
         value = "Update a sublist by ID",
         notes = "Updates an existing sublist and returns the complete updated record.",
@@ -159,7 +159,7 @@ public class SublistResource {
         @ApiParam(value = "Sublist updates", required = true)
         UpdateSublistBody data,
         @ApiParam(value = "ID of the sublist to update.", required = true)
-        @PathParam("id") String id
+        @PathParam("sublistId") String sublistId
     ) { return null; }
 
     @DELETE
@@ -181,7 +181,7 @@ public class SublistResource {
     ) { return null; }
 
     @DELETE
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
         value = "Delete a sublist by ID",
         notes = "Deletes the sublist with the given ID.\n\n"
@@ -203,6 +203,6 @@ public class SublistResource {
         @ApiParam(value = "ID of the owner.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "ID of the sublist to delete.", required = true)
-        @PathParam("id") String id
+        @PathParam("sublistId") String sublistId
     ) { return null; }
 }

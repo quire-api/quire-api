@@ -69,7 +69,7 @@ public class DocResource {
     ) { return null; }
 
     @GET
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{docId}")
     @ApiOperation(
         value = "Get a document by ID.",
         notes = "Returns the full document record for the given owner and document ID.",
@@ -85,7 +85,7 @@ public class DocResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true)
-        @PathParam("id") String id
+        @PathParam("docId") String docId
     ) { return null; }
 
     @GET
@@ -143,7 +143,7 @@ public class DocResource {
     ) { return null; }
 
     @PUT
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{docId}")
     @ApiOperation(
         value = "Update a document by ID.",
         notes = "Updates an existing document and returns the updated record.",
@@ -159,7 +159,7 @@ public class DocResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true)
-        @PathParam("id") String id,
+        @PathParam("docId") String docId,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateDocBody data
     ) { return null; }
@@ -185,7 +185,7 @@ public class DocResource {
     ) { return null; }
 
     @DELETE
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{docId}")
     @ApiOperation(
         value = "Delete a document by ID.",
         notes = "Deletes the specified document.\n\n"
@@ -207,6 +207,6 @@ public class DocResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true)
-        @PathParam("id") String id
+        @PathParam("docId") String docId
     ) { return null; }
 }

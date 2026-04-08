@@ -66,7 +66,7 @@ public class ChatResource {
     ) { return null; }
 
     @GET
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{chatId}")
     @ApiOperation(
         value = "Get a chat channel by ID.",
         notes = "Returns the full chat channel record for the given owner and channel ID.",
@@ -82,7 +82,7 @@ public class ChatResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Chat channel ID.", required = true)
-        @PathParam("id") String id
+        @PathParam("chatId") String chatId
     ) { return null; }
 
     @GET
@@ -138,7 +138,7 @@ public class ChatResource {
     ) { return null; }
 
     @PUT
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{chatId}")
     @ApiOperation(
         value = "Update a chat channel by ID.",
         notes = "Updates an existing chat channel and returns the updated record.",
@@ -154,7 +154,7 @@ public class ChatResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Chat channel ID.", required = true)
-        @PathParam("id") String id,
+        @PathParam("chatId") String chatId,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateChatBody data
     ) { return null; }
@@ -178,7 +178,7 @@ public class ChatResource {
     ) { return null; }
 
     @DELETE
-    @Path("/id/{ownerType}/{ownerId}/{id}")
+    @Path("/id/{ownerType}/{ownerId}/{chatId}")
     @ApiOperation(
         value = "Delete a chat channel by ID.",
         notes = "Deletes the specified chat channel.\n\n"
@@ -200,6 +200,6 @@ public class ChatResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Chat channel ID.", required = true)
-        @PathParam("id") String id
+        @PathParam("chatId") String chatId
     ) { return null; }
 }
