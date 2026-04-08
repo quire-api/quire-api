@@ -1,5 +1,11 @@
 # Changelog
 
+## Apr 8, 2026
+
+- **Task API:** Adjusted API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
+    - Example: `POST /task/id/MyPrj/357?position=before`
+- **TASK API:** Added support for [or deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
+
 ## Mar 27, 2026
 
 - An additional `predecessors` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-id--projectId---id--get) APIs.
