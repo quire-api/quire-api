@@ -173,10 +173,10 @@ public class DocResource {
         notes = "Deletes the specified document."
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "ok",
-            examples = @Example({
-                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
-            }))
+        @ApiResponse(
+            code = 204,
+            message = "No Content"
+        )
     })
     public Response deleteDocByOid(
         @ApiParam(value = "Document OID.", required = true)
@@ -190,10 +190,10 @@ public class DocResource {
         notes = "Deletes the specified document."
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "ok",
-            examples = @Example({
-                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
-            }))
+        @ApiResponse(
+            code = 204,
+            message = "No Content"
+        )
     })
     public Response deleteDocById(
         @ApiParam(

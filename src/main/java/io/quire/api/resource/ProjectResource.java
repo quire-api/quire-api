@@ -277,10 +277,10 @@ public class ProjectResource {
         notes = "Deletes the specified project."
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "ok",
-            examples = @Example({
-                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
-            }))
+        @ApiResponse(
+            code = 204,
+            message = "No Content"
+        )
     })
     public Response deleteProject(
         @ApiParam(value = "Project OID.", required = true)

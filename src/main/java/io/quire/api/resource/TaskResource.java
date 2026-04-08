@@ -477,14 +477,8 @@ public class TaskResource {
     )
     @ApiResponses({
         @ApiResponse(
-            code = 200,
-            message = "ok",
-            examples = @Example({
-                @ExampleProperty(
-                    mediaType = "application/json",
-                    value = "{\"success\": true}"
-                )
-            })
+            code = 204,
+            message = "No Content"
         )
     })
     public Response deleteTaskByOid(
@@ -502,14 +496,8 @@ public class TaskResource {
     )
     @ApiResponses({
         @ApiResponse(
-            code = 200,
-            message = "ok",
-            examples = @Example({
-                @ExampleProperty(
-                    mediaType = "application/json",
-                    value = "{\"success\": true}"
-                )
-            })
+            code = 204,
+            message = "No Content"
         )
     })
     public Response deleteTaskById(

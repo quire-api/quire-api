@@ -99,10 +99,10 @@ public class OrganizationResource {
         notes = "Deletes the specified organization."
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "ok",
-            examples = @Example({
-                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
-            }))
+        @ApiResponse(
+            code = 204,
+            message = "No Content"
+        )
     })
     public Response deleteOrganization(
         @ApiParam(value = "Organization OID.", required = true)

@@ -166,10 +166,10 @@ public class ChatResource {
         notes = "Deletes the specified chat channel."
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "ok",
-            examples = @Example({
-                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
-            }))
+        @ApiResponse(
+            code = 204,
+            message = "No Content"
+        )
     })
     public Response deleteChatByOid(
         @ApiParam(value = "Chat channel OID.", required = true)
@@ -183,10 +183,10 @@ public class ChatResource {
         notes = "Deletes the specified chat channel."
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "ok",
-            examples = @Example({
-                @ExampleProperty(mediaType = "application/json", value = "{'success': true}")
-            }))
+        @ApiResponse(
+            code = 204,
+            message = "No Content"
+        )
     })
     public Response deleteChatById(
         @ApiParam(
