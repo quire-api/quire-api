@@ -2,8 +2,9 @@
 
 ## Apr 8, 2026
 
-- **Task API:** Adjusted API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
+- **Task API:** Enhanced API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
     - Example: `POST /task/id/MyPrj/357?position=before`
+    - *Deprecated*: `POST /task/before` and `POST /task/after`
 - **TASK API:** Added support for [deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
 - `DELETE` endpoints now return `204 No Content` instead of `200 OK`
 - **Storage API:** `PUT` endpoints now return `204 No Content` instead of `200 OK`
