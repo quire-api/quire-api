@@ -19,7 +19,7 @@ public class TagResource {
     @POST
     @Path("/{projectOid}")
     @ApiOperation(
-        value = "Create a tag",
+        value = "Create a tag.",
         notes = "Creates a new tag in the specified project (by OID).",
         response = Tag.class
     )
@@ -37,7 +37,7 @@ public class TagResource {
     @POST
     @Path("/id/{projectId}")
     @ApiOperation(
-        value = "Create a tag",
+        value = "Create a tag.",
         notes = "Creates a new tag in the specified project (by ID).",
         response = Tag.class
     )
@@ -55,7 +55,7 @@ public class TagResource {
     @GET
     @Path("/{oid}")
     @ApiOperation(
-        value = "Get a tag",
+        value = "Get a tag.",
         notes = "Returns the complete tag record for the given OID.",
         response = Tag.class
     )
@@ -67,7 +67,7 @@ public class TagResource {
     @GET
     @Path("/list/{projectOid}")
     @ApiOperation(
-        value = "List tags by project OID",
+        value = "List tags by project OID.",
         notes = "Returns all tags in the specified project (by OID).",
         response = Tag.class,
         responseContainer = "List"
@@ -84,7 +84,7 @@ public class TagResource {
     @GET
     @Path("/list/id/{projectId}")
     @ApiOperation(
-        value = "List tags by project ID",
+        value = "List tags by project ID.",
         notes = "Returns all tags in the specified project (by ID).",
         response = Tag.class,
         responseContainer = "List"
@@ -101,7 +101,7 @@ public class TagResource {
     @PUT
     @Path("/{oid}")
     @ApiOperation(
-        value = "Update a tag",
+        value = "Update a tag.",
         notes = "Updates an existing tag and returns the complete updated record.",
         response = Tag.class
     )
@@ -115,7 +115,7 @@ public class TagResource {
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
-        value = "Delete a tag",
+        value = "Delete a tag.",
         notes = "Deletes the tag with the given OID.\n\n"
             + "> Note: Returns `204 No Content` regardless of whether the tag exists."
     )

@@ -37,7 +37,7 @@ Authenticating via OAuth2 requires the following steps:
 
 **1. Give your app a cool name**
 
-Your app deserves a cool name that lives up to its wide broad of great features. 
+Your app deserves a cool name that lives up to its broad range of great features. 
 
 All of the app users will see this name in public, so think carefully!
 
@@ -223,7 +223,7 @@ When the user revokes the grant to a host (either a project or an organization),
 
 ## Notification Events
 
-A notification is the information about a update (aka., an activity). Here is an example:
+A notification is the information about an update (aka., an activity). Here is an example:
 
 ```
 {
@@ -235,7 +235,7 @@ A notification is the information about a update (aka., an activity). Here is an
     "id": "project-id"
   },
   "organizationSummary": {
-    "oid": "organization-where-event-ccurred",
+    "oid": "organization-where-event-occurred",
     "id": "organization-id"
   },
   "data": {
@@ -374,7 +374,7 @@ If you'd like to pass additional information in this syntax, you can append it a
 "app|/path|channel"
 ```
 
-For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JON object sent to the hook URL.
+For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JSON object sent to the hook URL.
 
 ```
 {

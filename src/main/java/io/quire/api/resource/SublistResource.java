@@ -19,7 +19,7 @@ public class SublistResource {
     @POST
     @Path("/{ownerType}/{ownerOid}")
     @ApiOperation(
-        value = "Create a sublist by owner OID",
+        value = "Create a sublist by owner OID.",
         notes = "Creates a new sublist under the specified owner (by OID).",
         response = Sublist.class
     )
@@ -39,7 +39,7 @@ public class SublistResource {
     @POST
     @Path("/id/{ownerType}/{ownerId}")
     @ApiOperation(
-        value = "Create a sublist by owner ID",
+        value = "Create a sublist by owner ID.",
         notes = "Creates a new sublist under the specified owner (by ID).",
         response = Sublist.class
     )
@@ -59,7 +59,7 @@ public class SublistResource {
     @GET
     @Path("/{oid}")
     @ApiOperation(
-        value = "Get a sublist by OID",
+        value = "Get a sublist by OID.",
         notes = "Returns the complete sublist record for the given OID.",
         response = Sublist.class
     )
@@ -71,7 +71,7 @@ public class SublistResource {
     @GET
     @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
-        value = "Get a sublist by ID",
+        value = "Get a sublist by ID.",
         notes = "Returns the complete sublist record for the given ID.",
         response = Sublist.class
     )
@@ -91,7 +91,7 @@ public class SublistResource {
     @GET
     @Path("/list/{ownerType}/{ownerOid}")
     @ApiOperation(
-        value = "List sublists by owner OID",
+        value = "List sublists by owner OID.",
         notes = "Returns all sublists under the specified owner (by OID).",
         response = Sublist.class,
         responseContainer = "List"
@@ -110,7 +110,7 @@ public class SublistResource {
     @GET
     @Path("/list/id/{ownerType}/{ownerId}")
     @ApiOperation(
-        value = "List sublists by owner ID",
+        value = "List sublists by owner ID.",
         notes = "Returns all sublists under the specified owner (by ID).",
         response = Sublist.class,
         responseContainer = "List"
@@ -129,7 +129,7 @@ public class SublistResource {
     @PUT
     @Path("/{oid}")
     @ApiOperation(
-        value = "Update a sublist by OID",
+        value = "Update a sublist by OID.",
         notes = "Updates an existing sublist and returns the complete updated record.",
         response = Sublist.class
     )
@@ -143,7 +143,7 @@ public class SublistResource {
     @PUT
     @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
-        value = "Update a sublist by ID",
+        value = "Update a sublist by ID.",
         notes = "Updates an existing sublist and returns the complete updated record.",
         response = Sublist.class
     )
@@ -165,7 +165,7 @@ public class SublistResource {
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
-        value = "Delete a sublist by OID",
+        value = "Delete a sublist by OID.",
         notes = "Deletes the sublist with the given OID.\n\n"
             + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
     )
@@ -183,7 +183,7 @@ public class SublistResource {
     @DELETE
     @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
-        value = "Delete a sublist by ID",
+        value = "Delete a sublist by ID.",
         notes = "Deletes the sublist with the given ID.\n\n"
             + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
     )

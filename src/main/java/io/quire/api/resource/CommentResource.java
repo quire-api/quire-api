@@ -135,6 +135,20 @@ public class CommentResource {
         @PathParam("taskId") int taskId
     ) { return null; }
 
+    // -------- Get --------
+
+    @GET
+    @Path("/{commentOid}")
+    @ApiOperation(
+        value = "Get an existing comment (by comment OID).",
+        notes = "Returns the full comment record.",
+        response = Comment.class
+    )
+    public Response getCommentByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid
+    ) { return null; }
+
     // -------- Update --------
 
     @PUT

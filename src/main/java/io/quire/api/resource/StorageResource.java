@@ -19,6 +19,16 @@ import javax.ws.rs.core.Response;
 public class StorageResource {
 
     @GET
+    @Path("/list")
+    @ApiOperation(
+        value = "List all stored entries.",
+        notes =
+            "Returns all stored entries (up to 20) for the current access token.",
+        response = StorageList.class
+    )
+    public Response getAllValues() { return null; }
+
+    @GET
     @Path("/list/{prefix}")
     @ApiOperation(
         value = "List stored entries by prefix.",
@@ -57,7 +67,6 @@ public class StorageResource {
         notes =
             "Creates or replaces the value stored under the given name.\n"
           + "If `null` is provided as the value, the key will be deleted.\n"
-          + "Returns `{ \"success\": true }` when the operation succeeds.\n"
           + "Note: values are scoped per access token."
     )
     @ApiResponses({

@@ -162,7 +162,8 @@ public class StatusResource {
     @Path("/id/{projectId}/{value}")
     @ApiOperation(
         value = "Delete a task status (by project ID).",
-        notes = "Deletes the specified status."
+        notes = "Deletes the specified status.\n\n"
+            + "> Note: Returns `204 No Content` regardless of whether the status exists."
     )
     @ApiResponses({
         @ApiResponse(
