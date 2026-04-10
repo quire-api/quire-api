@@ -31,7 +31,7 @@ jobs:
           node-version: '20'
 
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build (mvn clean compile)
         run: mvn clean compile
