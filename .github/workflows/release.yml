@@ -1,0 +1,45 @@
+name: Build & Release API Doc
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Commit message for the release'
+        required: false
+        default: 'Build doc'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build (mvn clean compile)
+        run: mvn clean compile
+
+      - name: Commit and push dist/
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dist/
+          git diff --cached --quiet || git commit -m "${{ github.event.inputs.message }}"
+          git push
