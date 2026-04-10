@@ -1,0 +1,18 @@
+#!/bin/bash
+#	Purpose:
+#		pull, build, and push if build succeeds
+#	History:
+#		Thu Apr 10 2025, Created by jimmyshiau
+#
+# Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+#
+DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$DIR/.." || exit 1
+
+git pull || exit 1
+
+"$DIR/build" || exit 1
+
+git add dist/
+git commit -m "Build doc"
+git push
