@@ -519,7 +519,21 @@ public class TaskResource {
     @Path("/search/{projectOid}")
     @ApiOperation(
         value = "Search tasks in a project by project OID.",
-        notes = "Returns tasks that match the specified criteria in the project.",
+        notes = "Returns tasks that match the specified criteria in the project.\n\n"
+              + "### Custom Field Filtering\n\n"
+              + "You can filter by custom fields by passing the field name as a query parameter "
+              + "(case-insensitive). For example, `?cost=13` or `?approvedBy=john.doe`.\n\n"
+              + "Supported field types and value formats:\n\n"
+              + "| Type | Value format | Example |\n"
+              + "| --- | --- | --- |\n"
+              + "| Number, Money | Numeric value | `cost=13` |\n"
+              + "| Checkbox | `true` or `false` | `done=true` |\n"
+              + "| Select | Option name | `priority=High` |\n"
+              + "| User | User ID or OID | `approvedBy=john.doe` |\n"
+              + "| Task | Task ID (integer) or OID | `blockedBy=42` |\n"
+              + "| Email, Hyperlink | Exact value, or prefix with `~` for regex, `~*` for case-insensitive regex | `website=~example\\.com` |\n"
+              + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n\n"
+              + "Not supported: Text (use `text` for full-text search instead), Date, Formula, File, Lookup.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -601,7 +615,21 @@ public class TaskResource {
     @Path("/search/id/{projectId}")
     @ApiOperation(
         value = "Search tasks in a project by project ID.",
-        notes = "Returns tasks that match the specified criteria in the project.",
+        notes = "Returns tasks that match the specified criteria in the project.\n\n"
+              + "### Custom Field Filtering\n\n"
+              + "You can filter by custom fields by passing the field name as a query parameter "
+              + "(case-insensitive). For example, `?cost=13` or `?approvedBy=john.doe`.\n\n"
+              + "Supported field types and value formats:\n\n"
+              + "| Type | Value format | Example |\n"
+              + "| --- | --- | --- |\n"
+              + "| Number, Money | Numeric value | `cost=13` |\n"
+              + "| Checkbox | `true` or `false` | `done=true` |\n"
+              + "| Select | Option name | `priority=High` |\n"
+              + "| User | User ID or OID | `approvedBy=john.doe` |\n"
+              + "| Task | Task ID (integer) or OID | `blockedBy=42` |\n"
+              + "| Email, Hyperlink | Exact value, or prefix with `~` for regex, `~*` for case-insensitive regex | `website=~example\\.com` |\n"
+              + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n\n"
+              + "Not supported: Text (use `text` for full-text search instead), Date, Formula, File, Lookup.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
