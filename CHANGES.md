@@ -3,6 +3,8 @@
 ## Apr 13, 2026
 
 - **Task API:** Added support for [searching tasks by custom fields](https://quire.io/dev/api/#operation--task-search--projectOid--get) in project-level search. Supported field types: Number, Money, Checkbox, Select, User, Task, Email, Hyperlink, and Duration. Field names are case-insensitive.
+- **OAuth:** Added [PKCE](https://quire.io/dev/api/#oauth-pkce) (RFC 7636) support for single-page apps. Only S256 method is supported. PKCE flows do not issue refresh tokens.
+- **OAuth:** Improved error message when `grant_type` is missing from token exchange request.
 
 ## Apr 8, 2026
 
