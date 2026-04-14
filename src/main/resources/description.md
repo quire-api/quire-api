@@ -132,6 +132,15 @@ Then, the access token will be returned in the response's body.
 ```
 The token should be kept carefully and permanently since you need it to access every Quire API.
 
+### PKCE Support
+
+Quire supports <a href="https://tools.ietf.org/html/rfc7636">PKCE (RFC 7636)</a> for public clients such as single-page apps. To use it:
+
+1. Add `code_challenge` and `code_challenge_method=S256` to the authorization request.
+2. Send `code_verifier` instead of `client_secret` when exchanging the authorization code for a token.
+
+> **Note:** Only `S256` is supported. PKCE tokens do not include a `refresh_token`.
+
 ### Use Access Token to Access Quire API
 
 In each request, the access token must be put in the header. The header name is `Authorization` and the value is `Bearer your_token`.
