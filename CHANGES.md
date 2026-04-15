@@ -1,5 +1,9 @@
 # Changelog
 
+## Apr 15, 2026
+
+- **OAuth:** Added webhook token field to [app config page](https://quire.io/apps/dev). Developers can now set a verification token that is sent with each webhook payload.
+
 ## Apr 13, 2026
 
 - **Task API:** Added support for [searching tasks by custom fields](https://quire.io/dev/api/#operation--task-search--projectOid--get) in project-level search. Supported field types: Number, Money, Checkbox, Select, User, Task, Email, Hyperlink, and Duration. Field names are case-insensitive.
