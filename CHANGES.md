@@ -15,13 +15,13 @@
 - **Task API:** Enhanced API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
     - Example: `POST /task/id/MyPrj/357?position=before`
     - *Deprecated*: `POST /task/before` and `POST /task/after`
-- **TASK API:** Added support for [deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
+- **Task API:** Added support for [deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
 - `DELETE` endpoints now return `204 No Content` instead of `200 OK`
 - **Storage API:** `PUT` endpoints now return `204 No Content` instead of `200 OK`
 
 ## Mar 27, 2026
 
-- An additional `predecessors` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-id--projectId---id--get) APIs.
+- An additional `predecessors` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-search-id--projectId--get) APIs.
 
 ## Mar 23, 2026
 
@@ -35,13 +35,13 @@
 ## Feb 28, 2026
 
 - The transfer task event type has been updated to `52` (previously `30`). For this event, the `value` field represents the source project, and the `projectSummary` field represents the target project.
-- The transfer task event type has been updated to `109` (previously `108`). For this event, the `value` field represents the source organization, and the `organizationSummary` field represents the target organization.
+- The transfer project event type has been updated to `109` (previously `108`). For this event, the `value` field represents the source organization, and the `organizationSummary` field represents the target organization.
 
 ## Feb 13, 2026
 
 - Addition `projectSummary` and `organizationSummary` fields are included in the data sent to a web hook. See [Notification Event](https://quire.io/dev/api/#notification-events)
 - An additional `parent` field is included in the data sent to a web hook to provide parent task information. See [Notification Event](https://quire.io/dev/api/#notification-events)
-- An additional `parent` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-id--projectId---id--get) APIs.
+- An additional `parent` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-search-id--projectId--get) APIs.
 
 ## Feb 12, 2026
 

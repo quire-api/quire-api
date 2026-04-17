@@ -417,7 +417,7 @@ public class TaskResource {
         notes = "Uploads an attachment to an existing task.",
         response = SimpleAttachment.class
     )
-    public Response attachCommentByOid(
+    public Response attachTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("taskOid") String taskOid,
         @ApiParam(
@@ -442,7 +442,7 @@ public class TaskResource {
         notes = "Uploads an attachment to an existing task.",
         response = SimpleAttachment.class
     )
-    public Response attachCommentById(
+    public Response attachTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
@@ -693,6 +693,12 @@ public class TaskResource {
         )
         @QueryParam("commented") String commented,
         @ApiParam(
+            value = "Filter by source ref key.\n"
+                  + "See `sourceRef` in the task creation API.",
+            example = "git"
+        )
+        @QueryParam("sourceRef") String sourceRef,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -761,6 +767,12 @@ public class TaskResource {
             example = "7"
         )
         @QueryParam("commented") String commented,
+        @ApiParam(
+            value = "Filter by source ref key.\n"
+                  + "See `sourceRef` in the task creation API.",
+            example = "git"
+        )
+        @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -831,6 +843,12 @@ public class TaskResource {
         )
         @QueryParam("commented") String commented,
         @ApiParam(
+            value = "Filter by source ref key.\n"
+                  + "See `sourceRef` in the task creation API.",
+            example = "git"
+        )
+        @QueryParam("sourceRef") String sourceRef,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -900,6 +918,12 @@ public class TaskResource {
         )
         @QueryParam("commented") String commented,
         @ApiParam(
+            value = "Filter by source ref key.\n"
+                  + "See `sourceRef` in the task creation API.",
+            example = "git"
+        )
+        @QueryParam("sourceRef") String sourceRef,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -968,6 +992,12 @@ public class TaskResource {
             example = "7"
         )
         @QueryParam("commented") String commented,
+        @ApiParam(
+            value = "Filter by source ref key.\n"
+                  + "See `sourceRef` in the task creation API.",
+            example = "git"
+        )
+        @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"

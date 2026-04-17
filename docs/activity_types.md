@@ -60,7 +60,7 @@
 
 ### taskSummaries
 
-An addition field for for activities that can affect multiple tasks -- for example, removing a task that has subtasks (`1`). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
+An additional field for activities that can affect multiple tasks -- for example, removing a task that has subtasks (`1`). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
 
 For example, suppose there are two tasks, `A` and `B`, where `B` is a subtask of `A`. When `A` is removed, the hook will receive the following content in `taskSummaries`.
 
