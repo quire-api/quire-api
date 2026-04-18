@@ -1,5 +1,9 @@
 # Changelog
 
+## Apr 18, 2026
+
+- **Rate Limits:** When exceeding the [API rate limit](https://quire.io/dev/api/#rate-limits), the `429 Too Many Requests` response now includes a [`Retry-After`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After) header indicating the number of seconds to wait before retrying.
+
 ## Apr 15, 2026
 
 - **OAuth:** Added webhook token field to [app config page](https://quire.io/apps/dev). Developers can now set a verification token that is sent with each webhook payload.
