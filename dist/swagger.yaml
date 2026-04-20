@@ -3629,15 +3629,15 @@ definitions:
         type: string
         example: file.txt
         description: File name of the attachment.
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   Change:
     type: object
     required:
@@ -3707,11 +3707,6 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -3722,19 +3717,24 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       owner:
         position: 99
         description: Project this chat channel belongs to.
         $ref: '#/definitions/ChatOwner'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   ChatOwner:
     type: object
     properties:
@@ -3799,11 +3799,6 @@ definitions:
         type: string
         position: 50
         description: URL of this comment on the Quire website.
-      pinAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.
       pinBy:
         position: 50
         description: User who pinned this comment, or null if not pinned.
@@ -3813,6 +3808,11 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
+      pinAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.
       editedBy:
         position: 50
         description: User who last edited this comment, or null if not edited.
@@ -3821,15 +3821,15 @@ definitions:
         position: 99
         description: Object this comment was added to.
         $ref: '#/definitions/CommentOwner'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   CommentOwner:
     type: object
     properties:
@@ -3905,14 +3905,14 @@ definitions:
         type: string
         example: Adjust style
         description: Content of the new comment (Markdown supported).
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false.'
       asUser:
         type: boolean
         example: true
         description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false.'
   CreateDocBody:
     type: object
     required:
@@ -4084,6 +4084,25 @@ definitions:
           type: string
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this task as created by the app.
+          Default: false (created by the authorizing user).
+      assignees:
+        type: array
+        description: |-
+          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
+
+          - Use "me" to indicate the current user.
+          - Use "inherit" to include all assignees of the parent task.
+
+          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -4110,19 +4129,6 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      assignees:
-        type: array
-        description: |-
-          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
-
-          - Use "me" to indicate the current user.
-          - Use "inherit" to include all assignees of the parent task.
-
-          Example: `{"addAssignees": ["me", "inherit", "foo@domain.com"]}`
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
       recurrence:
         description: |-
           (Optional) Recurrence details. Null if the task is not recurring.
@@ -4195,12 +4201,6 @@ definitions:
           - User/Task: specify the OID.
           - Duration: specify number of seconds.
           - Multi-value: specify a list.
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this task as created by the app.
-          Default: false (created by the authorizing user).
       name:
         type: string
         example: Design new **logo**
@@ -4222,7 +4222,7 @@ definitions:
         format: int32
         example: 0
         position: 4
-        description: '(Optional) Task priority. Must be between -1 (lowest) and 2 (highest). Default: 0.'
+        description: '(Optional) Task priority. Either an integer between -1 (lowest) and 2 (highest), or an English name (case-insensitive): `Low`, `Medium`, `High`, `Urgent`. Default: 0.'
       sourceRef:
         type: object
         example: '{''text'': ''Source: [Gmail](https://gmail.com/link)''}'
@@ -4287,11 +4287,6 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -4302,19 +4297,24 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       owner:
         position: 99
         description: Project this document belongs to.
         $ref: '#/definitions/DocOwner'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   DocOwner:
     type: object
     properties:
@@ -4411,16 +4411,16 @@ definitions:
         description: Users who follow this organization.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: Creation timestamp in UTC (ISO 8601).
       createdBy:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: User who created this record.
         $ref: '#/definitions/SimpleIdentity'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: Creation timestamp in UTC (ISO 8601).
   OrganizationWithPlan:
     type: object
     properties:
@@ -4489,16 +4489,16 @@ definitions:
         description: Users who follow this organization.
         items:
           $ref: '#/definitions/SimpleIdentity'
-      createdAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 99
-        description: Creation timestamp in UTC (ISO 8601).
       createdBy:
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         position: 99
         description: User who created this record.
         $ref: '#/definitions/SimpleIdentity'
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: Creation timestamp in UTC (ISO 8601).
   Partner:
     type: object
     properties:
@@ -4523,15 +4523,15 @@ definitions:
         position: 99
         description: The project this tag belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   Project:
     type: object
     properties:
@@ -4545,11 +4545,6 @@ definitions:
         format: int32
         example: 30
         description: Total number of tasks in this project.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root (top-level) tasks in this project.
       url:
         type: string
         example: https://quire.io/w/my_project
@@ -4557,6 +4552,11 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root (top-level) tasks in this project.
       nameText:
         type: string
         example: My Project
@@ -4598,37 +4598,37 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      archivedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was last edited.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this project.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       attachments:
         type: array
         position: 60
         description: Attachments associated with this project.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this project.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   ProjectJsonMap:
     type: object
     properties:
@@ -4657,11 +4657,6 @@ definitions:
         format: int32
         example: 30
         description: Total number of tasks in this project.
-      rootCount:
-        type: integer
-        format: int32
-        example: 5
-        description: Number of root (top-level) tasks in this project.
       url:
         type: string
         example: https://quire.io/w/my_project
@@ -4669,6 +4664,11 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      rootCount:
+        type: integer
+        format: int32
+        example: 5
+        description: Number of root (top-level) tasks in this project.
       nameText:
         type: string
         example: My Project
@@ -4714,58 +4714,40 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      archivedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was last edited.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this project.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
+      archivedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
       attachments:
         type: array
         position: 60
         description: Attachments associated with this project.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this project.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   Recurrence:
     type: object
     properties:
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
-      bymonth:
-        type: integer
-        format: int32
-        example: 10
-        description: Month number (1–12) used with `yearly` frequency.
-      dupsubtasks:
-        type: boolean
-        example: false
-        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
-      sincelatest:
-        type: boolean
-        example: true
-        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
       freq:
         type: string
         example: weekly
@@ -4787,6 +4769,24 @@ definitions:
         format: int32
         example: 2
         description: Week number (1-based) used with `monthly` or `yearly` frequencies.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
+      bymonth:
+        type: integer
+        format: int32
+        example: 10
+        description: Month number (1–12) used with `yearly` frequency.
+      dupsubtasks:
+        type: boolean
+        example: false
+        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
+      sincelatest:
+        type: boolean
+        example: true
+        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
       until:
         type: string
         example: '2020-12-22'
@@ -4799,24 +4799,6 @@ definitions:
         type: string
         example: j47xvxul26
         description: Identifier for the recurrence series this task belongs to. Tasks that share the same seriesId are part of the same recurring series.
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
-      bymonth:
-        type: integer
-        format: int32
-        example: 10
-        description: Month number (1–12) used with `yearly` frequency.
-      dupsubtasks:
-        type: boolean
-        example: false
-        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
-      sincelatest:
-        type: boolean
-        example: true
-        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
       freq:
         type: string
         example: weekly
@@ -4838,6 +4820,24 @@ definitions:
         format: int32
         example: 2
         description: Week number (1-based) used with `monthly` or `yearly` frequencies.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
+      bymonth:
+        type: integer
+        format: int32
+        example: 10
+        description: Month number (1–12) used with `yearly` frequency.
+      dupsubtasks:
+        type: boolean
+        example: false
+        description: 'Whether to duplicate subtasks when the task is completed. Default: true.'
+      sincelatest:
+        type: boolean
+        example: true
+        description: 'Whether to repeat relative to the last completion date (daily frequency only). Default: false.'
       until:
         type: string
         example: '2020-12-22'
@@ -4850,14 +4850,14 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the task that references another task (the referrer task).
-      when:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        description: Timestamp (UTC, ISO 8601) when this reference was created.
       user:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who created this reference.
+      when:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        description: Timestamp (UTC, ISO 8601) when this reference was created.
   SimpleAttachment:
     type: object
     properties:
@@ -5019,11 +5019,6 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      archivedAt:
-        type: string
-        example: '2020-02-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       start:
         type: string
         example: '2024-01-02'
@@ -5034,19 +5029,24 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      archivedAt:
+        type: string
+        example: '2020-02-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
       owner:
         position: 99
         description: Project this sublist belongs to.
         $ref: '#/definitions/SublistOwner'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   SublistOwner:
     type: object
     properties:
@@ -5082,6 +5082,10 @@ definitions:
   Subscription:
     type: object
     properties:
+      due:
+        type: string
+        example: '2038-02-22T02:06:58Z'
+        description: Subscription due/renewal timestamp in UTC (ISO 8601).
       plan:
         type: string
         example: Professional
@@ -5090,10 +5094,6 @@ definitions:
         type: boolean
         example: false
         description: Whether the subscription is expired. Available only when a due date is present.
-      due:
-        type: string
-        example: '2038-02-22T02:06:58Z'
-        description: Subscription due/renewal timestamp in UTC (ISO 8601).
   Tag:
     type: object
     properties:
@@ -5117,15 +5117,15 @@ definitions:
         position: 99
         description: The project this tag belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   Task:
     type: object
     properties:
@@ -5186,16 +5186,16 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
         example: 500
         position: 4
         description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       timelogs:
         type: array
         position: 4
@@ -5348,15 +5348,15 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   TaskInfo:
     type: object
     properties:
@@ -5436,16 +5436,16 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
         example: 500
         position: 4
         description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       timelogs:
         type: array
         position: 4
@@ -5606,15 +5606,15 @@ definitions:
           Note: It returns at most 10 levels of parent tasks. If exceeded, the 11th item will contain only the id.
 
         $ref: '#/definitions/TaskInfo'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   TaskWithProjectParentInfo:
     type: object
     properties:
@@ -5675,16 +5675,16 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
         example: 500
         position: 4
         description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       timelogs:
         type: array
         position: 4
@@ -5849,15 +5849,15 @@ definitions:
         position: 81
         description: The project to which this task belongs.
         $ref: '#/definitions/SimpleEntityWithId'
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 99
         description: Creation timestamp in UTC (ISO 8601).
-      createdBy:
-        position: 99
-        description: User who created this record.
-        $ref: '#/definitions/SimpleIdentity'
   Timelog:
     type: object
     properties:
@@ -5892,14 +5892,6 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
       iconColor:
         type: string
         example: '37'
@@ -5915,6 +5907,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
       archived:
         type: boolean
         example: true
@@ -5945,14 +5945,6 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
       iconColor:
         type: string
         example: '37'
@@ -5968,6 +5960,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
       archived:
         type: boolean
         example: true
@@ -6079,14 +6079,6 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
       iconColor:
         type: string
         example: '37'
@@ -6102,6 +6094,14 @@ definitions:
             'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',
             'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',
             'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
       archived:
         type: boolean
         example: true
@@ -6150,6 +6150,43 @@ definitions:
           type: string
         example:
           - ITaVbkhh3iVcEcV3vuSLeE2k
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
+      assignees:
+        type: array
+        description: |-
+          (Optional) Assignees to replace the current assignees (OID, ID, or email).
+          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
+
+          See `addAssignees` for special values.
+        items:
+          type: string
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+      addSuccessors:
+        type: array
+        description: |-
+          (Optional) Successors to add (task OID or ID).
+
+          IDs can be specified as `#id` or `id`.
+
+          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
+        items:
+          type: string
+      removeSuccessors:
+        type: array
+        description: |-
+          (Optional) Successors to remove (task OID or ID).
+
+          IDs can be specified as `#id` or `id`.
+
+          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
+        items:
+          type: string
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -6176,17 +6213,6 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      assignees:
-        type: array
-        description: |-
-          (Optional) Assignees to replace the current assignees (OID, ID, or email).
-          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
-
-          See `addAssignees` for special values.
-        items:
-          type: string
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
       recurrence:
         description: |-
           (Optional) Recurrence details. `null` if the task is not recurring.
@@ -6321,32 +6347,6 @@ definitions:
           type: string
         example:
           - aBuz4MwfZ5CasOae6stnFa2f
-      addSuccessors:
-        type: array
-        description: |-
-          (Optional) Successors to add (task OID or ID).
-
-          IDs can be specified as `#id` or `id`.
-
-          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
-        items:
-          type: string
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
-      removeSuccessors:
-        type: array
-        description: |-
-          (Optional) Successors to remove (task OID or ID).
-
-          IDs can be specified as `#id` or `id`.
-
-          Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
-        items:
-          type: string
       name:
         type: string
         example: New idea
@@ -6370,7 +6370,7 @@ definitions:
         format: int32
         example: 0
         position: 4
-        description: (Optional) New priority. Must be between -1 (lowest) and 2 (highest).
+        description: '(Optional) New priority. Either an integer between -1 (lowest) and 2 (highest), or an English name (case-insensitive): `Low`, `Medium`, `High`, `Urgent`.'
       sourceRef:
         type: object
         example: '{''text'': ''Source: [Gmail](https://gmail.com/link)''}'
@@ -6384,16 +6384,16 @@ definitions:
   User:
     type: object
     properties:
+      locale:
+        type: string
+        example: en_GB
+        description: The locale of the current user, or null if the user is not the current one.
       timeZone:
         type: object
         example: '`{''offset'': 0, ''name'': ''Europe/London''}`'
         description: The time zone of the current user, or null if the user is not the current one.
         additionalProperties:
           type: object
-      locale:
-        type: string
-        example: en_GB
-        description: The locale of the current user, or null if the user is not the current one.
       url:
         type: string
         example: https://quire.io/u/john
@@ -6414,15 +6414,15 @@ definitions:
         type: string
         example: john
         description: User ID.
-      website:
-        type: string
-        example: https://coolwebsites.com
-        description: Website URL.
-        allowEmptyValue: true
       email:
         type: string
         example: john@gmail.com
         description: Email address.
+        allowEmptyValue: true
+      website:
+        type: string
+        example: https://coolwebsites.com
+        description: Website URL.
         allowEmptyValue: true
       description:
         type: string
