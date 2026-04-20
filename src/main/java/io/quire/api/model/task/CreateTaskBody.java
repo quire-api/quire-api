@@ -21,7 +21,7 @@ public class CreateTaskBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Task priority. Must be between -1 (lowest) and 2 (highest). Default: 0.",
+        value = "(Optional) Task priority. Either an integer between -1 (lowest) and 2 (highest), or an English name (case-insensitive): `Low`, `Medium`, `High`, `Urgent`. Default: 0.",
         example = "0",
         position = 4
     )

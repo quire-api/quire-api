@@ -20,7 +20,7 @@ public class UpdateTaskBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) New priority. Must be between -1 (lowest) and 2 (highest).",
+        value = "(Optional) New priority. Either an integer between -1 (lowest) and 2 (highest), or an English name (case-insensitive): `Low`, `Medium`, `High`, `Urgent`.",
         example = "0",
         position = 4
     )
