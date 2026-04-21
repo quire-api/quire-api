@@ -162,6 +162,49 @@ public class SublistResource {
         @PathParam("sublistId") String sublistId
     ) { return null; }
 
+    @PUT
+    @Path("/undo-remove/{oid}")
+    @ApiOperation(
+        value = "Undo the removal of a sublist by OID.",
+        notes = "Restores a previously-removed sublist. "
+            + "Idempotent: if the sublist is not currently removed, this is "
+            + "a no-op and returns the current sublist record.\n\n"
+            + "Subject to the sublist-per-owner quota: may return "
+            + "`429 Too Many Requests` if the plan's sublist limit is "
+            + "already reached.",
+        response = Sublist.class
+    )
+    public Response undoRemoveSublistByOid(
+        @ApiParam(value = "OID of the sublist to restore.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    @PUT
+    @Path("/undo-remove/id/{ownerType}/{ownerId}/{sublistId}")
+    @ApiOperation(
+        value = "Undo the removal of a sublist by ID.",
+        notes = "Restores a previously-removed sublist. "
+            + "Idempotent: if the sublist is not currently removed, this is "
+            + "a no-op and returns the current sublist record.\n\n"
+            + "Subject to the sublist-per-owner quota: may return "
+            + "`429 Too Many Requests` if the plan's sublist limit is "
+            + "already reached.",
+        response = Sublist.class
+    )
+    public Response undoRemoveSublistById(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
+                  + "If omitted, `project` is assumed. For example, `/undo-remove/id/foo/bar` "
+                  + "is equivalent to `/undo-remove/id/project/foo/bar`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "ID of the owner.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "ID of the sublist to restore.", required = true)
+        @PathParam("sublistId") String sublistId
+    ) { return null; }
+
     @DELETE
     @Path("/{oid}")
     @ApiOperation(

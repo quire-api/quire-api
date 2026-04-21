@@ -159,6 +159,49 @@ public class ChatResource {
         UpdateChatBody data
     ) { return null; }
 
+    @PUT
+    @Path("/undo-remove/{oid}")
+    @ApiOperation(
+        value = "Undo the removal of a chat channel by OID.",
+        notes = "Restores a previously-removed chat channel. "
+            + "Idempotent: if the channel is not currently removed, this is "
+            + "a no-op and returns the current channel record.\n\n"
+            + "Subject to the chat-channel-per-project quota: may return "
+            + "`429 Too Many Requests` if the plan's chat-channel limit is "
+            + "already reached.",
+        response = Chat.class
+    )
+    public Response undoRemoveChatByOid(
+        @ApiParam(value = "Chat channel OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    @PUT
+    @Path("/undo-remove/id/{ownerType}/{ownerId}/{chatId}")
+    @ApiOperation(
+        value = "Undo the removal of a chat channel by ID.",
+        notes = "Restores a previously-removed chat channel. "
+            + "Idempotent: if the channel is not currently removed, this is "
+            + "a no-op and returns the current channel record.\n\n"
+            + "Subject to the chat-channel-per-project quota: may return "
+            + "`429 Too Many Requests` if the plan's chat-channel limit is "
+            + "already reached.",
+        response = Chat.class
+    )
+    public Response undoRemoveChatById(
+        @ApiParam(
+            value = "Owner type. Currently only `project` is supported. "
+                  + "If omitted, `project` is assumed; e.g., `/undo-remove/id/foo/bar` "
+                  + "is equivalent to `/undo-remove/id/project/foo/bar`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Chat channel ID.", required = true)
+        @PathParam("chatId") String chatId
+    ) { return null; }
+
     @DELETE
     @Path("/{oid}")
     @ApiOperation(

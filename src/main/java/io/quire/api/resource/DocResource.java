@@ -164,6 +164,51 @@ public class DocResource {
         UpdateDocBody data
     ) { return null; }
 
+    // -------- Undo remove --------
+
+    @PUT
+    @Path("/undo-remove/{oid}")
+    @ApiOperation(
+        value = "Undo the removal of a document by OID.",
+        notes = "Restores a previously-removed document. "
+            + "Idempotent: if the document is not currently removed, this is "
+            + "a no-op and returns the current document record.\n\n"
+            + "Subject to the document-per-owner quota: may return "
+            + "`429 Too Many Requests` if the plan's document limit is "
+            + "already reached.",
+        response = Doc.class
+    )
+    public Response undoRemoveDocByOid(
+        @ApiParam(value = "OID of the document to restore.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    @PUT
+    @Path("/undo-remove/id/{ownerType}/{ownerId}/{docId}")
+    @ApiOperation(
+        value = "Undo the removal of a document by ID.",
+        notes = "Restores a previously-removed document. "
+            + "Idempotent: if the document is not currently removed, this is "
+            + "a no-op and returns the current document record.\n\n"
+            + "Subject to the document-per-owner quota: may return "
+            + "`429 Too Many Requests` if the plan's document limit is "
+            + "already reached.",
+        response = Doc.class
+    )
+    public Response undoRemoveDocById(
+        @ApiParam(
+            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+                  + "If omitted, `project` is assumed; e.g., `/undo-remove/id/foo/bar` "
+                  + "is equivalent to `/undo-remove/id/project/foo/bar`.",
+            required = false
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Document ID.", required = true)
+        @PathParam("docId") String docId
+    ) { return null; }
+
     // -------- Delete --------
 
     @DELETE

@@ -192,6 +192,22 @@ public class CommentResource {
         Object data
     ) { return null; }
 
+    // -------- Undo remove --------
+
+    @PUT
+    @Path("/undo-remove/{commentOid}")
+    @ApiOperation(
+        value = "Undo the removal of a comment (by comment OID).",
+        notes = "Restores a previously-removed comment. "
+            + "Idempotent: if the comment is not currently removed, this is "
+            + "a no-op and returns the current comment record.",
+        response = Comment.class
+    )
+    public Response undoRemoveCommentByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid
+    ) { return null; }
+
     // -------- Delete --------
 
     @DELETE

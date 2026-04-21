@@ -469,6 +469,46 @@ public class TaskResource {
         Object data
     ) { return null; }
 
+    @PUT
+    @Path("/undo-remove/{oid}")
+    @ApiOperation(
+        value = "Undo the removal of a task by its OID.",
+        notes = "Restores a previously-removed task. "
+            + "Idempotent: if the task is not currently removed, this is a "
+            + "no-op and returns the current task record.\n\n"
+            + "Subject to the task-creation quota (same as creating a new "
+            + "task): may return `429 Too Many Requests` if the "
+            + "organization is at the plan's task limit.",
+        response = TaskWithParentInfo.class
+    )
+    public Response undoRemoveTaskByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    @PUT
+    @Path("/undo-remove/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Undo the removal of a task by its ID.",
+        notes = "Restores a previously-removed task. "
+            + "Idempotent: if the task is not currently removed, this is a "
+            + "no-op and returns the current task record.\n\n"
+            + "Subject to the task-creation quota (same as creating a new "
+            + "task): may return `429 Too Many Requests` if the "
+            + "organization is at the plan's task limit.",
+        response = TaskWithParentInfo.class
+    )
+    public Response undoRemoveTaskById(
+        @ApiParam(
+            value = "Project ID. Specify \"-\" for personal tasks in My Tasks.",
+            required = true
+        )
+        @PathParam("projectId") String projectId,
+
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId
+    ) { return null; }
+
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
