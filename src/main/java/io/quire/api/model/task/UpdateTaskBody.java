@@ -20,8 +20,13 @@ public class UpdateTaskBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) New priority. Either an integer between -1 (lowest) and 2 (highest), or an English name (case-insensitive): `Low`, `Medium`, `High`, `Urgent`.",
+        value = "(Optional) New priority. `-1` (lowest) through `2` (highest); "
+              + "`0` is Normal. "
+              + "(The server also accepts the case-insensitive English names "
+              + "`Low`, `Medium`, `High`, `Urgent`, but the integer form is "
+              + "recommended for typed callers.)",
         example = "0",
+        allowableValues = "-1, 0, 1, 2",
         position = 4
     )
     public int getPriority() { return 0; }
@@ -63,7 +68,8 @@ public class UpdateTaskBody {
     @ApiModelProperty(
         value = "(Optional) Assignees to replace the current assignees (OID, ID, or email).\n"
               + "This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.\n\n"
-              + "See `addAssignees` for special values."
+              + "Accepts the same special values as `addAssignees`: `\"me\"` "
+              + "(the current user) and `\"inherit\"` (all assignees of the parent task)."
     )
     public List<String> getAssignees() { return null; }
 
@@ -78,7 +84,8 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) Assignees to remove (OID, ID, or email).\n\n"
-              + "See `addAssignees` for details on special values."
+              + "Accepts the same special values as `addAssignees`: `\"me\"` "
+              + "(the current user) and `\"inherit\"` (all assignees of the parent task)."
     )
     public List<String> getRemoveAssignees() { return null; }
 
@@ -123,9 +130,9 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         example = "true",
-        value = "(Optional) Peekaboo setting.\n\n"
+        value = "(Optional) Peekaboo setting. Accepts a boolean or a positive integer:\n\n"
               + "- `true`: Hide indefinitely (task and subtasks).\n"
-              + "- Positive integer: Number of days to hide.\n"
+              + "- positive integer: Number of days to hide.\n"
               + "- `false`: Undo previous peekaboo.\n\n"
               + "Default: false."
     )
@@ -145,7 +152,10 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to replace the current followers (OID, ID, or email).\n\n"
-              + "See `addFollowers` for details."
+              + "Accepts the same special values as `addFollowers`: `\"me\"` "
+              + "(the current user), `\"inherit\"` (followers of the parent task), "
+              + "and `\"app\"` / `\"app|team\"` / `\"app|team|channel\"` / "
+              + "`\"app|/path\"` (the application)."
     )
     public List<String> getFollowers() { return null; }
 
@@ -163,7 +173,10 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to remove (OID, ID, or email).\n\n"
-              + "See `addFollowers` for details on special values."
+              + "Accepts the same special values as `addFollowers`: `\"me\"` "
+              + "(the current user), `\"inherit\"` (followers of the parent task), "
+              + "and `\"app\"` / `\"app|team\"` / `\"app|team|channel\"` / "
+              + "`\"app|/path\"` (the application)."
     )
     public List<String> getRemoveFollowers() { return null; }
 
@@ -196,11 +209,15 @@ public class UpdateTaskBody {
     public boolean getAsUser() { return false; }
 
     @ApiModelProperty(
-        value = "(Optional) Value for a custom field. Type depends on field definition.\n\n"
+        value = "PLACEHOLDER — do NOT send a key literally named `yourField`. "
+              + "Instead, use the custom field's own name (as defined via "
+              + "`/project/add-field`) as the JSON key, with a value matching "
+              + "the field's type:\n\n"
               + "- Money: numeric value only (no currency).\n"
               + "- User/Task: OID.\n"
               + "- Duration: number of seconds.\n"
-              + "- Multi-value: provide a list."
+              + "- Multi-value: provide a list.\n\n"
+              + "Example body fragment: `{\"Priority\": 3, \"Owners\": [\"ABC123\"]}`."
     )
     public Object getYourField() { return false; }
 

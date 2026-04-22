@@ -10,52 +10,98 @@ import io.swagger.annotations.ApiModelProperty;
  * (`PUT /project/update-field/{oid}/{fieldName}` or
  * `PUT /insight/update-field/{oid}/{fieldName}`).
  *
- * `type` is required and must match the existing field's type (it is
- * immutable via update). Other keys are applied only when present;
- * flag keys that are omitted preserve the existing value. Use
+ * All keys are optional; any key omitted preserves the existing value
+ * (flag keys are merged, not replaced). Use
  * `/rename-field/{oid}/{fieldName}/{newName}` to rename.
+ *
+ * Enum-like string values (`type`, `resultType`, `durationFormat`,
+ * `lookupType`, and `when`/`op` within `conditionFormat`) are accepted
+ * case-insensitively on input.
  */
 public class UpdateFieldBody {
 
     @ApiModelProperty(
-        value = "Field type. Must match the existing field's type "
-              + "(type is immutable; use a separate field for a different type).",
+        value = "(Optional) Field type. Type is immutable on update; "
+              + "if supplied, must match the existing field's type. "
+              + "Usually omitted — include only to assert the stored type.",
         example = "number",
-        required = true
+        allowableValues = "text, number, money, date, duration, select, "
+                        + "checkbox, user, task, hyperlink, email, formula, "
+                        + "file, lookup"
     )
     public String getType() { return null; }
 
-    @ApiModelProperty(value = "(Optional) See `FieldDefinition.multiple`.")
+    @ApiModelProperty(
+        value = "(Optional) Allow multiple values. "
+              + "Applies to `select`, `user`, `task`, and `file` (always true for `file`).",
+        example = "true"
+    )
     public Boolean getMultiple() { return null; }
 
-    @ApiModelProperty(value = "(Optional) See `FieldDefinition.hidden`.")
+    @ApiModelProperty(
+        value = "(Optional) Hide this field from the task detail panel.",
+        example = "false"
+    )
     public Boolean getHidden() { return null; }
 
-    @ApiModelProperty(value = "(Optional) See `FieldDefinition.clearOnDup`.")
+    @ApiModelProperty(
+        value = "(Optional) Clear this field when duplicating a task.",
+        example = "false"
+    )
     public Boolean getClearOnDup() { return null; }
 
-    @ApiModelProperty(value = "(Optional) See `FieldDefinition.private`.")
+    @ApiModelProperty(
+        value = "(Optional) Restrict access to non-guest members only.",
+        example = "false"
+    )
     public Boolean getPrivate() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `date` only) See `FieldDefinition.withTime`.")
+    @ApiModelProperty(
+        value = "(Optional, `date` only) Include time-of-day in addition to the date.",
+        example = "false"
+    )
     public Boolean getWithTime() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `number` only) See `FieldDefinition.percent`.")
+    @ApiModelProperty(
+        value = "(Optional, `number` only) Format the value as a percentage.",
+        example = "false"
+    )
     public Boolean getPercent() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `number`/`money` only) See `FieldDefinition.nDecimal`.")
+    @ApiModelProperty(
+        value = "(Optional, `number`/`money` only) Number of decimal digits. "
+              + "`-1` means no rounding.",
+        example = "2",
+        allowableValues = "-1, 0, 1, 2, 3"
+    )
     public Integer getNDecimal() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `money`/`formula` only) See `FieldDefinition.currency`.")
+    @ApiModelProperty(
+        value = "(Optional, `money`/`formula` only) Currency symbol. "
+              + "Pass `$` to reset a money field to its default.",
+        example = "USD"
+    )
     public String getCurrency() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `duration`/`formula` only) See `FieldDefinition.durationFormat`.")
+    @ApiModelProperty(
+        value = "(Optional, `duration`/`formula` only) Duration display format.",
+        example = "hh:mm",
+        allowableValues = "hh:mm:ss, hh:mm, 1h1m, 1h, 1d1h, dd:hh:mm:ss, "
+                        + "dd:hh:mm, dd:hh"
+    )
     public String getDurationFormat() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `formula` only) See `FieldDefinition.formula`.")
+    @ApiModelProperty(
+        value = "(Optional, `formula` only) Formula expression.",
+        example = "SUM(Subtask.Amount)"
+    )
     public String getFormula() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `formula` only) See `FieldDefinition.resultType`.")
+    @ApiModelProperty(
+        value = "(Optional, `formula` only) Expected result type.",
+        example = "number",
+        allowableValues = "text, number, money, date, duration, checkbox"
+    )
     public String getResultType() { return null; }
 
     @ApiModelProperty(
@@ -64,12 +110,23 @@ public class UpdateFieldBody {
     )
     public List<FieldOption> getOptions() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `lookup` only) See `FieldDefinition.lookup`. Replaces the entire map.")
+    @ApiModelProperty(
+        value = "(Optional, `lookup` only) Map from lookup key to numeric value. "
+              + "Keys are OIDs of the configured `lookupType` entity. "
+              + "Replaces the entire map."
+    )
     public Map<String, Number> getLookup() { return null; }
 
-    @ApiModelProperty(value = "(Optional, `lookup` only) See `FieldDefinition.lookupType`.")
+    @ApiModelProperty(
+        value = "(Optional, `lookup` only) Source type for lookup keys.",
+        example = "User",
+        allowableValues = "User, Task, Project, Organization"
+    )
     public String getLookupType() { return null; }
 
-    @ApiModelProperty(value = "(Optional) Replacement conditional-format rules. Replaces the entire list.")
-    public List<FieldConditionFormat> getConditionFormats() { return null; }
+    @ApiModelProperty(
+        value = "(Optional) Replacement conditional-format rules. "
+              + "Replaces the entire list."
+    )
+    public List<FieldConditionFormat> getConditionFormat() { return null; }
 }

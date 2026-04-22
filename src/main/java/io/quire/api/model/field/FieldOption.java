@@ -15,9 +15,11 @@ public class FieldOption {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "Color code (hex) for the option's chip. "
-              + "If omitted on creation, a color is auto-assigned.",
-        example = "#ff0000"
+        value = "(Optional) Palette color index for the option's chip. "
+              + "Format: two digits `[0-5][0-7]` (first = row 0-5, "
+              + "second = column 0-7). Examples: `00`, `13`, `57`. "
+              + "NOT a CSS hex color. If omitted on creation, a color is auto-assigned.",
+        example = "13"
     )
     public String getColor() { return null; }
 }

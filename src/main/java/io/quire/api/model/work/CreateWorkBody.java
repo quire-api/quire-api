@@ -25,20 +25,25 @@ public class CreateWorkBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Icon color index from Quire’s predefined palette.",
+        value = "(Optional) Icon color index from Quire's predefined palette. "
+              + "Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 "
+              + "(e.g. `00`, `37`, `57`). NOT a CSS hex color.",
         example = "37"
     )
     public String getIconColor() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Icon image identifier. Must be one of the predefined values:\n"
-              + "  'icon-view-list', 'icon-view-kanban', 'icon-briefcase-o', 'icon-rocket-o', 'icon-bug-o',\n"
-              + "  'icon-leaf-o', 'icon-clapperboard', 'icon-sitemap-o', 'icon-flash-on-o', 'icon-piggy-bank-o',\n"
-              + "  'icon-graduation-cap-o', 'icon-paper-plane-o', 'icon-globe-o', 'icon-music-o', 'icon-detail',\n"
-              + "  'icon-beach-o', 'icon-paper', 'icon-home-o', 'icon-building', 'icon-database-o',\n"
-              + "  'icon-microscope-o', 'icon-hamburger-o', 'icon-trophy-o', 'icon-thumbs-o-up', 'icon-thumbs-o-down',\n"
-              + "  'icon-smile-o', 'icon-frown-o', 'icon-meh-o', 'icon-bullseye', 'icon-square-dotted-o'",
-        example = "icon-view-kanban"
+        value = "(Optional) Icon image identifier.",
+        example = "icon-view-kanban",
+        allowableValues = "icon-view-list, icon-view-kanban, icon-briefcase-o, "
+                        + "icon-rocket-o, icon-bug-o, icon-leaf-o, icon-clapperboard, "
+                        + "icon-sitemap-o, icon-flash-on-o, icon-piggy-bank-o, "
+                        + "icon-graduation-cap-o, icon-paper-plane-o, icon-globe-o, "
+                        + "icon-music-o, icon-detail, icon-beach-o, icon-paper, "
+                        + "icon-home-o, icon-building, icon-database-o, "
+                        + "icon-microscope-o, icon-hamburger-o, icon-trophy-o, "
+                        + "icon-thumbs-o-up, icon-thumbs-o-down, icon-smile-o, "
+                        + "icon-frown-o, icon-meh-o, icon-bullseye, icon-square-dotted-o"
     )
     public String getImage() { return null; }
 

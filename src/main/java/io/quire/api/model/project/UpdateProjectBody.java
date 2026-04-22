@@ -44,7 +44,10 @@ public class UpdateProjectBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to replace the current followers of this project (user OIDs).\n"
-              + "This replaces all existing followers. To modify incrementally, use `getAddFollowers()` or `getRemoveFollowers()`."
+              + "This replaces all existing followers. To modify incrementally, use `addFollowers` or `removeFollowers`.\n\n"
+              + "Accepts the same special values as `addFollowers`: "
+              + "`\"me\"` (the current user) and `\"app\"` / `\"app|team\"` / "
+              + "`\"app|team|channel\"` / `\"app|/path\"` (the application)."
     )
     public List<String> getFollowers() { return null; }
 
@@ -63,7 +66,9 @@ public class UpdateProjectBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to remove from this project (user OIDs).\n"
-              + "See `getAddFollowers()` for details on special values."
+              + "Accepts the same special values as `addFollowers`: "
+              + "`\"me\"` (the current user) and `\"app\"` / `\"app|team\"` / "
+              + "`\"app|team|channel\"` / `\"app|/path\"` (the application)."
     )
     public List<String> getRemoveFollowers() { return null; }
 }

@@ -8,8 +8,9 @@ import java.util.List;
 public class Recurrence {
 
     @ApiModelProperty(
-        value = "Recurrence frequency. One of: `daily`, `weekly`, `monthly`, `yearly`.",
-        example = "weekly"
+        value = "Recurrence frequency.",
+        example = "weekly",
+        allowableValues = "daily, weekly, monthly, yearly"
     )
     public String getFreq() { return null; }
 

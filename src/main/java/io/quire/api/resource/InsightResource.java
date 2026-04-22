@@ -273,13 +273,13 @@ public class InsightResource {
               + "to the insight view (by OID). The response is the created "
               + "field in public form (same shape as entries in "
               + "`Insight.fields`, with an extra `name` key).\n\n"
-              + "The accepted `type` values are a subset of the project-level "
-              + "field types — `formula` and `lookup` are supported, but "
-              + "insight-only restrictions may reject certain types.\n\n"
+              + "Only `formula` and `lookup` types are allowed on insight "
+              + "views; all other field types are rejected with `400`.\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
               + "Returns `400 Bad Request` if the body is invalid; "
               + "`403 Forbidden` if the caller lacks permission; "
               + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
-        response = FieldDefinition.class
+        response = FieldDefinitionWithName.class
     )
     public Response addInsightField(
         @ApiParam(value = "Insight OID.", required = true)
@@ -293,13 +293,16 @@ public class InsightResource {
     @ApiOperation(
         value = "Update a custom-field definition on an insight view.",
         notes = "Updates the content of an existing custom field. "
-              + "`type` is required and must match the existing type "
-              + "(type is immutable). Keys that are omitted leave "
+              + "`type` is optional; if supplied it must match the existing "
+              + "type (type is immutable). Keys that are omitted leave "
               + "their current values intact (including individual flag "
               + "bits — flags are merged, not replaced).\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
               + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
-              + "to reorder, use `/move-field/{oid}/{name}`.",
-        response = FieldDefinition.class
+              + "to reorder, use `/move-field/{oid}/{name}`.\n\n"
+              + "Response body is a `FieldDefinition` with an extra `name` key "
+              + "(equal to the field's name), or an empty object if the field does not exist.",
+        response = FieldDefinitionWithName.class
     )
     public Response updateInsightField(
         @ApiParam(value = "Insight OID.", required = true)
@@ -315,6 +318,7 @@ public class InsightResource {
     @ApiOperation(
         value = "Remove a custom-field definition from an insight view.",
         notes = "Removes the named custom field from the insight view.\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
               + "> Note: Returns `204 No Content` regardless of whether the field exists."
     )
     @ApiResponses({
@@ -333,9 +337,11 @@ public class InsightResource {
         value = "Rename a custom-field definition on an insight view.",
         notes = "Renames the field in place and returns the renamed field. "
               + "The field's content is preserved.\n\n"
-              + "Returns an empty object if the source field is missing or "
-              + "the target name is already in use.",
-        response = FieldDefinition.class
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Response body is a `FieldDefinition` with an extra `name` key "
+              + "(equal to the new name), or an empty object if the source "
+              + "field is missing or the target name is already in use.",
+        response = FieldDefinitionWithName.class
     )
     public Response renameInsightField(
         @ApiParam(value = "Insight OID.", required = true)
@@ -353,8 +359,11 @@ public class InsightResource {
         notes = "Moves the named field to a new position. By default the "
               + "field is moved to the end; pass `?before={otherName}` to "
               + "place it immediately before another field.\n\n"
-              + "Returns the moved field's current definition.",
-        response = FieldDefinition.class
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Response body is a `FieldDefinition` with an extra `name` key "
+              + "(equal to the field's name), or an empty object if the field "
+              + "does not exist or `?before={otherName}` refers to a missing field.",
+        response = FieldDefinitionWithName.class
     )
     public Response moveInsightField(
         @ApiParam(value = "Insight OID.", required = true)

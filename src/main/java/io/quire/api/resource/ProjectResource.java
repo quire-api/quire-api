@@ -304,7 +304,7 @@ public class ProjectResource {
               + "Returns `400 Bad Request` if the body is invalid; "
               + "`403 Forbidden` if the caller lacks permission; "
               + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
-        response = FieldDefinition.class
+        response = FieldDefinitionWithName.class
     )
     public Response addProjectField(
         @ApiParam(value = "Project OID.", required = true)
@@ -318,7 +318,7 @@ public class ProjectResource {
     @ApiOperation(
         value = "Add a custom-field definition to a project by ID.",
         notes = "Same as `/project/add-field/{oid}`, but identifies the project by ID.",
-        response = FieldDefinition.class
+        response = FieldDefinitionWithName.class
     )
     public Response addProjectFieldById(
         @ApiParam(value = "Project ID.", required = true)
@@ -332,13 +332,16 @@ public class ProjectResource {
     @ApiOperation(
         value = "Update a custom-field definition on a project.",
         notes = "Updates the content of an existing custom field. "
-              + "`type` is required and must match the existing type "
-              + "(type is immutable). Keys that are omitted leave "
+              + "`type` is optional; if supplied it must match the existing "
+              + "type (type is immutable). Keys that are omitted leave "
               + "their current values intact (including individual flag "
               + "bits — flags are merged, not replaced).\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
               + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
-              + "to reorder, use `/move-field/{oid}/{name}`.",
-        response = FieldDefinition.class
+              + "to reorder, use `/move-field/{oid}/{name}`.\n\n"
+              + "Response body is a `FieldDefinition` with an extra `name` key "
+              + "(equal to the field's name), or an empty object if the field does not exist.",
+        response = FieldDefinitionWithName.class
     )
     public Response updateProjectField(
         @ApiParam(value = "Project OID.", required = true)
@@ -354,7 +357,7 @@ public class ProjectResource {
     @ApiOperation(
         value = "Update a custom-field definition on a project by ID.",
         notes = "Same as `/project/update-field/{oid}/{fieldName}`, but identifies the project by ID.",
-        response = FieldDefinition.class
+        response = FieldDefinitionWithName.class
     )
     public Response updateProjectFieldById(
         @ApiParam(value = "Project ID.", required = true)
@@ -370,6 +373,7 @@ public class ProjectResource {
     @ApiOperation(
         value = "Remove a custom-field definition from a project.",
         notes = "Removes the named custom field from the project.\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
               + "> Note: Returns `204 No Content` regardless of whether the field exists."
     )
     @ApiResponses({
@@ -405,9 +409,11 @@ public class ProjectResource {
         notes = "Renames the field in place and returns the renamed field. "
               + "The field's content is preserved; any task values under the "
               + "old name are migrated to the new name.\n\n"
-              + "Returns an empty object if the source field is missing or "
-              + "the target name is already in use.",
-        response = FieldDefinition.class
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Response body is a `FieldDefinition` with an extra `name` key "
+              + "(equal to the new name), or an empty object if the source "
+              + "field is missing or the target name is already in use.",
+        response = FieldDefinitionWithName.class
     )
     public Response renameProjectField(
         @ApiParam(value = "Project OID.", required = true)
@@ -424,7 +430,7 @@ public class ProjectResource {
         value = "Rename a custom-field definition on a project by ID.",
         notes = "Same as `/project/rename-field/{oid}/{fieldName}/{newName}`, "
               + "but identifies the project by ID.",
-        response = FieldDefinition.class
+        response = FieldDefinitionWithName.class
     )
     public Response renameProjectFieldById(
         @ApiParam(value = "Project ID.", required = true)
@@ -442,8 +448,11 @@ public class ProjectResource {
         notes = "Moves the named field to a new position. By default the "
               + "field is moved to the end; pass `?before={otherName}` to "
               + "place it immediately before another field.\n\n"
-              + "Returns the moved field's current definition.",
-        response = FieldDefinition.class
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Response body is a `FieldDefinition` with an extra `name` key "
+              + "(equal to the field's name), or an empty object if the field "
+              + "does not exist or `?before={otherName}` refers to a missing field.",
+        response = FieldDefinitionWithName.class
     )
     public Response moveProjectField(
         @ApiParam(value = "Project OID.", required = true)
@@ -464,7 +473,7 @@ public class ProjectResource {
     @ApiOperation(
         value = "Reorder a custom-field definition on a project by ID.",
         notes = "Same as `/project/move-field/{oid}/{fieldName}`, but identifies the project by ID.",
-        response = FieldDefinition.class
+        response = FieldDefinitionWithName.class
     )
     public Response moveProjectFieldById(
         @ApiParam(value = "Project ID.", required = true)

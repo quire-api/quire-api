@@ -20,7 +20,10 @@ public class UpdateOrganizationBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to replace the current followers of this organization (user OIDs).\n"
-              + "This replaces all existing followers. To modify incrementally, use `addFollowers()` or `removeFollowers()`."
+              + "This replaces all existing followers. To modify incrementally, use `addFollowers` or `removeFollowers`.\n\n"
+              + "Accepts the same special values as `addFollowers`: "
+              + "`\"me\"` (the current user) and `\"app\"` / `\"app|team\"` / "
+              + "`\"app|team|channel\"` / `\"app|/path\"` (the application)."
     )
     public List<String> getFollowers() { return null; }
 
@@ -39,7 +42,9 @@ public class UpdateOrganizationBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to remove from this organization (user OIDs).\n"
-              + "See `addFollowers()` for details on special values."
+              + "Accepts the same special values as `addFollowers`: "
+              + "`\"me\"` (the current user) and `\"app\"` / `\"app|team\"` / "
+              + "`\"app|team|channel\"` / `\"app|/path\"` (the application)."
     )
     public List<String> getRemoveFollowers() { return null; }
 }

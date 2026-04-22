@@ -12,7 +12,9 @@ public class UpdateTagBody {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Tag color (palette index or hex, depending on your client).",
+        value = "(Optional) Tag color index from Quire's predefined palette. "
+              + "Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 "
+              + "(e.g. `00`, `35`, `57`). NOT a CSS hex color.",
         example = "35",
         required = false
     )

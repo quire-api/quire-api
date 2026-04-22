@@ -21,8 +21,13 @@ public class CreateTaskBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Task priority. Either an integer between -1 (lowest) and 2 (highest), or an English name (case-insensitive): `Low`, `Medium`, `High`, `Urgent`. Default: 0.",
+        value = "(Optional) Task priority. `-1` (lowest) through `2` (highest); "
+              + "`0` is Normal. Default: 0. "
+              + "(The server also accepts the case-insensitive English names "
+              + "`Low`, `Medium`, `High`, `Urgent`, but the integer form is "
+              + "recommended for typed callers.)",
         example = "0",
+        allowableValues = "-1, 0, 1, 2",
         position = 4
     )
     public int getPriority() { return 0; }
@@ -96,9 +101,9 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         example = "true",
-        value = "(Optional) Peekaboo setting.\n\n"
+        value = "(Optional) Peekaboo setting. Accepts a boolean or a positive integer:\n\n"
               + "- `true`: Hide indefinitely.\n"
-              + "- Positive integer: Number of days to hide.\n"
+              + "- positive integer: Number of days to hide.\n"
               + "- `false`: Cancel previous peekaboo.\n\n"
               + "Default: false."
     )
@@ -142,11 +147,15 @@ public class CreateTaskBody {
     public List<String> getSuccessors() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Value for a custom field, depending on field definition.\n\n"
-              + "- Money: specify the numeric value only (no currency).\n"
-              + "- User/Task: specify the OID.\n"
-              + "- Duration: specify number of seconds.\n"
-              + "- Multi-value: specify a list."
+        value = "PLACEHOLDER — do NOT send a key literally named `yourField`. "
+              + "Instead, use the custom field's own name (as defined via "
+              + "`/project/add-field`) as the JSON key, with a value matching "
+              + "the field's type:\n\n"
+              + "- Money: numeric value only (no currency).\n"
+              + "- User/Task: OID.\n"
+              + "- Duration: number of seconds.\n"
+              + "- Multi-value: provide a list.\n\n"
+              + "Example body fragment: `{\"Priority\": 3, \"Owners\": [\"ABC123\"]}`."
     )
     public Object getYourField() { return false; }
 

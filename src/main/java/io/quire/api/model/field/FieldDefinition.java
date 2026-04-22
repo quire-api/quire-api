@@ -11,18 +11,18 @@ import io.swagger.annotations.ApiModelProperty;
  * Field-definition shape returned by the Project and Insight APIs and
  * accepted (with a few differences) by the add/update extensions.
  *
- * Enum-like string values are emitted in the canonical casing shown below
- * and accepted case-insensitively on input.
+ * Enum-like string values are emitted in the canonical casing shown on
+ * each field below (casing varies per field — e.g. `type` is lowercase,
+ * `lookupType` is PascalCase) and accepted case-insensitively on input.
  */
 public class FieldDefinition {
 
     @ApiModelProperty(
-        value = "Field type. One of:\n"
-              + "`text`, `number`, `money`, `date`, `duration`, `select`,\n"
-              + "`checkbox`, `user`, `task`, `hyperlink`, `email`,\n"
-              + "`formula`, `file`, `lookup`.\n"
-              + "Required on `POST`; immutable on `PUT` (must match the existing type).",
+        value = "Field type.",
         example = "number",
+        allowableValues = "text, number, money, date, duration, select, "
+                        + "checkbox, user, task, hyperlink, email, formula, "
+                        + "file, lookup",
         required = true
     )
     public String getType() { return null; }
@@ -66,8 +66,9 @@ public class FieldDefinition {
 
     @ApiModelProperty(
         value = "(Optional, `number`/`money` only) Number of decimal digits. "
-              + "Range: `-1` (no rounding) to `3`.",
-        example = "2"
+              + "`-1` means no rounding.",
+        example = "2",
+        allowableValues = "-1, 0, 1, 2, 3"
     )
     public Integer getNDecimal() { return null; }
 
@@ -79,9 +80,10 @@ public class FieldDefinition {
     public String getCurrency() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `duration` or `formula` only) Duration display format. One of:\n"
-              + "`hh:mm:ss`, `hh:mm`, `1h1m`, `1h`, `1d1h`, `dd:hh:mm:ss`, `dd:hh:mm`, `dd:hh`.",
-        example = "hh:mm"
+        value = "(Optional, `duration` or `formula` only) Duration display format.",
+        example = "hh:mm",
+        allowableValues = "hh:mm:ss, hh:mm, 1h1m, 1h, 1d1h, dd:hh:mm:ss, "
+                        + "dd:hh:mm, dd:hh"
     )
     public String getDurationFormat() { return null; }
 
@@ -92,9 +94,9 @@ public class FieldDefinition {
     public String getFormula() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `formula`) Expected result type. One of:\n"
-              + "`text`, `number`, `money`, `date`, `duration`, `checkbox`.",
-        example = "number"
+        value = "(Optional, `formula` only) Expected result type.",
+        example = "number",
+        allowableValues = "text, number, money, date, duration, checkbox"
     )
     public String getResultType() { return null; }
 
@@ -104,22 +106,26 @@ public class FieldDefinition {
     public List<FieldOption> getOptions() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `lookup`) Map from lookup key to numeric value.",
-        example = "{\"A\":1,\"B\":2,\"C\":3}"
+        value = "(Required for `lookup`) Map from lookup key to numeric value. "
+              + "Keys are OIDs of the configured `lookupType` entity "
+              + "(e.g. user OIDs when `lookupType=User`). Values are numbers. "
+              + "Example: `{\"abc123\": 1, \"def456\": 2}`."
     )
     public Map<String, Number> getLookup() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `lookup` only) Source type for lookup keys. One of:\n"
-              + "`User`, `Task`, `Project`, `Organization`. Default: `User`.",
-        example = "User"
+        value = "(Optional, `lookup` only) Source type for lookup keys. Default: `User`.",
+        example = "User",
+        allowableValues = "User, Task, Project, Organization"
     )
     public String getLookupType() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Conditional-format rules.\n"
-              + "Applicable to `date` (date rules) and to `number`/`money`/`duration`/`lookup`, "
-              + "including a `formula` whose `resultType` resolves to one of those (value rules)."
+        value = "(Optional) Conditional-format rules. "
+              + "Applicable to `date` (date rules use `when`) and to "
+              + "`number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). "
+              + "A `formula` is resolved by its `resultType`: "
+              + "`date` → date rules, `number`/`money`/`duration` → value rules."
     )
-    public List<FieldConditionFormat> getConditionFormats() { return null; }
+    public List<FieldConditionFormat> getConditionFormat() { return null; }
 }
