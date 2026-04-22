@@ -45,6 +45,13 @@ public class Organization extends IdentityX {
     public String getEmail() { return null; }
 
     @ApiModelProperty(
+        value = "Timestamp (UTC, ISO 8601) when this record was last edited.",
+        example = "2018-12-22T02:06:58.158Z",
+        position = 50
+    )
+    public String getEditedAt() { return null; }
+
+    @ApiModelProperty(
         value = "Creation timestamp in UTC (ISO 8601).",
         example = "2018-12-22T02:06:58.158Z",
         position = 99

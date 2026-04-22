@@ -7,6 +7,18 @@ import io.swagger.annotations.ApiModelProperty;
 public class UpdateOrganizationBody {
 
     @ApiModelProperty(
+        value = "(Optional) New display name for this organization (Markdown supported).",
+        example = "My Organization"
+    )
+    public String getName() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) New description for this organization (Markdown supported).",
+        example = "**Great** organization to start with."
+    )
+    public String getDescription() { return null; }
+
+    @ApiModelProperty(
         value = "(Optional) Followers to replace the current followers of this organization (user OIDs).\n"
               + "This replaces all existing followers. To modify incrementally, use `addFollowers()` or `removeFollowers()`."
     )

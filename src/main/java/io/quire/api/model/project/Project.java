@@ -75,6 +75,27 @@ public class Project extends Identity {
     public String getArchivedAt() { return null; }
 
     @ApiModelProperty(
+        value = "Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.",
+        example = "2018-12-22T02:06:58.158Z",
+        position = 50
+    )
+    public String getPublicAt() { return null; }
+
+    @ApiModelProperty(
+        value = "Target start date for this project. Null if not set.",
+        example = "2024-01-02",
+        position = 50
+    )
+    public String getStart() { return null; }
+
+    @ApiModelProperty(
+        value = "Target due date for this project. Null if not set.",
+        example = "2024-05-25",
+        position = 50
+    )
+    public String getDue() { return null; }
+
+    @ApiModelProperty(
         value = "Creation timestamp in UTC (ISO 8601).",
         example = "2018-12-22T02:06:58.158Z",
         position = 99
