@@ -1,5 +1,21 @@
 # Changelog
 
+## Apr 22, 2026
+
+- **Project & Insight APIs:** Added endpoints to manage [custom-field definitions](https://quire.io/dev/api/#definition-FieldDefinition) one at a time. Both the project and insight responses now include a `fields` map keyed by field name.
+    - [`POST /project/add-field/{oid}`](https://quire.io/dev/api/#operation--project-add-field--oid--post) (and `/add-field/id/{id}`) to add a definition.
+    - [`PUT /project/update-field/{oid}/{fieldName}`](https://quire.io/dev/api/#operation--project-update-field--oid---fieldName--put) to update an existing field's content — flag keys that are omitted preserve their current value.
+    - `DELETE /project/remove-field/{oid}/{fieldName}` to remove.
+    - `PUT /project/rename-field/{oid}/{fieldName}/{newName}` to rename.
+    - `PUT /project/move-field/{oid}/{fieldName}[?before={otherName}]` to reorder.
+    - Equivalent [`/insight/...-field/{insightOid}/...`](https://quire.io/dev/api/#operation--insight-add-field--oid--post) endpoints are available for insight views (OID-addressed only).
+    - Field types: `text`, `number`, `money`, `date`, `duration`, `select`, `checkbox`, `user`, `task`, `hyperlink`, `email`, `formula`, `file`, `lookup`. Enum-like values (`type`, `resultType`, `durationFormat`, `lookupType`, condition-format `when`/`op`) are accepted case-insensitively.
+- **Project API:** [`PUT /project/{oid}`](https://quire.io/dev/api/#operation--project--oid--put) now accepts `name`, `description`, `start`, `due`, `archived` (bool toggle), and `public` (bool toggle) in addition to follower deltas. The project response now includes `start`, `due`, `archivedAt`, and `publicAt`.
+- **Organization API:** [`PUT /organization/{oid}`](https://quire.io/dev/api/#operation--organization--oid--put) now accepts `name` and `description` in addition to follower deltas. The organization response now includes `editedAt`.
+- **Rate Limit API:** Added [`GET /rate_limit/{organizationOid}`](https://quire.io/dev/api/#operation--rate_limit--oid--get) (and `GET /rate_limit/id/{organizationId}`) to inspect current per-hour and per-minute API usage for an organization. Calls to this endpoint do not count against the rate limit.
+- **Undo-remove APIs:** Added `PUT /{entity}/undo-remove/{oid}` (and `/id/...` variants) to restore a previously-removed [task](https://quire.io/dev/api/#operation--task-undo-remove--oid--put), [comment](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put), [sublist](https://quire.io/dev/api/#operation--sublist-undo-remove--oid--put), [document](https://quire.io/dev/api/#operation--doc-undo-remove--oid--put), [chat channel](https://quire.io/dev/api/#operation--chat-undo-remove--oid--put), or [insight view](https://quire.io/dev/api/#operation--insight-undo-remove--oid--put). The endpoints are idempotent, and task/sublist/doc/chat/insight undo-remove is subject to the plan's per-type creation quota.
+- **Insight API:** Added the [Insight API](https://quire.io/dev/api/#tag-insight) to create, read, update, and delete insight views, matching the shape of the existing Sublist / Doc / Chat APIs. Custom-field configuration (`tableCols`, `fields`) is not yet exposed; follow-up is planned.
+
 ## Apr 20, 2026
 
 - **Task API:** The `priority` field in [create](https://quire.io/dev/api/#operation--task--projectOid--post) and [update](https://quire.io/dev/api/#operation--task--taskOid--put) task endpoints now accepts an English name (case-insensitive) — `Low`, `Medium`, `High`, or `Urgent` — in addition to the integer range `-1` to `2`.
