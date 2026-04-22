@@ -1,6 +1,7 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.*;
+import io.quire.api.model.field.*;
 import io.quire.api.model.insight.*;
 import io.swagger.annotations.*;
 
@@ -256,5 +257,116 @@ public class InsightResource {
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Insight ID.", required = true)
         @PathParam("insightId") String insightId
+    ) { return null; }
+
+    // -------- Custom fields --------
+    //
+    // Insight-level custom fields are addressed by insight OID only.
+    // (Insight IDs are unique per owner, so the `/id/...` style would
+    // require a full owner path — not supported here.)
+
+    @POST
+    @Path("/add-field/{oid}")
+    @ApiOperation(
+        value = "Add a custom-field definition to an insight view.",
+        notes = "Adds a new [custom-field definition](#definition-FieldDefinition) "
+              + "to the insight view (by OID). The response is the created "
+              + "field in public form (same shape as entries in "
+              + "`Insight.fields`, with an extra `name` key).\n\n"
+              + "The accepted `type` values are a subset of the project-level "
+              + "field types — `formula` and `lookup` are supported, but "
+              + "insight-only restrictions may reject certain types.\n\n"
+              + "Returns `400 Bad Request` if the body is invalid; "
+              + "`403 Forbidden` if the caller lacks permission; "
+              + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
+        response = FieldDefinition.class
+    )
+    public Response addInsightField(
+        @ApiParam(value = "Insight OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Field definition to add.", required = true)
+        AddFieldBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-field/{oid}/{fieldName}")
+    @ApiOperation(
+        value = "Update a custom-field definition on an insight view.",
+        notes = "Updates the content of an existing custom field. "
+              + "`type` is required and must match the existing type "
+              + "(type is immutable). Keys that are omitted leave "
+              + "their current values intact (including individual flag "
+              + "bits — flags are merged, not replaced).\n\n"
+              + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
+              + "to reorder, use `/move-field/{oid}/{name}`.",
+        response = FieldDefinition.class
+    )
+    public Response updateInsightField(
+        @ApiParam(value = "Insight OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to update.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field content.", required = true)
+        UpdateFieldBody data
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-field/{oid}/{fieldName}")
+    @ApiOperation(
+        value = "Remove a custom-field definition from an insight view.",
+        notes = "Removes the named custom field from the insight view.\n\n"
+              + "> Note: Returns `204 No Content` regardless of whether the field exists."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response removeInsightField(
+        @ApiParam(value = "Insight OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to remove.", required = true)
+        @PathParam("fieldName") String fieldName
+    ) { return null; }
+
+    @PUT
+    @Path("/rename-field/{oid}/{fieldName}/{newName}")
+    @ApiOperation(
+        value = "Rename a custom-field definition on an insight view.",
+        notes = "Renames the field in place and returns the renamed field. "
+              + "The field's content is preserved.\n\n"
+              + "Returns an empty object if the source field is missing or "
+              + "the target name is already in use.",
+        response = FieldDefinition.class
+    )
+    public Response renameInsightField(
+        @ApiParam(value = "Insight OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Current field name.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field name.", required = true)
+        @PathParam("newName") String newName
+    ) { return null; }
+
+    @PUT
+    @Path("/move-field/{oid}/{fieldName}")
+    @ApiOperation(
+        value = "Reorder a custom-field definition on an insight view.",
+        notes = "Moves the named field to a new position. By default the "
+              + "field is moved to the end; pass `?before={otherName}` to "
+              + "place it immediately before another field.\n\n"
+              + "Returns the moved field's current definition.",
+        response = FieldDefinition.class
+    )
+    public Response moveInsightField(
+        @ApiParam(value = "Insight OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to move.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(
+            value = "(Optional) Name of the field to insert before. "
+                  + "If omitted, the field is moved to the end.",
+            example = "before=Priority",
+            required = false
+        )
+        @QueryParam("before") String before
     ) { return null; }
 }

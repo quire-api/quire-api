@@ -1,9 +1,11 @@
 package io.quire.api.model.project;
 
 import io.quire.api.model.*;
+import io.quire.api.model.field.FieldDefinition;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 public class Project extends Identity {
 
@@ -119,4 +121,12 @@ public class Project extends Identity {
         position = 60
     )
     public List<Attachment> getAttachments() { return null; }
+
+    @ApiModelProperty(
+        value = "Custom-field definitions for this project, keyed by field name. "
+              + "Use the `add-field`, `update-field`, `remove-field`, `rename-field`, "
+              + "and `move-field` extensions to mutate entries.",
+        position = 70
+    )
+    public Map<String, FieldDefinition> getFields() { return null; }
 }

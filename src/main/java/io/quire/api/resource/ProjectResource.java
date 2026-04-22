@@ -1,5 +1,6 @@
 package io.quire.api.resource;
 
+import io.quire.api.model.field.*;
 import io.quire.api.model.project.*;
 import io.swagger.annotations.*;
 
@@ -288,4 +289,194 @@ public class ProjectResource {
         @PathParam("oid") String oid
     ) { return null; }
 */
+
+    // -------- Custom fields --------
+
+    @POST
+    @Path("/add-field/{oid}")
+    @ApiOperation(
+        value = "Add a custom-field definition to a project.",
+        notes = "Adds a new [custom-field definition](#definition-FieldDefinition) "
+              + "to the project (by OID). The response is the created field "
+              + "in public form (same shape as entries in `Project.fields`, "
+              + "with an extra `name` key).\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Returns `400 Bad Request` if the body is invalid; "
+              + "`403 Forbidden` if the caller lacks permission; "
+              + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
+        response = FieldDefinition.class
+    )
+    public Response addProjectField(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Field definition to add.", required = true)
+        AddFieldBody data
+    ) { return null; }
+
+    @POST
+    @Path("/add-field/id/{id}")
+    @ApiOperation(
+        value = "Add a custom-field definition to a project by ID.",
+        notes = "Same as `/project/add-field/{oid}`, but identifies the project by ID.",
+        response = FieldDefinition.class
+    )
+    public Response addProjectFieldById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Field definition to add.", required = true)
+        AddFieldBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-field/{oid}/{fieldName}")
+    @ApiOperation(
+        value = "Update a custom-field definition on a project.",
+        notes = "Updates the content of an existing custom field. "
+              + "`type` is required and must match the existing type "
+              + "(type is immutable). Keys that are omitted leave "
+              + "their current values intact (including individual flag "
+              + "bits — flags are merged, not replaced).\n\n"
+              + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
+              + "to reorder, use `/move-field/{oid}/{name}`.",
+        response = FieldDefinition.class
+    )
+    public Response updateProjectField(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to update.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field content.", required = true)
+        UpdateFieldBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-field/id/{id}/{fieldName}")
+    @ApiOperation(
+        value = "Update a custom-field definition on a project by ID.",
+        notes = "Same as `/project/update-field/{oid}/{fieldName}`, but identifies the project by ID.",
+        response = FieldDefinition.class
+    )
+    public Response updateProjectFieldById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Name of the field to update.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field content.", required = true)
+        UpdateFieldBody data
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-field/{oid}/{fieldName}")
+    @ApiOperation(
+        value = "Remove a custom-field definition from a project.",
+        notes = "Removes the named custom field from the project.\n\n"
+              + "> Note: Returns `204 No Content` regardless of whether the field exists."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response removeProjectField(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to remove.", required = true)
+        @PathParam("fieldName") String fieldName
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-field/id/{id}/{fieldName}")
+    @ApiOperation(
+        value = "Remove a custom-field definition from a project by ID.",
+        notes = "Same as `/project/remove-field/{oid}/{fieldName}`, but identifies the project by ID."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response removeProjectFieldById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Name of the field to remove.", required = true)
+        @PathParam("fieldName") String fieldName
+    ) { return null; }
+
+    @PUT
+    @Path("/rename-field/{oid}/{fieldName}/{newName}")
+    @ApiOperation(
+        value = "Rename a custom-field definition on a project.",
+        notes = "Renames the field in place and returns the renamed field. "
+              + "The field's content is preserved; any task values under the "
+              + "old name are migrated to the new name.\n\n"
+              + "Returns an empty object if the source field is missing or "
+              + "the target name is already in use.",
+        response = FieldDefinition.class
+    )
+    public Response renameProjectField(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Current field name.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field name.", required = true)
+        @PathParam("newName") String newName
+    ) { return null; }
+
+    @PUT
+    @Path("/rename-field/id/{id}/{fieldName}/{newName}")
+    @ApiOperation(
+        value = "Rename a custom-field definition on a project by ID.",
+        notes = "Same as `/project/rename-field/{oid}/{fieldName}/{newName}`, "
+              + "but identifies the project by ID.",
+        response = FieldDefinition.class
+    )
+    public Response renameProjectFieldById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Current field name.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field name.", required = true)
+        @PathParam("newName") String newName
+    ) { return null; }
+
+    @PUT
+    @Path("/move-field/{oid}/{fieldName}")
+    @ApiOperation(
+        value = "Reorder a custom-field definition on a project.",
+        notes = "Moves the named field to a new position. By default the "
+              + "field is moved to the end; pass `?before={otherName}` to "
+              + "place it immediately before another field.\n\n"
+              + "Returns the moved field's current definition.",
+        response = FieldDefinition.class
+    )
+    public Response moveProjectField(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to move.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(
+            value = "(Optional) Name of the field to insert before. "
+                  + "If omitted, the field is moved to the end.",
+            example = "before=Priority",
+            required = false
+        )
+        @QueryParam("before") String before
+    ) { return null; }
+
+    @PUT
+    @Path("/move-field/id/{id}/{fieldName}")
+    @ApiOperation(
+        value = "Reorder a custom-field definition on a project by ID.",
+        notes = "Same as `/project/move-field/{oid}/{fieldName}`, but identifies the project by ID.",
+        response = FieldDefinition.class
+    )
+    public Response moveProjectFieldById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Name of the field to move.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(
+            value = "(Optional) Name of the field to insert before. "
+                  + "If omitted, the field is moved to the end.",
+            example = "before=Priority",
+            required = false
+        )
+        @QueryParam("before") String before
+    ) { return null; }
 }
