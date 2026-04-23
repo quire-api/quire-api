@@ -644,33 +644,74 @@ public class TaskResource {
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Filter by the task's `createdAt` timestamp. "
-                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
-                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
-                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
-                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
-                  + "`notBetween` and value is an ISO 8601 timestamp "
-                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
-                  + "`between` / `notBetween` take two comma-separated operands. "
-                  + "Tokens and keywords are case-insensitive.",
+                  + "Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<timestamp>` or `{between|notBetween}:<timestamp>,<timestamp>`\n"
+                  + "- `<timestamp>` is ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` (UTC)\n"
+                  + "- Day boundaries resolve in the caller's timezone; week start follows the caller's locale\n"
+                  + "- `past` on this field is `< now()`\n"
+                  + "- Tokens and keywords are case-insensitive\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`, "
+                  + "`between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
             example = "ge:2026-04-01T00:00:00Z"
         )
         @QueryParam("created") String created,
         @ApiParam(
-            value = "Filter by the task's `editedAt` timestamp. "
-                  + "Same op vocabulary as `created`. "
-                  + "Note: `editedAt` is NULL for tasks that have never been "
-                  + "edited after creation; such tasks are excluded by every "
-                  + "op (use `created` to filter by creation time).",
+            value = "Filter by the task's `editedAt` timestamp. Same grammar "
+                  + "as `created`. Note: `editedAt` is `NULL` for tasks that "
+                  + "have never been edited after creation; such tasks are "
+                  + "excluded by every op (use `created` to filter by creation "
+                  + "time).\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`.",
             example = "last7d"
         )
         @QueryParam("edited") String edited,
         @ApiParam(
-            value = "Filter by the task's `archivedAt` timestamp. "
-                  + "Same op vocabulary as `created`, plus `isNull` / "
-                  + "`isNotNull` to find non-archived / archived tasks.",
+            value = "Filter by the task's `archivedAt` timestamp. Same grammar "
+                  + "as `created`, plus null ops since the field is nullable:\n"
+                  + "- `isNull` — not archived\n"
+                  + "- `isNotNull` — archived (any time)\n\n"
+                  + "Examples: `isNotNull`, `today`, `ge:2026-04-01T00:00:00Z`.",
             example = "isNotNull"
         )
         @QueryParam("archived") String archived,
+        @ApiParam(
+            value = "Filter by the task's `reshowAt` timestamp (scheduled "
+                  + "un-archive). Same grammar as `archived` (supports "
+                  + "`isNull` / `isNotNull`).\n\n"
+                  + "Examples: `isNotNull`, `today`, `between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
+            example = "isNotNull"
+        )
+        @QueryParam("unarchived") String unarchived,
+        @ApiParam(
+            value = "Filter by the task's `toggledAt` timestamp (when its "
+                  + "completion status was last changed). Same grammar as "
+                  + "`archived` (supports `isNull` / `isNotNull`).\n\n"
+                  + "Examples: `today`, `isNotNull`, `ge:2026-04-01T00:00:00Z`.",
+            example = "today"
+        )
+        @QueryParam("toggled") String toggled,
+        @ApiParam(
+            value = "Filter by the task's `start` date/time. Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<value>` or `{between|notBetween}:<value>,<value>`\n"
+                  + "- Null op: `isNull`, `isNotNull`\n"
+                  + "- `<value>` is either a date (`YYYY-MM-DD`) or a full ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`)\n"
+                  + "- A date operand expands to a whole-day window in the caller's timezone (`ge:2026-04-01` means \"on or after Apr 1 in the caller's calendar\"); `gt:D`/`le:D` use end-of-day, `lt:D`/`ge:D` use start-of-day\n"
+                  + "- `past` on `start`/`due` is `< today 00:00` in the caller's timezone (not `< now()`)\n"
+                  + "- `upcoming` on `start`/`due` is the window `[tomorrow, today + 7 days)`\n\n"
+                  + "Examples: `today`, `upcoming`, `ge:2026-04-01`, `between:2026-04-01,2026-04-30`, `isNull`.",
+            example = "ge:2026-04-01"
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "Filter by the task's `due` date/time. Same grammar and "
+                  + "semantics as `start` (accepts date-only operands, "
+                  + "`isNull`/`isNotNull`, and the same keyword/value ops).\n\n"
+                  + "Examples: `today`, `upcoming`, `le:2026-04-30`, `isNotNull`.",
+            example = "today"
+        )
+        @QueryParam("due") String due,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -769,33 +810,74 @@ public class TaskResource {
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Filter by the task's `createdAt` timestamp. "
-                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
-                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
-                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
-                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
-                  + "`notBetween` and value is an ISO 8601 timestamp "
-                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
-                  + "`between` / `notBetween` take two comma-separated operands. "
-                  + "Tokens and keywords are case-insensitive.",
+                  + "Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<timestamp>` or `{between|notBetween}:<timestamp>,<timestamp>`\n"
+                  + "- `<timestamp>` is ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` (UTC)\n"
+                  + "- Day boundaries resolve in the caller's timezone; week start follows the caller's locale\n"
+                  + "- `past` on this field is `< now()`\n"
+                  + "- Tokens and keywords are case-insensitive\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`, "
+                  + "`between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
             example = "ge:2026-04-01T00:00:00Z"
         )
         @QueryParam("created") String created,
         @ApiParam(
-            value = "Filter by the task's `editedAt` timestamp. "
-                  + "Same op vocabulary as `created`. "
-                  + "Note: `editedAt` is NULL for tasks that have never been "
-                  + "edited after creation; such tasks are excluded by every "
-                  + "op (use `created` to filter by creation time).",
+            value = "Filter by the task's `editedAt` timestamp. Same grammar "
+                  + "as `created`. Note: `editedAt` is `NULL` for tasks that "
+                  + "have never been edited after creation; such tasks are "
+                  + "excluded by every op (use `created` to filter by creation "
+                  + "time).\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`.",
             example = "last7d"
         )
         @QueryParam("edited") String edited,
         @ApiParam(
-            value = "Filter by the task's `archivedAt` timestamp. "
-                  + "Same op vocabulary as `created`, plus `isNull` / "
-                  + "`isNotNull` to find non-archived / archived tasks.",
+            value = "Filter by the task's `archivedAt` timestamp. Same grammar "
+                  + "as `created`, plus null ops since the field is nullable:\n"
+                  + "- `isNull` — not archived\n"
+                  + "- `isNotNull` — archived (any time)\n\n"
+                  + "Examples: `isNotNull`, `today`, `ge:2026-04-01T00:00:00Z`.",
             example = "isNotNull"
         )
         @QueryParam("archived") String archived,
+        @ApiParam(
+            value = "Filter by the task's `reshowAt` timestamp (scheduled "
+                  + "un-archive). Same grammar as `archived` (supports "
+                  + "`isNull` / `isNotNull`).\n\n"
+                  + "Examples: `isNotNull`, `today`, `between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
+            example = "isNotNull"
+        )
+        @QueryParam("unarchived") String unarchived,
+        @ApiParam(
+            value = "Filter by the task's `toggledAt` timestamp (when its "
+                  + "completion status was last changed). Same grammar as "
+                  + "`archived` (supports `isNull` / `isNotNull`).\n\n"
+                  + "Examples: `today`, `isNotNull`, `ge:2026-04-01T00:00:00Z`.",
+            example = "today"
+        )
+        @QueryParam("toggled") String toggled,
+        @ApiParam(
+            value = "Filter by the task's `start` date/time. Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<value>` or `{between|notBetween}:<value>,<value>`\n"
+                  + "- Null op: `isNull`, `isNotNull`\n"
+                  + "- `<value>` is either a date (`YYYY-MM-DD`) or a full ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`)\n"
+                  + "- A date operand expands to a whole-day window in the caller's timezone (`ge:2026-04-01` means \"on or after Apr 1 in the caller's calendar\"); `gt:D`/`le:D` use end-of-day, `lt:D`/`ge:D` use start-of-day\n"
+                  + "- `past` on `start`/`due` is `< today 00:00` in the caller's timezone (not `< now()`)\n"
+                  + "- `upcoming` on `start`/`due` is the window `[tomorrow, today + 7 days)`\n\n"
+                  + "Examples: `today`, `upcoming`, `ge:2026-04-01`, `between:2026-04-01,2026-04-30`, `isNull`.",
+            example = "ge:2026-04-01"
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "Filter by the task's `due` date/time. Same grammar and "
+                  + "semantics as `start` (accepts date-only operands, "
+                  + "`isNull`/`isNotNull`, and the same keyword/value ops).\n\n"
+                  + "Examples: `today`, `upcoming`, `le:2026-04-30`, `isNotNull`.",
+            example = "today"
+        )
+        @QueryParam("due") String due,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -873,33 +955,74 @@ public class TaskResource {
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Filter by the task's `createdAt` timestamp. "
-                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
-                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
-                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
-                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
-                  + "`notBetween` and value is an ISO 8601 timestamp "
-                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
-                  + "`between` / `notBetween` take two comma-separated operands. "
-                  + "Tokens and keywords are case-insensitive.",
+                  + "Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<timestamp>` or `{between|notBetween}:<timestamp>,<timestamp>`\n"
+                  + "- `<timestamp>` is ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` (UTC)\n"
+                  + "- Day boundaries resolve in the caller's timezone; week start follows the caller's locale\n"
+                  + "- `past` on this field is `< now()`\n"
+                  + "- Tokens and keywords are case-insensitive\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`, "
+                  + "`between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
             example = "ge:2026-04-01T00:00:00Z"
         )
         @QueryParam("created") String created,
         @ApiParam(
-            value = "Filter by the task's `editedAt` timestamp. "
-                  + "Same op vocabulary as `created`. "
-                  + "Note: `editedAt` is NULL for tasks that have never been "
-                  + "edited after creation; such tasks are excluded by every "
-                  + "op (use `created` to filter by creation time).",
+            value = "Filter by the task's `editedAt` timestamp. Same grammar "
+                  + "as `created`. Note: `editedAt` is `NULL` for tasks that "
+                  + "have never been edited after creation; such tasks are "
+                  + "excluded by every op (use `created` to filter by creation "
+                  + "time).\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`.",
             example = "last7d"
         )
         @QueryParam("edited") String edited,
         @ApiParam(
-            value = "Filter by the task's `archivedAt` timestamp. "
-                  + "Same op vocabulary as `created`, plus `isNull` / "
-                  + "`isNotNull` to find non-archived / archived tasks.",
+            value = "Filter by the task's `archivedAt` timestamp. Same grammar "
+                  + "as `created`, plus null ops since the field is nullable:\n"
+                  + "- `isNull` — not archived\n"
+                  + "- `isNotNull` — archived (any time)\n\n"
+                  + "Examples: `isNotNull`, `today`, `ge:2026-04-01T00:00:00Z`.",
             example = "isNotNull"
         )
         @QueryParam("archived") String archived,
+        @ApiParam(
+            value = "Filter by the task's `reshowAt` timestamp (scheduled "
+                  + "un-archive). Same grammar as `archived` (supports "
+                  + "`isNull` / `isNotNull`).\n\n"
+                  + "Examples: `isNotNull`, `today`, `between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
+            example = "isNotNull"
+        )
+        @QueryParam("unarchived") String unarchived,
+        @ApiParam(
+            value = "Filter by the task's `toggledAt` timestamp (when its "
+                  + "completion status was last changed). Same grammar as "
+                  + "`archived` (supports `isNull` / `isNotNull`).\n\n"
+                  + "Examples: `today`, `isNotNull`, `ge:2026-04-01T00:00:00Z`.",
+            example = "today"
+        )
+        @QueryParam("toggled") String toggled,
+        @ApiParam(
+            value = "Filter by the task's `start` date/time. Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<value>` or `{between|notBetween}:<value>,<value>`\n"
+                  + "- Null op: `isNull`, `isNotNull`\n"
+                  + "- `<value>` is either a date (`YYYY-MM-DD`) or a full ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`)\n"
+                  + "- A date operand expands to a whole-day window in the caller's timezone (`ge:2026-04-01` means \"on or after Apr 1 in the caller's calendar\"); `gt:D`/`le:D` use end-of-day, `lt:D`/`ge:D` use start-of-day\n"
+                  + "- `past` on `start`/`due` is `< today 00:00` in the caller's timezone (not `< now()`)\n"
+                  + "- `upcoming` on `start`/`due` is the window `[tomorrow, today + 7 days)`\n\n"
+                  + "Examples: `today`, `upcoming`, `ge:2026-04-01`, `between:2026-04-01,2026-04-30`, `isNull`.",
+            example = "ge:2026-04-01"
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "Filter by the task's `due` date/time. Same grammar and "
+                  + "semantics as `start` (accepts date-only operands, "
+                  + "`isNull`/`isNotNull`, and the same keyword/value ops).\n\n"
+                  + "Examples: `today`, `upcoming`, `le:2026-04-30`, `isNotNull`.",
+            example = "today"
+        )
+        @QueryParam("due") String due,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -977,33 +1100,74 @@ public class TaskResource {
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Filter by the task's `createdAt` timestamp. "
-                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
-                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
-                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
-                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
-                  + "`notBetween` and value is an ISO 8601 timestamp "
-                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
-                  + "`between` / `notBetween` take two comma-separated operands. "
-                  + "Tokens and keywords are case-insensitive.",
+                  + "Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<timestamp>` or `{between|notBetween}:<timestamp>,<timestamp>`\n"
+                  + "- `<timestamp>` is ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` (UTC)\n"
+                  + "- Day boundaries resolve in the caller's timezone; week start follows the caller's locale\n"
+                  + "- `past` on this field is `< now()`\n"
+                  + "- Tokens and keywords are case-insensitive\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`, "
+                  + "`between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
             example = "ge:2026-04-01T00:00:00Z"
         )
         @QueryParam("created") String created,
         @ApiParam(
-            value = "Filter by the task's `editedAt` timestamp. "
-                  + "Same op vocabulary as `created`. "
-                  + "Note: `editedAt` is NULL for tasks that have never been "
-                  + "edited after creation; such tasks are excluded by every "
-                  + "op (use `created` to filter by creation time).",
+            value = "Filter by the task's `editedAt` timestamp. Same grammar "
+                  + "as `created`. Note: `editedAt` is `NULL` for tasks that "
+                  + "have never been edited after creation; such tasks are "
+                  + "excluded by every op (use `created` to filter by creation "
+                  + "time).\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`.",
             example = "last7d"
         )
         @QueryParam("edited") String edited,
         @ApiParam(
-            value = "Filter by the task's `archivedAt` timestamp. "
-                  + "Same op vocabulary as `created`, plus `isNull` / "
-                  + "`isNotNull` to find non-archived / archived tasks.",
+            value = "Filter by the task's `archivedAt` timestamp. Same grammar "
+                  + "as `created`, plus null ops since the field is nullable:\n"
+                  + "- `isNull` — not archived\n"
+                  + "- `isNotNull` — archived (any time)\n\n"
+                  + "Examples: `isNotNull`, `today`, `ge:2026-04-01T00:00:00Z`.",
             example = "isNotNull"
         )
         @QueryParam("archived") String archived,
+        @ApiParam(
+            value = "Filter by the task's `reshowAt` timestamp (scheduled "
+                  + "un-archive). Same grammar as `archived` (supports "
+                  + "`isNull` / `isNotNull`).\n\n"
+                  + "Examples: `isNotNull`, `today`, `between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
+            example = "isNotNull"
+        )
+        @QueryParam("unarchived") String unarchived,
+        @ApiParam(
+            value = "Filter by the task's `toggledAt` timestamp (when its "
+                  + "completion status was last changed). Same grammar as "
+                  + "`archived` (supports `isNull` / `isNotNull`).\n\n"
+                  + "Examples: `today`, `isNotNull`, `ge:2026-04-01T00:00:00Z`.",
+            example = "today"
+        )
+        @QueryParam("toggled") String toggled,
+        @ApiParam(
+            value = "Filter by the task's `start` date/time. Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<value>` or `{between|notBetween}:<value>,<value>`\n"
+                  + "- Null op: `isNull`, `isNotNull`\n"
+                  + "- `<value>` is either a date (`YYYY-MM-DD`) or a full ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`)\n"
+                  + "- A date operand expands to a whole-day window in the caller's timezone (`ge:2026-04-01` means \"on or after Apr 1 in the caller's calendar\"); `gt:D`/`le:D` use end-of-day, `lt:D`/`ge:D` use start-of-day\n"
+                  + "- `past` on `start`/`due` is `< today 00:00` in the caller's timezone (not `< now()`)\n"
+                  + "- `upcoming` on `start`/`due` is the window `[tomorrow, today + 7 days)`\n\n"
+                  + "Examples: `today`, `upcoming`, `ge:2026-04-01`, `between:2026-04-01,2026-04-30`, `isNull`.",
+            example = "ge:2026-04-01"
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "Filter by the task's `due` date/time. Same grammar and "
+                  + "semantics as `start` (accepts date-only operands, "
+                  + "`isNull`/`isNotNull`, and the same keyword/value ops).\n\n"
+                  + "Examples: `today`, `upcoming`, `le:2026-04-30`, `isNotNull`.",
+            example = "today"
+        )
+        @QueryParam("due") String due,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -1081,33 +1245,74 @@ public class TaskResource {
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Filter by the task's `createdAt` timestamp. "
-                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
-                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
-                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
-                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
-                  + "`notBetween` and value is an ISO 8601 timestamp "
-                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
-                  + "`between` / `notBetween` take two comma-separated operands. "
-                  + "Tokens and keywords are case-insensitive.",
+                  + "Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<timestamp>` or `{between|notBetween}:<timestamp>,<timestamp>`\n"
+                  + "- `<timestamp>` is ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` (UTC)\n"
+                  + "- Day boundaries resolve in the caller's timezone; week start follows the caller's locale\n"
+                  + "- `past` on this field is `< now()`\n"
+                  + "- Tokens and keywords are case-insensitive\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`, "
+                  + "`between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
             example = "ge:2026-04-01T00:00:00Z"
         )
         @QueryParam("created") String created,
         @ApiParam(
-            value = "Filter by the task's `editedAt` timestamp. "
-                  + "Same op vocabulary as `created`. "
-                  + "Note: `editedAt` is NULL for tasks that have never been "
-                  + "edited after creation; such tasks are excluded by every "
-                  + "op (use `created` to filter by creation time).",
+            value = "Filter by the task's `editedAt` timestamp. Same grammar "
+                  + "as `created`. Note: `editedAt` is `NULL` for tasks that "
+                  + "have never been edited after creation; such tasks are "
+                  + "excluded by every op (use `created` to filter by creation "
+                  + "time).\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`.",
             example = "last7d"
         )
         @QueryParam("edited") String edited,
         @ApiParam(
-            value = "Filter by the task's `archivedAt` timestamp. "
-                  + "Same op vocabulary as `created`, plus `isNull` / "
-                  + "`isNotNull` to find non-archived / archived tasks.",
+            value = "Filter by the task's `archivedAt` timestamp. Same grammar "
+                  + "as `created`, plus null ops since the field is nullable:\n"
+                  + "- `isNull` — not archived\n"
+                  + "- `isNotNull` — archived (any time)\n\n"
+                  + "Examples: `isNotNull`, `today`, `ge:2026-04-01T00:00:00Z`.",
             example = "isNotNull"
         )
         @QueryParam("archived") String archived,
+        @ApiParam(
+            value = "Filter by the task's `reshowAt` timestamp (scheduled "
+                  + "un-archive). Same grammar as `archived` (supports "
+                  + "`isNull` / `isNotNull`).\n\n"
+                  + "Examples: `isNotNull`, `today`, `between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
+            example = "isNotNull"
+        )
+        @QueryParam("unarchived") String unarchived,
+        @ApiParam(
+            value = "Filter by the task's `toggledAt` timestamp (when its "
+                  + "completion status was last changed). Same grammar as "
+                  + "`archived` (supports `isNull` / `isNotNull`).\n\n"
+                  + "Examples: `today`, `isNotNull`, `ge:2026-04-01T00:00:00Z`.",
+            example = "today"
+        )
+        @QueryParam("toggled") String toggled,
+        @ApiParam(
+            value = "Filter by the task's `start` date/time. Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<value>` or `{between|notBetween}:<value>,<value>`\n"
+                  + "- Null op: `isNull`, `isNotNull`\n"
+                  + "- `<value>` is either a date (`YYYY-MM-DD`) or a full ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`)\n"
+                  + "- A date operand expands to a whole-day window in the caller's timezone (`ge:2026-04-01` means \"on or after Apr 1 in the caller's calendar\"); `gt:D`/`le:D` use end-of-day, `lt:D`/`ge:D` use start-of-day\n"
+                  + "- `past` on `start`/`due` is `< today 00:00` in the caller's timezone (not `< now()`)\n"
+                  + "- `upcoming` on `start`/`due` is the window `[tomorrow, today + 7 days)`\n\n"
+                  + "Examples: `today`, `upcoming`, `ge:2026-04-01`, `between:2026-04-01,2026-04-30`, `isNull`.",
+            example = "ge:2026-04-01"
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "Filter by the task's `due` date/time. Same grammar and "
+                  + "semantics as `start` (accepts date-only operands, "
+                  + "`isNull`/`isNotNull`, and the same keyword/value ops).\n\n"
+                  + "Examples: `today`, `upcoming`, `le:2026-04-30`, `isNotNull`.",
+            example = "today"
+        )
+        @QueryParam("due") String due,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -1185,33 +1390,74 @@ public class TaskResource {
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
             value = "Filter by the task's `createdAt` timestamp. "
-                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
-                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
-                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
-                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
-                  + "`notBetween` and value is an ISO 8601 timestamp "
-                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
-                  + "`between` / `notBetween` take two comma-separated operands. "
-                  + "Tokens and keywords are case-insensitive.",
+                  + "Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<timestamp>` or `{between|notBetween}:<timestamp>,<timestamp>`\n"
+                  + "- `<timestamp>` is ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` (UTC)\n"
+                  + "- Day boundaries resolve in the caller's timezone; week start follows the caller's locale\n"
+                  + "- `past` on this field is `< now()`\n"
+                  + "- Tokens and keywords are case-insensitive\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`, "
+                  + "`between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
             example = "ge:2026-04-01T00:00:00Z"
         )
         @QueryParam("created") String created,
         @ApiParam(
-            value = "Filter by the task's `editedAt` timestamp. "
-                  + "Same op vocabulary as `created`. "
-                  + "Note: `editedAt` is NULL for tasks that have never been "
-                  + "edited after creation; such tasks are excluded by every "
-                  + "op (use `created` to filter by creation time).",
+            value = "Filter by the task's `editedAt` timestamp. Same grammar "
+                  + "as `created`. Note: `editedAt` is `NULL` for tasks that "
+                  + "have never been edited after creation; such tasks are "
+                  + "excluded by every op (use `created` to filter by creation "
+                  + "time).\n\n"
+                  + "Examples: `today`, `last7d`, `ge:2026-04-01T00:00:00Z`.",
             example = "last7d"
         )
         @QueryParam("edited") String edited,
         @ApiParam(
-            value = "Filter by the task's `archivedAt` timestamp. "
-                  + "Same op vocabulary as `created`, plus `isNull` / "
-                  + "`isNotNull` to find non-archived / archived tasks.",
+            value = "Filter by the task's `archivedAt` timestamp. Same grammar "
+                  + "as `created`, plus null ops since the field is nullable:\n"
+                  + "- `isNull` — not archived\n"
+                  + "- `isNotNull` — archived (any time)\n\n"
+                  + "Examples: `isNotNull`, `today`, `ge:2026-04-01T00:00:00Z`.",
             example = "isNotNull"
         )
         @QueryParam("archived") String archived,
+        @ApiParam(
+            value = "Filter by the task's `reshowAt` timestamp (scheduled "
+                  + "un-archive). Same grammar as `archived` (supports "
+                  + "`isNull` / `isNotNull`).\n\n"
+                  + "Examples: `isNotNull`, `today`, `between:2026-04-01T00:00:00Z,2026-04-30T23:59:59Z`.",
+            example = "isNotNull"
+        )
+        @QueryParam("unarchived") String unarchived,
+        @ApiParam(
+            value = "Filter by the task's `toggledAt` timestamp (when its "
+                  + "completion status was last changed). Same grammar as "
+                  + "`archived` (supports `isNull` / `isNotNull`).\n\n"
+                  + "Examples: `today`, `isNotNull`, `ge:2026-04-01T00:00:00Z`.",
+            example = "today"
+        )
+        @QueryParam("toggled") String toggled,
+        @ApiParam(
+            value = "Filter by the task's `start` date/time. Value grammar:\n"
+                  + "- Keyword: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`\n"
+                  + "- Value op: `{ge|gt|le|lt|eq|ne}:<value>` or `{between|notBetween}:<value>,<value>`\n"
+                  + "- Null op: `isNull`, `isNotNull`\n"
+                  + "- `<value>` is either a date (`YYYY-MM-DD`) or a full ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`)\n"
+                  + "- A date operand expands to a whole-day window in the caller's timezone (`ge:2026-04-01` means \"on or after Apr 1 in the caller's calendar\"); `gt:D`/`le:D` use end-of-day, `lt:D`/`ge:D` use start-of-day\n"
+                  + "- `past` on `start`/`due` is `< today 00:00` in the caller's timezone (not `< now()`)\n"
+                  + "- `upcoming` on `start`/`due` is the window `[tomorrow, today + 7 days)`\n\n"
+                  + "Examples: `today`, `upcoming`, `ge:2026-04-01`, `between:2026-04-01,2026-04-30`, `isNull`.",
+            example = "ge:2026-04-01"
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "Filter by the task's `due` date/time. Same grammar and "
+                  + "semantics as `start` (accepts date-only operands, "
+                  + "`isNull`/`isNotNull`, and the same keyword/value ops).\n\n"
+                  + "Examples: `today`, `upcoming`, `le:2026-04-30`, `isNotNull`.",
+            example = "today"
+        )
+        @QueryParam("due") String due,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
