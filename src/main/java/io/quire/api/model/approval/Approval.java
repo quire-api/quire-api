@@ -1,0 +1,50 @@
+package io.quire.api.model.approval;
+
+import io.swagger.annotations.ApiModelProperty;
+
+/**
+ * The approval state attached to a task.
+ *
+ * Returned as the {@code approval} field on a task response and as the
+ * response body of {@code POST /task/approve/{taskOid}}.
+ */
+public class Approval {
+
+    @ApiModelProperty(
+        value = "Identifier of the approval category this approval "
+              + "belongs to. The default category has id `\"\"`.",
+        example = "legal"
+    )
+    public String getCategory() { return null; }
+
+    @ApiModelProperty(
+        value = "Current approval state. Derived from the last POST to "
+              + "`/task/approve/{oid}`:\n"
+              + "- `awaiting` — `request` was posted (initial or rolled-back).\n"
+              + "- `approved` — `approve` was posted.\n"
+              + "- `rejected` — `reject` was posted.\n"
+              + "- `changes` — `change` (request-for-changes) was posted.",
+        example = "awaiting",
+        allowableValues = "awaiting, approved, rejected, changes"
+    )
+    public String getState() { return null; }
+
+    @ApiModelProperty(
+        value = "OID of the user who originally requested approval. "
+              + "Preserved across subsequent approve / reject / change "
+              + "transitions."
+    )
+    public String getRequester() { return null; }
+
+    @ApiModelProperty(
+        value = "OID of the user who most recently approved / rejected / "
+              + "requested changes. Null while `state` is `awaiting`."
+    )
+    public String getApprover() { return null; }
+
+    @ApiModelProperty(
+        value = "Timestamp (UTC, ISO 8601) of the last state transition.",
+        example = "2026-04-24T10:05:00.000Z"
+    )
+    public String getToggledAt() { return null; }
+}

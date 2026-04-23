@@ -1,6 +1,7 @@
 package io.quire.api.resource;
 
 import io.quire.api.model.*;
+import io.quire.api.model.approval.*;
 import io.quire.api.model.task.*;
 import io.swagger.annotations.*;
 
@@ -505,6 +506,90 @@ public class TaskResource {
         )
         @PathParam("projectId") String projectId,
 
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId
+    ) { return null; }
+
+    // -------- Approval --------
+
+    @POST
+    @Path("/approve/{oid}")
+    @ApiOperation(
+        value = "Set or transition a task's approval state.",
+        notes = "Sets the task's [approval](#definition-Approval), or "
+              + "transitions it from its current state. The same endpoint "
+              + "handles every action — the request body's `state` token "
+              + "selects the transition:\n"
+              + "- `request` — request approval, or roll forward from "
+              + "`approved` / `rejected` / `changes` back to `awaiting`.\n"
+              + "- `approve` / `reject` / `change` — approver's decision.\n\n"
+              + "The caller must be a claimer (for `request`) or an "
+              + "approver (for `approve` / `reject` / `change`) of the "
+              + "category. The original requester is preserved across "
+              + "`approve` / `reject` / `change` transitions.\n\n"
+              + "To cancel an approval, use `DELETE /task/revoke-approval/{oid}`.\n\n"
+              + "Returns `400 Bad Request` if `state` is missing or unknown; "
+              + "`403 Forbidden` if the caller isn't a claimer / approver; "
+              + "`404 Not Found` if the task or `category` doesn't exist.",
+        response = Approval.class
+    )
+    public Response approveTaskByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Transition to apply.", required = true)
+        ApproveTaskBody data
+    ) { return null; }
+
+    @POST
+    @Path("/approve/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Set or transition a task's approval state by ID.",
+        notes = "Same as `/task/approve/{oid}`, but identifies the task by project + task ID.",
+        response = Approval.class
+    )
+    public Response approveTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId,
+        @ApiParam(value = "Transition to apply.", required = true)
+        ApproveTaskBody data
+    ) { return null; }
+
+    @DELETE
+    @Path("/revoke-approval/{oid}")
+    @ApiOperation(
+        value = "Cancel a task's approval.",
+        notes = "Revokes the task's current approval. The effect depends "
+              + "on the current state:\n"
+              + "- `awaiting` / `changes` → clears the approval entirely.\n"
+              + "- `approved` / `rejected` → rolls back to `awaiting` "
+              + "(the original requester is preserved; the approver can "
+              + "re-decide via `POST /task/approve/{oid}`, or `DELETE` "
+              + "again to clear).\n\n"
+              + "Idempotent: returns `204 No Content` even when no "
+              + "approval is set."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response revokeTaskApprovalByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid
+    ) { return null; }
+
+    @DELETE
+    @Path("/revoke-approval/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Cancel a task's approval by ID.",
+        notes = "Same as `/task/revoke-approval/{oid}`, but identifies the task by project + task ID."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response revokeTaskApprovalById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
         @ApiParam(value = "Task ID.", required = true)
         @PathParam("taskId") int taskId
     ) { return null; }

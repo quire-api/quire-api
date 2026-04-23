@@ -1,6 +1,7 @@
 package io.quire.api.model.project;
 
 import io.quire.api.model.*;
+import io.quire.api.model.approval.AppvCat;
 import io.quire.api.model.field.FieldDefinition;
 import io.swagger.annotations.*;
 
@@ -129,4 +130,13 @@ public class Project extends Identity {
         position = 70
     )
     public Map<String, FieldDefinition> getFields() { return null; }
+
+    @ApiModelProperty(
+        value = "Approval categories defined on this project. "
+              + "Use the `add-appv-cat`, `update-appv-cat`, and "
+              + "`remove-appv-cat` extensions to mutate entries. Null "
+              + "when only the implicit default category is in effect.",
+        position = 70
+    )
+    public List<AppvCat> getApprovalCategories() { return null; }
 }

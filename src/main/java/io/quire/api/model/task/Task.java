@@ -1,6 +1,7 @@
 package io.quire.api.model.task;
 
 import io.quire.api.model.*;
+import io.quire.api.model.approval.Approval;
 import io.swagger.annotations.*;
 
 import java.util.List;
@@ -78,4 +79,11 @@ public class Task extends SimpleTask {
 		+ "Since comments can be removed, this value may not always match the current set of comments.",
 		example = "2023-12-22T09:06:28.253Z", position = 73)
 	public String getCommentedAt() { return null; }
+
+	@ApiModelProperty(value = "The task's current approval state. "
+		+ "Null if no approval has been requested. "
+		+ "Mutate via `POST /task/approve/{oid}` (request / approve / reject / change) "
+		+ "and `DELETE /task/revoke-approval/{oid}` (cancel).",
+		position = 75)
+	public Approval getApproval() { return null; }
 }

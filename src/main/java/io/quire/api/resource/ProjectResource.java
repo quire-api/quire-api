@@ -1,5 +1,6 @@
 package io.quire.api.resource;
 
+import io.quire.api.model.approval.*;
 import io.quire.api.model.field.*;
 import io.quire.api.model.project.*;
 import io.swagger.annotations.*;
@@ -486,5 +487,116 @@ public class ProjectResource {
             required = false
         )
         @QueryParam("before") String before
+    ) { return null; }
+
+    // -------- Approval categories --------
+
+    @POST
+    @Path("/add-appv-cat/{oid}")
+    @ApiOperation(
+        value = "Add an approval category to a project.",
+        notes = "Adds a new [approval category](#definition-AppvCat) to "
+              + "the project. Projects carry an implicit default category "
+              + "(id `\"\"`) that is always available; use this endpoint "
+              + "to define additional categories with their own claimer / "
+              + "approver rosters.\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Returns `400 Bad Request` if the body is invalid; "
+              + "`403 Forbidden` if the caller lacks permission.",
+        response = AppvCat.class
+    )
+    public Response addProjectAppvCat(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Category to add.", required = true)
+        AddAppvCatBody data
+    ) { return null; }
+
+    @POST
+    @Path("/add-appv-cat/id/{id}")
+    @ApiOperation(
+        value = "Add an approval category to a project by ID.",
+        notes = "Same as `/project/add-appv-cat/{oid}`, but identifies the project by ID.",
+        response = AppvCat.class
+    )
+    public Response addProjectAppvCatById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Category to add.", required = true)
+        AddAppvCatBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-appv-cat/{oid}/{catId}")
+    @ApiOperation(
+        value = "Update an approval category on a project.",
+        notes = "Partial update: any of `name`, `claimers`, or `approvers` "
+              + "may be supplied; omitted keys preserve their current "
+              + "values. At least one key must be present.\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "Response body is the updated category, or an empty "
+              + "object if the category no longer exists (e.g. removed "
+              + "concurrently).",
+        response = AppvCat.class
+    )
+    public Response updateProjectAppvCat(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Category id.", required = true)
+        @PathParam("catId") String catId,
+        @ApiParam(value = "Changes to apply.", required = true)
+        UpdateAppvCatBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-appv-cat/id/{id}/{catId}")
+    @ApiOperation(
+        value = "Update an approval category on a project by ID.",
+        notes = "Same as `/project/update-appv-cat/{oid}/{catId}`, but identifies the project by ID.",
+        response = AppvCat.class
+    )
+    public Response updateProjectAppvCatById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Category id.", required = true)
+        @PathParam("catId") String catId,
+        @ApiParam(value = "Changes to apply.", required = true)
+        UpdateAppvCatBody data
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-appv-cat/{oid}/{catId}")
+    @ApiOperation(
+        value = "Remove an approval category from a project.",
+        notes = "Removes the named category. Any task whose approval "
+              + "references this category has its approval cleared.\n\n"
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "> Note: Returns `204 No Content` regardless of whether "
+              + "the category exists."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response removeProjectAppvCat(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Category id.", required = true)
+        @PathParam("catId") String catId
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-appv-cat/id/{id}/{catId}")
+    @ApiOperation(
+        value = "Remove an approval category from a project by ID.",
+        notes = "Same as `/project/remove-appv-cat/{oid}/{catId}`, but identifies the project by ID."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response removeProjectAppvCatById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("id") String id,
+        @ApiParam(value = "Category id.", required = true)
+        @PathParam("catId") String catId
     ) { return null; }
 }
