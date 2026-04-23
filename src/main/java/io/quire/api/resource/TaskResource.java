@@ -572,8 +572,9 @@ public class TaskResource {
               + "| User | User ID, email, or OID | `approvedBy=john.doe` |\n"
               + "| Task | Task ID (integer) or OID | `blockedBy=42` |\n"
               + "| Email, Hyperlink | Exact value, or prefix with `~` for regex, `~*` for case-insensitive regex | `website=~example\\.com` |\n"
-              + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n\n"
-              + "Not supported: Text (use `text` for full-text search instead), Date, Formula, File, Lookup.",
+              + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n"
+              + "| Date | Same grammar as the `start` / `due` query params — keyword ops (`today`, `past`, `last7d`, ...), value ops (`ge:<v>`, `lt:<v>`, `between:<v1>,<v2>`, ...), and null ops (`isNull`, `isNotNull`). `<v>` is `YYYY-MM-DD` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`; timestamp operands require a `withTime: true` field. | `approvedAt=today`, `approvedAt=ge:2026-04-01`, `approvedAt=between:2026-04-01,2026-04-30`, `approvedAt=isNull` |\n\n"
+              + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -738,8 +739,9 @@ public class TaskResource {
               + "| User | User ID, email, or OID | `approvedBy=john.doe` |\n"
               + "| Task | Task ID (integer) or OID | `blockedBy=42` |\n"
               + "| Email, Hyperlink | Exact value, or prefix with `~` for regex, `~*` for case-insensitive regex | `website=~example\\.com` |\n"
-              + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n\n"
-              + "Not supported: Text (use `text` for full-text search instead), Date, Formula, File, Lookup.",
+              + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n"
+              + "| Date | Same grammar as the `start` / `due` query params — keyword ops (`today`, `past`, `last7d`, ...), value ops (`ge:<v>`, `lt:<v>`, `between:<v1>,<v2>`, ...), and null ops (`isNull`, `isNotNull`). `<v>` is `YYYY-MM-DD` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`; timestamp operands require a `withTime: true` field. | `approvedAt=today`, `approvedAt=ge:2026-04-01`, `approvedAt=between:2026-04-01,2026-04-30`, `approvedAt=isNull` |\n\n"
+              + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
