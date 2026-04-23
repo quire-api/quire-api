@@ -21,9 +21,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class UpdateFieldBody {
 
     @ApiModelProperty(
-        value = "(Optional) Field type. Type is immutable on update; "
-              + "if supplied, must match the existing field's type. "
-              + "Usually omitted — include only to assert the stored type.",
+        value = "(Optional) Field type. Immutable on update — if supplied, "
+              + "must match the existing field's type. Usually omitted; "
+              + "include only to verify the stored type.",
         example = "number",
         allowableValues = "text, number, money, date, duration, select, "
                         + "checkbox, user, task, hyperlink, email, formula, "
@@ -105,8 +105,8 @@ public class UpdateFieldBody {
     public String getResultType() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `select` only) Replacement option list. "
-              + "Providing this list replaces the entire set of options."
+        value = "(Optional, `select` only) Replacement option list "
+              + "(replaces the entire set)."
     )
     public List<FieldOption> getOptions() { return null; }
 
@@ -125,8 +125,8 @@ public class UpdateFieldBody {
     public String getLookupType() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Replacement conditional-format rules. "
-              + "Replaces the entire list."
+        value = "(Optional) Replacement conditional-format rules "
+              + "(replaces the entire list)."
     )
     public List<FieldConditionFormat> getConditionFormat() { return null; }
 }

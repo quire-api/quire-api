@@ -293,10 +293,9 @@ public class InsightResource {
     @ApiOperation(
         value = "Update a custom-field definition on an insight view.",
         notes = "Updates the content of an existing custom field. "
-              + "`type` is optional; if supplied it must match the existing "
-              + "type (type is immutable). Keys that are omitted leave "
-              + "their current values intact (including individual flag "
-              + "bits — flags are merged, not replaced).\n\n"
+              + "`type` is immutable — if supplied, it must match the existing "
+              + "type. Keys that are omitted leave their current values intact "
+              + "(including individual flag bits — flags are merged, not replaced).\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
               + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
               + "to reorder, use `/move-field/{oid}/{name}`.\n\n"
