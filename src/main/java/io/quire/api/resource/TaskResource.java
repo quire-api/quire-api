@@ -643,6 +643,35 @@ public class TaskResource {
         )
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
+            value = "Filter by the task's `createdAt` timestamp. "
+                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
+                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
+                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
+                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
+                  + "`notBetween` and value is an ISO 8601 timestamp "
+                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
+                  + "`between` / `notBetween` take two comma-separated operands. "
+                  + "Tokens and keywords are case-insensitive.",
+            example = "ge:2026-04-01T00:00:00Z"
+        )
+        @QueryParam("created") String created,
+        @ApiParam(
+            value = "Filter by the task's `editedAt` timestamp. "
+                  + "Same op vocabulary as `created`. "
+                  + "Note: `editedAt` is NULL for tasks that have never been "
+                  + "edited after creation; such tasks are excluded by every "
+                  + "op (use `created` to filter by creation time).",
+            example = "last7d"
+        )
+        @QueryParam("edited") String edited,
+        @ApiParam(
+            value = "Filter by the task's `archivedAt` timestamp. "
+                  + "Same op vocabulary as `created`, plus `isNull` / "
+                  + "`isNotNull` to find non-archived / archived tasks.",
+            example = "isNotNull"
+        )
+        @QueryParam("archived") String archived,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -739,6 +768,35 @@ public class TaskResource {
         )
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
+            value = "Filter by the task's `createdAt` timestamp. "
+                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
+                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
+                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
+                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
+                  + "`notBetween` and value is an ISO 8601 timestamp "
+                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
+                  + "`between` / `notBetween` take two comma-separated operands. "
+                  + "Tokens and keywords are case-insensitive.",
+            example = "ge:2026-04-01T00:00:00Z"
+        )
+        @QueryParam("created") String created,
+        @ApiParam(
+            value = "Filter by the task's `editedAt` timestamp. "
+                  + "Same op vocabulary as `created`. "
+                  + "Note: `editedAt` is NULL for tasks that have never been "
+                  + "edited after creation; such tasks are excluded by every "
+                  + "op (use `created` to filter by creation time).",
+            example = "last7d"
+        )
+        @QueryParam("edited") String edited,
+        @ApiParam(
+            value = "Filter by the task's `archivedAt` timestamp. "
+                  + "Same op vocabulary as `created`, plus `isNull` / "
+                  + "`isNotNull` to find non-archived / archived tasks.",
+            example = "isNotNull"
+        )
+        @QueryParam("archived") String archived,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -813,6 +871,35 @@ public class TaskResource {
             example = "git"
         )
         @QueryParam("sourceRef") String sourceRef,
+        @ApiParam(
+            value = "Filter by the task's `createdAt` timestamp. "
+                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
+                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
+                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
+                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
+                  + "`notBetween` and value is an ISO 8601 timestamp "
+                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
+                  + "`between` / `notBetween` take two comma-separated operands. "
+                  + "Tokens and keywords are case-insensitive.",
+            example = "ge:2026-04-01T00:00:00Z"
+        )
+        @QueryParam("created") String created,
+        @ApiParam(
+            value = "Filter by the task's `editedAt` timestamp. "
+                  + "Same op vocabulary as `created`. "
+                  + "Note: `editedAt` is NULL for tasks that have never been "
+                  + "edited after creation; such tasks are excluded by every "
+                  + "op (use `created` to filter by creation time).",
+            example = "last7d"
+        )
+        @QueryParam("edited") String edited,
+        @ApiParam(
+            value = "Filter by the task's `archivedAt` timestamp. "
+                  + "Same op vocabulary as `created`, plus `isNull` / "
+                  + "`isNotNull` to find non-archived / archived tasks.",
+            example = "isNotNull"
+        )
+        @QueryParam("archived") String archived,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
@@ -889,6 +976,35 @@ public class TaskResource {
         )
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
+            value = "Filter by the task's `createdAt` timestamp. "
+                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
+                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
+                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
+                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
+                  + "`notBetween` and value is an ISO 8601 timestamp "
+                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
+                  + "`between` / `notBetween` take two comma-separated operands. "
+                  + "Tokens and keywords are case-insensitive.",
+            example = "ge:2026-04-01T00:00:00Z"
+        )
+        @QueryParam("created") String created,
+        @ApiParam(
+            value = "Filter by the task's `editedAt` timestamp. "
+                  + "Same op vocabulary as `created`. "
+                  + "Note: `editedAt` is NULL for tasks that have never been "
+                  + "edited after creation; such tasks are excluded by every "
+                  + "op (use `created` to filter by creation time).",
+            example = "last7d"
+        )
+        @QueryParam("edited") String edited,
+        @ApiParam(
+            value = "Filter by the task's `archivedAt` timestamp. "
+                  + "Same op vocabulary as `created`, plus `isNull` / "
+                  + "`isNotNull` to find non-archived / archived tasks.",
+            example = "isNotNull"
+        )
+        @QueryParam("archived") String archived,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -964,6 +1080,35 @@ public class TaskResource {
         )
         @QueryParam("sourceRef") String sourceRef,
         @ApiParam(
+            value = "Filter by the task's `createdAt` timestamp. "
+                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
+                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
+                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
+                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
+                  + "`notBetween` and value is an ISO 8601 timestamp "
+                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
+                  + "`between` / `notBetween` take two comma-separated operands. "
+                  + "Tokens and keywords are case-insensitive.",
+            example = "ge:2026-04-01T00:00:00Z"
+        )
+        @QueryParam("created") String created,
+        @ApiParam(
+            value = "Filter by the task's `editedAt` timestamp. "
+                  + "Same op vocabulary as `created`. "
+                  + "Note: `editedAt` is NULL for tasks that have never been "
+                  + "edited after creation; such tasks are excluded by every "
+                  + "op (use `created` to filter by creation time).",
+            example = "last7d"
+        )
+        @QueryParam("edited") String edited,
+        @ApiParam(
+            value = "Filter by the task's `archivedAt` timestamp. "
+                  + "Same op vocabulary as `created`, plus `isNull` / "
+                  + "`isNotNull` to find non-archived / archived tasks.",
+            example = "isNotNull"
+        )
+        @QueryParam("archived") String archived,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
@@ -1038,6 +1183,35 @@ public class TaskResource {
             example = "git"
         )
         @QueryParam("sourceRef") String sourceRef,
+        @ApiParam(
+            value = "Filter by the task's `createdAt` timestamp. "
+                  + "Accepts a keyword op (`past`, `yesterday`, `today`, "
+                  + "`tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, "
+                  + "`thisWeek`, `nextWeek`), or a `token:value` value op where "
+                  + "token is `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, or "
+                  + "`notBetween` and value is an ISO 8601 timestamp "
+                  + "(`YYYY-MM-DDTHH:MM:SSZ`). "
+                  + "`between` / `notBetween` take two comma-separated operands. "
+                  + "Tokens and keywords are case-insensitive.",
+            example = "ge:2026-04-01T00:00:00Z"
+        )
+        @QueryParam("created") String created,
+        @ApiParam(
+            value = "Filter by the task's `editedAt` timestamp. "
+                  + "Same op vocabulary as `created`. "
+                  + "Note: `editedAt` is NULL for tasks that have never been "
+                  + "edited after creation; such tasks are excluded by every "
+                  + "op (use `created` to filter by creation time).",
+            example = "last7d"
+        )
+        @QueryParam("edited") String edited,
+        @ApiParam(
+            value = "Filter by the task's `archivedAt` timestamp. "
+                  + "Same op vocabulary as `created`, plus `isNull` / "
+                  + "`isNotNull` to find non-archived / archived tasks.",
+            example = "isNotNull"
+        )
+        @QueryParam("archived") String archived,
         @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
