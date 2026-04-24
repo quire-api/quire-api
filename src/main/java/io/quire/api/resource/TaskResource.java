@@ -37,14 +37,16 @@ public class TaskResource {
         CreateTaskBody data,
 
         @ApiParam(
-            value = "Position of the new task relative to the task specified by `oid`. "
-                + "Allowed values are `before`, `after`, and `parent`. "
-                + "If omitted, `parent` is assumed. "
-                + "This parameter applies only when `oid` refers to a task.\n\n"
-                + "- `before`: before the specified task\n"
-                + "- `after`: after the specified task\n"
-                + "- `parent`: under the specified task",
-            example = "before"
+            value = "(Optional) Placement of the new task relative to the "
+                + "task referenced by `oid`. This parameter applies only "
+                + "when `oid` refers to a task:\n"
+                + "- `parent` (default): child of the referenced task.\n"
+                + "- `before`: sibling immediately before the referenced task.\n"
+                + "- `after`: sibling immediately after the referenced task.\n\n"
+                + "Omitted or empty → same as `parent`. Any other value "
+                + "returns `400 Bad Request`.",
+            example = "before",
+            allowableValues = "parent, before, after"
         )
         @QueryParam("position") String position
     ) { return null; }
@@ -90,13 +92,15 @@ public class TaskResource {
         CreateTaskBody data,
 
         @ApiParam(
-            value = "Position of the new task relative to the task specified by `taskId`. "
-                + "Allowed values are `before`, `after`, and `parent`. "
-                + "If omitted, `parent` is assumed.\n\n"
-                + "- `before`: before the specified task\n"
-                + "- `after`: after the specified task\n"
-                + "- `parent`: under the specified task",
-            example = "before"
+            value = "(Optional) Placement of the new task relative to the "
+                + "task referenced by `taskId`:\n"
+                + "- `parent` (default): child of the referenced task.\n"
+                + "- `before`: sibling immediately before the referenced task.\n"
+                + "- `after`: sibling immediately after the referenced task.\n\n"
+                + "Omitted or empty → same as `parent`. Any other value "
+                + "returns `400 Bad Request`.",
+            example = "before",
+            allowableValues = "parent, before, after"
         )
         @QueryParam("position") String position
     ) { return null; }
@@ -238,7 +242,11 @@ public class TaskResource {
     @ApiOperation(
         value = "Move an existing task by its OID.",
         notes = "Moves an existing task under another task as a subtask, "
-            + "or to the root level. "
+            + "reorders it among siblings, or sends it to the root level.\n\n"
+            + "Use `?task=` to name the reference task and `?position=` to "
+            + "choose placement (`parent` / `before` / `after`). "
+            + "See the by-ID variant `PUT /task/move/id/{projectId}/{taskId}` "
+            + "for the preferred URL form.\n\n"
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
@@ -247,12 +255,29 @@ public class TaskResource {
         @PathParam("oid") String oid,
 
         @ApiParam(
-            value = "The task that will become the new parent of the moved task. "
-                + "If `root` is specified, the moved task becomes a root task.",
+            value = "Reference task OID. How it's used depends on `position`:\n"
+                + "- `parent` (default): the moved task becomes a child of `task`.\n"
+                + "- `before` / `after`: the moved task is placed as a sibling, "
+                + "under `task`'s parent.\n\n"
+                + "Specify `root` to move to the root level (only valid with the "
+                + "default `parent` position).",
             required = true,
             example = "0Mg3VQ8kWeiVbLH1JjvzUcP7"
         )
-        @QueryParam("task") String task
+        @QueryParam("task") String task,
+
+        @ApiParam(
+            value = "(Optional) Placement relative to `task`:\n"
+                + "- `parent` (default): child of `task`.\n"
+                + "- `before`: sibling immediately before `task`.\n"
+                + "- `after`: sibling immediately after `task`.\n\n"
+                + "Omitted or empty → same as `parent`. Any other value returns "
+                + "`400 Bad Request`. `before` / `after` require `task` to refer "
+                + "to a task (not `root`).",
+            example = "before",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position
 
     ) { return null; }
 
@@ -261,7 +286,14 @@ public class TaskResource {
     @ApiOperation(
         value = "Move an existing task by its ID.",
         notes = "Moves an existing task under another task as a subtask, "
-            + "or to the root level. "
+            + "reorders it among siblings, or sends it to the root level.\n\n"
+            + "Use `?task=` to name the reference task and `?position=` to "
+            + "choose placement (`parent` / `before` / `after`).\n\n"
+            + "Examples:\n"
+            + "- `PUT /task/move/id/my_project/42?task=99` — reparent (default: child of task 99).\n"
+            + "- `PUT /task/move/id/my_project/42?task=99&position=before` — place task 42 before task 99.\n"
+            + "- `PUT /task/move/id/my_project/42?task=99&position=after` — place task 42 after task 99.\n"
+            + "- `PUT /task/move/id/my_project/42?task=root` — move to root level.\n\n"
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
@@ -277,12 +309,29 @@ public class TaskResource {
         @PathParam("taskId") int taskId,
 
         @ApiParam(
-            value = "ID of the task that will become the new parent of the moved task. "
-                + "If `root` is specified, the moved task becomes a root task.",
+            value = "Reference task ID. How it's used depends on `position`:\n"
+                + "- `parent` (default): the moved task becomes a child of `task`.\n"
+                + "- `before` / `after`: the moved task is placed as a sibling, "
+                + "under `task`'s parent.\n\n"
+                + "Specify `root` to move to the root level (only valid with the "
+                + "default `parent` position).",
             required = true,
             example = "253"
         )
-        @QueryParam("task") String task
+        @QueryParam("task") String task,
+
+        @ApiParam(
+            value = "(Optional) Placement relative to `task`:\n"
+                + "- `parent` (default): child of `task`.\n"
+                + "- `before`: sibling immediately before `task`.\n"
+                + "- `after`: sibling immediately after `task`.\n\n"
+                + "Omitted or empty → same as `parent`. Any other value returns "
+                + "`400 Bad Request`. `before` / `after` require `task` to refer "
+                + "to a task (not `root`).",
+            example = "before",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position
 
     ) { return null; }
 
@@ -290,7 +339,11 @@ public class TaskResource {
     @Path("/transfer/{oid}")
     @ApiOperation(
         value = "Transfer an existing task by its OID to another project.",
-        notes = "Transfers an existing task to another project. "
+        notes = "Transfers an existing task to another project, optionally "
+            + "positioning it relative to an existing task in the target "
+            + "(`?task=` + `?position=`). See the by-ID variant "
+            + "`PUT /task/transfer/id/{projectId}/{taskId}` for the preferred "
+            + "URL form.\n\n"
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
@@ -307,12 +360,31 @@ public class TaskResource {
         @QueryParam("project") String project,
 
         @ApiParam(
-            value = "Optional. OID of the task that will become the new parent "
-                + "of the transferred task. If omitted, the transferred task "
-                + "becomes a root task in the target project.",
+            value = "(Optional) OID of a reference task in the **target** "
+                + "project. How it's used depends on `position`:\n"
+                + "- `parent` (default): the transferred task becomes a "
+                + "child of `task`.\n"
+                + "- `before` / `after`: the transferred task is placed as "
+                + "a sibling, under `task`'s parent.\n\n"
+                + "If omitted (or `root`), the transferred task becomes a "
+                + "root task in the target project.",
             example = "0Mg3VQ8kWeiVbLH1JjvzUcP7"
         )
         @QueryParam("task") String task,
+
+        @ApiParam(
+            value = "(Optional) Placement relative to `task` in the target "
+                + "project:\n"
+                + "- `parent` (default): child of `task`.\n"
+                + "- `before`: sibling immediately before `task`.\n"
+                + "- `after`: sibling immediately after `task`.\n\n"
+                + "Omitted or empty → same as `parent`. Any other value "
+                + "returns `400 Bad Request`. `before` / `after` require "
+                + "`task` to refer to a task (not omitted, not `root`).",
+            example = "before",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
 
         @ApiParam(
             value = "Whether to invite assignees to the target project if they "
@@ -349,7 +421,14 @@ public class TaskResource {
     @Path("/transfer/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Transfer an existing task by its ID to another project.",
-        notes = "Transfers an existing task to another project. "
+        notes = "Transfers an existing task to another project, optionally "
+            + "positioning it relative to an existing task in the target "
+            + "(`?task=` + `?position=`).\n\n"
+            + "Examples:\n"
+            + "- `PUT /task/transfer/id/my_project/42?project=archive` — transfer to root of target project.\n"
+            + "- `PUT /task/transfer/id/my_project/42?project=archive&task=99` — transfer as a child of task 99 in target.\n"
+            + "- `PUT /task/transfer/id/my_project/42?project=archive&task=99&position=before` — transfer and place before task 99.\n"
+            + "- `PUT /task/transfer/id/my_project/42?project=-` — transfer to the user's Inbox.\n\n"
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
@@ -368,17 +447,36 @@ public class TaskResource {
             value = "ID of the target project to which the task will be transferred. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
             required = true,
-            example = "MyArchived"
+            example = "my_archive"
         )
         @QueryParam("project") String project,
 
         @ApiParam(
-            value = "Optional. ID of the task that will become the new parent "
-                + "of the transferred task. If omitted, the transferred task "
-                + "becomes a root task in the target project.",
+            value = "(Optional) ID of a reference task in the **target** "
+                + "project. How it's used depends on `position`:\n"
+                + "- `parent` (default): the transferred task becomes a "
+                + "child of `task`.\n"
+                + "- `before` / `after`: the transferred task is placed as "
+                + "a sibling, under `task`'s parent.\n\n"
+                + "If omitted (or `root`), the transferred task becomes a "
+                + "root task in the target project.",
             example = "253"
         )
         @QueryParam("task") String task,
+
+        @ApiParam(
+            value = "(Optional) Placement relative to `task` in the target "
+                + "project:\n"
+                + "- `parent` (default): child of `task`.\n"
+                + "- `before`: sibling immediately before `task`.\n"
+                + "- `after`: sibling immediately after `task`.\n\n"
+                + "Omitted or empty → same as `parent`. Any other value "
+                + "returns `400 Bad Request`. `before` / `after` require "
+                + "`task` to refer to a task (not omitted, not `root`).",
+            example = "before",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
 
         @ApiParam(
             value = "Whether to invite assignees to the target project if they "
