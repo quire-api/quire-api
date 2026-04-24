@@ -1744,6 +1744,63 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Partner'
+  /project/add-appv-cat/id/{id}:
+    post:
+      tags:
+        - project
+      summary: Add an approval category to a project by ID.
+      description: Same as `/project/add-appv-cat/{oid}`, but identifies the project by ID.
+      operationId: addProjectAppvCatById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Project ID.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Category to add.
+          required: true
+          schema:
+            $ref: '#/definitions/AddAppvCatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppvCat'
+  /project/add-appv-cat/{oid}:
+    post:
+      tags:
+        - project
+      summary: Add an approval category to a project.
+      description: |-
+        Adds a new [approval category](#definition-AppvCat) to the project. Projects carry an implicit default category (id `""`) that is always available; use this endpoint to define additional categories with their own claimer / approver rosters.
+
+        Requires the `Admin` scope to invoke.
+
+        Returns `400 Bad Request` if the body is invalid; `403 Forbidden` if the caller lacks permission.
+      operationId: addProjectAppvCat
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Project OID.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Category to add.
+          required: true
+          schema:
+            $ref: '#/definitions/AddAppvCatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppvCat'
   /project/add-field/id/{id}:
     post:
       tags:
@@ -2167,6 +2224,57 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/FieldDefinitionWithName'
+  /project/remove-appv-cat/id/{id}/{catId}:
+    delete:
+      tags:
+        - project
+      summary: Remove an approval category from a project by ID.
+      description: Same as `/project/remove-appv-cat/{oid}/{catId}`, but identifies the project by ID.
+      operationId: removeProjectAppvCatById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Project ID.
+          required: true
+          type: string
+        - name: catId
+          in: path
+          description: Category id.
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No Content
+  /project/remove-appv-cat/{oid}/{catId}:
+    delete:
+      tags:
+        - project
+      summary: Remove an approval category from a project.
+      description: |-
+        Removes the named category. Any task whose approval references this category has its approval cleared.
+
+        Requires the `Admin` scope to invoke.
+
+        > Note: Returns `204 No Content` regardless of whether the category exists.
+      operationId: removeProjectAppvCat
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Project OID.
+          required: true
+          type: string
+        - name: catId
+          in: path
+          description: Category id.
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No Content
   /project/remove-field/id/{id}/{fieldName}:
     delete:
       tags:
@@ -2283,6 +2391,73 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/FieldDefinitionWithName'
+  /project/update-appv-cat/id/{id}/{catId}:
+    put:
+      tags:
+        - project
+      summary: Update an approval category on a project by ID.
+      description: Same as `/project/update-appv-cat/{oid}/{catId}`, but identifies the project by ID.
+      operationId: updateProjectAppvCatById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Project ID.
+          required: true
+          type: string
+        - name: catId
+          in: path
+          description: Category id.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Changes to apply.
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateAppvCatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppvCat'
+  /project/update-appv-cat/{oid}/{catId}:
+    put:
+      tags:
+        - project
+      summary: Update an approval category on a project.
+      description: |-
+        Partial update: any of `name`, `claimers`, or `approvers` may be supplied; omitted keys preserve their current values. At least one key must be present.
+
+        Requires the `Admin` scope to invoke.
+
+        Response body is the updated category, or an empty object if the category no longer exists (e.g. removed concurrently).
+      operationId: updateProjectAppvCat
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Project OID.
+          required: true
+          type: string
+        - name: catId
+          in: path
+          description: Category id.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Changes to apply.
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateAppvCatBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppvCat'
   /project/update-field/id/{id}/{fieldName}:
     put:
       tags:
@@ -3327,6 +3502,73 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Tag'
+  /task/approve/id/{projectId}/{taskId}:
+    post:
+      tags:
+        - task
+      summary: Set or transition a task's approval state by ID.
+      description: Same as `/task/approve/{oid}`, but identifies the task by project + task ID.
+      operationId: approveTaskById
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: Project ID.
+          required: true
+          type: string
+        - name: taskId
+          in: path
+          description: Task ID.
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: body
+          description: Transition to apply.
+          required: true
+          schema:
+            $ref: '#/definitions/ApproveTaskBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Approval'
+  /task/approve/{oid}:
+    post:
+      tags:
+        - task
+      summary: Set or transition a task's approval state.
+      description: |-
+        Sets the task's [approval](#definition-Approval), or transitions it from its current state. The same endpoint handles every action — the request body's `state` token selects the transition:
+        - `request` — request approval, or roll forward from `approved` / `rejected` / `changes` back to `awaiting`.
+        - `approve` / `reject` / `change` — approver's decision.
+
+        The caller must be a claimer (for `request`) or an approver (for `approve` / `reject` / `change`) of the category. The original requester is preserved across `approve` / `reject` / `change` transitions.
+
+        To cancel an approval, use `DELETE /task/revoke-approval/{oid}`.
+
+        Returns `400 Bad Request` if `state` is missing or unknown; `403 Forbidden` if the caller isn't a claimer / approver; `404 Not Found` if the task or `category` doesn't exist.
+      operationId: approveTaskByOid
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Task OID.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Transition to apply.
+          required: true
+          schema:
+            $ref: '#/definitions/ApproveTaskBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Approval'
   /task/attach/id/{projectId}/{taskId}/{filename}:
     post:
       tags:
@@ -3699,6 +3941,53 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/TaskWithParentInfo'
+  /task/revoke-approval/id/{projectId}/{taskId}:
+    delete:
+      tags:
+        - task
+      summary: Cancel a task's approval by ID.
+      description: Same as `/task/revoke-approval/{oid}`, but identifies the task by project + task ID.
+      operationId: revokeTaskApprovalById
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: Project ID.
+          required: true
+          type: string
+        - name: taskId
+          in: path
+          description: Task ID.
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '204':
+          description: No Content
+  /task/revoke-approval/{oid}:
+    delete:
+      tags:
+        - task
+      summary: Cancel a task's approval.
+      description: |-
+        Revokes the task's current approval. The effect depends on the current state:
+        - `awaiting` / `changes` → clears the approval entirely.
+        - `approved` / `rejected` → rolls back to `awaiting` (the original requester is preserved; the approver can re-decide via `POST /task/approve/{oid}`, or `DELETE` again to clear).
+
+        Idempotent: returns `204 No Content` even when no approval is set.
+      operationId: revokeTaskApprovalByOid
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: Task OID.
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No Content
   /task/search-folder/id/{folderId}:
     get:
       tags:
@@ -3755,6 +4044,58 @@ paths:
           required: false
           type: boolean
           x-example: true
+        - name: assignee
+          in: query
+          description: |-
+            Filter by assignee. Each value is a user OID, user ID, or email.
+
+            Combine values with `,` (AND), `|` (OR), and `!` (NOT). AND binds tighter than OR.
+
+            Examples:
+            - `alice` — a single user (by ID)
+            - `alice@example.com` — by email
+            - `alice,bob` — assigned to both
+            - `alice|bob` — assigned to either
+            - `alice,!bob` — assigned to alice but not bob
+            - `alice,bob|carol` — `(alice AND bob) OR carol`
+          required: false
+          type: string
+          x-example: alice,!bob
+        - name: assignor
+          in: query
+          description: |-
+            Filter by assignor (the user who set the assignment). Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice
+        - name: follower
+          in: query
+          description: |-
+            Filter by follower. Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice|bob
+        - name: tag
+          in: query
+          description: |-
+            Filter by tag. Each value is a tag OID or a tag name (names are resolved within the search's organization).
+
+            Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Names containing `,`, `|`, `!`, `"`, or whitespace must be wrapped in `"..."`. Inside quotes, write `\"` for a literal `"` and `\\` for a literal `\`; any other `\x` is preserved as two literal characters.
+
+            Examples:
+            - `Legal` — a single tag
+            - `Legal,!Draft` — has `Legal` but not `Draft`
+            - `"In Progress",!Done` — quoted name with space
+            - `"Foo\"s Go"|Other` — quoted with escaped `"`
+          required: false
+          type: string
+          x-example: Legal,!Draft
         - name: modified
           in: query
           description: Return only tasks created or modified recently. Specify an integer (days); default 7 if omitted. Supports `d`, `h`, `m` suffixes (e.g., `8h`).
@@ -3925,6 +4266,58 @@ paths:
           required: false
           type: boolean
           x-example: true
+        - name: assignee
+          in: query
+          description: |-
+            Filter by assignee. Each value is a user OID, user ID, or email.
+
+            Combine values with `,` (AND), `|` (OR), and `!` (NOT). AND binds tighter than OR.
+
+            Examples:
+            - `alice` — a single user (by ID)
+            - `alice@example.com` — by email
+            - `alice,bob` — assigned to both
+            - `alice|bob` — assigned to either
+            - `alice,!bob` — assigned to alice but not bob
+            - `alice,bob|carol` — `(alice AND bob) OR carol`
+          required: false
+          type: string
+          x-example: alice,!bob
+        - name: assignor
+          in: query
+          description: |-
+            Filter by assignor (the user who set the assignment). Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice
+        - name: follower
+          in: query
+          description: |-
+            Filter by follower. Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice|bob
+        - name: tag
+          in: query
+          description: |-
+            Filter by tag. Each value is a tag OID or a tag name (names are resolved within the search's organization).
+
+            Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Names containing `,`, `|`, `!`, `"`, or whitespace must be wrapped in `"..."`. Inside quotes, write `\"` for a literal `"` and `\\` for a literal `\`; any other `\x` is preserved as two literal characters.
+
+            Examples:
+            - `Legal` — a single tag
+            - `Legal,!Draft` — has `Legal` but not `Draft`
+            - `"In Progress",!Done` — quoted name with space
+            - `"Foo\"s Go"|Other` — quoted with escaped `"`
+          required: false
+          type: string
+          x-example: Legal,!Draft
         - name: modified
           in: query
           description: Return only tasks created or modified recently. Specify an integer (days); default 7 if omitted. Supports `d`, `h`, `m` suffixes (e.g., `8h`).
@@ -4095,6 +4488,58 @@ paths:
           required: false
           type: boolean
           x-example: true
+        - name: assignee
+          in: query
+          description: |-
+            Filter by assignee. Each value is a user OID, user ID, or email.
+
+            Combine values with `,` (AND), `|` (OR), and `!` (NOT). AND binds tighter than OR.
+
+            Examples:
+            - `alice` — a single user (by ID)
+            - `alice@example.com` — by email
+            - `alice,bob` — assigned to both
+            - `alice|bob` — assigned to either
+            - `alice,!bob` — assigned to alice but not bob
+            - `alice,bob|carol` — `(alice AND bob) OR carol`
+          required: false
+          type: string
+          x-example: alice,!bob
+        - name: assignor
+          in: query
+          description: |-
+            Filter by assignor (the user who set the assignment). Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice
+        - name: follower
+          in: query
+          description: |-
+            Filter by follower. Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice|bob
+        - name: tag
+          in: query
+          description: |-
+            Filter by tag. Each value is a tag OID or a tag name (names are resolved within the search's organization).
+
+            Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Names containing `,`, `|`, `!`, `"`, or whitespace must be wrapped in `"..."`. Inside quotes, write `\"` for a literal `"` and `\\` for a literal `\`; any other `\x` is preserved as two literal characters.
+
+            Examples:
+            - `Legal` — a single tag
+            - `Legal,!Draft` — has `Legal` but not `Draft`
+            - `"In Progress",!Done` — quoted name with space
+            - `"Foo\"s Go"|Other` — quoted with escaped `"`
+          required: false
+          type: string
+          x-example: Legal,!Draft
         - name: modified
           in: query
           description: Return only tasks created or modified recently. Specify an integer (days); default 7 if omitted. Supports `d`, `h`, `m` suffixes (e.g., `8h`).
@@ -4265,6 +4710,58 @@ paths:
           required: false
           type: boolean
           x-example: true
+        - name: assignee
+          in: query
+          description: |-
+            Filter by assignee. Each value is a user OID, user ID, or email.
+
+            Combine values with `,` (AND), `|` (OR), and `!` (NOT). AND binds tighter than OR.
+
+            Examples:
+            - `alice` — a single user (by ID)
+            - `alice@example.com` — by email
+            - `alice,bob` — assigned to both
+            - `alice|bob` — assigned to either
+            - `alice,!bob` — assigned to alice but not bob
+            - `alice,bob|carol` — `(alice AND bob) OR carol`
+          required: false
+          type: string
+          x-example: alice,!bob
+        - name: assignor
+          in: query
+          description: |-
+            Filter by assignor (the user who set the assignment). Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice
+        - name: follower
+          in: query
+          description: |-
+            Filter by follower. Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice|bob
+        - name: tag
+          in: query
+          description: |-
+            Filter by tag. Each value is a tag OID or a tag name (names are resolved within the search's organization).
+
+            Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Names containing `,`, `|`, `!`, `"`, or whitespace must be wrapped in `"..."`. Inside quotes, write `\"` for a literal `"` and `\\` for a literal `\`; any other `\x` is preserved as two literal characters.
+
+            Examples:
+            - `Legal` — a single tag
+            - `Legal,!Draft` — has `Legal` but not `Draft`
+            - `"In Progress",!Done` — quoted name with space
+            - `"Foo\"s Go"|Other` — quoted with escaped `"`
+          required: false
+          type: string
+          x-example: Legal,!Draft
         - name: modified
           in: query
           description: Return only tasks created or modified recently. Specify an integer (days); default 7 if omitted. Supports `d`, `h`, `m` suffixes (e.g., `8h`).
@@ -4458,6 +4955,58 @@ paths:
           required: false
           type: boolean
           x-example: true
+        - name: assignee
+          in: query
+          description: |-
+            Filter by assignee. Each value is a user OID, user ID, or email.
+
+            Combine values with `,` (AND), `|` (OR), and `!` (NOT). AND binds tighter than OR.
+
+            Examples:
+            - `alice` — a single user (by ID)
+            - `alice@example.com` — by email
+            - `alice,bob` — assigned to both
+            - `alice|bob` — assigned to either
+            - `alice,!bob` — assigned to alice but not bob
+            - `alice,bob|carol` — `(alice AND bob) OR carol`
+          required: false
+          type: string
+          x-example: alice,!bob
+        - name: assignor
+          in: query
+          description: |-
+            Filter by assignor (the user who set the assignment). Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice
+        - name: follower
+          in: query
+          description: |-
+            Filter by follower. Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice|bob
+        - name: tag
+          in: query
+          description: |-
+            Filter by tag. Each value is a tag OID or a tag name (names are resolved within the search's organization).
+
+            Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Names containing `,`, `|`, `!`, `"`, or whitespace must be wrapped in `"..."`. Inside quotes, write `\"` for a literal `"` and `\\` for a literal `\`; any other `\x` is preserved as two literal characters.
+
+            Examples:
+            - `Legal` — a single tag
+            - `Legal,!Draft` — has `Legal` but not `Draft`
+            - `"In Progress",!Done` — quoted name with space
+            - `"Foo\"s Go"|Other` — quoted with escaped `"`
+          required: false
+          type: string
+          x-example: Legal,!Draft
         - name: modified
           in: query
           description: Return only tasks created or modified recently. Specify an integer (days); default 7 if omitted. Supports `d`, `h`, `m` suffixes (e.g., `8h`).
@@ -4651,6 +5200,58 @@ paths:
           required: false
           type: boolean
           x-example: true
+        - name: assignee
+          in: query
+          description: |-
+            Filter by assignee. Each value is a user OID, user ID, or email.
+
+            Combine values with `,` (AND), `|` (OR), and `!` (NOT). AND binds tighter than OR.
+
+            Examples:
+            - `alice` — a single user (by ID)
+            - `alice@example.com` — by email
+            - `alice,bob` — assigned to both
+            - `alice|bob` — assigned to either
+            - `alice,!bob` — assigned to alice but not bob
+            - `alice,bob|carol` — `(alice AND bob) OR carol`
+          required: false
+          type: string
+          x-example: alice,!bob
+        - name: assignor
+          in: query
+          description: |-
+            Filter by assignor (the user who set the assignment). Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice
+        - name: follower
+          in: query
+          description: |-
+            Filter by follower. Each value is a user OID, user ID, or email. Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Examples: `alice`, `alice,!bob`, `alice|bob`.
+          required: false
+          type: string
+          x-example: alice|bob
+        - name: tag
+          in: query
+          description: |-
+            Filter by tag. Each value is a tag OID or a tag name (names are resolved within the search's organization).
+
+            Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter than OR.
+
+            Names containing `,`, `|`, `!`, `"`, or whitespace must be wrapped in `"..."`. Inside quotes, write `\"` for a literal `"` and `\\` for a literal `\`; any other `\x` is preserved as two literal characters.
+
+            Examples:
+            - `Legal` — a single tag
+            - `Legal,!Draft` — has `Legal` but not `Draft`
+            - `"In Progress",!Done` — quoted name with space
+            - `"Foo\"s Go"|Other` — quoted with escaped `"`
+          required: false
+          type: string
+          x-example: Legal,!Draft
         - name: modified
           in: query
           description: Return only tasks created or modified recently. Specify an integer (days); default 7 if omitted. Supports `d`, `h`, `m` suffixes (e.g., `8h`).
@@ -5181,12 +5782,40 @@ securityDefinitions:
     tokenUrl: https://quire.io/oauth/token
     flow: accessCode
 definitions:
+  AddAppvCatBody:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      approvers:
+        type: array
+        description: (Optional) Users allowed to approve / reject / request-change in this category. Same conventions as `claimers`.
+        items:
+          type: string
+      claimers:
+        type: array
+        description: (Optional) Users allowed to request approval in this category. Omit or pass `null` for `anyone`; pass `[]` for `admins only`; otherwise, a list of user OIDs.
+        items:
+          type: string
+      name:
+        type: string
+        example: Legal Review
+        description: Display name.
+      id:
+        type: string
+        example: legal
+        description: Category identifier (URL-safe). Must be unique within the project. The identifier `""` is reserved for the implicit default category.
   AddFieldBody:
     type: object
     required:
       - name
       - type
     properties:
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -5195,10 +5824,6 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money`/`formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
       options:
         type: array
         description: (Required for `select`) Option list.
@@ -5209,50 +5834,15 @@ definitions:
         description: (Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers.
         additionalProperties:
           $ref: '#/definitions/Number'
-      durationFormat:
-        type: string
-        example: hh:mm
-        description: (Optional, `duration`/`formula` only) Duration display format.
-        enum:
-          - hh:mm:ss
-          - hh:mm
-          - 1h1m
-          - 1h
-          - 1d1h
-          - dd:hh:mm:ss
-          - dd:hh:mm
-          - dd:hh
+      conditionFormat:
+        type: array
+        description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       multiple:
         type: boolean
         example: true
         description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Required for `formula`) Formula expression.
       resultType:
         type: string
         example: number
@@ -5273,11 +5863,46 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
+      durationFormat:
+        type: string
+        example: hh:mm
+        description: (Optional, `duration`/`formula` only) Duration display format.
+        enum:
+          - hh:mm:ss
+          - hh:mm
+          - 1h1m
+          - 1h
+          - 1d1h
+          - dd:hh:mm:ss
+          - dd:hh:mm
+          - dd:hh
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Required for `formula`) Formula expression.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
       name:
         type: string
         example: Priority
@@ -5301,6 +5926,94 @@ definitions:
           - formula
           - file
           - lookup
+  Approval:
+    type: object
+    properties:
+      category:
+        type: string
+        example: legal
+        description: Identifier of the approval category this approval belongs to. The default category has id `""`.
+      approver:
+        type: string
+        description: OID of the user who most recently approved / rejected / requested changes. Null while `state` is `awaiting`.
+      toggledAt:
+        type: string
+        example: '2026-04-24T10:05:00.000Z'
+        description: Timestamp (UTC, ISO 8601) of the last state transition.
+      requester:
+        type: string
+        description: OID of the user who originally requested approval. Preserved across subsequent approve / reject / change transitions.
+      state:
+        type: string
+        example: awaiting
+        description: |-
+          Current approval state. Derived from the last POST to `/task/approve/{oid}`:
+          - `awaiting` — `request` was posted (initial or rolled-back).
+          - `approved` — `approve` was posted.
+          - `rejected` — `reject` was posted.
+          - `changes` — `change` (request-for-changes) was posted.
+        enum:
+          - awaiting
+          - approved
+          - rejected
+          - changes
+  ApproveTaskBody:
+    type: object
+    required:
+      - state
+    properties:
+      category:
+        type: string
+        example: legal
+        description: (Optional) Approval category id. Omitted / `null` / `""` resolves to the project's default category (id `""`), which is always available. An unknown id yields `404 Not Found`.
+      state:
+        type: string
+        example: request
+        description: |-
+          State transition to apply. Case-insensitive.
+          - `request` — request approval (or roll forward from `approved` / `rejected` / `changes` back to `awaiting`).
+          - `approve` — approve the request.
+          - `reject` — reject the request.
+          - `change` — request changes.
+
+          The caller must be a claimer (for `request`) or an approver (for `approve` / `reject` / `change`) of the category; otherwise `403 Forbidden` is returned.
+        enum:
+          - request
+          - approve
+          - reject
+          - change
+  AppvCat:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Legal Review
+        description: Display name.
+      id:
+        type: string
+        example: legal
+        description: Category identifier (URL-safe). The implicit default category has an empty id.
+      approvers:
+        type: array
+        position: 20
+        description: Users allowed to approve / reject / request-change in this category. Same conventions as `claimers`.
+        items:
+          type: string
+      claimers:
+        type: array
+        position: 20
+        description: Users allowed to request approval in this category. Omitted means `anyone` can claim; an empty list means `admins only`; otherwise, the listed user OIDs.
+        items:
+          type: string
+      createdAt:
+        type: string
+        example: '2026-04-24T10:00:00.000Z'
+        position: 90
+        description: Timestamp (UTC, ISO 8601) when this category was created.
+      createdBy:
+        position: 90
+        description: User who created this category.
+        $ref: '#/definitions/SimpleIdentity'
   Attachment:
     type: object
     properties:
@@ -5355,14 +6068,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?chat=Highlight101
         description: URL of this chat on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -5492,10 +6205,6 @@ definitions:
         type: string
         position: 50
         description: URL of this comment on the Quire website.
-      editedBy:
-        position: 50
-        description: User who last edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
       pinBy:
         position: 50
         description: User who pinned this comment, or null if not pinned.
@@ -5510,6 +6219,10 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
+      editedBy:
+        position: 50
+        description: User who last edited this comment, or null if not edited.
+        $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
         description: Object this comment was added to.
@@ -5920,12 +6633,6 @@ definitions:
           type: string
         example:
           - X6nmx9XjEO2wKbqeB1pRT43C
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this task as created by the app.
-          Default: false (created by the authorizing user).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -5968,6 +6675,12 @@ definitions:
           type: string
         example:
           - tzufRLqCnud74dARyDSvjWDl
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this task as created by the app.
+          Default: false (created by the authorizing user).
       assignees:
         type: array
         description: |-
@@ -6033,12 +6746,17 @@ definitions:
         description: |-
           PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
 
-          - Money: numeric value only (no currency).
-          - User/Task: OID.
+          - Text / Email / Hyperlink: string.
+          - Number / Money: numeric value (no currency symbol).
+          - Checkbox: `true` or `false`.
+          - Select: option name (string).
+          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
           - Duration: number of seconds.
-          - Multi-value: provide a list.
+          - **User**: user OID, user ID, or email — server resolves to the user's OID.
+          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
+          - Multi-value (fields configured with `multiple: true`): provide a list.
 
-          Example body fragment: `{"Priority": 3, "Owners": ["ABC123"]}`.
+          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
       name:
         type: string
         example: Design new **logo**
@@ -6085,14 +6803,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?doc=Highlight101
         description: URL of this document on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -6203,6 +6921,19 @@ definitions:
         type: string
         example: '42'
         description: 'Palette color index. Format: two digits `[0-5][0-7]` (first = row 0-5, second = column 0-7). Examples: `00`, `13`, `57`. NOT a CSS hex color.'
+      op:
+        type: string
+        example: '>='
+        description: (Value fields) Comparison operator.
+        enum:
+          - '>='
+          - '>'
+          - <=
+          - <
+          - '='
+          - '!='
+          - between
+          - notBetween
       when:
         type: string
         example: today
@@ -6218,19 +6949,6 @@ definitions:
           - lastWeek
           - thisWeek
           - nextWeek
-      op:
-        type: string
-        example: '>='
-        description: (Value fields) Comparison operator.
-        enum:
-          - '>='
-          - '>'
-          - <=
-          - <
-          - '='
-          - '!='
-          - between
-          - notBetween
       first:
         example: '100'
         description: (Value fields) First operand. For `duration`, must be an integer number of seconds.
@@ -6240,6 +6958,10 @@ definitions:
     required:
       - type
     properties:
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -6248,10 +6970,6 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money` or `formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
       options:
         type: array
         description: (Required for `select`) Option list.
@@ -6262,50 +6980,15 @@ definitions:
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
-      durationFormat:
-        type: string
-        example: hh:mm
-        description: (Optional, `duration` or `formula` only) Duration display format.
-        enum:
-          - hh:mm:ss
-          - hh:mm
-          - 1h1m
-          - 1h
-          - 1d1h
-          - dd:hh:mm:ss
-          - dd:hh:mm
-          - dd:hh
+      conditionFormat:
+        type: array
+        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       multiple:
         type: boolean
         example: true
         description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Required for `formula`) Formula expression.
       resultType:
         type: string
         example: number
@@ -6326,11 +7009,46 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
+      durationFormat:
+        type: string
+        example: hh:mm
+        description: (Optional, `duration` or `formula` only) Duration display format.
+        enum:
+          - hh:mm:ss
+          - hh:mm
+          - 1h1m
+          - 1h
+          - 1d1h
+          - dd:hh:mm:ss
+          - dd:hh:mm
+          - dd:hh
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Required for `formula`) Formula expression.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
       type:
         type: string
         example: number
@@ -6360,6 +7078,10 @@ definitions:
         type: string
         example: Priority
         description: Field name (equals the path `fieldName` for update/rename/move, or the `name` supplied in the body for add).
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -6368,10 +7090,6 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money` or `formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
       options:
         type: array
         description: (Required for `select`) Option list.
@@ -6382,50 +7100,15 @@ definitions:
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
-      durationFormat:
-        type: string
-        example: hh:mm
-        description: (Optional, `duration` or `formula` only) Duration display format.
-        enum:
-          - hh:mm:ss
-          - hh:mm
-          - 1h1m
-          - 1h
-          - 1d1h
-          - dd:hh:mm:ss
-          - dd:hh:mm
-          - dd:hh
+      conditionFormat:
+        type: array
+        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       multiple:
         type: boolean
         example: true
         description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Required for `formula`) Formula expression.
       resultType:
         type: string
         example: number
@@ -6446,11 +7129,46 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
+      durationFormat:
+        type: string
+        example: hh:mm
+        description: (Optional, `duration` or `formula` only) Duration display format.
+        enum:
+          - hh:mm:ss
+          - hh:mm
+          - 1h1m
+          - 1h
+          - 1d1h
+          - dd:hh:mm:ss
+          - dd:hh:mm
+          - dd:hh
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Required for `formula`) Formula expression.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
       type:
         type: string
         example: number
@@ -6490,14 +7208,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?insight=View101
         description: URL of this insight view on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -6615,14 +7333,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
+      nameHtml:
+        type: string
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: My Organization
@@ -6694,14 +7412,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
+      nameHtml:
+        type: string
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: My Organization
@@ -6818,6 +7536,10 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
       nameHtml:
         type: string
         example: My Project
@@ -6827,10 +7549,6 @@ definitions:
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
       name:
         type: string
         example: My Project
@@ -6864,11 +7582,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       start:
         type: string
         example: '2024-01-02'
@@ -6884,23 +7597,34 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       publicAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      attachments:
-        type: array
-        position: 60
-        description: Attachments associated with this project.
-        items:
-          $ref: '#/definitions/Attachment'
       followers:
         type: array
         position: 60
         description: Users who follow this project.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      attachments:
+        type: array
+        position: 60
+        description: Attachments associated with this project.
+        items:
+          $ref: '#/definitions/Attachment'
+      approvalCategories:
+        type: array
+        position: 70
+        description: Approval categories defined on this project. Use the `add-appv-cat`, `update-appv-cat`, and `remove-appv-cat` extensions to mutate entries. Null when only the implicit default category is in effect.
+        items:
+          $ref: '#/definitions/AppvCat'
       fields:
         type: object
         position: 70
@@ -6951,6 +7675,10 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
       nameHtml:
         type: string
         example: My Project
@@ -6960,10 +7688,6 @@ definitions:
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
       name:
         type: string
         example: My Project
@@ -7001,11 +7725,6 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       start:
         type: string
         example: '2024-01-02'
@@ -7021,23 +7740,34 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       publicAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      attachments:
-        type: array
-        position: 60
-        description: Attachments associated with this project.
-        items:
-          $ref: '#/definitions/Attachment'
       followers:
         type: array
         position: 60
         description: Users who follow this project.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      attachments:
+        type: array
+        position: 60
+        description: Attachments associated with this project.
+        items:
+          $ref: '#/definitions/Attachment'
+      approvalCategories:
+        type: array
+        position: 70
+        description: Approval categories defined on this project. Use the `add-appv-cat`, `update-appv-cat`, and `remove-appv-cat` extensions to mutate entries. Null when only the implicit default category is in effect.
+        items:
+          $ref: '#/definitions/AppvCat'
       fields:
         type: object
         position: 70
@@ -7096,6 +7826,11 @@ definitions:
   Recurrence:
     type: object
     properties:
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
       bymonth:
         type: integer
         format: int32
@@ -7135,11 +7870,6 @@ definitions:
         format: int32
         example: 2
         description: Week number (1-based) used with `monthly` or `yearly` frequencies.
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
       until:
         type: string
         example: '2020-12-22'
@@ -7152,6 +7882,11 @@ definitions:
         type: string
         example: j47xvxul26
         description: Identifier for the recurrence series this task belongs to. Tasks that share the same seriesId are part of the same recurring series.
+      bydayno:
+        type: integer
+        format: int32
+        example: 25
+        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
       bymonth:
         type: integer
         format: int32
@@ -7191,11 +7926,6 @@ definitions:
         format: int32
         example: 2
         description: Week number (1-based) used with `monthly` or `yearly` frequencies.
-      bydayno:
-        type: integer
-        format: int32
-        example: 25
-        description: 'Day number (1-based) used with `monthly` or `yearly` frequencies. Note: `byweekday` and `bydayno` cannot be specified at the same time.'
       until:
         type: string
         example: '2020-12-22'
@@ -7332,14 +8062,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?sublist=Highlight101
         description: URL of this sublist on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -7440,14 +8170,14 @@ definitions:
   Subscription:
     type: object
     properties:
-      plan:
-        type: string
-        example: Professional
-        description: Plan name (e.g., Free, Professional, Premium, Enterprise).
       due:
         type: string
         example: '2038-02-22T02:06:58Z'
         description: Subscription due/renewal timestamp in UTC (ISO 8601).
+      plan:
+        type: string
+        example: Professional
+        description: Plan name (e.g., Free, Professional, Premium, Enterprise).
       expired:
         type: boolean
         example: false
@@ -7514,16 +8244,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Design new logo
         position: 2
         description: Task name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
@@ -7544,6 +8274,10 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -7556,10 +8290,6 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       status:
         type: integer
         format: int32
@@ -7706,6 +8436,10 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
+      approval:
+        position: 75
+        description: The task's current approval state. Null if no approval has been requested. Mutate via `POST /task/approve/{oid}` (request / approve / reject / change) and `DELETE /task/revoke-approval/{oid}` (cancel).
+        $ref: '#/definitions/Approval'
       createdAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -7764,16 +8498,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Design new logo
         position: 2
         description: Task name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
@@ -7794,6 +8528,10 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -7806,10 +8544,6 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       status:
         type: integer
         format: int32
@@ -7956,6 +8690,10 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
+      approval:
+        position: 75
+        description: The task's current approval state. Null if no approval has been requested. Mutate via `POST /task/approve/{oid}` (request / approve / reject / change) and `DELETE /task/revoke-approval/{oid}` (cancel).
+        $ref: '#/definitions/Approval'
       parent:
         position: 80
         description: |+
@@ -8003,16 +8741,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Design new logo
         position: 2
         description: Task name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
@@ -8033,6 +8771,10 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       etc:
         type: integer
         format: int32
@@ -8045,10 +8787,6 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
       status:
         type: integer
         format: int32
@@ -8195,6 +8933,10 @@ definitions:
           If `null`, the record has never had a comment.
 
           Since comments can be removed, this value may not always match the current set of comments.
+      approval:
+        position: 75
+        description: The task's current approval state. Null if no approval has been requested. Mutate via `POST /task/approve/{oid}` (request / approve / reject / change) and `DELETE /task/revoke-approval/{oid}` (cancel).
+        $ref: '#/definitions/Approval'
       parent:
         position: 80
         description: |+
@@ -8243,6 +8985,23 @@ definitions:
         example: A piece of cake
         position: 5
         description: Optional note for this time log.
+  UpdateAppvCatBody:
+    type: object
+    properties:
+      approvers:
+        type: array
+        description: (Optional) New approvers list. Same conventions as `claimers`.
+        items:
+          type: string
+      claimers:
+        type: array
+        description: (Optional) New claimers list. Pass `null` for `anyone`, `[]` for `admins only`, or a list of user OIDs.
+        items:
+          type: string
+      name:
+        type: string
+        example: Legal Review
+        description: (Optional) New display name.
   UpdateChatBody:
     type: object
     properties:
@@ -8389,6 +9148,10 @@ definitions:
   UpdateFieldBody:
     type: object
     properties:
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -8397,10 +9160,6 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money`/`formula` only) Currency symbol. Pass `$` to reset a money field to its default.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
       options:
         type: array
         description: (Optional, `select` only) Replacement option list (replaces the entire set).
@@ -8411,50 +9170,15 @@ definitions:
         description: (Optional, `lookup` only) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity. Replaces the entire map.
         additionalProperties:
           $ref: '#/definitions/Number'
-      durationFormat:
-        type: string
-        example: hh:mm
-        description: (Optional, `duration`/`formula` only) Duration display format.
-        enum:
-          - hh:mm:ss
-          - hh:mm
-          - 1h1m
-          - 1h
-          - 1d1h
-          - dd:hh:mm:ss
-          - dd:hh:mm
-          - dd:hh
+      conditionFormat:
+        type: array
+        description: (Optional) Replacement conditional-format rules (replaces the entire list).
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       multiple:
         type: boolean
         example: true
         description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Optional, `formula` only) Formula expression.
       resultType:
         type: string
         example: number
@@ -8475,11 +9199,46 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: (Optional) Replacement conditional-format rules (replaces the entire list).
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
+      durationFormat:
+        type: string
+        example: hh:mm
+        description: (Optional, `duration`/`formula` only) Duration display format.
+        enum:
+          - hh:mm:ss
+          - hh:mm
+          - 1h1m
+          - 1h
+          - 1d1h
+          - dd:hh:mm:ss
+          - dd:hh:mm
+          - dd:hh
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Optional, `formula` only) Formula expression.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
       type:
         type: string
         example: number
@@ -8795,12 +9554,6 @@ definitions:
           type: string
         example:
           - ITaVbkhh3iVcEcV3vuSLeE2k
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -8854,6 +9607,12 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
       removeFollowers:
         type: array
         description: |-
@@ -8875,6 +9634,39 @@ definitions:
           type: string
         example:
           - 6QMKkEPBVWETLWrXqws94ALU
+      recurrence:
+        description: |-
+          (Optional) Recurrence details. `null` if the task is not recurring.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
+          - `interval`: Interval between occurrences. Default: 1.
+          - `until`: End date. Default: never ends.
+          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
+          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
+          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
+          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
+            Note: `byweekday` and `bydayno` cannot both be specified.
+          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
+          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
+        $ref: '#/definitions/Recurrence'
+      peekaboo:
+        type: object
+        example: true
+        description: |-
+          (Optional) Peekaboo setting. Accepts a boolean or a positive integer:
+
+          - `true`: Hide indefinitely (task and subtasks).
+          - positive integer: Number of days to hide.
+          - `false`: Undo previous peekaboo.
+
+          Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
       addTags:
         type: array
         description: |-
@@ -8936,39 +9728,6 @@ definitions:
           Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`.
         items:
           type: string
-      recurrence:
-        description: |-
-          (Optional) Recurrence details. `null` if the task is not recurring.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
-          - `interval`: Interval between occurrences. Default: 1.
-          - `until`: End date. Default: never ends.
-          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
-          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
-          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
-          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
-            Note: `byweekday` and `bydayno` cannot both be specified.
-          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
-          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
-        $ref: '#/definitions/Recurrence'
-      peekaboo:
-        type: object
-        example: true
-        description: |-
-          (Optional) Peekaboo setting. Accepts a boolean or a positive integer:
-
-          - `true`: Hide indefinitely (task and subtasks).
-          - positive integer: Number of days to hide.
-          - `false`: Undo previous peekaboo.
-
-          Default: false.
-        anyOf:
-          - type: boolean
-          - type: integer
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
       milestone:
         type: boolean
         example: true
@@ -8988,12 +9747,17 @@ definitions:
         description: |-
           PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
 
-          - Money: numeric value only (no currency).
-          - User/Task: OID.
+          - Text / Email / Hyperlink: string.
+          - Number / Money: numeric value (no currency symbol).
+          - Checkbox: `true` or `false`.
+          - Select: option name (string).
+          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
           - Duration: number of seconds.
-          - Multi-value: provide a list.
+          - **User**: user OID, user ID, or email — server resolves to the user's OID.
+          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
+          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
 
-          Example body fragment: `{"Priority": 3, "Owners": ["ABC123"]}`.
+          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
       name:
         type: string
         example: New idea
@@ -9050,14 +9814,14 @@ definitions:
         type: string
         example: https://quire.io/u/john
         description: URL of this user on the Quire website.
-      nameHtml:
-        type: string
-        example: John
-        description: User name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: John
         description: User name with Markdown removed.
+      nameHtml:
+        type: string
+        example: John
+        description: User name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: John
