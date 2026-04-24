@@ -709,6 +709,57 @@ public class TaskResource {
         )
         @QueryParam("mine") boolean mine,
         @ApiParam(
+            value = "Filter by assignee. Each value is a user OID, user ID, "
+                  + "or email.\n\n"
+                  + "Combine values with `,` (AND), `|` (OR), and `!` (NOT). "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples:\n"
+                  + "- `alice` — a single user (by ID)\n"
+                  + "- `alice@example.com` — by email\n"
+                  + "- `alice,bob` — assigned to both\n"
+                  + "- `alice|bob` — assigned to either\n"
+                  + "- `alice,!bob` — assigned to alice but not bob\n"
+                  + "- `alice,bob|carol` — `(alice AND bob) OR carol`",
+            example = "alice,!bob"
+        )
+        @QueryParam("assignee") String assignee,
+        @ApiParam(
+            value = "Filter by assignor (the user who set the assignment). "
+                  + "Each value is a user OID, user ID, or email. Combine "
+                  + "with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter "
+                  + "than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice"
+        )
+        @QueryParam("assignor") String assignor,
+        @ApiParam(
+            value = "Filter by follower. Each value is a user OID, user ID, "
+                  + "or email. Combine with `,` (AND), `|` (OR), `!` (NOT); "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice|bob"
+        )
+        @QueryParam("follower") String follower,
+        @ApiParam(
+            value = "Filter by tag. Each value is a tag OID or a tag name "
+                  + "(names are resolved within the search's "
+                  + "organization).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
+                  + "tighter than OR.\n\n"
+                  + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
+                  + "must be wrapped in `\"...\"`. Inside quotes, write "
+                  + "`\\\"` for a literal `\"` and `\\\\` for a literal "
+                  + "`\\`; any other `\\x` is preserved as two literal "
+                  + "characters.\n\n"
+                  + "Examples:\n"
+                  + "- `Legal` — a single tag\n"
+                  + "- `Legal,!Draft` — has `Legal` but not `Draft`\n"
+                  + "- `\"In Progress\",!Done` — quoted name with space\n"
+                  + "- `\"Foo\\\"s Go\"|Other` — quoted with escaped `\"`",
+            example = "Legal,!Draft"
+        )
+        @QueryParam("tag") String tag,
+        @ApiParam(
             value = "Return only tasks created or modified recently. "
                   + "Specify an integer (days); default 7 if omitted. "
                   + "Supports `d`, `h`, `m` suffixes (e.g., `8h`).",
@@ -876,6 +927,57 @@ public class TaskResource {
         )
         @QueryParam("mine") boolean mine,
         @ApiParam(
+            value = "Filter by assignee. Each value is a user OID, user ID, "
+                  + "or email.\n\n"
+                  + "Combine values with `,` (AND), `|` (OR), and `!` (NOT). "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples:\n"
+                  + "- `alice` — a single user (by ID)\n"
+                  + "- `alice@example.com` — by email\n"
+                  + "- `alice,bob` — assigned to both\n"
+                  + "- `alice|bob` — assigned to either\n"
+                  + "- `alice,!bob` — assigned to alice but not bob\n"
+                  + "- `alice,bob|carol` — `(alice AND bob) OR carol`",
+            example = "alice,!bob"
+        )
+        @QueryParam("assignee") String assignee,
+        @ApiParam(
+            value = "Filter by assignor (the user who set the assignment). "
+                  + "Each value is a user OID, user ID, or email. Combine "
+                  + "with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter "
+                  + "than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice"
+        )
+        @QueryParam("assignor") String assignor,
+        @ApiParam(
+            value = "Filter by follower. Each value is a user OID, user ID, "
+                  + "or email. Combine with `,` (AND), `|` (OR), `!` (NOT); "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice|bob"
+        )
+        @QueryParam("follower") String follower,
+        @ApiParam(
+            value = "Filter by tag. Each value is a tag OID or a tag name "
+                  + "(names are resolved within the search's "
+                  + "organization).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
+                  + "tighter than OR.\n\n"
+                  + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
+                  + "must be wrapped in `\"...\"`. Inside quotes, write "
+                  + "`\\\"` for a literal `\"` and `\\\\` for a literal "
+                  + "`\\`; any other `\\x` is preserved as two literal "
+                  + "characters.\n\n"
+                  + "Examples:\n"
+                  + "- `Legal` — a single tag\n"
+                  + "- `Legal,!Draft` — has `Legal` but not `Draft`\n"
+                  + "- `\"In Progress\",!Done` — quoted name with space\n"
+                  + "- `\"Foo\\\"s Go\"|Other` — quoted with escaped `\"`",
+            example = "Legal,!Draft"
+        )
+        @QueryParam("tag") String tag,
+        @ApiParam(
             value = "Return only tasks created or modified recently. "
                   + "Specify an integer (days); default 7 if omitted. "
                   + "Supports `d`, `h`, `m` suffixes (e.g., `8h`).",
@@ -1020,6 +1122,57 @@ public class TaskResource {
             example = "true"
         )
         @QueryParam("mine") boolean mine,
+        @ApiParam(
+            value = "Filter by assignee. Each value is a user OID, user ID, "
+                  + "or email.\n\n"
+                  + "Combine values with `,` (AND), `|` (OR), and `!` (NOT). "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples:\n"
+                  + "- `alice` — a single user (by ID)\n"
+                  + "- `alice@example.com` — by email\n"
+                  + "- `alice,bob` — assigned to both\n"
+                  + "- `alice|bob` — assigned to either\n"
+                  + "- `alice,!bob` — assigned to alice but not bob\n"
+                  + "- `alice,bob|carol` — `(alice AND bob) OR carol`",
+            example = "alice,!bob"
+        )
+        @QueryParam("assignee") String assignee,
+        @ApiParam(
+            value = "Filter by assignor (the user who set the assignment). "
+                  + "Each value is a user OID, user ID, or email. Combine "
+                  + "with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter "
+                  + "than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice"
+        )
+        @QueryParam("assignor") String assignor,
+        @ApiParam(
+            value = "Filter by follower. Each value is a user OID, user ID, "
+                  + "or email. Combine with `,` (AND), `|` (OR), `!` (NOT); "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice|bob"
+        )
+        @QueryParam("follower") String follower,
+        @ApiParam(
+            value = "Filter by tag. Each value is a tag OID or a tag name "
+                  + "(names are resolved within the search's "
+                  + "organization).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
+                  + "tighter than OR.\n\n"
+                  + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
+                  + "must be wrapped in `\"...\"`. Inside quotes, write "
+                  + "`\\\"` for a literal `\"` and `\\\\` for a literal "
+                  + "`\\`; any other `\\x` is preserved as two literal "
+                  + "characters.\n\n"
+                  + "Examples:\n"
+                  + "- `Legal` — a single tag\n"
+                  + "- `Legal,!Draft` — has `Legal` but not `Draft`\n"
+                  + "- `\"In Progress\",!Done` — quoted name with space\n"
+                  + "- `\"Foo\\\"s Go\"|Other` — quoted with escaped `\"`",
+            example = "Legal,!Draft"
+        )
+        @QueryParam("tag") String tag,
         @ApiParam(
             value = "Return only tasks created or modified recently. "
                   + "Specify an integer (days); default 7 if omitted. "
@@ -1166,6 +1319,57 @@ public class TaskResource {
         )
         @QueryParam("mine") boolean mine,
         @ApiParam(
+            value = "Filter by assignee. Each value is a user OID, user ID, "
+                  + "or email.\n\n"
+                  + "Combine values with `,` (AND), `|` (OR), and `!` (NOT). "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples:\n"
+                  + "- `alice` — a single user (by ID)\n"
+                  + "- `alice@example.com` — by email\n"
+                  + "- `alice,bob` — assigned to both\n"
+                  + "- `alice|bob` — assigned to either\n"
+                  + "- `alice,!bob` — assigned to alice but not bob\n"
+                  + "- `alice,bob|carol` — `(alice AND bob) OR carol`",
+            example = "alice,!bob"
+        )
+        @QueryParam("assignee") String assignee,
+        @ApiParam(
+            value = "Filter by assignor (the user who set the assignment). "
+                  + "Each value is a user OID, user ID, or email. Combine "
+                  + "with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter "
+                  + "than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice"
+        )
+        @QueryParam("assignor") String assignor,
+        @ApiParam(
+            value = "Filter by follower. Each value is a user OID, user ID, "
+                  + "or email. Combine with `,` (AND), `|` (OR), `!` (NOT); "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice|bob"
+        )
+        @QueryParam("follower") String follower,
+        @ApiParam(
+            value = "Filter by tag. Each value is a tag OID or a tag name "
+                  + "(names are resolved within the search's "
+                  + "organization).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
+                  + "tighter than OR.\n\n"
+                  + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
+                  + "must be wrapped in `\"...\"`. Inside quotes, write "
+                  + "`\\\"` for a literal `\"` and `\\\\` for a literal "
+                  + "`\\`; any other `\\x` is preserved as two literal "
+                  + "characters.\n\n"
+                  + "Examples:\n"
+                  + "- `Legal` — a single tag\n"
+                  + "- `Legal,!Draft` — has `Legal` but not `Draft`\n"
+                  + "- `\"In Progress\",!Done` — quoted name with space\n"
+                  + "- `\"Foo\\\"s Go\"|Other` — quoted with escaped `\"`",
+            example = "Legal,!Draft"
+        )
+        @QueryParam("tag") String tag,
+        @ApiParam(
             value = "Return only tasks created or modified recently. "
                   + "Specify an integer (days); default 7 if omitted. "
                   + "Supports `d`, `h`, `m` suffixes (e.g., `8h`).",
@@ -1311,6 +1515,57 @@ public class TaskResource {
         )
         @QueryParam("mine") boolean mine,
         @ApiParam(
+            value = "Filter by assignee. Each value is a user OID, user ID, "
+                  + "or email.\n\n"
+                  + "Combine values with `,` (AND), `|` (OR), and `!` (NOT). "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples:\n"
+                  + "- `alice` — a single user (by ID)\n"
+                  + "- `alice@example.com` — by email\n"
+                  + "- `alice,bob` — assigned to both\n"
+                  + "- `alice|bob` — assigned to either\n"
+                  + "- `alice,!bob` — assigned to alice but not bob\n"
+                  + "- `alice,bob|carol` — `(alice AND bob) OR carol`",
+            example = "alice,!bob"
+        )
+        @QueryParam("assignee") String assignee,
+        @ApiParam(
+            value = "Filter by assignor (the user who set the assignment). "
+                  + "Each value is a user OID, user ID, or email. Combine "
+                  + "with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter "
+                  + "than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice"
+        )
+        @QueryParam("assignor") String assignor,
+        @ApiParam(
+            value = "Filter by follower. Each value is a user OID, user ID, "
+                  + "or email. Combine with `,` (AND), `|` (OR), `!` (NOT); "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice|bob"
+        )
+        @QueryParam("follower") String follower,
+        @ApiParam(
+            value = "Filter by tag. Each value is a tag OID or a tag name "
+                  + "(names are resolved within the search's "
+                  + "organization).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
+                  + "tighter than OR.\n\n"
+                  + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
+                  + "must be wrapped in `\"...\"`. Inside quotes, write "
+                  + "`\\\"` for a literal `\"` and `\\\\` for a literal "
+                  + "`\\`; any other `\\x` is preserved as two literal "
+                  + "characters.\n\n"
+                  + "Examples:\n"
+                  + "- `Legal` — a single tag\n"
+                  + "- `Legal,!Draft` — has `Legal` but not `Draft`\n"
+                  + "- `\"In Progress\",!Done` — quoted name with space\n"
+                  + "- `\"Foo\\\"s Go\"|Other` — quoted with escaped `\"`",
+            example = "Legal,!Draft"
+        )
+        @QueryParam("tag") String tag,
+        @ApiParam(
             value = "Return only tasks created or modified recently. "
                   + "Specify an integer (days); default 7 if omitted. "
                   + "Supports `d`, `h`, `m` suffixes (e.g., `8h`).",
@@ -1455,6 +1710,57 @@ public class TaskResource {
             example = "true"
         )
         @QueryParam("mine") boolean mine,
+        @ApiParam(
+            value = "Filter by assignee. Each value is a user OID, user ID, "
+                  + "or email.\n\n"
+                  + "Combine values with `,` (AND), `|` (OR), and `!` (NOT). "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples:\n"
+                  + "- `alice` — a single user (by ID)\n"
+                  + "- `alice@example.com` — by email\n"
+                  + "- `alice,bob` — assigned to both\n"
+                  + "- `alice|bob` — assigned to either\n"
+                  + "- `alice,!bob` — assigned to alice but not bob\n"
+                  + "- `alice,bob|carol` — `(alice AND bob) OR carol`",
+            example = "alice,!bob"
+        )
+        @QueryParam("assignee") String assignee,
+        @ApiParam(
+            value = "Filter by assignor (the user who set the assignment). "
+                  + "Each value is a user OID, user ID, or email. Combine "
+                  + "with `,` (AND), `|` (OR), `!` (NOT); AND binds tighter "
+                  + "than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice"
+        )
+        @QueryParam("assignor") String assignor,
+        @ApiParam(
+            value = "Filter by follower. Each value is a user OID, user ID, "
+                  + "or email. Combine with `,` (AND), `|` (OR), `!` (NOT); "
+                  + "AND binds tighter than OR.\n\n"
+                  + "Examples: `alice`, `alice,!bob`, `alice|bob`.",
+            example = "alice|bob"
+        )
+        @QueryParam("follower") String follower,
+        @ApiParam(
+            value = "Filter by tag. Each value is a tag OID or a tag name "
+                  + "(names are resolved within the search's "
+                  + "organization).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
+                  + "tighter than OR.\n\n"
+                  + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
+                  + "must be wrapped in `\"...\"`. Inside quotes, write "
+                  + "`\\\"` for a literal `\"` and `\\\\` for a literal "
+                  + "`\\`; any other `\\x` is preserved as two literal "
+                  + "characters.\n\n"
+                  + "Examples:\n"
+                  + "- `Legal` — a single tag\n"
+                  + "- `Legal,!Draft` — has `Legal` but not `Draft`\n"
+                  + "- `\"In Progress\",!Done` — quoted name with space\n"
+                  + "- `\"Foo\\\"s Go\"|Other` — quoted with escaped `\"`",
+            example = "Legal,!Draft"
+        )
+        @QueryParam("tag") String tag,
         @ApiParam(
             value = "Return only tasks created or modified recently. "
                   + "Specify an integer (days); default 7 if omitted. "
