@@ -152,10 +152,13 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to replace the current followers (OID, ID, or email).\n\n"
-              + "Accepts the same special values as `addFollowers`: `\"me\"` "
-              + "(the current user), `\"inherit\"` (followers of the parent task), "
-              + "and `\"app\"` / `\"app|team\"` / `\"app|team|channel\"` / "
-              + "`\"app|/path\"` (the application)."
+              + "Special values:\n"
+              + "- `\"me\"`: the current user\n"
+              + "- `\"inherit\"`: include followers of the parent task\n"
+              + "- `\"app\"`: the application follows (receives notifications)\n\n"
+              + "App follower syntax:\n"
+              + "- `app|team` or `app|team|channel`\n"
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`)."
     )
     public List<String> getFollowers() { return null; }
 
@@ -173,10 +176,13 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) Followers to remove (OID, ID, or email).\n\n"
-              + "Accepts the same special values as `addFollowers`: `\"me\"` "
-              + "(the current user), `\"inherit\"` (followers of the parent task), "
-              + "and `\"app\"` / `\"app|team\"` / `\"app|team|channel\"` / "
-              + "`\"app|/path\"` (the application)."
+              + "Special values:\n"
+              + "- `\"me\"`: the current user\n"
+              + "- `\"inherit\"`: remove followers that were inherited from the parent task\n"
+              + "- `\"app\"`: the application\n\n"
+              + "App follower syntax:\n"
+              + "- `app|team` or `app|team|channel`\n"
+              + "- `app|/path` → appended to the hook URL."
     )
     public List<String> getRemoveFollowers() { return null; }
 

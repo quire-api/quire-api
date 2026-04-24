@@ -318,7 +318,8 @@ public class ProjectResource {
     @Path("/add-field/id/{id}")
     @ApiOperation(
         value = "Add a custom-field definition to a project by ID.",
-        notes = "Same as `/project/add-field/{oid}`, but identifies the project by ID.",
+        notes = "Adds a custom-field definition to the project, identifying "
+              + "the project by its ID. See also `/project/add-field/{oid}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
     public Response addProjectFieldById(
@@ -337,8 +338,9 @@ public class ProjectResource {
               + "type. Keys that are omitted leave their current values intact "
               + "(including individual flag bits — flags are merged, not replaced).\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
-              + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
-              + "to reorder, use `/move-field/{oid}/{name}`.\n\n"
+              + "To rename a field, use `/project/rename-field/id/{projectId}/{fieldName}/{newName}`; "
+              + "to reorder, use `/project/move-field/id/{projectId}/{fieldName}`. "
+              + "(The `/{oid}/...` URL form is also accepted.)\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
               + "(equal to the field's name), or an empty object if the field does not exist.",
         response = FieldDefinitionWithName.class
@@ -356,7 +358,10 @@ public class ProjectResource {
     @Path("/update-field/id/{id}/{fieldName}")
     @ApiOperation(
         value = "Update a custom-field definition on a project by ID.",
-        notes = "Same as `/project/update-field/{oid}/{fieldName}`, but identifies the project by ID.",
+        notes = "Updates an existing custom-field definition on the project, "
+              + "identifying the project by its ID. `type` is immutable; omitted "
+              + "keys preserve their current values (flags are merged). See also "
+              + "`/project/update-field/{oid}/{fieldName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
     public Response updateProjectFieldById(
@@ -390,7 +395,10 @@ public class ProjectResource {
     @Path("/remove-field/id/{id}/{fieldName}")
     @ApiOperation(
         value = "Remove a custom-field definition from a project by ID.",
-        notes = "Same as `/project/remove-field/{oid}/{fieldName}`, but identifies the project by ID."
+        notes = "Removes the named custom field from the project, identifying "
+              + "the project by its ID. Returns `204 No Content` regardless of "
+              + "whether the field exists. See also `/project/remove-field/{oid}/{fieldName}` "
+              + "for the OID form."
     )
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content")
@@ -428,8 +436,10 @@ public class ProjectResource {
     @Path("/rename-field/id/{id}/{fieldName}/{newName}")
     @ApiOperation(
         value = "Rename a custom-field definition on a project by ID.",
-        notes = "Same as `/project/rename-field/{oid}/{fieldName}/{newName}`, "
-              + "but identifies the project by ID.",
+        notes = "Renames a custom-field definition on the project, identifying "
+              + "the project by its ID. The field's content is preserved; task "
+              + "values under the old name are migrated to the new name. See also "
+              + "`/project/rename-field/{oid}/{fieldName}/{newName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
     public Response renameProjectFieldById(
@@ -472,7 +482,10 @@ public class ProjectResource {
     @Path("/move-field/id/{id}/{fieldName}")
     @ApiOperation(
         value = "Reorder a custom-field definition on a project by ID.",
-        notes = "Same as `/project/move-field/{oid}/{fieldName}`, but identifies the project by ID.",
+        notes = "Reorders a custom-field definition on the project, identifying "
+              + "the project by its ID. Pass `?before={otherName}` to place the "
+              + "field before another; omit to move it to the end. See also "
+              + "`/project/move-field/{oid}/{fieldName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
     public Response moveProjectFieldById(
@@ -516,7 +529,8 @@ public class ProjectResource {
     @Path("/add-appv-cat/id/{id}")
     @ApiOperation(
         value = "Add an approval category to a project by ID.",
-        notes = "Same as `/project/add-appv-cat/{oid}`, but identifies the project by ID.",
+        notes = "Adds an approval category to the project, identifying the "
+              + "project by its ID. See also `/project/add-appv-cat/{oid}` for the OID form.",
         response = AppvCat.class
     )
     public Response addProjectAppvCatById(
@@ -552,7 +566,11 @@ public class ProjectResource {
     @Path("/update-appv-cat/id/{id}/{catId}")
     @ApiOperation(
         value = "Update an approval category on a project by ID.",
-        notes = "Same as `/project/update-appv-cat/{oid}/{catId}`, but identifies the project by ID.",
+        notes = "Updates an approval category on the project, identifying the "
+              + "project by its ID. Partial update — omitted keys preserve their "
+              + "current values; at least one of `name`, `claimers`, or `approvers` "
+              + "must be present. See also `/project/update-appv-cat/{oid}/{catId}` "
+              + "for the OID form.",
         response = AppvCat.class
     )
     public Response updateProjectAppvCatById(
@@ -588,7 +606,11 @@ public class ProjectResource {
     @Path("/remove-appv-cat/id/{id}/{catId}")
     @ApiOperation(
         value = "Remove an approval category from a project by ID.",
-        notes = "Same as `/project/remove-appv-cat/{oid}/{catId}`, but identifies the project by ID."
+        notes = "Removes an approval category from the project, identifying the "
+              + "project by its ID. Any task whose approval references this "
+              + "category has its approval cleared. Returns `204 No Content` "
+              + "regardless of whether the category exists. See also "
+              + "`/project/remove-appv-cat/{oid}/{catId}` for the OID form."
     )
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content")

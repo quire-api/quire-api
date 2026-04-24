@@ -3,19 +3,22 @@ package io.quire.api.model.approval;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Request body for {@code POST /task/approve/{taskOid}}.
+ * Request body for {@code POST /task/approve/id/{projectId}/{taskId}}
+ * (or the OID form {@code POST /task/approve/{taskOid}}).
  *
  * The same endpoint handles every state transition — the {@code state}
  * token determines the action. To cancel an approval, use
- * {@code DELETE /task/revoke-approval/{taskOid}} instead.
+ * {@code DELETE /task/revoke-approval/id/{projectId}/{taskId}}
+ * (or the OID form) instead.
  */
 public class ApproveTaskBody {
 
     @ApiModelProperty(
-        value = "(Optional) Approval category id. Omitted / `null` / "
-              + "`\"\"` resolves to the project's default category "
-              + "(id `\"\"`), which is always available. An unknown id "
-              + "yields `404 Not Found`.",
+        value = "(Optional) Approval category id.\n\n"
+              + "- Omitted, `null`, or `\"\"`: resolves to the project's "
+              + "default category (id `\"\"`), which is always available.\n"
+              + "- Any other value: must match a category defined on the "
+              + "project; unknown ids return `404 Not Found`.",
         example = "legal"
     )
     public String getCategory() { return null; }

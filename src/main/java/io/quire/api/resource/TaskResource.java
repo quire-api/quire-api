@@ -527,7 +527,8 @@ public class TaskResource {
               + "approver (for `approve` / `reject` / `change`) of the "
               + "category. The original requester is preserved across "
               + "`approve` / `reject` / `change` transitions.\n\n"
-              + "To cancel an approval, use `DELETE /task/revoke-approval/{oid}`.\n\n"
+              + "To cancel an approval, use `DELETE /task/revoke-approval/id/{projectId}/{taskId}` "
+              + "(or `DELETE /task/revoke-approval/{oid}` by OID).\n\n"
               + "Returns `400 Bad Request` if `state` is missing or unknown; "
               + "`403 Forbidden` if the caller isn't a claimer / approver; "
               + "`404 Not Found` if the task or `category` doesn't exist.",
@@ -544,7 +545,11 @@ public class TaskResource {
     @Path("/approve/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Set or transition a task's approval state by ID.",
-        notes = "Same as `/task/approve/{oid}`, but identifies the task by project + task ID.",
+        notes = "Sets or transitions a task's approval state, identifying the "
+              + "task by project + task ID. The request body's `state` token "
+              + "(`request` / `approve` / `reject` / `change`) selects the "
+              + "transition. To cancel, use `DELETE /task/revoke-approval/id/{projectId}/{taskId}`. "
+              + "See also `/task/approve/{oid}` for the OID form.",
         response = Approval.class
     )
     public Response approveTaskById(
@@ -565,8 +570,8 @@ public class TaskResource {
               + "- `awaiting` / `changes` → clears the approval entirely.\n"
               + "- `approved` / `rejected` → rolls back to `awaiting` "
               + "(the original requester is preserved; the approver can "
-              + "re-decide via `POST /task/approve/{oid}`, or `DELETE` "
-              + "again to clear).\n\n"
+              + "re-decide via `POST /task/approve/id/{projectId}/{taskId}`, "
+              + "or `DELETE` again to clear).\n\n"
               + "Idempotent: returns `204 No Content` even when no "
               + "approval is set."
     )
@@ -582,7 +587,12 @@ public class TaskResource {
     @Path("/revoke-approval/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Cancel a task's approval by ID.",
-        notes = "Same as `/task/revoke-approval/{oid}`, but identifies the task by project + task ID."
+        notes = "Cancels a task's approval, identifying the task by project + "
+              + "task ID. Smart-dispatched: from `awaiting` / `changes` the "
+              + "approval is cleared entirely; from `approved` / `rejected` it "
+              + "rolls back to `awaiting` (original requester preserved). "
+              + "Idempotent — returns `204` even when no approval is set. See "
+              + "also `/task/revoke-approval/{oid}` for the OID form."
     )
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content")

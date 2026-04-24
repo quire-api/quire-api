@@ -10,7 +10,7 @@ import java.util.List;
  *
  * Projects carry an implicit default category (id `""`) that is always
  * available; additional categories can be added via
- * {@code POST /project/add-appv-cat/{oid}}.
+ * {@code POST /project/add-appv-cat/id/{projectId}} (or the OID form).
  */
 public class AppvCat {
 
@@ -28,16 +28,20 @@ public class AppvCat {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "Users allowed to request approval in this category. "
-              + "Omitted means `anyone` can claim; an empty list means "
-              + "`admins only`; otherwise, the listed user OIDs.",
+        value = "Users allowed to request approval in this category.\n\n"
+              + "- Omitted from the response: anyone can request.\n"
+              + "- `[]` (empty list): admins only.\n"
+              + "- List of user OIDs: those specific users.",
         position = 20
     )
     public List<String> getClaimers() { return null; }
 
     @ApiModelProperty(
-        value = "Users allowed to approve / reject / request-change in "
-              + "this category. Same conventions as `claimers`.",
+        value = "Users allowed to approve, reject, or request changes in "
+              + "this category.\n\n"
+              + "- Omitted from the response: anyone can respond.\n"
+              + "- `[]` (empty list): admins only.\n"
+              + "- List of user OIDs: those specific users.",
         position = 20
     )
     public List<String> getApprovers() { return null; }

@@ -6,7 +6,8 @@ import java.util.List;
 
 /**
  * Request body for adding an approval category to a project
- * ({@code POST /project/add-appv-cat/{oid}}).
+ * ({@code POST /project/add-appv-cat/id/{projectId}}, or the OID form
+ * {@code POST /project/add-appv-cat/{oid}}).
  */
 public class AddAppvCatBody {
 
@@ -27,16 +28,19 @@ public class AddAppvCatBody {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Users allowed to request approval in this "
-              + "category. Omit or pass `null` for `anyone`; pass `[]` "
-              + "for `admins only`; otherwise, a list of user OIDs."
+        value = "(Optional) Users allowed to request approval in this category.\n\n"
+              + "- Omit or `null`: anyone can request.\n"
+              + "- `[]` (empty list): admins only.\n"
+              + "- List of user OIDs: those specific users."
     )
     public List<String> getClaimers() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Users allowed to approve / reject / "
-              + "request-change in this category. Same conventions "
-              + "as `claimers`."
+        value = "(Optional) Users allowed to approve, reject, or request "
+              + "changes in this category.\n\n"
+              + "- Omit or `null`: anyone can respond.\n"
+              + "- `[]` (empty list): admins only.\n"
+              + "- List of user OIDs: those specific users."
     )
     public List<String> getApprovers() { return null; }
 }

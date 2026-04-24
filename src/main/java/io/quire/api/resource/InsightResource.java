@@ -261,9 +261,11 @@ public class InsightResource {
 
     // -------- Custom fields --------
     //
-    // Insight-level custom fields are addressed by insight OID only.
-    // (Insight IDs are unique per owner, so the `/id/...` style would
-    // require a full owner path — not supported here.)
+    // Each field-extension endpoint is offered in two URL forms:
+    //   by-OID: /insight/<ext>/{insightOid}[/{fieldName}[/{newName}]]
+    //   by-ID:  /insight/<ext>/id/{ownerType}/{ownerId}/{insightId}[/...]
+    // Both dispatch through the same handler; pick whichever is more
+    // convenient for the caller.
 
     @POST
     @Path("/add-field/{oid}")
@@ -297,8 +299,9 @@ public class InsightResource {
               + "type. Keys that are omitted leave their current values intact "
               + "(including individual flag bits — flags are merged, not replaced).\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
-              + "To rename a field, use `/rename-field/{oid}/{name}/{newName}`; "
-              + "to reorder, use `/move-field/{oid}/{name}`.\n\n"
+              + "To rename a field, use `/insight/rename-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}/{newName}`; "
+              + "to reorder, use `/insight/move-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}`. "
+              + "(The `/{oid}/...` URL form is also accepted.)\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
               + "(equal to the field's name), or an empty object if the field does not exist.",
         response = FieldDefinitionWithName.class
@@ -367,6 +370,149 @@ public class InsightResource {
     public Response moveInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
+        @ApiParam(value = "Name of the field to move.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(
+            value = "(Optional) Name of the field to insert before. "
+                  + "If omitted, the field is moved to the end.",
+            example = "before=Priority",
+            required = false
+        )
+        @QueryParam("before") String before
+    ) { return null; }
+
+    // -------- Custom fields — by-id variants (#24535) --------
+
+    @POST
+    @Path("/add-field/id/{ownerType}/{ownerId}/{insightId}")
+    @ApiOperation(
+        value = "Add a custom-field definition to an insight view by ID.",
+        notes = "Adds a custom-field definition to an insight view, "
+              + "identifying the insight by owner-type + owner ID + insight ID. "
+              + "Only `formula` and `lookup` field types are allowed on "
+              + "insight views. See also `/insight/add-field/{oid}` for the OID form.",
+        response = FieldDefinitionWithName.class
+    )
+    public Response addInsightFieldById(
+        @ApiParam(
+            value = "Owner type.",
+            allowableValues = "project, organization, folder, smart-folder",
+            required = true
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Insight ID.", required = true)
+        @PathParam("insightId") String insightId,
+        @ApiParam(value = "Field definition to add.", required = true)
+        AddFieldBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}")
+    @ApiOperation(
+        value = "Update a custom-field definition on an insight view by ID.",
+        notes = "Updates an existing custom-field definition on an insight "
+              + "view, identifying the insight by owner-type + owner ID + "
+              + "insight ID. `type` is immutable; omitted keys preserve "
+              + "current values. See also `/insight/update-field/{oid}/{fieldName}` "
+              + "for the OID form.",
+        response = FieldDefinitionWithName.class
+    )
+    public Response updateInsightFieldById(
+        @ApiParam(
+            value = "Owner type.",
+            allowableValues = "project, organization, folder, smart-folder",
+            required = true
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Insight ID.", required = true)
+        @PathParam("insightId") String insightId,
+        @ApiParam(value = "Name of the field to update.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field content.", required = true)
+        UpdateFieldBody data
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}")
+    @ApiOperation(
+        value = "Remove a custom-field definition from an insight view by ID.",
+        notes = "Removes the named custom field from an insight view, "
+              + "identifying the insight by owner-type + owner ID + insight "
+              + "ID. Returns `204 No Content` regardless of whether the "
+              + "field exists. See also `/insight/remove-field/{oid}/{fieldName}` "
+              + "for the OID form."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content")
+    })
+    public Response removeInsightFieldById(
+        @ApiParam(
+            value = "Owner type.",
+            allowableValues = "project, organization, folder, smart-folder",
+            required = true
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Insight ID.", required = true)
+        @PathParam("insightId") String insightId,
+        @ApiParam(value = "Name of the field to remove.", required = true)
+        @PathParam("fieldName") String fieldName
+    ) { return null; }
+
+    @PUT
+    @Path("/rename-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}/{newName}")
+    @ApiOperation(
+        value = "Rename a custom-field definition on an insight view by ID.",
+        notes = "Renames a custom-field definition on an insight view, "
+              + "identifying the insight by owner-type + owner ID + insight "
+              + "ID. The field's content is preserved. See also "
+              + "`/insight/rename-field/{oid}/{fieldName}/{newName}` for the OID form.",
+        response = FieldDefinitionWithName.class
+    )
+    public Response renameInsightFieldById(
+        @ApiParam(
+            value = "Owner type.",
+            allowableValues = "project, organization, folder, smart-folder",
+            required = true
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Insight ID.", required = true)
+        @PathParam("insightId") String insightId,
+        @ApiParam(value = "Current field name.", required = true)
+        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "New field name.", required = true)
+        @PathParam("newName") String newName
+    ) { return null; }
+
+    @PUT
+    @Path("/move-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}")
+    @ApiOperation(
+        value = "Reorder a custom-field definition on an insight view by ID.",
+        notes = "Reorders a custom-field definition on an insight view, "
+              + "identifying the insight by owner-type + owner ID + insight "
+              + "ID. Pass `?before={otherName}` to place the field before "
+              + "another; omit to move it to the end. See also "
+              + "`/insight/move-field/{oid}/{fieldName}` for the OID form.",
+        response = FieldDefinitionWithName.class
+    )
+    public Response moveInsightFieldById(
+        @ApiParam(
+            value = "Owner type.",
+            allowableValues = "project, organization, folder, smart-folder",
+            required = true
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Owner ID.", required = true)
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Insight ID.", required = true)
+        @PathParam("insightId") String insightId,
         @ApiParam(value = "Name of the field to move.", required = true)
         @PathParam("fieldName") String fieldName,
         @ApiParam(

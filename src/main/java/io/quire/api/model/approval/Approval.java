@@ -6,7 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
  * The approval state attached to a task.
  *
  * Returned as the {@code approval} field on a task response and as the
- * response body of {@code POST /task/approve/{taskOid}}.
+ * response body of {@code POST /task/approve/id/{projectId}/{taskId}}
+ * (or the OID form {@code POST /task/approve/{taskOid}}).
  */
 public class Approval {
 
@@ -19,7 +20,7 @@ public class Approval {
 
     @ApiModelProperty(
         value = "Current approval state. Derived from the last POST to "
-              + "`/task/approve/{oid}`:\n"
+              + "`/task/approve/id/{projectId}/{taskId}` (or the OID form):\n"
               + "- `awaiting` — `request` was posted (initial or rolled-back).\n"
               + "- `approved` — `approve` was posted.\n"
               + "- `rejected` — `reject` was posted.\n"
