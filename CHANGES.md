@@ -1,5 +1,50 @@
 # Changelog
 
+## Apr 24, 2026
+
+- **Insight API:** The 5 field-extension endpoints (`add-field`, `update-field`, `remove-field`, `rename-field`, `move-field`) now accept the by-ID URL form in addition to the by-OID form. The by-ID path identifies the insight by owner-type + owner ID + insight ID:
+    - `POST /insight/add-field/id/{ownerType}/{ownerId}/{insightId}`
+    - `PUT /insight/update-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}`
+    - `DELETE /insight/remove-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}`
+    - `PUT /insight/rename-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}/{newName}`
+    - `PUT /insight/move-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}[?before={otherName}]`
+    - `{ownerType}` is one of `project`, `organization`, `folder`, `smart-folder`.
+    - Both URL forms dispatch through the same handler — pick whichever is more convenient.
+- **Task API:** `cfUser` and `cfTask` custom-field values in [`POST /task/id/{projectId}`](https://quire.io/dev/api/#operation--task-id--projectId--post) and [`PUT /task/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-id--projectId---taskId--put) bodies now accept the same shorthand forms already supported for built-in fields — no more OID-only restriction.
+    - **cfUser**: user OID, user ID, or email. Server resolves to the user's OID.
+    - **cfTask**: task OID, integer task ID, or `#<id>` string. Server resolves to the task's OID, scoped to the task's project.
+    - Multi-value fields (`multiple: true`) accept mixed forms in one list and are de-duplicated by resolved OID: `{"Owners": ["alice", "bob@example.com"], "Depends": [42, "#99"]}`.
+    - Unknown values (user or task not found, wrong project) return `400 Bad Request`.
+- **Task Search API:** Added `assignee`, `assignor`, `follower`, and `tag` query params to the project, organization, and folder search endpoints.
+    - **User refs** (`assignee`, `assignor`, `follower`): each value is a user OID, user ID, or email — same dispatch as the `User` custom-field type.
+    - **Tags** (`tag`): value is a tag OID or tag name. Tag-name resolution is scoped to the search — project search matches the project's own tags plus its organization's global tags; organization / folder search matches any tag in the organization.
+    - **Boolean grammar** shared by all four params:
+        - `a,b,c` — all (AND)
+        - `a|b|c` — any (OR)
+        - `!a` — not (may appear inside either an AND or OR list)
+        - `a,b|c` — `(a AND b) OR c` (AND binds tighter than OR)
+    - **Quoting for tag names** with special characters: enclose in `"..."`. Inside quotes, `\"` is a literal `"` and `\\` is a literal `\`; any other `\x` is preserved as two literal characters.
+    - Examples: `?assignee=alice,!bob`, `?follower=alice|bob`, `?tag=Legal,!Draft`, `?tag="In Progress",!Done`, `?tag="Foo\"s Go"|Other`.
+    - `cfUser` custom-field search additionally accepts user email (already supported — docs updated).
+- **Task Search API:** Custom-field filtering now supports `Date` custom fields. The filter grammar matches the built-in `start` / `due` params (keyword, value, null ops; date-only or ISO 8601 timestamp operand). Timestamp operands are accepted only on fields configured with `withTime: true`. For a field named `approvedAt`, example queries: `?approvedAt=today`, `?approvedAt=ge:2026-04-01`, `?approvedAt=between:2026-04-01,2026-04-30`, `?approvedAt=isNull`. Only `Formula`, `File`, `Lookup`, and `Text` custom-field types remain unsupported for search.
+- **Task Search API:** Added `created`, `edited`, `archived`, `unarchived`, `toggled`, `start`, and `due` query params to filter by the task's date/time columns. Supported across the project, organization, and folder search endpoints.
+    - Keyword ops: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`. Day boundaries resolve in the OAuth user's timezone; week start follows their locale.
+    - Value ops (token:value): `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, `notBetween`. Operand is an ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`). `between` / `notBetween` are inclusive on both ends.
+    - Null ops (nullable fields — `archived`, `unarchived`, `toggled`, `start`, `due`): `isNull`, `isNotNull`.
+    - `start` / `due` additionally accept a **date-only** operand (`YYYY-MM-DD`), which expands to a whole-day window in the caller's timezone. `gt:D` / `le:D` use end-of-day, `lt:D` / `ge:D` use start-of-day.
+    - `past` on simple timestamp fields (`created`, `edited`, `archived`, `unarchived`, `toggled`) is `< now()`; on `start` / `due` it is `< today 00:00` in the caller's timezone (canonical).
+    - Tokens and keywords are case-insensitive.
+- **Project API:** Added endpoints to manage [approval categories](https://quire.io/dev/api/#definition-AppvCat) on a project. The project response now includes an `approvalCategories` list.
+    - [`POST /project/add-appv-cat/{oid}`](https://quire.io/dev/api/#operation--project-add-appv-cat--oid--post) (and `/add-appv-cat/id/{id}`) to add a category.
+    - `PUT /project/update-appv-cat/{oid}/{catId}` to update a category's name / claimers / approvers (partial; omitted keys preserve current values).
+    - `DELETE /project/remove-appv-cat/{oid}/{catId}` to remove.
+    - Each category carries a `claimers` roster (may `request` approval) and an `approvers` roster (may `approve` / `reject` / `change`). `null` means "anyone"; `[]` means "admins only"; otherwise a list of user OIDs.
+- **Task API:** Added endpoints to drive a task's [approval](https://quire.io/dev/api/#definition-Approval) workflow. Task responses now include an `approval` field when set.
+    - [`POST /task/approve/{oid}`](https://quire.io/dev/api/#operation--task-approve--oid--post) (and `/approve/id/{projectId}/{taskId}`) to request (`request`), approve (`approve`), reject (`reject`), or request changes (`change`). The same endpoint handles every transition; the body's `state` token (case-insensitive) selects the action. `request` also covers rolling forward from `approved` / `rejected` / `changes` back to `awaiting`.
+    - `DELETE /task/revoke-approval/{oid}` (and `/revoke-approval/id/{projectId}/{taskId}`) to cancel. Smart-dispatch per current state: `awaiting` / `changes` → clears; `approved` / `rejected` → rolls back to `awaiting` (original requester preserved). Idempotent.
+    - `category` is optional on `POST /task/approve` — omitted / `null` / `""` resolves to the project's implicit default category (id `""`), which is always available. An unknown category id returns `404`.
+    - The original requester is preserved across `approve` / `reject` / `change` transitions; the responding user is recorded as `approver`.
+
 ## Apr 22, 2026
 
 - **Project & Insight APIs:** Added endpoints to manage [custom-field definitions](https://quire.io/dev/api/#definition-FieldDefinition) one at a time. Both the project and insight responses now include a `fields` map keyed by field name.
