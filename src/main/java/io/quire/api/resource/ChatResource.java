@@ -257,13 +257,10 @@ public class ChatResource {
     @ApiOperation(
         value = "Delete a chat channel by OID.",
         notes = "Deletes the specified chat channel.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the channel exists."
+              + "> Note: Returns `204 No Content` regardless of whether the chat exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteChatByOid(
         @ApiParam(value = "Chat channel OID.", required = true)
@@ -275,13 +272,10 @@ public class ChatResource {
     @ApiOperation(
         value = "Delete a chat channel by ID.",
         notes = "Deletes the specified chat channel.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the channel exists."
+              + "> Note: Returns `204 No Content` regardless of whether the chat exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteChatById(
         @ApiParam(

@@ -469,7 +469,7 @@ public class ProjectResource {
               + "> Note: Returns `204 No Content` regardless of whether the field exists."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — field removed (or already absent).")
     })
     public Response removeProjectField(
         @ApiParam(value = "Project OID.", required = true)
@@ -488,7 +488,7 @@ public class ProjectResource {
               + "for the OID form."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — field removed (or already absent).")
     })
     public Response removeProjectFieldById(
         @ApiParam(value = "Project ID.", required = true)
@@ -732,7 +732,7 @@ public class ProjectResource {
               + "the category exists."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — category removed (or already absent).")
     })
     public Response removeProjectAppvCat(
         @ApiParam(value = "Project OID.", required = true)
@@ -752,7 +752,7 @@ public class ProjectResource {
               + "`/project/remove-appv-cat/{oid}/{catId}` for the OID form."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — category removed (or already absent).")
     })
     public Response removeProjectAppvCatById(
         @ApiParam(value = "Project ID.", required = true)

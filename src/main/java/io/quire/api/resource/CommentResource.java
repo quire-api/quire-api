@@ -276,13 +276,10 @@ public class CommentResource {
     @ApiOperation(
         value = "Delete an existing comment (by comment OID).",
         notes = "Deletes an existing comment.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the comment exists."
+              + "> Note: Returns `204 No Content` regardless of whether the comment exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)

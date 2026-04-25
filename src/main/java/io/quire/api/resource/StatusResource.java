@@ -187,13 +187,10 @@ public class StatusResource {
     @ApiOperation(
         value = "Delete a task status (by project OID).",
         notes = "Deletes the specified status.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the status exists."
+              + "> Note: Returns `204 No Content` regardless of whether the status exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteStatusByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
@@ -207,13 +204,10 @@ public class StatusResource {
     @ApiOperation(
         value = "Delete a task status (by project ID).",
         notes = "Deletes the specified status.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the status exists."
+              + "> Note: Returns `204 No Content` regardless of whether the status exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteStatusByProjectId(
         @ApiParam(value = "Project ID.", required = true)

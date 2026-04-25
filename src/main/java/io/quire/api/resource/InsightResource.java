@@ -281,13 +281,10 @@ public class InsightResource {
     @ApiOperation(
         value = "Delete an insight view by OID.",
         notes = "Deletes the specified insight view.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the insight exists."
+              + "> Note: Returns `204 No Content` regardless of whether the insight exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteInsightByOid(
         @ApiParam(value = "Insight OID.", required = true)
@@ -299,13 +296,10 @@ public class InsightResource {
     @ApiOperation(
         value = "Delete an insight view by ID.",
         notes = "Deletes the specified insight view.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the insight exists."
+              + "> Note: Returns `204 No Content` regardless of whether the insight exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteInsightById(
         @ApiParam(
@@ -395,7 +389,7 @@ public class InsightResource {
               + "> Note: Returns `204 No Content` regardless of whether the field exists."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — field removed (or already absent).")
     })
     public Response removeInsightField(
         @ApiParam(value = "Insight OID.", required = true)
@@ -543,7 +537,7 @@ public class InsightResource {
               + "for the OID form."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — field removed (or already absent).")
     })
     public Response removeInsightFieldById(
         @ApiParam(

@@ -260,13 +260,10 @@ public class SublistResource {
     @ApiOperation(
         value = "Delete a sublist by OID.",
         notes = "Deletes the sublist with the given OID.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
+              + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteSublistByOid(
         @ApiParam(value = "OID of the sublist to delete.", required = true)
@@ -278,13 +275,10 @@ public class SublistResource {
     @ApiOperation(
         value = "Delete a sublist by ID.",
         notes = "Deletes the sublist with the given ID.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
+              + "> Note: Returns `204 No Content` regardless of whether the sublist exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteSublistById(
         @ApiParam(

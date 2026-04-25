@@ -266,13 +266,10 @@ public class DocResource {
     @ApiOperation(
         value = "Delete a document by OID.",
         notes = "Deletes the specified document.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the document exists."
+              + "> Note: Returns `204 No Content` regardless of whether the doc exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteDocByOid(
         @ApiParam(value = "Document OID.", required = true)
@@ -284,13 +281,10 @@ public class DocResource {
     @ApiOperation(
         value = "Delete a document by ID.",
         notes = "Deletes the specified document.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the document exists."
+              + "> Note: Returns `204 No Content` regardless of whether the doc exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteDocById(
         @ApiParam(

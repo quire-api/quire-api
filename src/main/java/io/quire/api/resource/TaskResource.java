@@ -821,7 +821,7 @@ public class TaskResource {
               + "approval is set."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — approval revoked (or already absent).")
     })
     public Response revokeTaskApprovalByOid(
         @ApiParam(value = "Task OID.", required = true)
@@ -840,7 +840,7 @@ public class TaskResource {
               + "also `/task/revoke-approval/{oid}` for the OID form."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — approval revoked (or already absent).")
     })
     public Response revokeTaskApprovalById(
         @ApiParam(value = "Project ID.", required = true)
@@ -879,11 +879,14 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — task's full timelogs array.",
             response = Timelog.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — `start` / `end` "
-              + "missing or malformed, `end` precedes `start`, or `user` is unknown."),
-        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+              + "missing or malformed, `end` precedes `start`, or `user` is unknown.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.",
+            response = ErrorResponse.class),
         @ApiResponse(code = 409, message = "Conflict — a log with the same "
               + "`(user, start, end)` already exists; use `PUT /task/update-timelog/...` "
-              + "to amend it.")
+              + "to amend it.",
+            response = ErrorResponse.class)
     })
     public Response addTaskTimelogById(
         @ApiParam(value = "Project ID.", required = true)
@@ -1125,13 +1128,10 @@ public class TaskResource {
     @ApiOperation(
         value = "Delete a task and all of its subtasks by its OID.",
         notes = "Deletes an existing task and all of its subtasks.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the task exists."
+              + "> Note: Returns `204 No Content` regardless of whether the task exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
@@ -1145,13 +1145,10 @@ public class TaskResource {
     @ApiOperation(
         value = "Delete a task and all of its subtasks by its ID.",
         notes = "Deletes an existing task and all of its subtasks.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the task exists."
+              + "> Note: Returns `204 No Content` regardless of whether the task exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteTaskById(
         @ApiParam(

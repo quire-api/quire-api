@@ -150,13 +150,10 @@ public class TagResource {
     @ApiOperation(
         value = "Delete a tag.",
         notes = "Deletes the tag with the given OID.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the tag exists."
+              + "> Note: Returns `204 No Content` regardless of whether the tag exists."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content")
     })
     public Response deleteTag(
         @ApiParam(value = "OID of the tag to delete.", required = true)
