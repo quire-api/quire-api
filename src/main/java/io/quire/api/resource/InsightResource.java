@@ -338,10 +338,7 @@ public class InsightResource {
               + "`Insight.fields`, with an extra `name` key).\n\n"
               + "Only `formula` and `lookup` types are allowed on insight "
               + "views; all other field types are rejected with `400`.\n\n"
-              + "Requires the `Admin` scope to invoke.\n\n"
-              + "Returns `400 Bad Request` if the body is invalid; "
-              + "`403 Forbidden` if the caller lacks permission; "
-              + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
+              + "Requires the `Admin` scope to invoke.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({

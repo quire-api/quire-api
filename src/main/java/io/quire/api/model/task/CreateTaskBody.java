@@ -48,15 +48,16 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) A list of tag OIDs or names to be added to the new task.\n"
-              + "Tag names are case-insensitive."
+              + "Tag names are case-insensitive.",
+        example = "[\"urgent\", \"design\"]"
     )
     public List<String> getTags() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) A list of user identifiers (OID, ID, or email) to assign this task to.\n\n"
               + "- Use \"me\" to indicate the current user.\n"
-              + "- Use \"inherit\" to include all assignees of the parent task.\n\n"
-              + "Example: `{\"addAssignees\": [\"me\", \"inherit\", \"foo@domain.com\"]}`"
+              + "- Use \"inherit\" to include all assignees of the parent task.",
+        example = "[\"me\", \"alice@example.com\"]"
     )
     public List<String> getAssignees() { return null; }
 
@@ -135,14 +136,15 @@ public class CreateTaskBody {
               + "- Use \"app\" for the application itself to follow (receive notifications).\n\n"
               + "For app followers, additional syntaxes are supported:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`)."
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).",
+        example = "[\"bob@example.com\"]"
     )
     public List<String> getFollowers() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) List of successor task identifiers (OID or ID).\n\n"
-              + "IDs can be specified as `#id` or `id`.\n\n"
-              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+              + "IDs can be specified as `#id` or `id`. Integer IDs are also accepted.",
+        example = "[\"#13\"]"
     )
     public List<String> getSuccessors() { return null; }
 
@@ -181,7 +183,7 @@ public class CreateTaskBody {
               + "Available via API when retrieving the task.\n\n"
               + "If the entry contains a key `text`, its value will be displayed client-side "
               + "and should be formatted in Markdown. It is recommended to include a source link.\n\n",
-        example = "{'text': 'Source: [Gmail](https://gmail.com/link)'}",
+        example = "{\"text\": \"Source: [Gmail](https://gmail.com/link)\"}",
         position = 60
     )
     public Map<String, Object> getSourceRef() { return null; }

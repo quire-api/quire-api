@@ -49,19 +49,22 @@ public class UpdateTaskBody {
     @ApiModelProperty(
         value = "(Optional) Tags to replace the current tags on this task (OID or name).\n"
               + "This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.\n"
-              + "Tag names are case-insensitive."
+              + "Tag names are case-insensitive.",
+        example = "[\"urgent\", \"design\"]"
     )
     public List<String> getTags() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Tags to add to this task (OID or name).\n"
-              + "Tag names are case-insensitive."
+              + "Tag names are case-insensitive.",
+        example = "[\"urgent\"]"
     )
     public List<String> getAddTags() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Tags to remove from this task (OID or name).\n"
-              + "Tag names are case-insensitive."
+              + "Tag names are case-insensitive.",
+        example = "[\"draft\"]"
     )
     public List<String> getRemoveTags() { return null; }
 
@@ -69,7 +72,8 @@ public class UpdateTaskBody {
         value = "(Optional) Assignees to replace the current assignees (OID, ID, or email).\n"
               + "This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.\n\n"
               + "Accepts the same special values as `addAssignees`: `\"me\"` "
-              + "(the current user) and `\"inherit\"` (all assignees of the parent task)."
+              + "(the current user) and `\"inherit\"` (all assignees of the parent task).",
+        example = "[\"me\", \"alice@example.com\"]"
     )
     public List<String> getAssignees() { return null; }
 
@@ -77,15 +81,16 @@ public class UpdateTaskBody {
         value = "(Optional) Assignees to add (OID, ID, or email).\n"
               + "Special values:\n"
               + "- \"me\": the current user\n"
-              + "- \"inherit\": include all assignees of the parent task\n\n"
-              + "Example: `{\"addAssignees\": [\"me\", \"inherit\", \"foo@domain.com\"]}`"
+              + "- \"inherit\": include all assignees of the parent task",
+        example = "[\"me\"]"
     )
     public List<String> getAddAssignees() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Assignees to remove (OID, ID, or email).\n\n"
               + "Accepts the same special values as `addAssignees`: `\"me\"` "
-              + "(the current user) and `\"inherit\"` (all assignees of the parent task)."
+              + "(the current user) and `\"inherit\"` (all assignees of the parent task).",
+        example = "[\"alice@example.com\"]"
     )
     public List<String> getRemoveAssignees() { return null; }
 
@@ -158,7 +163,8 @@ public class UpdateTaskBody {
               + "- `\"app\"`: the application follows (receives notifications)\n\n"
               + "App follower syntax:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`)."
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).",
+        example = "[\"bob@example.com\"]"
     )
     public List<String> getFollowers() { return null; }
 
@@ -170,7 +176,8 @@ public class UpdateTaskBody {
               + "- \"app\": the application follows (receives notifications)\n\n"
               + "App follower syntax:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`)."
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).",
+        example = "[\"me\"]"
     )
     public List<String> getAddFollowers() { return null; }
 
@@ -182,28 +189,29 @@ public class UpdateTaskBody {
               + "- `\"app\"`: the application\n\n"
               + "App follower syntax:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL."
+              + "- `app|/path` → appended to the hook URL.",
+        example = "[\"bob@example.com\"]"
     )
     public List<String> getRemoveFollowers() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Successors to replace the current successors (task OID or ID).\n\n"
-              + "IDs can be specified as `#id` or `id`.\n\n"
-              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+              + "IDs can be specified as `#id` or `id`. Integer IDs are also accepted.",
+        example = "[\"#13\"]"
     )
     public List<String> getSuccessors() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Successors to add (task OID or ID).\n\n"
-              + "IDs can be specified as `#id` or `id`.\n\n"
-              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+              + "IDs can be specified as `#id` or `id`. Integer IDs are also accepted.",
+        example = "[\"#13\"]"
     )
     public List<String> getAddSuccessors() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Successors to remove (task OID or ID).\n\n"
-              + "IDs can be specified as `#id` or `id`.\n\n"
-              + "Examples: `'AMZ0-59R125-35KTK2356G'`, `'#13'`, `135`."
+              + "IDs can be specified as `#id` or `id`. Integer IDs are also accepted.",
+        example = "[\"#13\"]"
     )
     public List<String> getRemoveSuccessors() { return null; }
 
@@ -243,7 +251,7 @@ public class UpdateTaskBody {
         value = "(Optional) Arbitrary source reference data to store with the task. Available via API on retrieval.\n\n"
               + "If the map contains `text`, its value will be displayed client-side and should be Markdown. "
               + "Including a source link is recommended.",
-        example = "{'text': 'Source: [Gmail](https://gmail.com/link)'}",
+        example = "{\"text\": \"Source: [Gmail](https://gmail.com/link)\"}",
         position = 60
     )
     public Map<String, Object> getSourceRef() { return null; }

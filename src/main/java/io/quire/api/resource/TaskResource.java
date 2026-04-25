@@ -61,7 +61,25 @@ public class TaskResource {
     @Path("/id/{projectId}")
     @ApiOperation(
         value = "Add a new root task.",
-        notes = "Adds a new root task to a project.",
+        notes = "Adds a new root task to a project.\n\n"
+              + "Minimal request body only needs `name`. A fuller example:\n\n"
+              + "```json\n"
+              + "{\n"
+              + "  \"name\": \"Design new logo\",\n"
+              + "  \"description\": \"Needs to match the brand guide.\",\n"
+              + "  \"priority\": 2,\n"
+              + "  \"tags\": [\"design\", \"urgent\"],\n"
+              + "  \"assignees\": [\"me\"],\n"
+              + "  \"start\": \"2026-05-01\",\n"
+              + "  \"due\": \"2026-05-10\",\n"
+              + "  \"Priority\": 3,\n"
+              + "  \"Owners\": [\"alice@example.com\"]\n"
+              + "}\n"
+              + "```\n\n"
+              + "> `Priority` / `Owners` in this example are **custom-field** keys "
+              + "from the project's own `/project/add-field` definitions — they are "
+              + "not fixed API fields and are only recognised by name. See "
+              + "`CreateTaskBody.yourField` for the rules on each custom-field type.",
         response = Task.class
     )
     @ApiResponses({
@@ -87,7 +105,9 @@ public class TaskResource {
     @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Add a new task relative to another task.",
-        notes = "Adds a new task under another task, or before or after another task.",
+        notes = "Adds a new task under another task, or before or after another task. "
+              + "See `POST /task/id/{projectId}` for a full request-body example — "
+              + "the body shape is identical.",
         response = Task.class
     )
     @ApiResponses({
@@ -252,7 +272,9 @@ public class TaskResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update an existing task by its OID.",
-        notes = "Updates an existing task and returns the updated record.",
+        notes = "Updates an existing task and returns the updated record. "
+              + "See `PUT /task/id/{projectId}/{taskId}` for a full request-body "
+              + "example and the replace-vs-incremental field pattern.",
         response = TaskWithParentInfo.class
     )
     @ApiResponses({
@@ -272,7 +294,21 @@ public class TaskResource {
     @Path("/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Update an existing task by its ID.",
-        notes = "Updates an existing task and returns the updated record.",
+        notes = "Updates an existing task and returns the updated record.\n\n"
+              + "Only the fields you include are updated; omitted fields are "
+              + "left unchanged. Example — complete the task, add a tag, and "
+              + "remove an assignee:\n\n"
+              + "```json\n"
+              + "{\n"
+              + "  \"status\": 100,\n"
+              + "  \"addTags\": [\"done\"],\n"
+              + "  \"removeAssignees\": [\"alice@example.com\"]\n"
+              + "}\n"
+              + "```\n\n"
+              + "> Note the replace-vs-incremental pattern: `tags` replaces the "
+              + "entire tag set; `addTags` / `removeTags` modify the set in place. "
+              + "Same for `assignees` / `addAssignees` / `removeAssignees`, and "
+              + "`followers` / `successors` / etc. Mix whichever suits the intent.",
         response = TaskWithParentInfo.class
     )
     @ApiResponses({

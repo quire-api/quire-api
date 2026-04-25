@@ -352,10 +352,7 @@ public class ProjectResource {
               + "to the project (by OID). The response is the created field "
               + "in public form (same shape as entries in `Project.fields`, "
               + "with an extra `name` key).\n\n"
-              + "Requires the `Admin` scope to invoke.\n\n"
-              + "Returns `400 Bad Request` if the body is invalid; "
-              + "`403 Forbidden` if the caller lacks permission; "
-              + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
+              + "Requires the `Admin` scope to invoke.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
@@ -377,7 +374,20 @@ public class ProjectResource {
     @ApiOperation(
         value = "Add a custom-field definition to a project by ID.",
         notes = "Adds a custom-field definition to the project, identifying "
-              + "the project by its ID. See also `/project/add-field/{oid}` for the OID form.",
+              + "the project by its ID. See also `/project/add-field/{oid}` for the OID form.\n\n"
+              + "Example — a single-select \"Priority\" field with three options:\n\n"
+              + "```json\n"
+              + "{\n"
+              + "  \"name\": \"Priority\",\n"
+              + "  \"type\": \"select\",\n"
+              + "  \"options\": [\"Low\", \"Medium\", \"High\"]\n"
+              + "}\n"
+              + "```\n\n"
+              + "> See [FieldDefinition](#definition-FieldDefinition) for the full "
+              + "list of supported `type` values (`text`, `number`, `money`, "
+              + "`select`, `checkbox`, `date`, `duration`, `email`, `hyperlink`, "
+              + "`user`, `task`, `formula`, `lookup`) and the type-specific keys "
+              + "each one accepts.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
@@ -610,9 +620,7 @@ public class ProjectResource {
               + "(id `\"\"`) that is always available; use this endpoint "
               + "to define additional categories with their own claimer / "
               + "approver rosters.\n\n"
-              + "Requires the `Admin` scope to invoke.\n\n"
-              + "Returns `400 Bad Request` if the body is invalid; "
-              + "`403 Forbidden` if the caller lacks permission.",
+              + "Requires the `Admin` scope to invoke.",
         response = AppvCat.class
     )
     @ApiResponses({
@@ -633,7 +641,17 @@ public class ProjectResource {
     @ApiOperation(
         value = "Add an approval category to a project by ID.",
         notes = "Adds an approval category to the project, identifying the "
-              + "project by its ID. See also `/project/add-appv-cat/{oid}` for the OID form.",
+              + "project by its ID. See also `/project/add-appv-cat/{oid}` for the OID form.\n\n"
+              + "Example:\n\n"
+              + "```json\n"
+              + "{\n"
+              + "  \"name\": \"Legal review\",\n"
+              + "  \"claimers\": [\"alice@example.com\"],\n"
+              + "  \"approvers\": [\"bob@example.com\"]\n"
+              + "}\n"
+              + "```\n\n"
+              + "> Each entry in `claimers` / `approvers` is a user OID, ID, or "
+              + "email — same dispatch as the User custom-field type.",
         response = AppvCat.class
     )
     @ApiResponses({
