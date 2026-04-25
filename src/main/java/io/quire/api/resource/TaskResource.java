@@ -1291,7 +1291,13 @@ public class TaskResource {
               + "offending row. Fix the value and retry. Example error:\n\n"
               + "```json\n"
               + "{ \"code\": 400, \"message\": \"items[1]: Invalid value for `priority`: 99 (expected -1, 0, 1, or 2)\" }\n"
-              + "```",
+              + "```\n\n"
+              + "**Rate-limit cost**: each bulk call costs `N` units against "
+              + "the per-minute / per-hour API quota, where `N` is the number "
+              + "of submitted items — the same total cost as `N` equivalent "
+              + "single-task calls. Charged upfront; if the cost would "
+              + "exceed the quota, the whole batch is rejected with `429` "
+              + "before any item is processed.",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1311,7 +1317,9 @@ public class TaskResource {
         @ApiResponse(code = 413, message = "Payload Too Large — body "
               + "exceeds the API packet size limit.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — batch "
+        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
+              + "rate-limit cost (`items.length` units) would exceed the "
+              + "caller's per-minute / per-hour API quota, OR the batch "
               + "would exceed the project's task quota.",
             response = ErrorResponse.class)
     })
@@ -1500,7 +1508,12 @@ public class TaskResource {
               + "partial network failure or concurrent removal without "
               + "diffing state first. Shape errors (both / neither `oid` "
               + "and `id`, malformed ref) still 400 + rollback — those "
-              + "are typos, not state races.",
+              + "are typos, not state races.\n\n"
+              + "**Rate-limit cost**: each bulk call costs `N` units "
+              + "against the per-minute / per-hour API quota, where `N` "
+              + "is `items.length` — the same total cost as `N` equivalent "
+              + "single-task PUTs. The cost does not adjust for skipped "
+              + "items; the per-item resolve still runs.",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1521,6 +1534,10 @@ public class TaskResource {
               + "exist. (Item-level not-found is silent skip.)",
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
+              + "rate-limit cost (`items.length` units) would exceed the "
+              + "caller's per-minute / per-hour API quota.",
             response = ErrorResponse.class)
     })
     public Response bulkUpdateTaskById(
@@ -1556,6 +1573,8 @@ public class TaskResource {
         @ApiResponse(code = 404, message = "Not Found — project does not exist.",
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests.",
             response = ErrorResponse.class)
     })
     public Response bulkUpdateTaskByOid(
@@ -1607,7 +1626,12 @@ public class TaskResource {
               + "agents — safe to re-submit duplicates or already-removed "
               + "OIDs.\n\n"
               + "`?return=compact` is a no-op here (the response is "
-              + "already in identifier shape).",
+              + "already in identifier shape).\n\n"
+              + "**Rate-limit cost**: each bulk call costs `N` units "
+              + "against the per-minute / per-hour API quota, where `N` "
+              + "is `items.length` — the same total cost as `N` equivalent "
+              + "single-task DELETEs. The cost does not adjust for skipped "
+              + "items.",
         response = Object.class,
         responseContainer = "List"
     )
@@ -1627,6 +1651,10 @@ public class TaskResource {
               + "exist. (Item-level not-found is silent skip.)",
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
+              + "rate-limit cost (`items.length` units) would exceed the "
+              + "caller's per-minute / per-hour API quota.",
             response = ErrorResponse.class)
     })
     public Response bulkRemoveTaskById(
@@ -1661,6 +1689,8 @@ public class TaskResource {
         @ApiResponse(code = 404, message = "Not Found — project does not exist.",
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests.",
             response = ErrorResponse.class)
     })
     public Response bulkRemoveTaskByOid(
