@@ -1250,6 +1250,352 @@ public class TaskResource {
         @QueryParam("user") String user
     ) { return null; }
 
+    // -------- Bulk (#24486) --------
+
+    @POST
+    @Path("/bulk-add/id/{projectId}")
+    @ApiOperation(
+        value = "Bulk-add N root tasks to a project by ID.",
+        notes = "Creates up to **100 root tasks** in one transaction.\n\n"
+              + "Body is a top-level JSON array of `CreateTaskBody` items "
+              + "(no envelope) — same shape as single-task `POST /task/...`. "
+              + "Items can include nested `tasks` to create subtrees in the "
+              + "same call; only the **root** of each item is echoed in the "
+              + "response (use `GET /task/list/id/{projectId}/{rootId}` to "
+              + "enumerate the created subtree).\n\n"
+              + "**Atomic**: any per-item validation / permission / DB error "
+              + "rolls back the whole batch and returns `{code, message}` "
+              + "with `items[i]:` prefixed so the agent can pinpoint the "
+              + "offending row. Fix the value and retry.\n\n"
+              + "Response is a same-length array, one element per submitted "
+              + "item (full task record, or `{oid, id}` under "
+              + "`?return=compact`).",
+        response = Task.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of created tasks "
+              + "(one per submitted item, root only for nested subtrees).",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
+              + "array, empty, over the 100-item cap, or any per-item "
+              + "validation failure (whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks "
+              + "permission to add tasks to the project.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large — body "
+              + "exceeds the API packet size limit.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests — batch "
+              + "would exceed the project's task quota.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkAddTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Tasks to create.", required = true)
+        java.util.List<CreateTaskBody> data,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or "
+                + "`compact` (returns `{oid, id}` per element instead of "
+                + "the full task record). Recommended for large batches.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @POST
+    @Path("/bulk-add/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Bulk-add N tasks relative to a task by ID.",
+        notes = "Creates up to **100 tasks** anchored at the task identified "
+              + "by `projectId` + `taskId`. The optional `?position=` query "
+              + "parameter mirrors single-task `POST /task/...` semantics:\n"
+              + "- `parent` (default): children of the anchor task.\n"
+              + "- `before`: siblings immediately before the anchor.\n"
+              + "- `after`: siblings immediately after the anchor.\n\n"
+              + "Submitted-order is preserved across the batch regardless "
+              + "of `?position=` (the server uses a sliding-chain insert "
+              + "internally).\n\n"
+              + "See `POST /task/bulk-add/id/{projectId}` for body shape, "
+              + "atomic semantics, and response details.",
+        response = Task.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of created tasks.",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project or anchor "
+              + "task does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkAddTaskAtTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Anchor task ID.", required = true)
+        @PathParam("taskId") int taskId,
+        @ApiParam(value = "Tasks to create.", required = true)
+        java.util.List<CreateTaskBody> data,
+        @ApiParam(
+            value = "(Optional) Placement of the new tasks relative to the "
+                + "anchor: `parent` (default), `before`, or `after`. Any "
+                + "other value returns `400 Bad Request`.",
+            example = "after",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @POST
+    @Path("/bulk-add/{oid}")
+    @ApiOperation(
+        value = "Bulk-add N tasks by OID (project or task anchor).",
+        notes = "Creates up to **100 tasks** anchored at the entity "
+              + "identified by `oid` — a project OID creates root tasks, "
+              + "a task OID creates subtasks (or siblings, depending on "
+              + "`?position=`).\n\n"
+              + "See the by-ID forms `POST /task/bulk-add/id/{projectId}` "
+              + "and `POST /task/bulk-add/id/{projectId}/{taskId}` for body "
+              + "shape, atomic semantics, sliding-chain order preservation, "
+              + "and response details.",
+        response = Task.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of created tasks.",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — anchor does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkAddTaskByOid(
+        @ApiParam(
+            value = "OID of the project (root tasks) or anchor task "
+                + "(subtasks / siblings, per `?position=`).",
+            required = true
+        )
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Tasks to create.", required = true)
+        java.util.List<CreateTaskBody> data,
+        @ApiParam(
+            value = "(Optional) Placement when `oid` refers to a task: "
+                + "`parent` (default), `before`, or `after`. Ignored when "
+                + "`oid` is a project.",
+            example = "after",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @PUT
+    @Path("/bulk-update/id/{projectId}")
+    @ApiOperation(
+        value = "Bulk-update N tasks in a project by ID.",
+        notes = "Updates up to **100 tasks** in one transaction. Body is "
+              + "a top-level JSON array of `BulkUpdateTaskItem` — each item "
+              + "carries exactly one of `oid` / `id` (mutually exclusive) "
+              + "plus the `UpdateTaskBody`-shape fields to apply.\n\n"
+              + "**Atomic on real bugs**: validation / permission / DB "
+              + "errors propagate as `{code, message}` with `items[i]:` "
+              + "prefix and roll back the whole batch.\n\n"
+              + "**Skip-not-found**: items whose target task can't be "
+              + "found (already removed, never existed, etc.) are silently "
+              + "skipped — the corresponding response slot is `null` and "
+              + "the rest of the batch proceeds. Shape errors (both / "
+              + "neither `oid` and `id`, malformed ref) still 400 + rollback.\n\n"
+              + "Response is a same-length array (full task record, "
+              + "`{oid, id}` under `?return=compact`, or `null` for "
+              + "skipped items).",
+        response = Task.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of updated tasks "
+              + "(slots for not-found items are `null`).",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
+              + "array, empty, over the 100-item cap, item shape error "
+              + "(both/neither oid+id, malformed ref), or any per-item "
+              + "validation failure (whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks "
+              + "permission on the project or any task in the batch "
+              + "(whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not "
+              + "exist. (Item-level not-found is silent skip.)",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkUpdateTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Tasks to update.", required = true)
+        java.util.List<BulkUpdateTaskItem> data,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @PUT
+    @Path("/bulk-update/{projectOid}")
+    @ApiOperation(
+        value = "Bulk-update N tasks in a project by OID.",
+        notes = "OID-form of `PUT /task/bulk-update/id/{projectId}` — see "
+              + "that endpoint for body shape, atomic semantics, "
+              + "skip-not-found behaviour, and response details.",
+        response = Task.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of updated tasks.",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkUpdateTaskByOid(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("projectOid") String projectOid,
+        @ApiParam(value = "Tasks to update.", required = true)
+        java.util.List<BulkUpdateTaskItem> data,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @DELETE
+    @Path("/bulk-remove/id/{projectId}")
+    @ApiOperation(
+        value = "Bulk-remove N tasks from a project by ID.",
+        notes = "Removes up to **100 tasks** in one transaction. Body is "
+              + "a top-level JSON array of task references — each element "
+              + "is one of:\n"
+              + "- a task OID (string),\n"
+              + "- an integer task ID, or\n"
+              + "- a `\"#<id>\"` string (the ID-with-hash form).\n\n"
+              + "Mixed forms in the same batch are allowed.\n\n"
+              + "**Atomic on real bugs**: malformed refs (non-string / "
+              + "non-int / unsupported shape) and permission failures "
+              + "roll back the whole batch.\n\n"
+              + "**Skip-not-found**: refs that don't resolve (already "
+              + "removed, cascade-removed by an earlier item in the same "
+              + "batch, etc.) are silently skipped — the corresponding "
+              + "response slot is `null`.\n\n"
+              + "Response is a same-length array of `{\"oid\": \"...\"}` "
+              + "(the deleted task's OID) or `null` for skipped items. "
+              + "`?return=compact` is a no-op here (response is already "
+              + "in identifier shape).",
+        response = Object.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of `{oid}` "
+              + "elements (slots for not-found items are `null`).",
+            response = Object.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
+              + "array, empty, over the 100-item cap, or any item is a "
+              + "malformed ref (whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks "
+              + "permission on the project or any task in the batch "
+              + "(whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not "
+              + "exist. (Item-level not-found is silent skip.)",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkRemoveTaskById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(
+            value = "Task references to remove. Each element is a task OID "
+                  + "(string), an integer ID, or a `\"#<id>\"` string. "
+                  + "Mixed forms allowed.",
+            required = true
+        )
+        java.util.List<Object> data
+    ) { return null; }
+
+    @DELETE
+    @Path("/bulk-remove/{projectOid}")
+    @ApiOperation(
+        value = "Bulk-remove N tasks from a project by OID.",
+        notes = "OID-form of `DELETE /task/bulk-remove/id/{projectId}` — "
+              + "see that endpoint for body shape, atomic semantics, "
+              + "skip-not-found behaviour, and response details.",
+        response = Object.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of `{oid}` elements.",
+            response = Object.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkRemoveTaskByOid(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("projectOid") String projectOid,
+        @ApiParam(
+            value = "Task references to remove. Each element is a task OID "
+                  + "(string), an integer ID, or a `\"#<id>\"` string. "
+                  + "Mixed forms allowed.",
+            required = true
+        )
+        java.util.List<Object> data
+    ) { return null; }
+
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
