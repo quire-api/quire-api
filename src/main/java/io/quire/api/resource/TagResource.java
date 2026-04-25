@@ -23,6 +23,11 @@ public class TagResource {
         notes = "Creates a new tag in the specified project (by OID).",
         response = Tag.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created tag.", response = Tag.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed (e.g., name missing or too long)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response createTag(
         @ApiParam(
             value = "OID of the project to add the new tag to.\n"
@@ -41,10 +46,16 @@ public class TagResource {
         notes = "Creates a new tag in the specified project (by ID).",
         response = Tag.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created tag.", response = Tag.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response createTagToProject(
         @ApiParam(
             value = "ID of the project to add the new tag to.\n"
                   + "Specify \"-\" to add it to personal tasks (My Tasks, not in a specific project).",
+            example = "my_project",
             required = true
         )
         @PathParam("projectId") String projectId,
@@ -59,6 +70,10 @@ public class TagResource {
         notes = "Returns the complete tag record for the given OID.",
         response = Tag.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — tag record.", response = Tag.class),
+        @ApiResponse(code = 404, message = "Not Found — tag does not exist.")
+    })
     public Response getTag(
         @ApiParam(value = "OID of the tag to fetch.", required = true)
         @PathParam("oid") String oid
@@ -72,6 +87,11 @@ public class TagResource {
         response = Tag.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of tags (may be empty).",
+            response = Tag.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getTagsByProjectOid(
         @ApiParam(
             value = "OID of the project.\n"
@@ -89,10 +109,16 @@ public class TagResource {
         response = Tag.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of tags (may be empty).",
+            response = Tag.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getTagsByProjectId(
         @ApiParam(
             value = "ID of the project.\n"
                   + "Specify \"-\" to list tags used in personal tasks (My Tasks, not in a specific project).",
+            example = "my_project",
             required = true
         )
         @PathParam("projectId") String projectId
@@ -102,9 +128,16 @@ public class TagResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update a tag.",
-        notes = "Updates an existing tag and returns the complete updated record.",
+        notes = "Updates an existing tag and returns the complete updated record. "
+              + "Omitted body fields are left unchanged.",
         response = Tag.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated tag record.", response = Tag.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this tag."),
+        @ApiResponse(code = 404, message = "Not Found — tag does not exist.")
+    })
     public Response updateTag(
         @ApiParam(value = "OID of the tag to update.", required = true)
         @PathParam("oid") String oid,

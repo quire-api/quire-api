@@ -23,6 +23,12 @@ public class StatusResource {
         notes = "Creates a new task status in the specified project.",
         response = Status.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created status.", response = Status.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response createStatus(
         @ApiParam(value = "Project OID to add the status to.", required = true)
         @PathParam("projectOid") String projectOid,
@@ -37,8 +43,14 @@ public class StatusResource {
         notes = "Creates a new task status in the specified project.",
         response = Status.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created status.", response = Status.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response createStatusToProject(
-        @ApiParam(value = "Project ID to add the status to.", required = true)
+        @ApiParam(value = "Project ID to add the status to.", example = "my_project", required = true)
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Status to create.", required = true)
         CreateStatusBody data
@@ -53,10 +65,14 @@ public class StatusResource {
         notes = "Returns the status record matching the given value in the specified project.",
         response = Status.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — status record.", response = Status.class),
+        @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
+    })
     public Response getStatusByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid,
-        @ApiParam(value = "Status value to fetch.", required = true)
+        @ApiParam(value = "Status value to fetch.", example = "100", required = true)
         @PathParam("value") int value
     ) { return null; }
 
@@ -67,10 +83,14 @@ public class StatusResource {
         notes = "Returns the status record matching the given value in the specified project.",
         response = Status.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — status record.", response = Status.class),
+        @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
+    })
     public Response getStatusByProjectId(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", example = "my_project", required = true)
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Status value to fetch.", required = true)
+        @ApiParam(value = "Status value to fetch.", example = "100", required = true)
         @PathParam("value") int value
     ) { return null; }
 
@@ -84,6 +104,11 @@ public class StatusResource {
         response = Status.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of statuses (may be empty).",
+            response = Status.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getStatusesByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid
@@ -97,8 +122,13 @@ public class StatusResource {
         response = Status.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of statuses (may be empty).",
+            response = Status.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getStatusesByProjectId(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", example = "my_project", required = true)
         @PathParam("projectId") String projectId
     ) { return null; }
 
@@ -108,13 +138,20 @@ public class StatusResource {
     @Path("/{projectOid}/{value}")
     @ApiOperation(
         value = "Update a task status (by project OID).",
-        notes = "Updates an existing status and returns the complete updated record.",
+        notes = "Updates an existing status and returns the complete updated record. "
+              + "Omitted body fields are left unchanged.",
         response = Status.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated status record.", response = Status.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
+        @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
+    })
     public Response updateStatusByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid,
-        @ApiParam(value = "Status value to update.", required = true)
+        @ApiParam(value = "Status value to update.", example = "100", required = true)
         @PathParam("value") int value,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateStatusBody data
@@ -124,13 +161,20 @@ public class StatusResource {
     @Path("/id/{projectId}/{value}")
     @ApiOperation(
         value = "Update a task status (by project ID).",
-        notes = "Updates an existing status and returns the complete updated record.",
+        notes = "Updates an existing status and returns the complete updated record. "
+              + "Omitted body fields are left unchanged.",
         response = Status.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated status record.", response = Status.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
+        @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
+    })
     public Response updateStatusByProjectId(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", example = "my_project", required = true)
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Status value to update.", required = true)
+        @ApiParam(value = "Status value to update.", example = "100", required = true)
         @PathParam("value") int value,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateStatusBody data

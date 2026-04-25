@@ -23,6 +23,12 @@ public class SublistResource {
         notes = "Creates a new sublist under the specified owner (by OID).",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created sublist record.", response = Sublist.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a sublist under this owner."),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response createSublist(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -43,6 +49,12 @@ public class SublistResource {
         notes = "Creates a new sublist under the specified owner (by ID).",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created sublist record.", response = Sublist.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a sublist under this owner."),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response createSublistToProject(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -63,6 +75,10 @@ public class SublistResource {
         notes = "Returns the complete sublist record for the given OID.",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — sublist record.", response = Sublist.class),
+        @ApiResponse(code = 404, message = "Not Found — sublist does not exist.")
+    })
     public Response getSublist(
         @ApiParam(value = "OID of the sublist.", required = true)
         @PathParam("oid") String oid
@@ -75,6 +91,10 @@ public class SublistResource {
         notes = "Returns the complete sublist record for the given ID.",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — sublist record.", response = Sublist.class),
+        @ApiResponse(code = 404, message = "Not Found — sublist does not exist.")
+    })
     public Response getSublistById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -82,9 +102,9 @@ public class SublistResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "ID of the owner the sublist belongs to.", required = true)
+        @ApiParam(value = "ID of the owner the sublist belongs to.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "ID of the sublist.", required = true)
+        @ApiParam(value = "ID of the sublist.", required = true, example = "1234")
         @PathParam("sublistId") String sublistId
     ) { return null; }
 
@@ -96,6 +116,10 @@ public class SublistResource {
         response = Sublist.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of sublist records (may be empty).", response = Sublist.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response getSublistsByProjectOid(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -115,6 +139,10 @@ public class SublistResource {
         response = Sublist.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of sublist records (may be empty).", response = Sublist.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response getSublistsByProjectId(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -122,7 +150,7 @@ public class SublistResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "ID of the owner.", required = true)
+        @ApiParam(value = "ID of the owner.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId
     ) { return null; }
 
@@ -133,6 +161,12 @@ public class SublistResource {
         notes = "Updates an existing sublist and returns the complete updated record.",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated sublist record.", response = Sublist.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this sublist."),
+        @ApiResponse(code = 404, message = "Not Found — sublist does not exist.")
+    })
     public Response updateSublistByOid(
         @ApiParam(value = "OID of the sublist to update.", required = true)
         @PathParam("oid") String oid,
@@ -147,6 +181,12 @@ public class SublistResource {
         notes = "Updates an existing sublist and returns the complete updated record.",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated sublist record.", response = Sublist.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this sublist."),
+        @ApiResponse(code = 404, message = "Not Found — sublist does not exist.")
+    })
     public Response updateSublistById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -154,11 +194,11 @@ public class SublistResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "ID of the owner.", required = true)
+        @ApiParam(value = "ID of the owner.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Sublist updates", required = true)
         UpdateSublistBody data,
-        @ApiParam(value = "ID of the sublist to update.", required = true)
+        @ApiParam(value = "ID of the sublist to update.", required = true, example = "1234")
         @PathParam("sublistId") String sublistId
     ) { return null; }
 
@@ -174,6 +214,11 @@ public class SublistResource {
             + "already reached.",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored sublist record.", response = Sublist.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this sublist."),
+        @ApiResponse(code = 404, message = "Not Found — sublist does not exist.")
+    })
     public Response undoRemoveSublistByOid(
         @ApiParam(value = "OID of the sublist to restore.", required = true)
         @PathParam("oid") String oid
@@ -191,6 +236,11 @@ public class SublistResource {
             + "already reached.",
         response = Sublist.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored sublist record.", response = Sublist.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this sublist."),
+        @ApiResponse(code = 404, message = "Not Found — sublist does not exist.")
+    })
     public Response undoRemoveSublistById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`.\n"
@@ -199,9 +249,9 @@ public class SublistResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "ID of the owner.", required = true)
+        @ApiParam(value = "ID of the owner.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "ID of the sublist to restore.", required = true)
+        @ApiParam(value = "ID of the sublist to restore.", required = true, example = "1234")
         @PathParam("sublistId") String sublistId
     ) { return null; }
 

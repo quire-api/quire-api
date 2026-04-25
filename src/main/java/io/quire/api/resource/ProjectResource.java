@@ -42,6 +42,9 @@ public class ProjectResource {
         response = Project.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of authorized projects (may be empty).", response = Project.class, responseContainer = "List")
+    })
     public Response getProjects(
         @ApiParam(
             value = "Whether to include archived projects.\n"
@@ -69,6 +72,10 @@ public class ProjectResource {
         response = Project.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of authorized projects (may be empty).", response = Project.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response getProjectsByOrganizationOid(
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("organizationOid") String organizationOid,
@@ -99,8 +106,12 @@ public class ProjectResource {
         response = Project.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of authorized projects (may be empty).", response = Project.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response getProjectsByOrganizationId(
-        @ApiParam(value = "Organization ID.", required = true)
+        @ApiParam(value = "Organization ID.", required = true, example = "my_org")
         @PathParam("organizationId") String organizationId,
 
         @ApiParam(
@@ -130,8 +141,12 @@ public class ProjectResource {
         notes = "Returns the complete project record for the given ID.",
         response = ProjectWithPlan.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — project record.", response = ProjectWithPlan.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getProjectById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id
     ) { return null; }
 
@@ -142,6 +157,10 @@ public class ProjectResource {
         notes = "Returns the complete project record for the given OID.",
         response = ProjectWithPlan.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — project record.", response = ProjectWithPlan.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getProjectByOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid
@@ -158,8 +177,13 @@ public class ProjectResource {
               + "Note: The number of allowed invocations may be more restricted.",
         response = String.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — CSV export of project.", response = String.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission or plan does not include CSV export."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getProjectCsvById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
 
         @ApiParam(
@@ -189,6 +213,11 @@ public class ProjectResource {
               + "Note: The number of allowed invocations may be more restricted.",
         response = String.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — CSV export of project.", response = String.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission or plan does not include CSV export."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getProjectCsvByOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
@@ -222,8 +251,13 @@ public class ProjectResource {
               + "Note: The number of allowed invocations may be more restricted.",
         response = ProjectJsonMap.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — JSON export of project.", response = ProjectJsonMap.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission or plan does not include JSON export."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getProjectJsonById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id
     ) { return null; }
 
@@ -236,6 +270,11 @@ public class ProjectResource {
               + "Note: The number of allowed invocations may be more restricted.",
         response = ProjectJsonMap.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — JSON export of project.", response = ProjectJsonMap.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission or plan does not include JSON export."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getProjectJsonByOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid
@@ -250,8 +289,14 @@ public class ProjectResource {
         notes = "Updates an existing project and returns the complete updated record.",
         response = Project.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated project record.", response = Project.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response updateProjectById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateProjectBody data
@@ -264,6 +309,12 @@ public class ProjectResource {
         notes = "Updates an existing project and returns the complete updated record.",
         response = Project.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated project record.", response = Project.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response updateProjectByOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
@@ -307,6 +358,13 @@ public class ProjectResource {
               + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — plan's custom-field limit is reached.")
+    })
     public Response addProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
@@ -322,8 +380,15 @@ public class ProjectResource {
               + "the project by its ID. See also `/project/add-field/{oid}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — plan's custom-field limit is reached.")
+    })
     public Response addProjectFieldById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
         @ApiParam(value = "Field definition to add.", required = true)
         AddFieldBody data
@@ -345,10 +410,16 @@ public class ProjectResource {
               + "(equal to the field's name), or an empty object if the field does not exist.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response updateProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to update.", required = true)
+        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data
@@ -364,10 +435,16 @@ public class ProjectResource {
               + "`/project/update-field/{oid}/{fieldName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response updateProjectFieldById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Name of the field to update.", required = true)
+        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data
@@ -423,12 +500,17 @@ public class ProjectResource {
               + "field is missing or the target name is already in use.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — renamed custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response renameProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Current field name.", required = true)
+        @ApiParam(value = "Current field name.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true)
+        @ApiParam(value = "New field name.", required = true, example = "Importance")
         @PathParam("newName") String newName
     ) { return null; }
 
@@ -442,12 +524,17 @@ public class ProjectResource {
               + "`/project/rename-field/{oid}/{fieldName}/{newName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — renamed custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response renameProjectFieldById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Current field name.", required = true)
+        @ApiParam(value = "Current field name.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true)
+        @ApiParam(value = "New field name.", required = true, example = "Importance")
         @PathParam("newName") String newName
     ) { return null; }
 
@@ -464,10 +551,15 @@ public class ProjectResource {
               + "does not exist or `?before={otherName}` refers to a missing field.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — moved custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response moveProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to move.", required = true)
+        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
@@ -488,10 +580,15 @@ public class ProjectResource {
               + "`/project/move-field/{oid}/{fieldName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — moved custom-field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response moveProjectFieldById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Name of the field to move.", required = true)
+        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
@@ -518,6 +615,12 @@ public class ProjectResource {
               + "`403 Forbidden` if the caller lacks permission.",
         response = AppvCat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created approval category.", response = AppvCat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response addProjectAppvCat(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
@@ -533,8 +636,14 @@ public class ProjectResource {
               + "project by its ID. See also `/project/add-appv-cat/{oid}` for the OID form.",
         response = AppvCat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created approval category.", response = AppvCat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response addProjectAppvCatById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
         @ApiParam(value = "Category to add.", required = true)
         AddAppvCatBody data
@@ -553,10 +662,16 @@ public class ProjectResource {
               + "concurrently).",
         response = AppvCat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated approval category.", response = AppvCat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response updateProjectAppvCat(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Category id.", required = true)
+        @ApiParam(value = "Category id.", required = true, example = "legal")
         @PathParam("catId") String catId,
         @ApiParam(value = "Changes to apply.", required = true)
         UpdateAppvCatBody data
@@ -573,10 +688,16 @@ public class ProjectResource {
               + "for the OID form.",
         response = AppvCat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated approval category.", response = AppvCat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response updateProjectAppvCatById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Category id.", required = true)
+        @ApiParam(value = "Category id.", required = true, example = "legal")
         @PathParam("catId") String catId,
         @ApiParam(value = "Changes to apply.", required = true)
         UpdateAppvCatBody data

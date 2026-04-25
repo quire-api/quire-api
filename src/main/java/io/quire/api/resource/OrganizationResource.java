@@ -37,6 +37,10 @@ public class OrganizationResource {
         response = Organization.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of organizations (may be empty).",
+            response = Organization.class, responseContainer = "List")
+    })
     public Response getOrganizations() { return null; }
 
     @GET
@@ -46,8 +50,13 @@ public class OrganizationResource {
         notes = "Returns the complete organization record for the given ID.",
         response = OrganizationWithPlan.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — organization record with plan info.",
+            response = OrganizationWithPlan.class),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist, or is not accessible to the caller.")
+    })
     public Response getOrganizationById(
-        @ApiParam(value = "Organization ID.", required = true)
+        @ApiParam(value = "Organization ID.", example = "my_org", required = true)
         @PathParam("id") String id
     ) { return null; }
 
@@ -58,6 +67,11 @@ public class OrganizationResource {
         notes = "Returns the complete organization record for the given OID.",
         response = OrganizationWithPlan.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — organization record with plan info.",
+            response = OrganizationWithPlan.class),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist, or is not accessible to the caller.")
+    })
     public Response getOrganizationByOid(
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("oid") String oid
@@ -67,11 +81,19 @@ public class OrganizationResource {
     @Path("/id/{id}")
     @ApiOperation(
         value = "Update an organization by ID.",
-        notes = "Updates an existing organization and returns the complete updated record.",
+        notes = "Updates an existing organization and returns the complete updated record. "
+              + "Omitted body fields are left unchanged.",
         response = Organization.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated organization record.",
+            response = Organization.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this organization."),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response updateOrganizationById(
-        @ApiParam(value = "Organization ID.", required = true)
+        @ApiParam(value = "Organization ID.", example = "my_org", required = true)
         @PathParam("id") String id,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateOrganizationBody data
@@ -81,9 +103,17 @@ public class OrganizationResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update an organization by OID.",
-        notes = "Updates an existing organization and returns the complete updated record.",
+        notes = "Updates an existing organization and returns the complete updated record. "
+              + "Omitted body fields are left unchanged.",
         response = Organization.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated organization record.",
+            response = Organization.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this organization."),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response updateOrganizationByOid(
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("oid") String oid,

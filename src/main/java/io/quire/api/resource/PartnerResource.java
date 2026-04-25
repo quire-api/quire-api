@@ -21,6 +21,11 @@ public class PartnerResource {
         notes = "Returns the full external team record for the given OID.",
         response = Partner.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — external team record.",
+            response = Partner.class),
+        @ApiResponse(code = 404, message = "Not Found — external team does not exist.")
+    })
     public Response getPartnerByOid(
         @ApiParam(value = "External team OID.", required = true)
         @PathParam("oid") String oid
@@ -34,6 +39,11 @@ public class PartnerResource {
         response = Partner.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of external teams (may be empty).",
+            response = Partner.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getPartnersByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid
@@ -47,8 +57,13 @@ public class PartnerResource {
         response = Partner.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of external teams (may be empty).",
+            response = Partner.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getPartnersByProjectId(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", example = "my_project", required = true)
         @PathParam("projectId") String projectId
     ) { return null; }
 

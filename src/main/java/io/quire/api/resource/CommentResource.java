@@ -24,6 +24,12 @@ public class CommentResource {
         notes = "Adds a new comment to the specified task.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created comment record.", response = Comment.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a comment to this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response createCommentToTaskByOid(
         @ApiParam(value = "OID of the task.", required = true)
         @PathParam("taskOid") String taskOid,
@@ -38,6 +44,12 @@ public class CommentResource {
         notes = "Adds a new comment to the specified chat channel.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created comment record.", response = Comment.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a comment to this chat channel."),
+        @ApiResponse(code = 404, message = "Not Found — chat channel does not exist.")
+    })
     public Response createCommentToChatByOid(
         @ApiParam(value = "OID of the chat channel.", required = true)
         @PathParam("chatOid") String chatOid,
@@ -52,10 +64,16 @@ public class CommentResource {
         notes = "Adds a new comment to the specified task.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created comment record.", response = Comment.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a comment to this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response createCommentToTaskById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data
@@ -68,10 +86,16 @@ public class CommentResource {
         notes = "Adds a new comment to the specified chat channel.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created comment record.", response = Comment.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a comment to this chat channel."),
+        @ApiResponse(code = 404, message = "Not Found — chat channel does not exist.")
+    })
     public Response createCommentToChatById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Chat channel ID.", required = true)
+        @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId,
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data
@@ -87,6 +111,10 @@ public class CommentResource {
         response = Comment.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — chat channel does not exist.")
+    })
     public Response getCommentsOfChatByOid(
         @ApiParam(value = "OID of the chat channel.", required = true)
         @PathParam("chatOid") String chatOid
@@ -100,6 +128,10 @@ public class CommentResource {
         response = Comment.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response getCommentsOfTaskByOid(
         @ApiParam(value = "OID of the task.", required = true)
         @PathParam("taskOid") String taskOid
@@ -113,10 +145,14 @@ public class CommentResource {
         response = Comment.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — chat channel does not exist.")
+    })
     public Response getCommentsOfChatById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Chat channel ID.", required = true)
+        @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId
     ) { return null; }
 
@@ -128,10 +164,14 @@ public class CommentResource {
         response = Comment.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response getCommentsOfTaskById(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId
     ) { return null; }
 
@@ -144,6 +184,10 @@ public class CommentResource {
         notes = "Returns the full comment record.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — comment record.", response = Comment.class),
+        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+    })
     public Response getCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)
         @PathParam("commentOid") String commentOid
@@ -158,6 +202,12 @@ public class CommentResource {
         notes = "Updates an existing comment and returns the updated record.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated comment record.", response = Comment.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this comment."),
+        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+    })
     public Response updateCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)
         @PathParam("commentOid") String commentOid,
@@ -174,6 +224,12 @@ public class CommentResource {
         notes = "Uploads an attachment to an existing comment.",
         response = SimpleAttachment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — attachment record.", response = SimpleAttachment.class),
+        @ApiResponse(code = 400, message = "Bad Request — bad payload or filename."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this comment."),
+        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+    })
     public Response attachToCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)
         @PathParam("commentOid") String commentOid,
@@ -203,6 +259,11 @@ public class CommentResource {
             + "a no-op and returns the current comment record.",
         response = Comment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored comment record.", response = Comment.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this comment."),
+        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+    })
     public Response undoRemoveCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)
         @PathParam("commentOid") String commentOid

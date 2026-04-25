@@ -28,8 +28,13 @@ public class RateLimitResource {
           + "across all organizations in the group.",
         response = RateLimit.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — current rate-limit counters.",
+            response = RateLimit.class),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response getRateLimitById(
-        @ApiParam(value = "Organization ID.", required = true)
+        @ApiParam(value = "Organization ID.", example = "my_org", required = true)
         @PathParam("id") String id
     ) { return null; }
 
@@ -44,6 +49,11 @@ public class RateLimitResource {
           + "across all organizations in the group.",
         response = RateLimit.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — current rate-limit counters.",
+            response = RateLimit.class),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response getRateLimitByOid(
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("oid") String oid

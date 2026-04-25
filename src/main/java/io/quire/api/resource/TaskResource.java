@@ -23,6 +23,12 @@ public class TaskResource {
         notes = "Adds a new task to a project, under another task, or before or after another task.",
         response = Task.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created task.", response = Task.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a task here."),
+        @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
+    })
     public Response createTask(
         @ApiParam(
             value = "OID of the project or task to which the new task will be added. "
@@ -58,12 +64,19 @@ public class TaskResource {
         notes = "Adds a new root task to a project.",
         response = Task.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created task.", response = Task.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a task to this project."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response createTaskByProjectId(
         @ApiParam(
             value = "ID of the project to which this new task will be added. "
                   + "The task will be created as a root task. Specify \"-\" "
                   + "to add it to personal tasks (in My Tasks).",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Task to create", required = true)
@@ -77,15 +90,22 @@ public class TaskResource {
         notes = "Adds a new task under another task, or before or after another task.",
         response = Task.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created task.", response = Task.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a task here."),
+        @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
+    })
     public Response createTaskByTaskId(
         @ApiParam(
             value = "ID of the project to which the new task will be added. "
                   + "Specify \"-\" to add it to personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "ID of the referenced task.", required = true)
+        @ApiParam(value = "ID of the referenced task.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(value = "Task to create.", required = true)
@@ -115,6 +135,11 @@ public class TaskResource {
         response = Task.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of tasks (may be empty).",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
+    })
     public Response getTasksByOid(
         @ApiParam(
             value = "OID of the project or parent task. "
@@ -133,11 +158,17 @@ public class TaskResource {
         response = Task.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of root tasks (may be empty).",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response getRootTasks(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId
     ) { return null; }
@@ -151,15 +182,21 @@ public class TaskResource {
         response = Task.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of subtasks (may be empty).",
+            response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
+    })
     public Response getSubtasks(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Parent task ID.", required = true)
+        @ApiParam(value = "Parent task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(
@@ -178,6 +215,10 @@ public class TaskResource {
         notes = "Returns the full task record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response getTask(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid
@@ -190,15 +231,20 @@ public class TaskResource {
         notes = "Returns the full task record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response getTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId
     ) { return null; }
 
@@ -209,6 +255,12 @@ public class TaskResource {
         notes = "Updates an existing task and returns the updated record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response updateTask(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid,
@@ -223,14 +275,21 @@ public class TaskResource {
         notes = "Updates an existing task and returns the updated record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response updateTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
 
         @PathParam("taskId") int taskId,
         @ApiParam(value = "Updated task content.", required = true)
@@ -250,6 +309,12 @@ public class TaskResource {
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `task` or `position`."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to move this task."),
+        @ApiResponse(code = 404, message = "Not Found — task or reference task does not exist.")
+    })
     public Response moveTask(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid,
@@ -297,15 +362,22 @@ public class TaskResource {
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `task` or `position`."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to move this task."),
+        @ApiResponse(code = 404, message = "Not Found — task or reference task does not exist.")
+    })
     public Response moveTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(
@@ -347,6 +419,12 @@ public class TaskResource {
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `project`, `task`, or `position`."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to transfer this task."),
+        @ApiResponse(code = 404, message = "Not Found — task, target project, or reference task does not exist.")
+    })
     public Response transferTask(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid,
@@ -432,15 +510,22 @@ public class TaskResource {
             + "Returns the updated task record.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `project`, `task`, or `position`."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to transfer this task."),
+        @ApiResponse(code = 404, message = "Not Found — task, target project, or reference task does not exist.")
+    })
     public Response transferTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(
@@ -516,6 +601,12 @@ public class TaskResource {
         notes = "Uploads an attachment to an existing task.",
         response = SimpleAttachment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created attachment.", response = SimpleAttachment.class),
+        @ApiResponse(code = 400, message = "Bad Request — filename or payload invalid."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response attachTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("taskOid") String taskOid,
@@ -541,15 +632,22 @@ public class TaskResource {
         notes = "Uploads an attachment to an existing task.",
         response = SimpleAttachment.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — newly created attachment.", response = SimpleAttachment.class),
+        @ApiResponse(code = 400, message = "Bad Request — filename or payload invalid."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+    })
     public Response attachTaskById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(
@@ -580,6 +678,12 @@ public class TaskResource {
             + "organization is at the plan's task limit.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — organization is at the plan's task limit.")
+    })
     public Response undoRemoveTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid
@@ -597,14 +701,21 @@ public class TaskResource {
             + "organization is at the plan's task limit.",
         response = TaskWithParentInfo.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored task record.", response = TaskWithParentInfo.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this task."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — organization is at the plan's task limit.")
+    })
     public Response undoRemoveTaskById(
         @ApiParam(
             value = "Project ID. Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId
     ) { return null; }
 
@@ -1009,11 +1120,12 @@ public class TaskResource {
     public Response deleteTaskById(
         @ApiParam(
             value = "Project ID. Specify \"-\" to remove from personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true)
+        @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId
     ) {
         return null;
@@ -1042,6 +1154,13 @@ public class TaskResource {
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response searchTasksByOid(
         @ApiParam(
             value = "Project OID. "
@@ -1260,11 +1379,19 @@ public class TaskResource {
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+    })
     public Response searchTasksById(
         @ApiParam(
             value = "ID of the task's project. "
                   + "Specify \"-\" for personal tasks in My Tasks.",
-            required = true
+            required = true,
+            example = "my_project"
         )
         @PathParam("projectId") String projectId,
         @ApiParam(
@@ -1465,6 +1592,13 @@ public class TaskResource {
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+            response = TaskWithProjectParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this organization."),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response searchTasksByOrgOid(
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("organizationOid") String organizationOid,
@@ -1661,8 +1795,15 @@ public class TaskResource {
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+            response = TaskWithProjectParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this organization."),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
+    })
     public Response searchTasksByOrgId(
-        @ApiParam(value = "Organization ID.", required = true)
+        @ApiParam(value = "Organization ID.", required = true, example = "my_org")
         @PathParam("organizationId") String organizationId,
         @ApiParam(
             value = "Full-text query against task name, description, and attachments.\n"
@@ -1857,6 +1998,13 @@ public class TaskResource {
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+            response = TaskWithProjectParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this folder."),
+        @ApiResponse(code = 404, message = "Not Found — folder does not exist.")
+    })
     public Response searchTasksByFolderOid(
         @ApiParam(value = "Folder OID.", required = true)
         @PathParam("folderOid") String folderOid,
@@ -2053,8 +2201,15 @@ public class TaskResource {
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+            response = TaskWithProjectParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this folder."),
+        @ApiResponse(code = 404, message = "Not Found — folder does not exist.")
+    })
     public Response searchTasksByFolderId(
-        @ApiParam(value = "Folder ID.", required = true)
+        @ApiParam(value = "Folder ID.", required = true, example = "my_folder")
         @PathParam("folderId") String folderId,
         @ApiParam(
             value = "Full-text query against task name, description, and attachments.\n"

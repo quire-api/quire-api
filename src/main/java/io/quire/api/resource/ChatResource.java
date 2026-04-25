@@ -20,6 +20,12 @@ public class ChatResource {
         notes = "Adds a new chat channel to the specified owner (currently only `project`).",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created chat channel.", response = Chat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a chat in this owner."),
+        @ApiResponse(code = 404, message = "Not Found — parent owner does not exist.")
+    })
     public Response createChat(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -40,6 +46,12 @@ public class ChatResource {
         notes = "Adds a new chat channel to the specified owner by ID (currently only `project`).",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created chat channel.", response = Chat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a chat in this owner."),
+        @ApiResponse(code = 404, message = "Not Found — parent owner does not exist.")
+    })
     public Response createChatById(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -47,7 +59,7 @@ public class ChatResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Chat channel to create.", required = true)
         CreateChatBody data
@@ -60,6 +72,10 @@ public class ChatResource {
         notes = "Returns the full chat channel record.",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — chat channel record.", response = Chat.class),
+        @ApiResponse(code = 404, message = "Not Found — chat does not exist.")
+    })
     public Response getChat(
         @ApiParam(value = "Chat channel OID.", required = true)
         @PathParam("oid") String oid
@@ -72,6 +88,10 @@ public class ChatResource {
         notes = "Returns the full chat channel record for the given owner and channel ID.",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — chat channel record.", response = Chat.class),
+        @ApiResponse(code = 404, message = "Not Found — chat does not exist.")
+    })
     public Response getChatById(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -79,9 +99,9 @@ public class ChatResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Chat channel ID.", required = true)
+        @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId
     ) { return null; }
 
@@ -93,6 +113,10 @@ public class ChatResource {
         response = Chat.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of chat channels (may be empty).", response = Chat.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — parent owner does not exist.")
+    })
     public Response getChatsByOwnerOid(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -112,6 +136,10 @@ public class ChatResource {
         response = Chat.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of chat channels (may be empty).", response = Chat.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — parent owner does not exist.")
+    })
     public Response getChatsByOwnerId(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -119,7 +147,7 @@ public class ChatResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId
     ) { return null; }
 
@@ -130,6 +158,12 @@ public class ChatResource {
         notes = "Updates an existing chat channel and returns the updated record.",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated chat channel.", response = Chat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this chat."),
+        @ApiResponse(code = 404, message = "Not Found — chat does not exist.")
+    })
     public Response updateChatByOid(
         @ApiParam(value = "Chat channel OID.", required = true)
         @PathParam("oid") String oid,
@@ -144,6 +178,12 @@ public class ChatResource {
         notes = "Updates an existing chat channel and returns the updated record.",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated chat channel.", response = Chat.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this chat."),
+        @ApiResponse(code = 404, message = "Not Found — chat does not exist.")
+    })
     public Response updateChatById(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -151,9 +191,9 @@ public class ChatResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Chat channel ID.", required = true)
+        @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateChatBody data
@@ -171,6 +211,11 @@ public class ChatResource {
             + "already reached.",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored chat channel.", response = Chat.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this chat."),
+        @ApiResponse(code = 404, message = "Not Found — chat does not exist.")
+    })
     public Response undoRemoveChatByOid(
         @ApiParam(value = "Chat channel OID.", required = true)
         @PathParam("oid") String oid
@@ -188,6 +233,11 @@ public class ChatResource {
             + "already reached.",
         response = Chat.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored chat channel.", response = Chat.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this chat."),
+        @ApiResponse(code = 404, message = "Not Found — chat does not exist.")
+    })
     public Response undoRemoveChatById(
         @ApiParam(
             value = "Owner type. Currently only `project` is supported. "
@@ -196,9 +246,9 @@ public class ChatResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Chat channel ID.", required = true)
+        @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId
     ) { return null; }
 
@@ -240,9 +290,9 @@ public class ChatResource {
             required = false
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Chat channel ID.", required = true)
+        @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId
     ) { return null; }
 }

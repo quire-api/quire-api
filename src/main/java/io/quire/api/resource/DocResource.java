@@ -21,6 +21,12 @@ public class DocResource {
         notes = "Adds a new document to the specified owner (`project`, `organization`, `folder`, or `smart-folder`).",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created doc record.", response = Doc.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a doc in this owner."),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response createDoc(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -41,6 +47,12 @@ public class DocResource {
         notes = "Adds a new document to the specified owner by ID (`project`, `organization`, `folder`, or `smart-folder`).",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created doc record.", response = Doc.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a doc in this owner."),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response createDocById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -63,6 +75,10 @@ public class DocResource {
         notes = "Returns the full document record.",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — doc record.", response = Doc.class),
+        @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
+    })
     public Response getDoc(
         @ApiParam(value = "Document OID.", required = true)
         @PathParam("oid") String oid
@@ -75,6 +91,10 @@ public class DocResource {
         notes = "Returns the full document record for the given owner and document ID.",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — doc record.", response = Doc.class),
+        @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
+    })
     public Response getDocById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -84,7 +104,7 @@ public class DocResource {
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Document ID.", required = true)
+        @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId
     ) { return null; }
 
@@ -96,6 +116,10 @@ public class DocResource {
         response = Doc.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of doc records (may be empty).", response = Doc.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response getDocsByOwnerOid(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -115,6 +139,10 @@ public class DocResource {
         response = Doc.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of doc records (may be empty).", response = Doc.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response getDocsByOwnerId(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -135,6 +163,12 @@ public class DocResource {
         notes = "Updates an existing document and returns the updated record.",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated doc record.", response = Doc.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this doc."),
+        @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
+    })
     public Response updateDocByOid(
         @ApiParam(value = "Document OID.", required = true)
         @PathParam("oid") String oid,
@@ -149,6 +183,12 @@ public class DocResource {
         notes = "Updates an existing document and returns the updated record.",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated doc record.", response = Doc.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this doc."),
+        @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
+    })
     public Response updateDocById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -158,7 +198,7 @@ public class DocResource {
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Document ID.", required = true)
+        @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateDocBody data
@@ -178,6 +218,11 @@ public class DocResource {
             + "already reached.",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored doc record.", response = Doc.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this doc."),
+        @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
+    })
     public Response undoRemoveDocByOid(
         @ApiParam(value = "OID of the document to restore.", required = true)
         @PathParam("oid") String oid
@@ -195,6 +240,11 @@ public class DocResource {
             + "already reached.",
         response = Doc.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored doc record.", response = Doc.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this doc."),
+        @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
+    })
     public Response undoRemoveDocById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
@@ -205,7 +255,7 @@ public class DocResource {
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Document ID.", required = true)
+        @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId
     ) { return null; }
 
@@ -251,7 +301,7 @@ public class DocResource {
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Document ID.", required = true)
+        @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId
     ) { return null; }
 }

@@ -26,6 +26,10 @@ public class StorageResource {
             "Returns all stored entries (up to 20) for the current access token.",
         response = StorageList.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of stored entries (may be empty).",
+            response = StorageList.class)
+    })
     public Response getAllValues() { return null; }
 
     @GET
@@ -37,9 +41,14 @@ public class StorageResource {
           + "Use this to page or group application-specific values by a common key prefix.",
         response = StorageList.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of matching entries (may be empty).",
+            response = StorageList.class)
+    })
     public Response getValues(
         @ApiParam(
-            value = "Key prefix to match. Example: \"foo\".",
+            value = "Key prefix to match.",
+            example = "foo",
             required = true
         )
         @PathParam("prefix") String prefix
@@ -51,12 +60,15 @@ public class StorageResource {
         value = "Get a stored value.",
         notes =
             "Returns the application-specific value stored under the given name.\n"
-          + "If the key is not found, a 404 status is returned.\n"
           + "Note: values are scoped per access token.",
         response = StorageMap.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — stored value.", response = StorageMap.class),
+        @ApiResponse(code = 404, message = "Not Found — no value stored under this key for the current access token.")
+    })
     public Response getValue(
-        @ApiParam(value = "The key name. Example: \"latest\".", required = true)
+        @ApiParam(value = "The key name.", example = "latest", required = true)
         @PathParam("name") String name
     ) { return null; }
 
@@ -70,16 +82,15 @@ public class StorageResource {
           + "Note: values are scoped per access token."
     )
     @ApiResponses({
-        @ApiResponse(
-            code = 204,
-            message = "No Content"
-        )
+        @ApiResponse(code = 204, message = "No Content — value stored (or deleted if null)."),
+        @ApiResponse(code = 400, message = "Bad Request — payload too large, or malformed JSON.")
     })
     public Response updateValue(
-        @ApiParam(value = "The key name. Example: \"latest\".", required = true)
+        @ApiParam(value = "The key name.", example = "latest", required = true)
         @PathParam("name") String name,
         @ApiParam(
-            value = "The value to store. Any JSON-serializable object is accepted."
+            value = "The value to store. Any JSON-serializable object is accepted. "
+                  + "Send `null` to delete the key."
         )
         StorageMap data
     ) { return null; }
@@ -100,7 +111,7 @@ public class StorageResource {
         )
     })
     public Response deleteValue(
-        @ApiParam(value = "The key name. Example: \"latest\".", required = true)
+        @ApiParam(value = "The key name.", example = "latest", required = true)
         @PathParam("name") String name
     ) { return null; }
 }

@@ -25,11 +25,19 @@ public class InsightResource {
         notes = "Adds a new insight view to the specified owner (`project`, `organization`, `folder`, or `smart-folder`).",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created insight record.", response = Insight.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+    })
     public Response createInsight(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/abc123` is equivalent to `/project/abc123`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner OID.", required = true)
@@ -45,14 +53,22 @@ public class InsightResource {
         notes = "Adds a new insight view to the specified owner by ID (`project`, `organization`, `folder`, or `smart-folder`).",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created insight record.", response = Insight.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+    })
     public Response createInsightById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Insight view to create.", required = true)
         CreateInsightBody data
@@ -67,6 +83,10 @@ public class InsightResource {
         notes = "Returns the full insight record.",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — insight record.", response = Insight.class),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+    })
     public Response getInsight(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid
@@ -79,16 +99,21 @@ public class InsightResource {
         notes = "Returns the full insight record for the given owner and insight ID.",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — insight record.", response = Insight.class),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+    })
     public Response getInsightById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId
     ) { return null; }
 
@@ -100,11 +125,16 @@ public class InsightResource {
         response = Insight.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of insight records (may be empty).", response = Insight.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response getInsightsByOwnerOid(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/list/abc123` is equivalent to `/list/project/abc123`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner OID.", required = true)
@@ -119,14 +149,19 @@ public class InsightResource {
         response = Insight.class,
         responseContainer = "List"
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — list of insight records (may be empty).", response = Insight.class, responseContainer = "List"),
+        @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
+    })
     public Response getInsightsByOwnerId(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/list/id/foo` is equivalent to `/list/id/project/foo`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId
     ) { return null; }
 
@@ -139,6 +174,12 @@ public class InsightResource {
         notes = "Updates an existing insight view and returns the updated record.",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated insight record.", response = Insight.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+    })
     public Response updateInsightByOid(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
@@ -153,16 +194,23 @@ public class InsightResource {
         notes = "Updates an existing insight view and returns the updated record.",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated insight record.", response = Insight.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+    })
     public Response updateInsightById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateInsightBody data
@@ -182,6 +230,12 @@ public class InsightResource {
             + "already reached.",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored insight record.", response = Insight.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+    })
     public Response undoRemoveInsightByOid(
         @ApiParam(value = "OID of the insight to restore.", required = true)
         @PathParam("oid") String oid
@@ -199,17 +253,24 @@ public class InsightResource {
             + "already reached.",
         response = Insight.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — restored insight record.", response = Insight.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+    })
     public Response undoRemoveInsightById(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/undo-remove/id/foo/bar` "
                   + "is equivalent to `/undo-remove/id/project/foo/bar`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId
     ) { return null; }
 
@@ -283,6 +344,13 @@ public class InsightResource {
               + "`429 Too Many Requests` if the plan's custom-field limit is reached.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — custom-field quota reached.")
+    })
     public Response addInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
@@ -306,10 +374,16 @@ public class InsightResource {
               + "(equal to the field's name), or an empty object if the field does not exist.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+    })
     public Response updateInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to update.", required = true)
+        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data
@@ -345,12 +419,17 @@ public class InsightResource {
               + "field is missing or the target name is already in use.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — renamed field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+    })
     public Response renameInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Current field name.", required = true)
+        @ApiParam(value = "Current field name.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true)
+        @ApiParam(value = "New field name.", required = true, example = "Importance")
         @PathParam("newName") String newName
     ) { return null; }
 
@@ -367,10 +446,15 @@ public class InsightResource {
               + "does not exist or `?before={otherName}` refers to a missing field.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — moved field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+    })
     public Response moveInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to move.", required = true)
+        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
@@ -393,16 +477,24 @@ public class InsightResource {
               + "insight views. See also `/insight/add-field/{oid}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — created field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — custom-field quota reached.")
+    })
     public Response addInsightFieldById(
         @ApiParam(
             value = "Owner type.",
             allowableValues = "project, organization, folder, smart-folder",
-            required = true
+            required = true,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
         @ApiParam(value = "Field definition to add.", required = true)
         AddFieldBody data
@@ -419,18 +511,25 @@ public class InsightResource {
               + "for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — updated field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+    })
     public Response updateInsightFieldById(
         @ApiParam(
             value = "Owner type.",
             allowableValues = "project, organization, folder, smart-folder",
-            required = true
+            required = true,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Name of the field to update.", required = true)
+        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data
@@ -474,20 +573,26 @@ public class InsightResource {
               + "`/insight/rename-field/{oid}/{fieldName}/{newName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — renamed field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+    })
     public Response renameInsightFieldById(
         @ApiParam(
             value = "Owner type.",
             allowableValues = "project, organization, folder, smart-folder",
-            required = true
+            required = true,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Current field name.", required = true)
+        @ApiParam(value = "Current field name.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true)
+        @ApiParam(value = "New field name.", required = true, example = "Importance")
         @PathParam("newName") String newName
     ) { return null; }
 
@@ -502,18 +607,24 @@ public class InsightResource {
               + "`/insight/move-field/{oid}/{fieldName}` for the OID form.",
         response = FieldDefinitionWithName.class
     )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — moved field definition.", response = FieldDefinitionWithName.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+    })
     public Response moveInsightFieldById(
         @ApiParam(
             value = "Owner type.",
             allowableValues = "project, organization, folder, smart-folder",
-            required = true
+            required = true,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Insight ID.", required = true)
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Name of the field to move.", required = true)
+        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
