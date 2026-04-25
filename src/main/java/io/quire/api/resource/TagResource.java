@@ -36,7 +36,16 @@ public class TagResource {
         )
         @PathParam("projectOid") String projectOid,
         @ApiParam(value = "Tag to create", required = true)
-        CreateTagBody data
+        CreateTagBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -60,7 +69,16 @@ public class TagResource {
         )
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Tag to create", required = true)
-        CreateTagBody data
+        CreateTagBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
@@ -142,7 +160,16 @@ public class TagResource {
         @ApiParam(value = "OID of the tag to update.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Tag updates", required = true)
-        UpdateTagBody data
+        UpdateTagBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE

@@ -299,7 +299,16 @@ public class ProjectResource {
         @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateProjectBody data
+        UpdateProjectBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -319,7 +328,16 @@ public class ProjectResource {
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateProjectBody data
+        UpdateProjectBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
 /* Not supported yet (security concern)
@@ -366,7 +384,16 @@ public class ProjectResource {
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Field definition to add.", required = true)
-        AddFieldBody data
+        AddFieldBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -401,7 +428,16 @@ public class ProjectResource {
         @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
         @ApiParam(value = "Field definition to add.", required = true)
-        AddFieldBody data
+        AddFieldBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -432,7 +468,16 @@ public class ProjectResource {
         @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field content.", required = true)
-        UpdateFieldBody data
+        UpdateFieldBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -457,7 +502,16 @@ public class ProjectResource {
         @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field content.", required = true)
-        UpdateFieldBody data
+        UpdateFieldBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE
@@ -521,7 +575,16 @@ public class ProjectResource {
         @ApiParam(value = "Current field name.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field name.", required = true, example = "Importance")
-        @PathParam("newName") String newName
+        @PathParam("newName") String newName,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -545,7 +608,16 @@ public class ProjectResource {
         @ApiParam(value = "Current field name.", required = true, example = "Priority")
         @PathParam("fieldName") String fieldName,
         @ApiParam(value = "New field name.", required = true, example = "Importance")
-        @PathParam("newName") String newName
+        @PathParam("newName") String newName,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -577,7 +649,16 @@ public class ProjectResource {
             example = "before=Priority",
             required = false
         )
-        @QueryParam("before") String before
+        @QueryParam("before") String before,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -606,7 +687,16 @@ public class ProjectResource {
             example = "before=Priority",
             required = false
         )
-        @QueryParam("before") String before
+        @QueryParam("before") String before,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Approval categories --------
@@ -633,7 +723,16 @@ public class ProjectResource {
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Category to add.", required = true)
-        AddAppvCatBody data
+        AddAppvCatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -664,7 +763,16 @@ public class ProjectResource {
         @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
         @ApiParam(value = "Category to add.", required = true)
-        AddAppvCatBody data
+        AddAppvCatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -692,7 +800,16 @@ public class ProjectResource {
         @ApiParam(value = "Category id.", required = true, example = "legal")
         @PathParam("catId") String catId,
         @ApiParam(value = "Changes to apply.", required = true)
-        UpdateAppvCatBody data
+        UpdateAppvCatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -718,7 +835,16 @@ public class ProjectResource {
         @ApiParam(value = "Category id.", required = true, example = "legal")
         @PathParam("catId") String catId,
         @ApiParam(value = "Changes to apply.", required = true)
-        UpdateAppvCatBody data
+        UpdateAppvCatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE

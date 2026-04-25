@@ -33,7 +33,16 @@ public class StatusResource {
         @ApiParam(value = "Project OID to add the status to.", required = true)
         @PathParam("projectOid") String projectOid,
         @ApiParam(value = "Status to create.", required = true)
-        CreateStatusBody data
+        CreateStatusBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -53,7 +62,16 @@ public class StatusResource {
         @ApiParam(value = "Project ID to add the status to.", example = "my_project", required = true)
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Status to create.", required = true)
-        CreateStatusBody data
+        CreateStatusBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Read (single) --------
@@ -154,7 +172,16 @@ public class StatusResource {
         @ApiParam(value = "Status value to update.", example = "100", required = true)
         @PathParam("value") int value,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateStatusBody data
+        UpdateStatusBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -177,7 +204,16 @@ public class StatusResource {
         @ApiParam(value = "Status value to update.", example = "100", required = true)
         @PathParam("value") int value,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateStatusBody data
+        UpdateStatusBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Delete --------

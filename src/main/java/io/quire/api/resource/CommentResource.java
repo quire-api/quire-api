@@ -34,7 +34,16 @@ public class CommentResource {
         @ApiParam(value = "OID of the task.", required = true)
         @PathParam("taskOid") String taskOid,
         @ApiParam(value = "Comment to create.", required = true)
-        CreateCommentBody data
+        CreateCommentBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -54,7 +63,16 @@ public class CommentResource {
         @ApiParam(value = "OID of the chat channel.", required = true)
         @PathParam("chatOid") String chatOid,
         @ApiParam(value = "Comment to create.", required = true)
-        CreateCommentBody data
+        CreateCommentBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -76,7 +94,16 @@ public class CommentResource {
         @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
         @ApiParam(value = "Comment to create.", required = true)
-        CreateCommentBody data
+        CreateCommentBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -98,7 +125,16 @@ public class CommentResource {
         @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId,
         @ApiParam(value = "Comment to create.", required = true)
-        CreateCommentBody data
+        CreateCommentBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- List --------
@@ -212,7 +248,16 @@ public class CommentResource {
         @ApiParam(value = "Comment OID.", required = true)
         @PathParam("commentOid") String commentOid,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateCommentBody data
+        UpdateCommentBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Attachments --------
@@ -266,7 +311,16 @@ public class CommentResource {
     })
     public Response undoRemoveCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)
-        @PathParam("commentOid") String commentOid
+        @PathParam("commentOid") String commentOid,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Delete --------

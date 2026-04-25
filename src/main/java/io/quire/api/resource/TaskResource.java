@@ -435,8 +435,16 @@ public class TaskResource {
             example = "before",
             allowableValues = "parent, before, after"
         )
-        @QueryParam("position") String position
+        @QueryParam("position") String position,
 
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -496,8 +504,16 @@ public class TaskResource {
             example = "before",
             allowableValues = "parent, before, after"
         )
-        @QueryParam("position") String position
+        @QueryParam("position") String position,
 
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -584,8 +600,16 @@ public class TaskResource {
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
         )
-        @QueryParam("custom-field") String customField
+        @QueryParam("custom-field") String customField,
 
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -683,8 +707,16 @@ public class TaskResource {
                 + "If omitted, `true` is assumed. Specify `false` to disable this.",
             example = "true"
         )
-        @QueryParam("custom-field") String customField
+        @QueryParam("custom-field") String customField,
 
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -779,7 +811,16 @@ public class TaskResource {
     })
     public Response undoRemoveTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
-        @PathParam("oid") String oid
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -809,7 +850,16 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
 
         @ApiParam(value = "Task ID.", required = true, example = "42")
-        @PathParam("taskId") int taskId
+        @PathParam("taskId") int taskId,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Approval --------
@@ -840,7 +890,17 @@ public class TaskResource {
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Transition to apply.", required = true)
-        ApproveTaskBody data
+        ApproveTaskBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full approval record, or `compact` for identifiers only "
+                + "(`{\"oid\": <taskOid>}`). See API description for "
+                + "`?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -860,7 +920,17 @@ public class TaskResource {
         @ApiParam(value = "Task ID.", required = true)
         @PathParam("taskId") int taskId,
         @ApiParam(value = "Transition to apply.", required = true)
-        ApproveTaskBody data
+        ApproveTaskBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full approval record, or `compact` for identifiers only "
+                + "(`{\"oid\": <taskOid>}`). See API description for "
+                + "`?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE

@@ -96,7 +96,17 @@ public class OrganizationResource {
         @ApiParam(value = "Organization ID.", example = "my_org", required = true)
         @PathParam("id") String id,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateOrganizationBody data
+        UpdateOrganizationBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full organization record, or `compact` for identifiers "
+                + "only (`{\"oid\":…, \"id\":…}`). See API description for "
+                + "`?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -118,7 +128,17 @@ public class OrganizationResource {
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateOrganizationBody data
+        UpdateOrganizationBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full organization record, or `compact` for identifiers "
+                + "only (`{\"oid\":…, \"id\":…}`). See API description for "
+                + "`?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
 /* Not supported yet (security concern)

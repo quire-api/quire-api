@@ -39,7 +39,16 @@ public class SublistResource {
         @ApiParam(value = "OID of the owner the new sublist will belong to.", required = true)
         @PathParam("ownerOid") String ownerOid,
         @ApiParam(value = "Sublist to create", required = true)
-        CreateSublistBody data
+        CreateSublistBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -65,7 +74,16 @@ public class SublistResource {
         @ApiParam(value = "ID of the owner the new sublist will belong to.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Sublist to create", required = true)
-        CreateSublistBody data
+        CreateSublistBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
@@ -171,7 +189,16 @@ public class SublistResource {
         @ApiParam(value = "OID of the sublist to update.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Sublist updates", required = true)
-        UpdateSublistBody data
+        UpdateSublistBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -199,7 +226,16 @@ public class SublistResource {
         @ApiParam(value = "Sublist updates", required = true)
         UpdateSublistBody data,
         @ApiParam(value = "ID of the sublist to update.", required = true, example = "1234")
-        @PathParam("sublistId") String sublistId
+        @PathParam("sublistId") String sublistId,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -221,7 +257,16 @@ public class SublistResource {
     })
     public Response undoRemoveSublistByOid(
         @ApiParam(value = "OID of the sublist to restore.", required = true)
-        @PathParam("oid") String oid
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -252,7 +297,16 @@ public class SublistResource {
         @ApiParam(value = "ID of the owner.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "ID of the sublist to restore.", required = true, example = "1234")
-        @PathParam("sublistId") String sublistId
+        @PathParam("sublistId") String sublistId,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE

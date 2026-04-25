@@ -37,7 +37,16 @@ public class DocResource {
         @ApiParam(value = "Owner OID.", required = true)
         @PathParam("ownerOid") String ownerOid,
         @ApiParam(value = "Document to create.", required = true)
-        CreateDocBody data
+        CreateDocBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -63,7 +72,16 @@ public class DocResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document to create.", required = true)
-        CreateDocBody data
+        CreateDocBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Read --------
@@ -173,7 +191,16 @@ public class DocResource {
         @ApiParam(value = "Document OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateDocBody data
+        UpdateDocBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -201,7 +228,16 @@ public class DocResource {
         @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateDocBody data
+        UpdateDocBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Undo remove --------
@@ -225,7 +261,16 @@ public class DocResource {
     })
     public Response undoRemoveDocByOid(
         @ApiParam(value = "OID of the document to restore.", required = true)
-        @PathParam("oid") String oid
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -256,7 +301,16 @@ public class DocResource {
         @ApiParam(value = "Owner ID.", required = true)
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true, example = "1234")
-        @PathParam("docId") String docId
+        @PathParam("docId") String docId,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     // -------- Delete --------

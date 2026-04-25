@@ -36,7 +36,16 @@ public class ChatResource {
         @ApiParam(value = "Owner OID.", required = true)
         @PathParam("ownerOid") String ownerOid,
         @ApiParam(value = "Chat channel to create.", required = true)
-        CreateChatBody data
+        CreateChatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -62,7 +71,16 @@ public class ChatResource {
         @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Chat channel to create.", required = true)
-        CreateChatBody data
+        CreateChatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
@@ -168,7 +186,16 @@ public class ChatResource {
         @ApiParam(value = "Chat channel OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateChatBody data
+        UpdateChatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -196,7 +223,16 @@ public class ChatResource {
         @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
         @PathParam("chatId") String chatId,
         @ApiParam(value = "Fields to update.", required = true)
-        UpdateChatBody data
+        UpdateChatBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -218,7 +254,16 @@ public class ChatResource {
     })
     public Response undoRemoveChatByOid(
         @ApiParam(value = "Chat channel OID.", required = true)
-        @PathParam("oid") String oid
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -249,7 +294,16 @@ public class ChatResource {
         @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Chat channel ID.", required = true, example = "1234")
-        @PathParam("chatId") String chatId
+        @PathParam("chatId") String chatId,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full record, or `compact` for identifiers only. "
+                + "See API description for `?return=` semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE
