@@ -702,6 +702,277 @@ public class TaskResource {
         @PathParam("taskId") int taskId
     ) { return null; }
 
+    // -------- Timelog --------
+
+    @POST
+    @Path("/add-timelog/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Add a time log to a task by ID.",
+        notes = "Adds a [time log](#definition-Timelog) to the task identified "
+              + "by project + task ID. The new log is credited to the "
+              + "authenticated caller unless `user` is supplied in the body.\n\n"
+              + "Identity of a log is the triple `(user, start, end)`. Sub-second "
+              + "precision in `start` / `end` is truncated to whole seconds.\n\n"
+              + "On success returns the task's full timelogs array. Example:\n\n"
+              + "```json\n"
+              + "[\n"
+              + "  {\n"
+              + "    \"start\": \"2026-04-26T09:00:00.000Z\",\n"
+              + "    \"end\": \"2026-04-26T10:30:00.000Z\",\n"
+              + "    \"billable\": true,\n"
+              + "    \"note\": \"Pair-programming session\",\n"
+              + "    \"user\": { \"oid\": \"u-123\", \"name\": \"John Doe\" }\n"
+              + "  }\n"
+              + "]\n"
+              + "```",
+        response = Timelog.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task's full timelogs array.",
+            response = Timelog.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — `start` / `end` "
+              + "missing or malformed, `end` precedes `start`, or `user` is unknown."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a log with the same "
+              + "`(user, start, end)` already exists; use `PUT /task/update-timelog/...` "
+              + "to amend it.")
+    })
+    public Response addTaskTimelogById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId,
+        @ApiParam(value = "Time log to add.", required = true)
+        AddTimelogBody data
+    ) { return null; }
+
+    @POST
+    @Path("/add-timelog/{oid}")
+    @ApiOperation(
+        value = "Add a time log to a task by OID.",
+        notes = "Adds a [time log](#definition-Timelog) to a task, "
+              + "identifying the task by OID. See "
+              + "`POST /task/add-timelog/id/{projectId}/{taskId}` for the "
+              + "preferred by-ID form, full semantics, and an example response.",
+        response = Timelog.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task's full timelogs array.",
+            response = Timelog.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request."),
+        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — duplicate `(user, start, end)`.")
+    })
+    public Response addTaskTimelogByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(value = "Time log to add.", required = true)
+        AddTimelogBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-timelog/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Update an existing time log on a task by ID.",
+        notes = "Updates an existing [time log](#definition-Timelog) on the "
+              + "task identified by project + task ID. The log to update is "
+              + "located by the `start`, `end`, and (optional) `user` query "
+              + "parameters — that triple is the log's identity. The body "
+              + "carries new values; any field omitted **or set to `null`** "
+              + "preserves the existing value (so an agent that always "
+              + "includes every field with `null` for unchanged ones is "
+              + "safe). To clear `note`, send an empty string.\n\n"
+              + "Sub-second precision in time values is truncated to whole "
+              + "seconds (in both query params and body).\n\n"
+              + "On success returns the task's full timelogs array. Example:\n\n"
+              + "```json\n"
+              + "[\n"
+              + "  {\n"
+              + "    \"start\": \"2026-04-26T09:15:00.000Z\",\n"
+              + "    \"end\": \"2026-04-26T10:45:00.000Z\",\n"
+              + "    \"billable\": true,\n"
+              + "    \"note\": \"Updated note\",\n"
+              + "    \"user\": { \"oid\": \"u-123\", \"name\": \"John Doe\" }\n"
+              + "  }\n"
+              + "]\n"
+              + "```",
+        response = Timelog.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task's full timelogs array.",
+            response = Timelog.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — query params missing "
+              + "or malformed, or new `end` precedes new `start`."),
+        @ApiResponse(code = 404, message = "Not Found — no log matches the "
+              + "identifying triple, or the task does not exist.")
+    })
+    public Response updateTaskTimelogById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId,
+        @ApiParam(
+            value = "Start timestamp of the existing log (identifies the log "
+                  + "together with `end` and `user`). ISO 8601, UTC.",
+            example = "2026-04-26T09:00:00Z",
+            required = true
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "End timestamp of the existing log. ISO 8601, UTC.",
+            example = "2026-04-26T10:30:00Z",
+            required = true
+        )
+        @QueryParam("end") String end,
+        @ApiParam(
+            value = "(Optional) User the existing log is credited to (OID, "
+                  + "ID, or email). Omitted defaults to the authenticated "
+                  + "caller.",
+            example = "john.doe@example.com"
+        )
+        @QueryParam("user") String user,
+        @ApiParam(value = "Fields to change.", required = true)
+        UpdateTimelogBody data
+    ) { return null; }
+
+    @PUT
+    @Path("/update-timelog/{oid}")
+    @ApiOperation(
+        value = "Update an existing time log on a task by OID.",
+        notes = "Updates an existing [time log](#definition-Timelog), "
+              + "identifying the task by OID. See "
+              + "`PUT /task/update-timelog/id/{projectId}/{taskId}` for the "
+              + "preferred by-ID form, full semantics, and an example response.",
+        response = Timelog.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task's full timelogs array.",
+            response = Timelog.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request."),
+        @ApiResponse(code = 404, message = "Not Found — no log matches the "
+              + "identifying triple, or the task does not exist.")
+    })
+    public Response updateTaskTimelogByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(
+            value = "Start timestamp of the existing log. ISO 8601, UTC.",
+            example = "2026-04-26T09:00:00Z",
+            required = true
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "End timestamp of the existing log. ISO 8601, UTC.",
+            example = "2026-04-26T10:30:00Z",
+            required = true
+        )
+        @QueryParam("end") String end,
+        @ApiParam(
+            value = "(Optional) User the existing log is credited to. "
+                  + "Defaults to the caller.",
+            example = "john.doe@example.com"
+        )
+        @QueryParam("user") String user,
+        @ApiParam(value = "Fields to change.", required = true)
+        UpdateTimelogBody data
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-timelog/id/{projectId}/{taskId}")
+    @ApiOperation(
+        value = "Remove a time log from a task by ID.",
+        notes = "Removes the [time log](#definition-Timelog) identified by "
+              + "the `(user, start, end)` triple from the task identified by "
+              + "project + task ID. Sub-second precision in the query params "
+              + "is truncated to whole seconds before matching.\n\n"
+              + "On success returns the task's remaining timelogs array "
+              + "(empty when no logs remain). Example after removing the "
+              + "only log:\n\n"
+              + "```json\n"
+              + "[]\n"
+              + "```",
+        response = Timelog.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task's remaining timelogs "
+              + "array (empty when none remain).",
+            response = Timelog.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — `start` / `end` "
+              + "query params missing or malformed."),
+        @ApiResponse(code = 404, message = "Not Found — no log matches the "
+              + "triple, or the task does not exist.")
+    })
+    public Response removeTaskTimelogById(
+        @ApiParam(value = "Project ID.", required = true)
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true)
+        @PathParam("taskId") int taskId,
+        @ApiParam(
+            value = "Start timestamp of the log to remove. ISO 8601, UTC.",
+            example = "2026-04-26T09:00:00Z",
+            required = true
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "End timestamp of the log to remove. ISO 8601, UTC.",
+            example = "2026-04-26T10:30:00Z",
+            required = true
+        )
+        @QueryParam("end") String end,
+        @ApiParam(
+            value = "(Optional) User the log is credited to. Defaults to "
+                  + "the authenticated caller.",
+            example = "john.doe@example.com"
+        )
+        @QueryParam("user") String user
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-timelog/{oid}")
+    @ApiOperation(
+        value = "Remove a time log from a task by OID.",
+        notes = "Removes a [time log](#definition-Timelog) from a task, "
+              + "identifying the task by OID. See "
+              + "`DELETE /task/remove-timelog/id/{projectId}/{taskId}` for "
+              + "the preferred by-ID form, full semantics, and an example response.",
+        response = Timelog.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — task's remaining timelogs "
+              + "array (empty when none remain).",
+            response = Timelog.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request."),
+        @ApiResponse(code = 404, message = "Not Found — no log matches the "
+              + "triple, or the task does not exist.")
+    })
+    public Response removeTaskTimelogByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(
+            value = "Start timestamp of the log to remove. ISO 8601, UTC.",
+            example = "2026-04-26T09:00:00Z",
+            required = true
+        )
+        @QueryParam("start") String start,
+        @ApiParam(
+            value = "End timestamp of the log to remove. ISO 8601, UTC.",
+            example = "2026-04-26T10:30:00Z",
+            required = true
+        )
+        @QueryParam("end") String end,
+        @ApiParam(
+            value = "(Optional) User the log is credited to.",
+            example = "john.doe@example.com"
+        )
+        @QueryParam("user") String user
+    ) { return null; }
+
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
