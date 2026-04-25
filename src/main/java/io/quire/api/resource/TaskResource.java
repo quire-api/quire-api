@@ -54,7 +54,20 @@ public class TaskResource {
             example = "before",
             allowableValues = "parent, before, after"
         )
-        @QueryParam("position") String position
+        @QueryParam("position") String position,
+
+        @ApiParam(
+            value = "(Optional) Response shape:\n"
+                + "- `full` (default): the full task record.\n"
+                + "- `compact`: identifiers only (`{\"oid\":…, \"id\":…}`). "
+                + "Saves payload, tokens, and a server-side reload + render. "
+                + "Recommended for MCP / scripted callers that only need the "
+                + "OID/ID to chain follow-up calls.\n\n"
+                + "Any other value returns `400 Bad Request`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -98,7 +111,17 @@ public class TaskResource {
         )
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Task to create", required = true)
-        CreateTaskBody data
+        CreateTaskBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full task record, or `compact` for identifiers only "
+                + "(`{\"oid\":…, \"id\":…}`). See "
+                + "`POST /task/{oid}` for full semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @POST
@@ -142,7 +165,17 @@ public class TaskResource {
             example = "before",
             allowableValues = "parent, before, after"
         )
-        @QueryParam("position") String position
+        @QueryParam("position") String position,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full task record, or `compact` for identifiers only "
+                + "(`{\"oid\":…, \"id\":…}`). See "
+                + "`POST /task/{oid}` for full semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
@@ -287,7 +320,21 @@ public class TaskResource {
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid,
         @ApiParam(value = "Updated task content.", required = true)
-        UpdateTaskBody data
+        UpdateTaskBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape:\n"
+                + "- `full` (default): the full task record.\n"
+                + "- `compact`: identifiers only (`{\"oid\":…, \"id\":…}`). "
+                + "Saves payload, tokens, and a server-side reload + render. "
+                + "Recommended for MCP / scripted callers that already have "
+                + "the OID/ID and just need confirmation that the update "
+                + "succeeded.\n\n"
+                + "Any other value returns `400 Bad Request`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
@@ -329,7 +376,17 @@ public class TaskResource {
 
         @PathParam("taskId") int taskId,
         @ApiParam(value = "Updated task content.", required = true)
-        UpdateTaskBody data
+        UpdateTaskBody data,
+
+        @ApiParam(
+            value = "(Optional) Response shape: `full` (default) for the "
+                + "full task record, or `compact` for identifiers only "
+                + "(`{\"oid\":…, \"id\":…}`). See "
+                + "`PUT /task/{oid}` for full semantics.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @PUT
