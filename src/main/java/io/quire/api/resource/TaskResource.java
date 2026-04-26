@@ -409,7 +409,7 @@ public class TaskResource {
         @ApiResponse(code = 404, message = "Not Found — task or reference task does not exist.")
     })
     public Response moveTask(
-        @ApiParam(value = "Task OID.", required = true)
+        @ApiParam(value = "Task OID to be moved.", required = true)
         @PathParam("oid") String oid,
 
         @ApiParam(
@@ -478,7 +478,7 @@ public class TaskResource {
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true, example = "42")
+        @ApiParam(value = "Task ID to be moved.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(
@@ -535,7 +535,7 @@ public class TaskResource {
         @ApiResponse(code = 404, message = "Not Found — task, target project, or reference task does not exist.")
     })
     public Response transferTask(
-        @ApiParam(value = "Task OID.", required = true)
+        @ApiParam(value = "Task OID to be transferred.", required = true)
         @PathParam("oid") String oid,
 
         @ApiParam(
@@ -642,7 +642,7 @@ public class TaskResource {
         )
         @PathParam("projectId") String projectId,
 
-        @ApiParam(value = "Task ID.", required = true, example = "42")
+        @ApiParam(value = "Task ID to be transferred.", required = true, example = "42")
         @PathParam("taskId") int taskId,
 
         @ApiParam(
@@ -1326,7 +1326,7 @@ public class TaskResource {
     public Response bulkAddTaskById(
         @ApiParam(value = "Project ID.", required = true)
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Tasks to create.", required = true)
+        @ApiParam(value = "Tasks to be created.", required = true)
         java.util.List<CreateTaskBody> data,
         @ApiParam(
             value = "(Optional) Response shape — `full` (default) or "
@@ -1397,7 +1397,7 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Anchor task ID.", required = true)
         @PathParam("taskId") int taskId,
-        @ApiParam(value = "Tasks to create.", required = true)
+        @ApiParam(value = "Tasks to be created.", required = true)
         java.util.List<CreateTaskBody> data,
         @ApiParam(
             value = "(Optional) Placement of the new tasks relative to the "
@@ -1451,7 +1451,7 @@ public class TaskResource {
             required = true
         )
         @PathParam("oid") String oid,
-        @ApiParam(value = "Tasks to create.", required = true)
+        @ApiParam(value = "Tasks to be created.", required = true)
         java.util.List<CreateTaskBody> data,
         @ApiParam(
             value = "(Optional) Placement when `oid` refers to a task: "
@@ -1543,7 +1543,7 @@ public class TaskResource {
     public Response bulkUpdateTaskById(
         @ApiParam(value = "Project ID.", required = true)
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Tasks to update.", required = true)
+        @ApiParam(value = "Tasks to be updated.", required = true)
         java.util.List<BulkUpdateTaskItem> data,
         @ApiParam(
             value = "(Optional) Response shape — `full` (default) or `compact`.",
@@ -1580,7 +1580,7 @@ public class TaskResource {
     public Response bulkUpdateTaskByOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid,
-        @ApiParam(value = "Tasks to update.", required = true)
+        @ApiParam(value = "Tasks to be updated.", required = true)
         java.util.List<BulkUpdateTaskItem> data,
         @ApiParam(
             value = "(Optional) Response shape — `full` (default) or `compact`.",
@@ -1661,7 +1661,7 @@ public class TaskResource {
         @ApiParam(value = "Project ID.", required = true)
         @PathParam("projectId") String projectId,
         @ApiParam(
-            value = "Task references to remove. Each element is a task OID "
+            value = "Task references to be removed. Each element is a task OID "
                   + "(string), an integer ID, or a `\"#<id>\"` string. "
                   + "Mixed forms allowed.",
             required = true
@@ -1697,12 +1697,188 @@ public class TaskResource {
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid,
         @ApiParam(
-            value = "Task references to remove. Each element is a task OID "
+            value = "Task references to be removed. Each element is a task OID "
                   + "(string), an integer ID, or a `\"#<id>\"` string. "
                   + "Mixed forms allowed.",
             required = true
         )
         java.util.List<Object> data
+    ) { return null; }
+
+    // -------- Bulk move (#24554) --------
+
+    @PUT
+    @Path("/bulk-move/id/{projectId}")
+    @ApiOperation(
+        value = "Bulk-move N tasks within a project by ID.",
+        notes = "Repositions up to **100 tasks** within a project to the "
+              + "same destination anchor in one transaction. Same query-"
+              + "param grammar as single-task `PUT /task/move/...`:\n"
+              + "- `?task=root` — move items to project root (only valid "
+              + "with default `?position=parent`).\n"
+              + "- `?task={ref}&position=parent` (default) — items become "
+              + "children of the reference task.\n"
+              + "- `?task={ref}&position=before` — items become siblings "
+              + "immediately before the reference.\n"
+              + "- `?task={ref}&position=after` — items become siblings "
+              + "immediately after the reference.\n\n"
+              + "`{ref}` follows the URL grammar (same as single-task "
+              + "move): the by-ID URL form expects an integer task ID "
+              + "(or `root`); the by-OID form expects a task OID. "
+              + "Items in the **body** use the bulk mixed-form convention "
+              + "(OID / integer ID / `#<id>` string) — same as bulk-remove.\n\n"
+              + "Example: `PUT /task/bulk-move/id/my_project?task=99&return=compact`\n\n"
+              + "Request body (mixed-form refs):\n\n"
+              + "```json\n"
+              + "[ 42, \"#17\", \"iuRRiKoyrxdBFhFTTo\" ]\n"
+              + "```\n\n"
+              + "Response (compact mode; slot 1 was already removed by another caller, so it's `null`):\n\n"
+              + "```json\n"
+              + "[\n"
+              + "  { \"oid\": \"abc1Foo\", \"id\": 42 },\n"
+              + "  null,\n"
+              + "  { \"oid\": \"iuRRiKoyrxdBFhFTTo\", \"id\": 88 }\n"
+              + "]\n"
+              + "```\n\n"
+              + "**Atomic on real bugs**: validation / permission / DB "
+              + "errors (cycle detection — making a task its own ancestor — "
+              + "throws `400`) propagate as `{code, message}` with "
+              + "`items[i]:` prefix and roll back the whole batch.\n\n"
+              + "**Skip-not-found**: items whose target task can't be "
+              + "resolved (already removed, never existed, cascade-removed "
+              + "by an earlier item, in a different project, etc.) are "
+              + "silently skipped — the corresponding response slot is "
+              + "`null`. Idempotent for agents.\n\n"
+              + "**Order preservation (sliding chain)**: items are moved "
+              + "in submitted order. Items 1..N-1 are positioned *after "
+              + "the previous successful move*, regardless of the URL "
+              + "`?position=` — without this, `?position=after R` would "
+              + "reverse the batch.\n\n"
+              + "**Rate-limit cost**: each bulk call costs `N` units "
+              + "against the per-minute / per-hour API quota, where `N` "
+              + "is `items.length` — same total cost as `N` equivalent "
+              + "single-task moves.\n\n"
+              + "All items must belong to the project in the URL. "
+              + "Cross-project moves go through bulk-transfer (see #24555).",
+        response = TaskWithParentInfo.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of moved tasks "
+              + "(slots for not-found items are `null`).",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
+              + "array, empty, over the 100-item cap, item shape error, "
+              + "missing `?task=`, invalid `?position=`, "
+              + "`?task=root&position=before|after`, cycle detection "
+              + "(item is an ancestor of `?task=`), or cross-project ref. "
+              + "Whole batch rolled back.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks "
+              + "permission on the project or any task in the batch "
+              + "(whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project (URL "
+              + "scope) or `?task=` reference does not exist. (Item-"
+              + "level not-found is silent skip.)",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
+              + "rate-limit cost (`items.length` units) would exceed the "
+              + "caller's per-minute / per-hour API quota.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkMoveTaskById(
+        @ApiParam(value = "Project ID.", required = true,
+            example = "my_project")
+        @PathParam("projectId") String projectId,
+        @ApiParam(
+            value = "Task references to be moved. Each element is a task OID "
+                  + "(string), an integer ID, or a `\"#<id>\"` string. "
+                  + "Mixed forms allowed.",
+            required = true
+        )
+        java.util.List<Object> data,
+        @ApiParam(
+            value = "Reference task ID (the destination anchor for the "
+                  + "whole batch), or `root` to move items to the project "
+                  + "root.",
+            required = true,
+            example = "99"
+        )
+        @QueryParam("task") String task,
+        @ApiParam(
+            value = "(Optional) Placement of moved items relative to the "
+                  + "reference: `parent` (default), `before`, or `after`. "
+                  + "`before` / `after` require `?task=` to refer to a "
+                  + "task (not `root`).",
+            example = "after",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @PUT
+    @Path("/bulk-move/{projectOid}")
+    @ApiOperation(
+        value = "Bulk-move N tasks within a project by OID.",
+        notes = "OID-form of `PUT /task/bulk-move/id/{projectId}` — see "
+              + "that endpoint for body shape, atomic / skip-not-found "
+              + "semantics, sliding-chain order preservation, and "
+              + "rate-limit details.\n\n"
+              + "Note: `{ref}` (in `?task=`) is a task OID (or `root`) "
+              + "in this URL form, matching the by-OID grammar.",
+        response = TaskWithParentInfo.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of moved tasks.",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkMoveTaskByOid(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("projectOid") String projectOid,
+        @ApiParam(
+            value = "Task references to be moved. Each element is a task OID "
+                  + "(string), an integer ID, or a `\"#<id>\"` string.",
+            required = true
+        )
+        java.util.List<Object> data,
+        @ApiParam(
+            value = "Reference task OID (destination anchor), or `root`.",
+            required = true,
+            example = "iuRRiKoyrxdBFhFTTo"
+        )
+        @QueryParam("task") String task,
+        @ApiParam(
+            value = "(Optional) `parent` (default), `before`, or `after`.",
+            example = "after",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE
