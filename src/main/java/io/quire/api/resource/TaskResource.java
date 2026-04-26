@@ -1256,7 +1256,7 @@ public class TaskResource {
     @Path("/bulk-add/id/{projectId}")
     @ApiOperation(
         value = "Bulk-add N root tasks to a project by ID.",
-        notes = "Creates up to **100 root tasks** in one transaction.\n\n"
+        notes = "Creates up to **300 root tasks** in one transaction.\n\n"
               + "Body is a top-level JSON array of `CreateTaskBody` items "
               + "(no envelope) — same shape as single-task `POST /task/...`. "
               + "Items can include nested `tasks` to create subtrees in the "
@@ -1306,7 +1306,7 @@ public class TaskResource {
               + "(one per submitted item, root only for nested subtrees).",
             response = Task.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
-              + "array, empty, over the 100-item cap, or any per-item "
+              + "array, empty, over the 300-item cap, or any per-item "
               + "validation failure (whole batch rolled back).",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
@@ -1342,7 +1342,7 @@ public class TaskResource {
     @Path("/bulk-add/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Bulk-add N tasks relative to a task by ID.",
-        notes = "Creates up to **100 tasks** anchored at the task identified "
+        notes = "Creates up to **300 tasks** anchored at the task identified "
               + "by `projectId` + `taskId`. The optional `?position=` query "
               + "parameter mirrors single-task `POST /task/...` semantics:\n"
               + "- `parent` (default): children of the anchor task.\n"
@@ -1419,7 +1419,7 @@ public class TaskResource {
     @Path("/bulk-add/{oid}")
     @ApiOperation(
         value = "Bulk-add N tasks by OID (project or task anchor).",
-        notes = "Creates up to **100 tasks** anchored at the entity "
+        notes = "Creates up to **300 tasks** anchored at the entity "
               + "identified by `oid` — a project OID creates root tasks, "
               + "a task OID creates subtasks (or siblings, depending on "
               + "`?position=`).\n\n"
@@ -1473,7 +1473,7 @@ public class TaskResource {
     @Path("/bulk-update/id/{projectId}")
     @ApiOperation(
         value = "Bulk-update N tasks in a project by ID.",
-        notes = "Updates up to **100 tasks** in one transaction. Body is "
+        notes = "Updates up to **300 tasks** in one transaction. Body is "
               + "a top-level JSON array of `BulkUpdateTaskItem` — each item "
               + "carries exactly one of `oid` / `id` (mutually exclusive) "
               + "plus the `UpdateTaskBody`-shape fields to apply.\n\n"
@@ -1522,7 +1522,7 @@ public class TaskResource {
               + "(slots for not-found items are `null`).",
             response = Task.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
-              + "array, empty, over the 100-item cap, item shape error "
+              + "array, empty, over the 300-item cap, item shape error "
               + "(both/neither oid+id, malformed ref), or any per-item "
               + "validation failure (whole batch rolled back).",
             response = ErrorResponse.class),
@@ -1594,7 +1594,7 @@ public class TaskResource {
     @Path("/bulk-remove/id/{projectId}")
     @ApiOperation(
         value = "Bulk-remove N tasks from a project by ID.",
-        notes = "Removes up to **100 tasks** in one transaction. Body is "
+        notes = "Removes up to **300 tasks** in one transaction. Body is "
               + "a top-level JSON array of task references — each element "
               + "is one of:\n"
               + "- a task OID (string),\n"
@@ -1640,7 +1640,7 @@ public class TaskResource {
               + "elements (slots for not-found items are `null`).",
             response = Object.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
-              + "array, empty, over the 100-item cap, or any item is a "
+              + "array, empty, over the 300-item cap, or any item is a "
               + "malformed ref (whole batch rolled back).",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
@@ -1711,7 +1711,7 @@ public class TaskResource {
     @Path("/bulk-move/id/{projectId}")
     @ApiOperation(
         value = "Bulk-move N tasks within a project by ID.",
-        notes = "Repositions up to **100 tasks** within a project to the "
+        notes = "Repositions up to **300 tasks** within a project to the "
               + "same destination anchor in one transaction. Same query-"
               + "param grammar as single-task `PUT /task/move/...`:\n"
               + "- `?task=root` — move items to project root (only valid "
@@ -1768,7 +1768,7 @@ public class TaskResource {
               + "(slots for not-found items are `null`).",
             response = TaskWithParentInfo.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
-              + "array, empty, over the 100-item cap, item shape error, "
+              + "array, empty, over the 300-item cap, item shape error, "
               + "missing `?task=`, invalid `?position=`, "
               + "`?task=root&position=before|after`, cycle detection "
               + "(item is an ancestor of `?task=`), or cross-project ref. "
@@ -1887,7 +1887,7 @@ public class TaskResource {
     @Path("/bulk-transfer/id/{sourceProjectId}")
     @ApiOperation(
         value = "Bulk-transfer N tasks across projects by ID.",
-        notes = "Transfers up to **100 tasks** from the source project "
+        notes = "Transfers up to **300 tasks** from the source project "
               + "(URL path) to a different target project (`?project=`) "
               + "in one transaction. Same query-param grammar as "
               + "single-task `PUT /task/transfer/...`:\n"
@@ -1943,7 +1943,7 @@ public class TaskResource {
               + "tasks (slots for not-found items are `null`).",
             response = TaskWithParentInfo.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
-              + "array, empty, over the 100-item cap, item shape error, "
+              + "array, empty, over the 300-item cap, item shape error, "
               + "missing `?project=`, invalid `?position=`, "
               + "`?task=root&position=before|after`, `?project=` resolves "
               + "to the URL source project, or any per-item validation "
