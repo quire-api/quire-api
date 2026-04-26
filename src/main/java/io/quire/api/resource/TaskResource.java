@@ -229,15 +229,46 @@ public class TaskResource {
     @GET
     @Path("/list/id/{projectId}/{taskId}")
     @ApiOperation(
-        value = "Get all subtasks of the given task.",
-        notes = "Returns all direct subtasks of the specified task.\n"
-              + "Note: only one level is returned—subtasks of subtasks are not included; retrieve them recursively.",
+        value = "Get the subtasks of the given task.",
+        notes = "By default returns only the direct subtasks of `{taskId}` (one level). "
+              + "To fetch a whole subtree in a single call, set `?depth=N` or `?depth=full` — "
+              + "each task in the response then carries a nested `tasks` field with its "
+              + "walked children, recursively.\n\n"
+
+              + "**When to use which:**\n"
+              + "- Default (no `?depth`): you only need the immediate children.\n"
+              + "- `?depth=2` or `3`: small subtree where you know the shape.\n"
+              + "- `?depth=full`: full subtree snapshot — pair with `?return=compact` "
+              + "for navigation/lookup workloads to keep the payload (and LLM-token cost) small.\n\n"
+
+              + "**Per-tier total-nodes cap when `?depth>1`:** "
+              + "Free → rejected (`402`), Pro → 500, Premium → 2,000, "
+              + "Enterprise → unlimited (bounded only by the global response-size ceiling). "
+              + "When the cap fires mid-walk, the partial subtree is returned and the "
+              + "**last emitted sibling at the cropped level carries `\"cropped\": true`**. "
+              + "Recovery: call `GET /task/list/id/{prj}/{croppedSiblingParentId}` "
+              + "(default `?depth=1`) to fetch the rest of that level — flat single-level "
+              + "lists have no cap.\n\n"
+
+              + "**Tree shape signals for the agent:**\n"
+              + "- Node has a `tasks` array → its children were walked. Empty array means a true leaf.\n"
+              + "- Node has no `tasks` field → its children were not walked (depth limit "
+              + "reached, or cap fired before reaching it). Drill in if you need them.\n"
+              + "- Node has `\"cropped\": true` → more siblings of this node exist at the same level.\n\n"
+
+              + "**Notes:** Subtree responses (`?depth>1`) omit the per-task `childCount` "
+              + "field — the `tasks` array is the canonical signal. The flat default "
+              + "(`?depth=1`) and single-task `GET /task/{oid}` still include `childCount`. "
+              + "`?depth>1` is mutually exclusive with `?limit=` and `?cursor=` — pick "
+              + "either snapshot mode or per-level pagination, not both.",
         response = Task.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — list of subtasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — list of subtasks (may be empty). With `?depth>1`, each entry may carry nested `tasks` + `cropped` fields.",
             response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `depth` value, `?depth>1` without a task ID in the URL, or `?depth>1` combined with `?limit`/`?cursor`."),
+        @ApiResponse(code = 402, message = "Payment Required — `?depth>1` requires the Professional plan or above. Use `?depth=1` (or omit `?depth`) for unrestricted flat per-level listing."),
         @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
     })
     public Response getSubtasks(
@@ -258,7 +289,30 @@ public class TaskResource {
             example = "active",
             required = false
         )
-        @QueryParam("status") String status
+        @QueryParam("status") String status,
+
+        @ApiParam(
+            value = "Subtree depth. Omit or `1` for the default flat single-level list "
+                  + "(immediate children only). Any positive integer returns a multi-level "
+                  + "subtree capped at the given depth; `full` walks every level (bounded by "
+                  + "the per-tier total-nodes cap). `?depth>1` requires the Professional plan "
+                  + "or above and is mutually exclusive with `?limit`/`?cursor`.",
+            example = "2",
+            required = false
+        )
+        @QueryParam("depth") String depth,
+
+        @ApiParam(
+            value = "Response shape. `full` (default) returns the standard task records; "
+                  + "`compact` returns identifier-only nodes — `{oid, id, tasks?, cropped?}` "
+                  + "in subtree mode, `{oid, id}` otherwise. Pair `?depth=full&return=compact` "
+                  + "to fetch a whole subtree's identifier graph at minimal token cost; the "
+                  + "agent then `GET /task/{oid}` for only the nodes it wants in detail.",
+            example = "compact",
+            allowableValues = "full, compact",
+            required = false
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
