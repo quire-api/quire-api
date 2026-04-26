@@ -1881,6 +1881,225 @@ public class TaskResource {
         @QueryParam("return") String returnMode
     ) { return null; }
 
+    // -------- Bulk transfer (#24555) --------
+
+    @PUT
+    @Path("/bulk-transfer/id/{sourceProjectId}")
+    @ApiOperation(
+        value = "Bulk-transfer N tasks across projects by ID.",
+        notes = "Transfers up to **100 tasks** from the source project "
+              + "(URL path) to a different target project (`?project=`) "
+              + "in one transaction. Same query-param grammar as "
+              + "single-task `PUT /task/transfer/...`:\n"
+              + "- `?project={target}` (required) — target project ID, "
+              + "or `-` for the user's Inbox.\n"
+              + "- `?task={ref}` (optional) — destination anchor in the "
+              + "target project. Omitted, empty, or `root` → items "
+              + "become root tasks of the target.\n"
+              + "- `?position=` — `parent` (default), `before`, or `after`.\n"
+              + "- `?invite`, `?tag`, `?status`, `?custom-field` — auto-"
+              + "remap flags, all default `true`.\n\n"
+              + "Items in the **body** use the bulk mixed-form convention "
+              + "(OID / integer ID / `#<id>` string) — same as bulk-remove "
+              + "/ bulk-move.\n\n"
+              + "Example: `PUT /task/bulk-transfer/id/my_project?project=archive_2026&task=root&return=compact`\n\n"
+              + "Request body (mixed-form refs):\n\n"
+              + "```json\n"
+              + "[ 42, \"#99\", \"iuRRiKoyrxdBFhFTTo\" ]\n"
+              + "```\n\n"
+              + "Response (compact mode; OIDs are preserved across "
+              + "transfer, IDs are reassigned from the target's counter):\n\n"
+              + "```json\n"
+              + "[\n"
+              + "  { \"oid\": \"abc1Foo\",            \"id\": 7 },\n"
+              + "  null,\n"
+              + "  { \"oid\": \"iuRRiKoyrxdBFhFTTo\", \"id\": 8 }\n"
+              + "]\n"
+              + "```\n\n"
+              + "**Atomic on real bugs**: validation / permission / DB "
+              + "errors propagate as `{code, message}` with `items[i]:` "
+              + "prefix and roll back **both** source and target locks.\n\n"
+              + "**Skip-not-found**: items not in the source project "
+              + "(already in target / in another project / removed / "
+              + "never existed) are silently skipped — the response slot "
+              + "is `null`.\n\n"
+              + "**Source == target**: if `?project=` resolves to the "
+              + "same project as the URL source, the whole batch is "
+              + "rejected with `400` (use `bulk-move` for within-project "
+              + "reorder).\n\n"
+              + "**Order preservation (sliding chain)**: items are "
+              + "transferred in submitted order — items 1..N-1 land "
+              + "*after the previous successful transfer*, regardless "
+              + "of `?position=`.\n\n"
+              + "**Rate-limit cost**: each bulk call costs `N` units "
+              + "against the per-minute / per-hour API quota, where `N` "
+              + "is `items.length` — same total cost as `N` equivalent "
+              + "single-task transfers.",
+        response = TaskWithParentInfo.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of transferred "
+              + "tasks (slots for not-found items are `null`).",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — body not a JSON "
+              + "array, empty, over the 100-item cap, item shape error, "
+              + "missing `?project=`, invalid `?position=`, "
+              + "`?task=root&position=before|after`, `?project=` resolves "
+              + "to the URL source project, or any per-item validation "
+              + "failure. Whole batch rolled back.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks "
+              + "permission on the source or target project, or on any "
+              + "individual task in the batch. Whole batch rolled back.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — source project, "
+              + "target project, or `?task=` reference does not exist. "
+              + "(Item-level not-found is silent skip.)",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests — the "
+              + "batch's rate-limit cost (`items.length` units) would "
+              + "exceed the caller's per-minute / per-hour API quota.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkTransferTaskById(
+        @ApiParam(value = "Source project ID.", required = true,
+            example = "my_project")
+        @PathParam("sourceProjectId") String sourceProjectId,
+        @ApiParam(
+            value = "Task references to be transferred. Each element is "
+                  + "a task OID (string), an integer ID, or a `\"#<id>\"` "
+                  + "string. Mixed forms allowed.",
+            required = true
+        )
+        java.util.List<Object> data,
+        @ApiParam(
+            value = "Target project ID. Specify `-` for the user's Inbox.",
+            required = true,
+            example = "archive_2026"
+        )
+        @QueryParam("project") String project,
+        @ApiParam(
+            value = "(Optional) Reference task ID in the target project "
+                  + "(destination anchor for the whole batch), or `root` "
+                  + "to transfer items to the target project's root.",
+            example = "500"
+        )
+        @QueryParam("task") String task,
+        @ApiParam(
+            value = "(Optional) Placement of transferred items relative "
+                  + "to the reference: `parent` (default), `before`, or "
+                  + "`after`. `before` / `after` require `?task=` to "
+                  + "refer to a task (not `root`).",
+            example = "parent",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
+        @ApiParam(
+            value = "(Optional, default `true`) Auto-invite assignees to "
+                  + "the target project if not already members.",
+            example = "true"
+        )
+        @QueryParam("invite") String invite,
+        @ApiParam(
+            value = "(Optional, default `true`) Auto-create tags in the "
+                  + "target project if not already present.",
+            example = "true"
+        )
+        @QueryParam("tag") String tag,
+        @ApiParam(
+            value = "(Optional, default `true`) Auto-remap statuses to "
+                  + "the target project.",
+            example = "true"
+        )
+        @QueryParam("status") String status,
+        @ApiParam(
+            value = "(Optional, default `true`) Auto-create / remap "
+                  + "non-empty custom fields in the target project.",
+            example = "true"
+        )
+        @QueryParam("custom-field") String customField,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @PUT
+    @Path("/bulk-transfer/{sourceProjectOid}")
+    @ApiOperation(
+        value = "Bulk-transfer N tasks across projects by OID.",
+        notes = "OID-form of `PUT /task/bulk-transfer/id/{sourceProjectId}` "
+              + "— see that endpoint for body shape, atomic / skip-not-"
+              + "found semantics, sliding-chain order preservation, "
+              + "auto-remap flags, and rate-limit details.\n\n"
+              + "Note: `?project=` and `?task=` are OIDs (or `root` / "
+              + "`-`) in this URL form, matching the by-OID grammar.",
+        response = TaskWithParentInfo.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of transferred tasks.",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — source or target "
+              + "project does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 413, message = "Payload Too Large.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests.",
+            response = ErrorResponse.class)
+    })
+    public Response bulkTransferTaskByOid(
+        @ApiParam(value = "Source project OID.", required = true)
+        @PathParam("sourceProjectOid") String sourceProjectOid,
+        @ApiParam(
+            value = "Task references to be transferred. Each element is "
+                  + "a task OID (string), an integer ID, or a `\"#<id>\"` "
+                  + "string.",
+            required = true
+        )
+        java.util.List<Object> data,
+        @ApiParam(
+            value = "Target project OID. Specify `-` for the user's Inbox.",
+            required = true,
+            example = "0Mg3VQ8kWeiVbLH1PrjzUc89"
+        )
+        @QueryParam("project") String project,
+        @ApiParam(
+            value = "(Optional) Reference task OID, or `root`.",
+            example = "iuRRiKoyrxdBFhFTTo"
+        )
+        @QueryParam("task") String task,
+        @ApiParam(
+            value = "(Optional) `parent` (default), `before`, or `after`.",
+            example = "parent",
+            allowableValues = "parent, before, after"
+        )
+        @QueryParam("position") String position,
+        @ApiParam(value = "(Optional, default `true`)", example = "true")
+        @QueryParam("invite") String invite,
+        @ApiParam(value = "(Optional, default `true`)", example = "true")
+        @QueryParam("tag") String tag,
+        @ApiParam(value = "(Optional, default `true`)", example = "true")
+        @QueryParam("status") String status,
+        @ApiParam(value = "(Optional, default `true`)", example = "true")
+        @QueryParam("custom-field") String customField,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default) or `compact`.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
     @DELETE
     @Path("/{oid}")
     @ApiOperation(
