@@ -221,6 +221,11 @@ public class TaskResource {
               + "Pair with `?return=compact` to render each item as `{oid, id, cursor?}` "
               + "for navigation/lookup workloads at minimal token cost.\n\n"
 
+              + "**Rate-limit cost** (#24558): proportional to the number of items returned — "
+              + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer items) costs 1, "
+              + "`?limit=1000` costs 10, `?limit=no` returning 5,000 items costs 50. "
+              + "Symmetric with bulk-write cost.\n\n"
+
               + "To retrieve all tasks (including all subtasks), use the search API.",
         response = Task.class,
         responseContainer = "List"
@@ -300,7 +305,12 @@ public class TaskResource {
               + "field — the `tasks` array is the canonical signal. The flat default "
               + "(`?depth=1`) and single-task `GET /task/{oid}` still include `childCount`. "
               + "`?depth>1` is mutually exclusive with `?limit=` and `?cursor=` — pick "
-              + "either snapshot mode or per-level pagination, not both.",
+              + "either snapshot mode or per-level pagination, not both.\n\n"
+
+              + "**Rate-limit cost** (#24558): proportional to the number of tasks returned "
+              + "across the whole tree — `max(1, ceil(items / 100))` units. So a flat "
+              + "`?limit=100` (or fewer) costs 1; a `?depth=full` returning 500 nodes "
+              + "costs 5; a `?depth=full` returning 2,000 (Premium cap) costs 20.",
         response = Task.class,
         responseContainer = "List"
     )
@@ -2273,7 +2283,10 @@ public class TaskResource {
               + "| Email, Hyperlink | Exact value, or prefix with `~` for regex, `~*` for case-insensitive regex | `website=~example\\.com` |\n"
               + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n"
               + "| Date | Same grammar as the `start` / `due` query params — keyword ops (`today`, `past`, `last7d`, ...), value ops (`ge:<v>`, `lt:<v>`, `between:<v1>,<v2>`, ...), and null ops (`isNull`, `isNotNull`). `<v>` is `YYYY-MM-DD` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`; timestamp operands require a `withTime: true` field. | `approvedAt=today`, `approvedAt=ge:2026-04-01`, `approvedAt=between:2026-04-01,2026-04-30`, `approvedAt=isNull` |\n\n"
-              + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.",
+              + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.\n\n"
+              + "**Rate-limit cost** (#24558): proportional to the number of items returned — "
+              + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer matches) costs 1, "
+              + "`?limit=1000` costs 10, `?limit=no` returning 5,000 matches costs 50.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -2498,7 +2511,10 @@ public class TaskResource {
               + "| Email, Hyperlink | Exact value, or prefix with `~` for regex, `~*` for case-insensitive regex | `website=~example\\.com` |\n"
               + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n"
               + "| Date | Same grammar as the `start` / `due` query params — keyword ops (`today`, `past`, `last7d`, ...), value ops (`ge:<v>`, `lt:<v>`, `between:<v1>,<v2>`, ...), and null ops (`isNull`, `isNotNull`). `<v>` is `YYYY-MM-DD` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`; timestamp operands require a `withTime: true` field. | `approvedAt=today`, `approvedAt=ge:2026-04-01`, `approvedAt=between:2026-04-01,2026-04-30`, `approvedAt=isNull` |\n\n"
-              + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.",
+              + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.\n\n"
+              + "**Rate-limit cost** (#24558): proportional to the number of items returned — "
+              + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer matches) costs 1, "
+              + "`?limit=1000` costs 10, `?limit=no` returning 5,000 matches costs 50.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
