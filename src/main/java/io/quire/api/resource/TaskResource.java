@@ -2713,6 +2713,34 @@ public class TaskResource {
         )
         @QueryParam("due") String due,
         @ApiParam(
+            value = "Filter by task priority. Each value is an integer "
+                  + "(`-1`..`2`) or a label (`low`, `medium`, `high`, "
+                  + "`urgent`, `none`; case-insensitive).\n\n"
+                  + "Combine with `,` (AND), `|` (OR), `!` (NOT). AND of "
+                  + "two distinct positives is the empty set (a column has "
+                  + "exactly one priority); negation works as expected.\n\n"
+                  + "Examples: `high`, `1`, `high|urgent`, `!low`.",
+            example = "high|urgent"
+        )
+        @QueryParam("priority") String priority,
+        @ApiParam(
+            value = "Filter by task type. Values: `normal` (or `task`), "
+                  + "`section`, `milestone`. Combine with `,` / `|` / `!`. "
+                  + "Useful for structural navigation (e.g., listing only "
+                  + "sections in a project).\n\n"
+                  + "Examples: `section`, `section|milestone`, `!section`.",
+            example = "section|milestone"
+        )
+        @QueryParam("type") String type,
+        @ApiParam(
+            value = "Filter by the user who created the task. Each value "
+                  + "is a user OID, user ID, or email. Combine with `,` / "
+                  + "`|` / `!` (same grammar as `assignee`).\n\n"
+                  + "Examples: `alice`, `alice|bob`, `!alice`.",
+            example = "alice"
+        )
+        @QueryParam("createdBy") String createdBy,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
