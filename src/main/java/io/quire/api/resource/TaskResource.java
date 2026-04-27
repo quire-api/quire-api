@@ -988,13 +988,12 @@ public class TaskResource {
     // -------- Approval --------
 
     @POST
-    @Path("/approve/{oid}")
+    @Path("/approve/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Set or transition a task's approval state.",
         notes = "Sets the task's [approval](#definition-Approval), or "
-              + "transitions it from its current state. The same endpoint "
-              + "handles every action — the request body's `state` token "
-              + "selects the transition:\n"
+              + "transitions it from its current state. The `?state=` "
+              + "query parameter selects the transition:\n"
               + "- `request` — request approval, or roll forward from "
               + "`approved` / `rejected` / `changes` back to `awaiting`.\n"
               + "- `approve` / `reject` / `change` — approver's decision.\n\n"
@@ -1002,24 +1001,41 @@ public class TaskResource {
               + "approver (for `approve` / `reject` / `change`) of the "
               + "category. The original requester is preserved across "
               + "`approve` / `reject` / `change` transitions.\n\n"
-              + "To cancel an approval, use `DELETE /task/revoke-approval/id/{projectId}/{taskId}` "
-              + "(or `DELETE /task/revoke-approval/{oid}` by OID).\n\n"
-              + "Returns `400 Bad Request` if `state` is missing or unknown; "
-              + "`403 Forbidden` if the caller isn't a claimer / approver; "
-              + "`404 Not Found` if the task or `category` doesn't exist.",
+              + "Example: `POST /task/approve/id/my_project/42?category=Legal&state=approve` "
+              + "(the request body is unused and may be empty).\n\n"
+              + "To cancel an approval, use "
+              + "`DELETE /task/revoke-approval/id/{projectId}/{taskId}`.\n\n"
+              + "Returns `400 Bad Request` if `?state=` is missing or "
+              + "unknown; `403 Forbidden` if the caller isn't a claimer / "
+              + "approver; `404 Not Found` if the task or `?category=` "
+              + "doesn't exist.",
         response = Approval.class
     )
-    public Response approveTaskByOid(
-        @ApiParam(value = "Task OID.", required = true)
-        @PathParam("oid") String oid,
-        @ApiParam(value = "Transition to apply.", required = true)
-        ApproveTaskBody data,
-
+    public Response approveTaskById(
+        @ApiParam(value = "Project ID.", required = true,
+            example = "my_project")
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true, example = "42")
+        @PathParam("taskId") int taskId,
+        @ApiParam(
+            value = "Approval transition to apply. Same vocabulary as "
+                  + "`bulk-approve`.",
+            required = true,
+            example = "approve",
+            allowableValues = "request, approve, reject, change"
+        )
+        @QueryParam("state") String state,
+        @ApiParam(
+            value = "(Optional) Approval category ID. Defaults to the "
+                  + "project's default category (id `\"\"`).",
+            example = "Legal"
+        )
+        @QueryParam("category") String category,
         @ApiParam(
             value = "(Optional) Response shape: `full` (default) for the "
                 + "full approval record, or `compact` for identifiers only "
-                + "(`{\"oid\": <taskOid>}`). See API description for "
-                + "`?return=` semantics.",
+                + "(`{\"oid\": <taskOid>, \"id\": <taskId>}`). See API "
+                + "description for `?return=` semantics.",
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -1027,37 +1043,27 @@ public class TaskResource {
     ) { return null; }
 
     @POST
-    @Path("/approve/id/{projectId}/{taskId}")
+    @Path("/approve/{oid}")
     @ApiOperation(
-        value = "Set or transition a task's approval state by ID.",
-        notes = "Sets or transitions a task's approval state, identifying the "
-              + "task by project + task ID. The request body's `state` token "
-              + "(`request` / `approve` / `reject` / `change`) selects the "
-              + "transition. To cancel, use `DELETE /task/revoke-approval/id/{projectId}/{taskId}`. "
-              + "See also `/task/approve/{oid}` for the OID form.",
+        value = "Set or transition a task's approval state by OID.",
+        notes = "OID-form of `POST /task/approve/id/{projectId}/{taskId}` "
+              + "— see that endpoint for `?state=` / `?category=` grammar, "
+              + "permission rules, and error semantics.",
         response = Approval.class
     )
-    public Response approveTaskById(
-        @ApiParam(value = "Project ID.", required = true)
-        @PathParam("projectId") String projectId,
-        @ApiParam(value = "Task ID.", required = true)
-        @PathParam("taskId") int taskId,
-        @ApiParam(value = "Transition to apply.", required = true)
-        ApproveTaskBody data,
-
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full approval record, or `compact` for identifiers only "
-                + "(`{\"oid\": <taskOid>}`). See API description for "
-                + "`?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+    public Response approveTaskByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(required = true, example = "approve",
+            allowableValues = "request, approve, reject, change")
+        @QueryParam("state") String state,
+        @QueryParam("category") String category,
+        @ApiParam(allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
     @DELETE
-    @Path("/revoke-approval/{oid}")
+    @Path("/revoke-approval/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Cancel a task's approval.",
         notes = "Revokes the task's current approval. The effect depends "
@@ -1073,30 +1079,28 @@ public class TaskResource {
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content — approval revoked (or already absent).")
     })
-    public Response revokeTaskApprovalByOid(
-        @ApiParam(value = "Task OID.", required = true)
-        @PathParam("oid") String oid
+    public Response revokeTaskApprovalById(
+        @ApiParam(value = "Project ID.", required = true,
+            example = "my_project")
+        @PathParam("projectId") String projectId,
+        @ApiParam(value = "Task ID.", required = true, example = "42")
+        @PathParam("taskId") int taskId
     ) { return null; }
 
     @DELETE
-    @Path("/revoke-approval/id/{projectId}/{taskId}")
+    @Path("/revoke-approval/{oid}")
     @ApiOperation(
-        value = "Cancel a task's approval by ID.",
-        notes = "Cancels a task's approval, identifying the task by project + "
-              + "task ID. Smart-dispatched: from `awaiting` / `changes` the "
-              + "approval is cleared entirely; from `approved` / `rejected` it "
-              + "rolls back to `awaiting` (original requester preserved). "
-              + "Idempotent — returns `204` even when no approval is set. See "
-              + "also `/task/revoke-approval/{oid}` for the OID form."
+        value = "Cancel a task's approval by OID.",
+        notes = "OID-form of `DELETE /task/revoke-approval/id/{projectId}/{taskId}` "
+              + "— see that endpoint for the smart-dispatch behavior and "
+              + "idempotency guarantee."
     )
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content — approval revoked (or already absent).")
     })
-    public Response revokeTaskApprovalById(
-        @ApiParam(value = "Project ID.", required = true)
-        @PathParam("projectId") String projectId,
-        @ApiParam(value = "Task ID.", required = true)
-        @PathParam("taskId") int taskId
+    public Response revokeTaskApprovalByOid(
+        @ApiParam(value = "Task OID.", required = true)
+        @PathParam("oid") String oid
     ) { return null; }
 
     // -------- Timelog --------
@@ -2220,6 +2224,115 @@ public class TaskResource {
             example = "compact",
             allowableValues = "full, compact"
         )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    // -------- Bulk approve --------
+
+    @POST
+    @Path("/bulk-approve/id/{projectId}")
+    @ApiOperation(
+        value = "Bulk-approve N tasks in a project by ID.",
+        notes = "Applies a single approval transition (`request` / "
+              + "`approve` / `reject` / `change`) to all tasks in the "
+              + "batch. Body is a top-level JSON array of task references "
+              + "(OID string, integer ID, or `\"#<id>\"` string; mixed "
+              + "forms allowed). Up to **300** items per call.\n\n"
+              + "**Same atomic / skip-not-found / `items[i]:` error / "
+              + "rate-limit conventions** as the other bulk endpoints "
+              + "(see `bulk-update` for details).\n\n"
+              + "Example:\n"
+              + "```\n"
+              + "POST /task/bulk-approve/id/my_project?category=Legal&state=approve\n"
+              + "Body: [42, \"#43\", \"iuRRiKoyrxdBFhFTTo\"]\n"
+              + "```\n\n"
+              + "**Permissions** — same per-task role checks as the "
+              + "single-task `POST /task/approve/{taskOid}`. Any per-item "
+              + "permission failure rolls back the whole batch with an "
+              + "`items[i]: ...` prefixed error.",
+        response = TaskWithParentInfo.class,
+        responseContainer = "List"
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — array of updated tasks "
+              + "(same length as the request body; `null` for skipped "
+              + "items whose task wasn't found).",
+            response = TaskWithParentInfo.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — body shape, "
+              + "missing or invalid `?state=`, malformed item ref, or "
+              + "per-item validation error (with `items[i]:` prefix).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks "
+              + "claimer / approver role on at least one item (whole "
+              + "batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Not Found — project or "
+              + "approval `?category=` does not exist.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 429, message = "Too Many Requests — bulk "
+              + "rate-limit cost is `N` units (one per item).",
+            response = ErrorResponse.class)
+    })
+    public Response bulkApproveTaskById(
+        @ApiParam(value = "Project ID.", required = true,
+            example = "my_project")
+        @PathParam("projectId") String projectId,
+        @ApiParam(
+            value = "Task references to apply the approval transition to. "
+                  + "Each element is a task OID (string), an integer ID, "
+                  + "or a `\"#<id>\"` string. Up to 300 items.",
+            required = true
+        )
+        java.util.List<Object> data,
+        @ApiParam(
+            value = "Approval transition to apply to every task in the "
+                  + "batch. `request` requests approval (or rolls forward "
+                  + "from a decided state back to `awaiting`); "
+                  + "`approve` / `reject` / `change` records the "
+                  + "approver's decision.",
+            required = true,
+            example = "approve",
+            allowableValues = "request, approve, reject, change"
+        )
+        @QueryParam("state") String state,
+        @ApiParam(
+            value = "(Optional) Approval category ID. Defaults to the "
+                  + "project's default category (id `\"\"`).",
+            example = "Legal"
+        )
+        @QueryParam("category") String category,
+        @ApiParam(
+            value = "(Optional) Response shape — `full` (default; "
+                  + "per-item full task record with `approval` field) or "
+                  + "`compact` (per-item `{oid, id}`). `null` slots are "
+                  + "preserved in either mode.",
+            example = "compact",
+            allowableValues = "full, compact"
+        )
+        @QueryParam("return") String returnMode
+    ) { return null; }
+
+    @POST
+    @Path("/bulk-approve/{projectOid}")
+    @ApiOperation(
+        value = "Bulk-approve N tasks in a project by OID.",
+        notes = "OID-form of `POST /task/bulk-approve/id/{projectId}` — "
+              + "see that endpoint for body shape, query params, "
+              + "atomic / skip-not-found semantics, and rate-limit "
+              + "details.",
+        response = TaskWithParentInfo.class,
+        responseContainer = "List"
+    )
+    public Response bulkApproveTaskByOid(
+        @ApiParam(value = "Project OID.", required = true)
+        @PathParam("projectOid") String projectOid,
+        @ApiParam(required = true)
+        java.util.List<Object> data,
+        @ApiParam(required = true, example = "approve",
+            allowableValues = "request, approve, reject, change")
+        @QueryParam("state") String state,
+        @QueryParam("category") String category,
+        @ApiParam(allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
