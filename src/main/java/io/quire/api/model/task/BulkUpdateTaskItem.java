@@ -19,15 +19,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class BulkUpdateTaskItem extends UpdateTaskBody {
 
     @ApiModelProperty(
-        value = "Target task OID. Mutually exclusive with `id`. Exactly "
-              + "one of `oid` / `id` must be supplied per item.",
+        value = "Target task OID. Exactly one of `oid` / `id` must be "
+              + "supplied per item.",
         example = "iuRRiKoyrxdBFhFTTo"
     )
     public String getOid() { return null; }
 
     @ApiModelProperty(
-        value = "Target task ID. Mutually exclusive with `oid`. Exactly "
-              + "one of `oid` / `id` must be supplied per item.",
+        value = "Target task ID. Exactly one of `oid` / `id` must be "
+              + "supplied per item.",
         example = "42"
     )
     public Integer getId() { return null; }

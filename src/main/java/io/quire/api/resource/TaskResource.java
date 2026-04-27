@@ -293,7 +293,7 @@ public class TaskResource {
               + "reached, or cap fired before reaching it). Drill in if you need them.\n"
               + "- Node has `\"cropped\": true` → more siblings of this node exist at the same level.\n\n"
 
-              + "**Pagination** (flat path only, mutually exclusive with `?depth>1`): "
+              + "**Pagination** (flat path only, cannot be combined with `?depth>1`): "
               + "pass `?limit=N` (1..1000) to opt into paginated chunks. When more results "
               + "exist, the LAST item carries `\"cursor\": \"<token>\"` — pass it back as "
               + "`?cursor=<token>` (plus the same `?limit=` and `?status=`) for the next "
@@ -304,8 +304,8 @@ public class TaskResource {
               + "**Notes:** Subtree responses (`?depth>1`) omit the per-task `childCount` "
               + "field — the `tasks` array is the canonical signal. The flat default "
               + "(`?depth=1`) and single-task `GET /task/{oid}` still include `childCount`. "
-              + "`?depth>1` is mutually exclusive with `?limit=` and `?cursor=` — pick "
-              + "either snapshot mode or per-level pagination, not both.\n\n"
+              + "`?depth>1` cannot be combined with `?limit=` or `?cursor=` "
+              + "(returns `400`).\n\n"
 
               + "**Rate-limit cost** (#24558): proportional to the number of tasks returned "
               + "across the whole tree — `max(1, ceil(items / 100))` units. So a flat "
@@ -346,7 +346,7 @@ public class TaskResource {
                   + "(immediate children only). Any positive integer returns a multi-level "
                   + "subtree capped at the given depth; `full` walks every level (bounded by "
                   + "the per-tier total-nodes cap). `?depth>1` requires the Professional plan "
-                  + "or above and is mutually exclusive with `?limit`/`?cursor`.",
+                  + "or above and cannot be combined with `?limit`/`?cursor`.",
             example = "2",
             required = false
         )
@@ -356,7 +356,7 @@ public class TaskResource {
             value = "Page size for the flat path (1..1000). Omit for the default unpaginated "
                   + "full list. Pass `no` to be explicit. When set and more results exist, "
                   + "the last item in the response carries a `cursor` field. "
-                  + "Mutually exclusive with `?depth>1`.",
+                  + "Cannot be combined with `?depth>1`.",
             example = "100",
             required = false
         )
@@ -365,7 +365,7 @@ public class TaskResource {
         @ApiParam(
             value = "Continuation token. Pass back the `cursor` value from the last item of "
                   + "the previous page to fetch the next page. Re-pass `?limit=` and any "
-                  + "filter (`?status=`) on the same call. Mutually exclusive with `?depth>1`.",
+                  + "filter (`?status=`) on the same call. Cannot be combined with `?depth>1`.",
             required = false
         )
         @QueryParam("cursor") String cursor,
@@ -1598,8 +1598,8 @@ public class TaskResource {
         value = "Bulk-update N tasks in a project by ID.",
         notes = "Updates up to **300 tasks** in one transaction. Body is "
               + "a top-level JSON array of `BulkUpdateTaskItem` — each item "
-              + "carries exactly one of `oid` / `id` (mutually exclusive) "
-              + "plus the `UpdateTaskBody`-shape fields to apply.\n\n"
+              + "carries exactly one of `oid` / `id` plus the "
+              + "`UpdateTaskBody`-shape fields to apply.\n\n"
               + "Example: `PUT /task/bulk-update/id/my_project?return=compact`\n\n"
               + "Request body:\n\n"
               + "```json\n"
@@ -2284,16 +2284,35 @@ public class TaskResource {
               + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n"
               + "| Date | Same grammar as the `start` / `due` query params — keyword ops (`today`, `past`, `last7d`, ...), value ops (`ge:<v>`, `lt:<v>`, `between:<v1>,<v2>`, ...), and null ops (`isNull`, `isNotNull`). `<v>` is `YYYY-MM-DD` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`; timestamp operands require a `withTime: true` field. | `approvedAt=today`, `approvedAt=ge:2026-04-01`, `approvedAt=between:2026-04-01,2026-04-30`, `approvedAt=isNull` |\n\n"
               + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.\n\n"
-              + "**Rate-limit cost** (#24558): proportional to the number of items returned — "
+
+              + "### Pagination\n\n"
+              + "Pass `?limit=N` to cap each response at `N` items. When more results "
+              + "exist, the **last item carries a `cursor` field**; pass its value back as "
+              + "`?cursor=<token>` (along with the same `?limit=` and any filter) to fetch "
+              + "the next page. End of stream is signalled by the absence of `cursor` on "
+              + "the last item.\n\n"
+              + "Example loop:\n"
+              + "```\n"
+              + "GET /task/search/id/my_project?status=active&limit=30\n"
+              + "    → 30 items; last has cursor: \"crsr1u\"\n"
+              + "GET /task/search/id/my_project?status=active&limit=30&cursor=crsr1u\n"
+              + "    → 30 items; last has cursor: \"crsr11k\"\n"
+              + "GET /task/search/id/my_project?status=active&limit=30&cursor=crsr11k\n"
+              + "    → 12 items; no cursor on last item → stop\n"
+              + "```\n"
+              + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
+              + "use it verbatim from the previous response.\n\n"
+
+              + "**Rate-limit cost**: proportional to the number of items returned — "
               + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer matches) costs 1, "
               + "`?limit=1000` costs 10, `?limit=no` returning 5,000 matches costs 50.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. malformed `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
@@ -2512,16 +2531,35 @@ public class TaskResource {
               + "| Duration | Seconds, or with suffix: `d` (days), `h` (hours), `m` (minutes) | `estimate=2h` |\n"
               + "| Date | Same grammar as the `start` / `due` query params — keyword ops (`today`, `past`, `last7d`, ...), value ops (`ge:<v>`, `lt:<v>`, `between:<v1>,<v2>`, ...), and null ops (`isNull`, `isNotNull`). `<v>` is `YYYY-MM-DD` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`; timestamp operands require a `withTime: true` field. | `approvedAt=today`, `approvedAt=ge:2026-04-01`, `approvedAt=between:2026-04-01,2026-04-30`, `approvedAt=isNull` |\n\n"
               + "Not supported: Text (use `text` for full-text search instead), Formula, File, Lookup.\n\n"
-              + "**Rate-limit cost** (#24558): proportional to the number of items returned — "
+
+              + "### Pagination\n\n"
+              + "Pass `?limit=N` to cap each response at `N` items. When more results "
+              + "exist, the **last item carries a `cursor` field**; pass its value back as "
+              + "`?cursor=<token>` (along with the same `?limit=` and any filter) to fetch "
+              + "the next page. End of stream is signalled by the absence of `cursor` on "
+              + "the last item.\n\n"
+              + "Example loop:\n"
+              + "```\n"
+              + "GET /task/search/id/my_project?status=active&limit=30\n"
+              + "    → 30 items; last has cursor: \"crsr1u\"\n"
+              + "GET /task/search/id/my_project?status=active&limit=30&cursor=crsr1u\n"
+              + "    → 30 items; last has cursor: \"crsr11k\"\n"
+              + "GET /task/search/id/my_project?status=active&limit=30&cursor=crsr11k\n"
+              + "    → 12 items; no cursor on last item → stop\n"
+              + "```\n"
+              + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
+              + "use it verbatim from the previous response.\n\n"
+
+              + "**Rate-limit cost**: proportional to the number of items returned — "
               + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer matches) costs 1, "
               + "`?limit=1000` costs 10, `?limit=no` returning 5,000 matches costs 50.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. malformed `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
@@ -2754,7 +2792,14 @@ public class TaskResource {
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
             example = "no"
         )
-        @QueryParam("limit") String limit
+        @QueryParam("limit") String limit,
+        @ApiParam(
+            value = "Continuation token from the previous page's last item. "
+                  + "See **Pagination** in the operation notes for the loop. "
+                  + "Cannot be combined with `?sublist=`.",
+            required = false
+        )
+        @QueryParam("cursor") String cursor
     ) { return null; }
 
     @GET
