@@ -2247,7 +2247,7 @@ public class TaskResource {
               + "Body: [42, \"#43\", \"iuRRiKoyrxdBFhFTTo\"]\n"
               + "```\n\n"
               + "**Permissions** — same per-task role checks as the "
-              + "single-task `POST /task/approve/{taskOid}`. Any per-item "
+              + "single-task `POST /task/approve/id/{projectId}/{taskId}`. Any per-item "
               + "permission failure rolls back the whole batch with an "
               + "`items[i]: ...` prefixed error.",
         response = TaskWithParentInfo.class,
