@@ -430,7 +430,10 @@ public class TaskResource {
         value = "Update an existing task by its OID.",
         notes = "Updates an existing task and returns the updated record. "
               + "See `PUT /task/id/{projectId}/{taskId}` for a full request-body "
-              + "example and the replace-vs-incremental field pattern.",
+              + "example and the replace-vs-incremental field pattern.\n\n"
+              + "To archive (hide indefinitely) or snooze a task, set the `peekaboo` "
+              + "field: `true` hides it indefinitely, a positive integer hides it for "
+              + "that many days, `false` unhides.",
         response = TaskWithParentInfo.class
     )
     @ApiResponses({
@@ -478,7 +481,10 @@ public class TaskResource {
               + "> Note the replace-vs-incremental pattern: `tags` replaces the "
               + "entire tag set; `addTags` / `removeTags` modify the set in place. "
               + "Same for `assignees` / `addAssignees` / `removeAssignees`, and "
-              + "`followers` / `successors` / etc. Mix whichever suits the intent.",
+              + "`followers` / `successors` / etc. Mix whichever suits the intent.\n\n"
+              + "To archive (hide indefinitely) or snooze a task, set the `peekaboo` "
+              + "field: `true` hides it indefinitely, a positive integer hides it for "
+              + "that many days, `false` unhides.",
         response = TaskWithParentInfo.class
     )
     @ApiResponses({

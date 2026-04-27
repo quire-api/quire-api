@@ -173,7 +173,8 @@ public class ChatResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update a chat channel by OID.",
-        notes = "Updates an existing chat channel and returns the updated record.",
+        notes = "Updates an existing chat channel and returns the updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Chat.class
     )
     @ApiResponses({
@@ -202,7 +203,8 @@ public class ChatResource {
     @Path("/id/{ownerType}/{ownerId}/{chatId}")
     @ApiOperation(
         value = "Update a chat channel by ID.",
-        notes = "Updates an existing chat channel and returns the updated record.",
+        notes = "Updates an existing chat channel and returns the updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Chat.class
     )
     @ApiResponses({

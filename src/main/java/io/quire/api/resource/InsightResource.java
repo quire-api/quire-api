@@ -189,7 +189,8 @@ public class InsightResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update an insight view by OID.",
-        notes = "Updates an existing insight view and returns the updated record.",
+        notes = "Updates an existing insight view and returns the updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Insight.class
     )
     @ApiResponses({
@@ -218,7 +219,8 @@ public class InsightResource {
     @Path("/id/{ownerType}/{ownerId}/{insightId}")
     @ApiOperation(
         value = "Update an insight view by ID.",
-        notes = "Updates an existing insight view and returns the updated record.",
+        notes = "Updates an existing insight view and returns the updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Insight.class
     )
     @ApiResponses({

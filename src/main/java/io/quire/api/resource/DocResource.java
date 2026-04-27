@@ -178,7 +178,8 @@ public class DocResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update a document by OID.",
-        notes = "Updates an existing document and returns the updated record.",
+        notes = "Updates an existing document and returns the updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Doc.class
     )
     @ApiResponses({
@@ -207,7 +208,8 @@ public class DocResource {
     @Path("/id/{ownerType}/{ownerId}/{docId}")
     @ApiOperation(
         value = "Update a document by ID.",
-        notes = "Updates an existing document and returns the updated record.",
+        notes = "Updates an existing document and returns the updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Doc.class
     )
     @ApiResponses({

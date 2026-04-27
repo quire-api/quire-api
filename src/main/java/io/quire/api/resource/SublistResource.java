@@ -176,7 +176,8 @@ public class SublistResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update a sublist by OID.",
-        notes = "Updates an existing sublist and returns the complete updated record.",
+        notes = "Updates an existing sublist and returns the complete updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Sublist.class
     )
     @ApiResponses({
@@ -205,7 +206,8 @@ public class SublistResource {
     @Path("/id/{ownerType}/{ownerId}/{sublistId}")
     @ApiOperation(
         value = "Update a sublist by ID.",
-        notes = "Updates an existing sublist and returns the complete updated record.",
+        notes = "Updates an existing sublist and returns the complete updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Sublist.class
     )
     @ApiResponses({

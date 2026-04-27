@@ -294,7 +294,8 @@ public class ProjectResource {
     @Path("/id/{id}")
     @ApiOperation(
         value = "Update a project by ID.",
-        notes = "Updates an existing project and returns the complete updated record.",
+        notes = "Updates an existing project and returns the complete updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Project.class
     )
     @ApiResponses({
@@ -323,7 +324,8 @@ public class ProjectResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Update a project by OID.",
-        notes = "Updates an existing project and returns the complete updated record.",
+        notes = "Updates an existing project and returns the complete updated record.\n\n"
+              + "To archive or unarchive, set `archived: true` or `archived: false` in the body.",
         response = Project.class
     )
     @ApiResponses({
