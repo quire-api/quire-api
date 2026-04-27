@@ -2,6 +2,21 @@
 
 ## Apr 27, 2026
 
+- **Task API:** Added the bulk-approve endpoint for applying a single approval transition (`request` / `approve` / `reject` / `change`) to N tasks in one call. Same body shape, atomic / skip-not-found / `items[i]:` error / rate-limit conventions as the bulk-add / bulk-update / bulk-remove / bulk-move / bulk-transfer endpoints.
+    - [`POST /task/bulk-approve/id/{projectId}?state=<state>[&category=<catId>]`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) — body is a top-level array of task references (OID, integer ID, or `"#<id>"` string; mixed forms allowed). The OID-form `POST /task/bulk-approve/{projectOid}` is also available.
+    - `?state=` (required) follows the single-task `POST /task/approve/id/{projectId}/{taskId}` vocabulary; `?category=` (optional) defaults to the project's default category.
+    - `?return=compact` returns `{oid, id}` per item (vs. the full task record in default mode).
+    - Per-task role checks match the single-task endpoint — any item failing the claimer/approver check rolls the whole batch back with an `items[i]: ...` error.
+- **Task API:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) (and the by-OID form) now takes `state` and `category` as **query parameters** instead of body fields — same grammar as the bulk-approve endpoint. Example: `POST /task/approve/id/my_project/42?category=Legal&state=approve`. The request body is unused and may be empty. `?return=compact` also now returns `{oid, id}` (was `{oid}` only) so it matches every other compact response.
+- **Task search:** opt-in cursor pagination via `?cursor=<token>` on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get) (and the search-organization / search-folder endpoints). With `?limit=N` and more results to come, the **last item carries `"cursor": "<token>"`** — pass it back as `?cursor=<token>` (with the same `?limit=` and any filter) for the next page. End of stream is signalled by the absence of `cursor` on the last item of a page. Same shape (bare array) on every page — no envelope. Example:
+    ```
+    GET /task/search/id/my_project?status=active&limit=30
+    GET /task/search/id/my_project?status=active&limit=30&cursor=<token-from-page-1's-last-item>
+    ```
+    - Applies to `/task/search/...`, `/task/search-organization/...`, and `/task/search-folder/...` (and all OID-form variants).
+    - Cannot be combined with `?sublist=` (returns `400`).
+- **Task search:** added `?recurring=` query parameter on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get). Boolean: `true` (or empty, i.e. `?recurring`) returns only recurring tasks (those with a recurrence configured); `false` returns only non-recurring tasks; any other value returns `400 Bad Request`. Implemented as `is [not] null` on the underlying recurrence column.
+    - Future work: a richer `?recurrence=<expression>` (filter by next-due window, frequency / interval, weekday set, until-date, etc.) is tracked separately and not part of this round.
 - **Task search:** three new query parameters on `/task/search/...`. Each accepts the `,` (AND) / `|` (OR) / `!` (NOT) grammar already used by `assignee` / `tag`.
     - `?priority=` — filter by task priority. Values are integers (`-1`..`2`) or labels (`low`, `medium`, `high`, `urgent`, `none`; case-insensitive). Examples: `?priority=high`, `?priority=high|urgent`, `?priority=!low`.
     - `?type=` — filter by task type: `normal` (alias `task`), `section`, `milestone`. Example: `?type=section|milestone`.
@@ -42,7 +57,7 @@
     - `{name}` for custom-field extensions (`add-field` / `update-field` / `rename-field` / `move-field` on both project and insight).
     - `{id}` for approval categories (`add-appv-cat` / `update-appv-cat`).
     - `{value}` for task statuses (`POST /status` / `PUT /status`).
-    - `{oid}` (the task OID) for `POST /task/approve/...`.
+    - `{oid, id}` for `POST /task/approve/...`.
     - Any other `?return=` value returns `400 Bad Request`. `GET`, `DELETE`, list / search, and the timelog and attach endpoints don't accept `?return=` — their response shape is fixed.
 - **Task API:** Added three timelog endpoints for managing a task's [time logs](https://quire.io/dev/api/#definition-Timelog) without rewriting the whole task. Identity of a log is the triple `(user, start, end)`; sub-second precision is truncated to whole seconds.
     - [`POST /task/add-timelog/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-add-timelog-id--projectId---taskId--post) — body carries `start` / `end` (required) and optional `user` / `billable` / `note`. `user` defaults to the caller. Returns `409 Conflict` if a log with the same triple already exists.
