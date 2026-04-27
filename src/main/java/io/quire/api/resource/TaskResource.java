@@ -2741,6 +2741,14 @@ public class TaskResource {
         )
         @QueryParam("createdBy") String createdBy,
         @ApiParam(
+            value = "Filter on whether the task has a recurrence configured. "
+                  + "`true` (or empty) returns only recurring tasks; "
+                  + "`false` returns only non-recurring tasks. Any other "
+                  + "value returns `400 Bad Request`.",
+            example = "true"
+        )
+        @QueryParam("recurring") String recurring,
+        @ApiParam(
             value = "Maximum number of tasks to return. Default: 30. "
                   + "Use `no` to return all matches.\n\n"
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
