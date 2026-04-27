@@ -206,14 +206,29 @@ public class TaskResource {
     @Path("/list/id/{projectId}")
     @ApiOperation(
         value = "Get all root tasks of the given project.",
-        notes = "Returns all root tasks of the project.\n\n"
-              + "To retrieve all tasks (including all subtasks), use the search API with `limit=no`.",
+        notes = "Returns all root tasks of the project as a bare JSON array.\n\n"
+
+              + "**Pagination is opt-in** via `?limit=N` (1..1000). Without `?limit=` "
+              + "or `?cursor=`, the response is the full bare array. When `?limit=N` "
+              + "is set and more results exist, the LAST item carries "
+              + "`\"cursor\": \"<token>\"` — pass it back as `?cursor=<token>` "
+              + "(plus the same `?limit=` and any filter like `?status=`) to fetch the "
+              + "next page. End of stream is signalled by the absence of `cursor` on "
+              + "the last item. `?limit=no` is an explicit \"return everything\". "
+              + "Same pagination grammar applies to the subtasks endpoint "
+              + "`GET /task/list/id/{projectId}/{taskId}`.\n\n"
+
+              + "Pair with `?return=compact` to render each item as `{oid, id, cursor?}` "
+              + "for navigation/lookup workloads at minimal token cost.\n\n"
+
+              + "To retrieve all tasks (including all subtasks), use the search API.",
         response = Task.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — list of root tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — bare array of root tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `?limit=` value, or `?cursor=` doesn't belong to this list."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getRootTasks(
@@ -223,7 +238,24 @@ public class TaskResource {
             required = true,
             example = "my_project"
         )
-        @PathParam("projectId") String projectId
+        @PathParam("projectId") String projectId,
+
+        @ApiParam(
+            value = "Page size (1..1000). Omit for the default unpaginated full list, "
+                  + "or pass `no` to be explicit. When set and more results exist, "
+                  + "the last item in the response carries a `cursor` field.",
+            example = "100",
+            required = false
+        )
+        @QueryParam("limit") String limit,
+
+        @ApiParam(
+            value = "Continuation token. Pass back the `cursor` value from the last "
+                  + "item of the previous page to fetch the next page. Re-pass any "
+                  + "filter (`?status=`) and `?limit=` on the same call.",
+            required = false
+        )
+        @QueryParam("cursor") String cursor
     ) { return null; }
 
     @GET
@@ -256,6 +288,14 @@ public class TaskResource {
               + "reached, or cap fired before reaching it). Drill in if you need them.\n"
               + "- Node has `\"cropped\": true` → more siblings of this node exist at the same level.\n\n"
 
+              + "**Pagination** (flat path only, mutually exclusive with `?depth>1`): "
+              + "pass `?limit=N` (1..1000) to opt into paginated chunks. When more results "
+              + "exist, the LAST item carries `\"cursor\": \"<token>\"` — pass it back as "
+              + "`?cursor=<token>` (plus the same `?limit=` and `?status=`) for the next "
+              + "page. Without `?limit=` / `?cursor=`, the response is the full bare array. "
+              + "`?limit=no` is an explicit \"return everything\". Composes with "
+              + "`?return=compact`.\n\n"
+
               + "**Notes:** Subtree responses (`?depth>1`) omit the per-task `childCount` "
               + "field — the `tasks` array is the canonical signal. The flat default "
               + "(`?depth=1`) and single-task `GET /task/{oid}` still include `childCount`. "
@@ -267,7 +307,7 @@ public class TaskResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of subtasks (may be empty). With `?depth>1`, each entry may carry nested `tasks` + `cropped` fields.",
             response = Task.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid `depth` value, `?depth>1` without a task ID in the URL, or `?depth>1` combined with `?limit`/`?cursor`."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `depth` / `limit` value, `?depth>1` without a task ID in the URL, `?depth>1` combined with `?limit`/`?cursor`, or `?cursor=` doesn't belong to this list."),
         @ApiResponse(code = 402, message = "Payment Required — `?depth>1` requires the Professional plan or above. Use `?depth=1` (or omit `?depth`) for unrestricted flat per-level listing."),
         @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
     })
@@ -303,11 +343,30 @@ public class TaskResource {
         @QueryParam("depth") String depth,
 
         @ApiParam(
+            value = "Page size for the flat path (1..1000). Omit for the default unpaginated "
+                  + "full list. Pass `no` to be explicit. When set and more results exist, "
+                  + "the last item in the response carries a `cursor` field. "
+                  + "Mutually exclusive with `?depth>1`.",
+            example = "100",
+            required = false
+        )
+        @QueryParam("limit") String limit,
+
+        @ApiParam(
+            value = "Continuation token. Pass back the `cursor` value from the last item of "
+                  + "the previous page to fetch the next page. Re-pass `?limit=` and any "
+                  + "filter (`?status=`) on the same call. Mutually exclusive with `?depth>1`.",
+            required = false
+        )
+        @QueryParam("cursor") String cursor,
+
+        @ApiParam(
             value = "Response shape. `full` (default) returns the standard task records; "
-                  + "`compact` returns identifier-only nodes — `{oid, id, tasks?, cropped?}` "
-                  + "in subtree mode, `{oid, id}` otherwise. Pair `?depth=full&return=compact` "
-                  + "to fetch a whole subtree's identifier graph at minimal token cost; the "
-                  + "agent then `GET /task/{oid}` for only the nodes it wants in detail.",
+                  + "`compact` returns identifier-only items — `{oid, id, tasks?, cropped?}` "
+                  + "in subtree mode, `{oid, id, cursor?}` in flat / paginated mode. Pair "
+                  + "with `?depth=full` (subtree) or `?limit=N` (paginated) to fetch a "
+                  + "whole subtree's / page's identifier graph at minimal token cost; the "
+                  + "agent then `GET /task/{oid}` for only the items it wants in detail.",
             example = "compact",
             allowableValues = "full, compact",
             required = false
