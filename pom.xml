@@ -155,6 +155,26 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>merge-description</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <concat destfile="${project.build.directory}/description.md" force="yes" fixlastline="yes">
+                                    <fileset dir="${project.basedir}/src/main/resources/description" includes="*.md" excludes="_*.md"/>
+                                </concat>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.github.kongchen</groupId>
                 <artifactId>swagger-maven-plugin</artifactId>
                 <version>${swagger-maven-plugin.version}</version>
@@ -166,7 +186,7 @@
                             <schemes>https</schemes>
                             <host>quire.io</host>
                             <basePath>/api</basePath>
-                            <descriptionFile>${project.basedir}/src/main/resources/description.md</descriptionFile>
+                            <descriptionFile>${project.build.directory}/description.md</descriptionFile>
                             <outputFormats>yaml</outputFormats>
                             <swaggerDirectory>generated</swaggerDirectory>
                             <securityDefinitions>
