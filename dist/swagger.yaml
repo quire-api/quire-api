@@ -9197,22 +9197,22 @@ definitions:
       - id
       - name
     properties:
-      claimers:
-        type: array
-        description: |-
-          (Optional) Users allowed to request approval in this category.
-
-          - Omit or `null`: anyone can request.
-          - `[]` (empty list): admins only.
-          - List of user OIDs: those specific users.
-        items:
-          type: string
       approvers:
         type: array
         description: |-
           (Optional) Users allowed to approve, reject, or request changes in this category.
 
           - Omit or `null`: anyone can respond.
+          - `[]` (empty list): admins only.
+          - List of user OIDs: those specific users.
+        items:
+          type: string
+      claimers:
+        type: array
+        description: |-
+          (Optional) Users allowed to request approval in this category.
+
+          - Omit or `null`: anyone can request.
           - `[]` (empty list): admins only.
           - List of user OIDs: those specific users.
         items:
@@ -9231,25 +9231,27 @@ definitions:
       - name
       - type
     properties:
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
-      hidden:
+      withTime:
         type: boolean
         example: false
-        description: (Optional) Hide this field from the task detail panel.
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
       lookup:
         type: object
         description: (Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers.
         additionalProperties:
           $ref: '#/definitions/Number'
-      conditionFormat:
-        type: array
-        description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Required for `formula`) Formula expression.
       durationFormat:
         type: string
         example: hh:mm
@@ -9263,29 +9265,6 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Required for `formula`) Formula expression.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
       resultType:
         type: string
         example: number
@@ -9297,10 +9276,26 @@ definitions:
           - date
           - duration
           - checkbox
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       clearOnDup:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      conditionFormat:
+        type: array
+        description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       lookupType:
         type: string
         example: User
@@ -9310,10 +9305,15 @@ definitions:
           - Task
           - Project
           - Organization
-      multiple:
+      hidden:
         type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
       name:
         type: string
         example: Priority
@@ -9351,14 +9351,14 @@ definitions:
       - end
       - start
     properties:
-      end:
-        type: string
-        example: '2026-04-26T10:30:00Z'
-        description: End timestamp (ISO 8601, UTC). Must be on or after `start`. Sub-second precision is truncated to whole seconds.
       start:
         type: string
         example: '2026-04-26T09:00:00Z'
         description: Start timestamp (ISO 8601, UTC). Sub-second precision is truncated to whole seconds.
+      end:
+        type: string
+        example: '2026-04-26T10:30:00Z'
+        description: End timestamp (ISO 8601, UTC). Must be on or after `start`. Sub-second precision is truncated to whole seconds.
       user:
         type: string
         example: john.doe@example.com
@@ -9413,17 +9413,6 @@ definitions:
         type: string
         example: legal
         description: Category identifier (URL-safe). The implicit default category has an empty id.
-      claimers:
-        type: array
-        position: 20
-        description: |-
-          Users allowed to request approval in this category.
-
-          - Omitted from the response: anyone can request.
-          - `[]` (empty list): admins only.
-          - List of user OIDs: those specific users.
-        items:
-          type: string
       approvers:
         type: array
         position: 20
@@ -9431,6 +9420,17 @@ definitions:
           Users allowed to approve, reject, or request changes in this category.
 
           - Omitted from the response: anyone can respond.
+          - `[]` (empty list): admins only.
+          - List of user OIDs: those specific users.
+        items:
+          type: string
+      claimers:
+        type: array
+        position: 20
+        description: |-
+          Users allowed to request approval in this category.
+
+          - Omitted from the response: anyone can request.
           - `[]` (empty list): admins only.
           - List of user OIDs: those specific users.
         items:
@@ -9486,19 +9486,6 @@ definitions:
         format: int32
         example: 42
         description: Target task ID. Exactly one of `oid` / `id` must be supplied per item.
-      description:
-        type: string
-        example: This is a **cool** task.
-        description: (Optional) New task description.
-      tags:
-        type: array
-        example: '["urgent", "design"]'
-        description: |-
-          (Optional) Tags to replace the current tags on this task (OID or name).
-          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
-          Tag names are case-insensitive.
-        items:
-          type: string
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -9525,6 +9512,19 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      tags:
+        type: array
+        example: '["urgent", "design"]'
+        description: |-
+          (Optional) Tags to replace the current tags on this task (OID or name).
+          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
+          Tag names are case-insensitive.
+        items:
+          type: string
+      description:
+        type: string
+        example: This is a **cool** task.
+        description: (Optional) New task description.
       assignees:
         type: array
         example: '["me", "alice@example.com"]'
@@ -9704,12 +9704,6 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New task name.
-      status:
-        type: integer
-        format: int32
-        example: 100
-        position: 4
-        description: (Optional) New status, between 0 and 100. Specify 100 to complete the task.
       etc:
         type: integer
         format: int32
@@ -9718,6 +9712,12 @@ definitions:
         description: |-
           (Optional) Estimated time to complete, in seconds. Must be non-negative or `null`.
           Specify `null` to clear the value.
+      status:
+        type: integer
+        format: int32
+        example: 100
+        position: 4
+        description: (Optional) New status, between 0 and 100. Specify 100 to complete the task.
       priority:
         type: integer
         format: int32
@@ -9779,10 +9779,6 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -9791,6 +9787,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -9875,11 +9875,6 @@ definitions:
         type: string
         example: iDsPd.QP_qM.hN.Trymukn8b
         description: Object identifier (OID), a UUID-like unique string.
-      description:
-        type: string
-        example: It is *cool*!
-        position: 1
-        description: Comment content (Markdown supported).
       descriptionText:
         type: string
         example: It is cool!
@@ -9890,6 +9885,11 @@ definitions:
         example: It is <i>cool</i>!
         position: 1
         description: Comment content rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: It is *cool*!
+        position: 1
+        description: Comment content (Markdown supported).
       attachments:
         type: array
         position: 8
@@ -9900,19 +9900,19 @@ definitions:
         type: string
         position: 50
         description: URL of this comment on the Quire website.
+      editedBy:
+        position: 50
+        description: User who last edited this comment, or null if not edited.
+        $ref: '#/definitions/SimpleIdentity'
+      pinBy:
+        position: 50
+        description: User who pinned this comment, or null if not pinned.
+        $ref: '#/definitions/SimpleIdentity'
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.
-      pinBy:
-        position: 50
-        description: User who pinned this comment, or null if not pinned.
-        $ref: '#/definitions/SimpleIdentity'
-      editedBy:
-        position: 50
-        description: User who last edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -9955,10 +9955,6 @@ definitions:
     required:
       - name
     properties:
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -9998,6 +9994,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -10030,23 +10030,19 @@ definitions:
         type: string
         example: Adjust style
         description: Content of the new comment (Markdown supported).
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false.'
       asUser:
         type: boolean
         example: true
         description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false.'
   CreateDocBody:
     type: object
     required:
       - name
     properties:
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -10086,6 +10082,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -10114,10 +10114,6 @@ definitions:
     required:
       - name
     properties:
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -10157,6 +10153,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -10222,10 +10222,6 @@ definitions:
         description: (Optional) List of task OIDs to include in this sublist. All descendants of the specified tasks will be included as well.
         items:
           type: string
-      description:
-        type: string
-        example: '**Great** record to start with.'
-        description: (Optional) Description of the record (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -10265,6 +10261,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
+      description:
+        type: string
+        example: '**Great** record to start with.'
+        description: (Optional) Description of the record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -10310,24 +10310,6 @@ definitions:
     required:
       - name
     properties:
-      description:
-        type: string
-        example: This is a *cool* task.
-        description: (Optional) A description of the task.
-      tags:
-        type: array
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-        description: |-
-          (Optional) A list of tag OIDs or names to be added to the new task.
-          Tag names are case-insensitive.
-        items:
-          type: string
-      tasks:
-        type: array
-        description: (Optional) List of subtasks to create along with this task.
-        items:
-          $ref: '#/definitions/CreateTaskBody'
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -10354,6 +10336,24 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      tags:
+        type: array
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+        description: |-
+          (Optional) A list of tag OIDs or names to be added to the new task.
+          Tag names are case-insensitive.
+        items:
+          type: string
+      description:
+        type: string
+        example: This is a *cool* task.
+        description: (Optional) A description of the task.
+      tasks:
+        type: array
+        description: (Optional) List of subtasks to create along with this task.
+        items:
+          $ref: '#/definitions/CreateTaskBody'
       assignees:
         type: array
         example:
@@ -10453,18 +10453,18 @@ definitions:
         type: string
         example: Design new **logo**
         description: The name of the task.
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: '(Optional) Task status. Must be between 0 and 100. Default: 0.'
       etc:
         type: integer
         format: int32
         example: 0
         position: 4
         description: (Optional) Estimated time to complete, in seconds. Must be non-negative.
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: '(Optional) Task status. Must be between 0 and 100. Default: 0.'
       priority:
         type: integer
         format: int32
@@ -10511,10 +10511,6 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -10523,6 +10519,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -10625,6 +10625,19 @@ definitions:
         type: string
         example: '42'
         description: 'Palette color index. Format: two digits `[0-5][0-7]` (first = row 0-5, second = column 0-7). Examples: `00`, `13`, `57`. NOT a CSS hex color.'
+      op:
+        type: string
+        example: '>='
+        description: (Value fields) Comparison operator.
+        enum:
+          - '>='
+          - '>'
+          - <=
+          - <
+          - '='
+          - '!='
+          - between
+          - notBetween
       when:
         type: string
         example: today
@@ -10640,19 +10653,6 @@ definitions:
           - lastWeek
           - thisWeek
           - nextWeek
-      op:
-        type: string
-        example: '>='
-        description: (Value fields) Comparison operator.
-        enum:
-          - '>='
-          - '>'
-          - <=
-          - <
-          - '='
-          - '!='
-          - between
-          - notBetween
       first:
         example: '100'
         description: (Value fields) First operand. For `duration`, must be an integer number of seconds.
@@ -10666,25 +10666,27 @@ definitions:
     required:
       - type
     properties:
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
-      hidden:
+      withTime:
         type: boolean
         example: false
-        description: (Optional) Hide this field from the task detail panel.
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
       lookup:
         type: object
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
-      conditionFormat:
-        type: array
-        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Required for `formula`) Formula expression.
       durationFormat:
         type: string
         example: hh:mm
@@ -10698,29 +10700,6 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Required for `formula`) Formula expression.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
       resultType:
         type: string
         example: number
@@ -10732,10 +10711,26 @@ definitions:
           - date
           - duration
           - checkbox
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       clearOnDup:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      conditionFormat:
+        type: array
+        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       lookupType:
         type: string
         example: User
@@ -10745,10 +10740,15 @@ definitions:
           - Task
           - Project
           - Organization
-      multiple:
+      hidden:
         type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
       type:
         type: string
         example: number
@@ -10786,25 +10786,27 @@ definitions:
         type: string
         example: Priority
         description: Field name (equals the path `fieldName` for update/rename/move, or the `name` supplied in the body for add).
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
-      hidden:
+      withTime:
         type: boolean
         example: false
-        description: (Optional) Hide this field from the task detail panel.
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
       lookup:
         type: object
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
-      conditionFormat:
-        type: array
-        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Required for `formula`) Formula expression.
       durationFormat:
         type: string
         example: hh:mm
@@ -10818,29 +10820,6 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Required for `formula`) Formula expression.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
       resultType:
         type: string
         example: number
@@ -10852,10 +10831,26 @@ definitions:
           - date
           - duration
           - checkbox
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       clearOnDup:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      conditionFormat:
+        type: array
+        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       lookupType:
         type: string
         example: User
@@ -10865,10 +10860,15 @@ definitions:
           - Task
           - Project
           - Organization
-      multiple:
+      hidden:
         type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
       type:
         type: string
         example: number
@@ -10932,10 +10932,6 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -10944,6 +10940,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -11062,10 +11062,6 @@ definitions:
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -11074,6 +11070,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -11141,10 +11141,6 @@ definitions:
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -11153,6 +11149,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -11227,9 +11227,6 @@ definitions:
   Project:
     type: object
     properties:
-      organization:
-        description: Organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
       nameText:
         type: string
         example: My Project
@@ -11238,15 +11235,18 @@ definitions:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
+      organization:
+        description: Organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
       activeCount:
         type: integer
         format: int32
@@ -11265,10 +11265,6 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -11277,6 +11273,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -11290,11 +11290,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      publicAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
       start:
         type: string
         example: '2024-01-02'
@@ -11310,6 +11305,11 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      publicAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -11366,9 +11366,6 @@ definitions:
   ProjectWithPlan:
     type: object
     properties:
-      organization:
-        description: Organization this project belongs to.
-        $ref: '#/definitions/SimpleIdentity'
       nameText:
         type: string
         example: My Project
@@ -11377,15 +11374,18 @@ definitions:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
-      url:
-        type: string
-        example: https://quire.io/w/my_project
-        description: URL of this project on the Quire website.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
+      url:
+        type: string
+        example: https://quire.io/w/my_project
+        description: URL of this project on the Quire website.
+      organization:
+        description: Organization this project belongs to.
+        $ref: '#/definitions/SimpleIdentity'
       activeCount:
         type: integer
         format: int32
@@ -11404,10 +11404,6 @@ definitions:
         type: string
         example: my_project
         description: Project ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -11416,6 +11412,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -11433,11 +11433,6 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      publicAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
       start:
         type: string
         example: '2024-01-02'
@@ -11453,6 +11448,11 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      publicAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -11494,14 +11494,14 @@ definitions:
   RateLimit:
     type: object
     properties:
-      organization:
-        type: string
-        example: YxjapXXRCOYxoaiCT4tT3OQm
-        description: OID of the organization these limits apply to.
       plan:
         type: string
         example: Enterprise
         description: 'Plan name: `Free`, `Professional`, `Premium`, or `Enterprise`.'
+      organization:
+        type: string
+        example: YxjapXXRCOYxoaiCT4tT3OQm
+        description: OID of the organization these limits apply to.
       hour:
         description: Hourly rate-limit bucket.
         $ref: '#/definitions/RateLimitBucket'
@@ -11511,16 +11511,16 @@ definitions:
   RateLimitBucket:
     type: object
     properties:
-      used:
-        type: integer
-        format: int32
-        example: 42
-        description: Number of calls consumed so far in the current window.
       reset:
         type: integer
         format: int64
         example: 1774863600
         description: Unix epoch (seconds) of the next wall-clock boundary at which the `used` counter will reset.
+      used:
+        type: integer
+        format: int32
+        example: 42
+        description: Number of calls consumed so far in the current window.
       limit:
         type: integer
         format: int32
@@ -11743,19 +11743,19 @@ definitions:
   StorageList:
     type: object
     properties:
-      latest:
-        description: Object stored under the key `latest` (key–value map of properties).
-        $ref: '#/definitions/StorageMap'
+      currentProject:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: Value stored under the key `currentProject` (e.g., a project OID).
       myList:
         type: array
         example: '["alpha", "beta", "gamma"]'
         description: List stored under the key `myList`.
         items:
           type: string
-      currentProject:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: Value stored under the key `currentProject` (e.g., a project OID).
+      latest:
+        description: Object stored under the key `latest` (key–value map of properties).
+        $ref: '#/definitions/StorageMap'
   StorageMap:
     type: object
     properties:
@@ -11786,10 +11786,6 @@ definitions:
         type: string
         example: Highlight101
         description: ID.
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -11798,6 +11794,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
@@ -11878,14 +11878,14 @@ definitions:
   Subscription:
     type: object
     properties:
-      expired:
-        type: boolean
-        example: false
-        description: Whether the subscription is expired. Available only when a due date is present.
       due:
         type: string
         example: '2038-02-22T02:06:58Z'
         description: Subscription due/renewal timestamp in UTC (ISO 8601).
+      expired:
+        type: boolean
+        example: false
+        description: Whether the subscription is expired. Available only when a due date is present.
       plan:
         type: string
         example: Professional
@@ -11967,11 +11967,6 @@ definitions:
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -11982,6 +11977,11 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       etc:
         type: integer
         format: int32
@@ -11998,12 +11998,6 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: Task status, from 0 to 100. `100` indicates the task is completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -12020,6 +12014,12 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: Task status, from 0 to 100. `100` indicates the task is completed.
       priority:
         type: integer
         format: int32
@@ -12221,11 +12221,6 @@ definitions:
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -12236,6 +12231,11 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       etc:
         type: integer
         format: int32
@@ -12252,12 +12252,6 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: Task status, from 0 to 100. `100` indicates the task is completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -12274,6 +12268,12 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: Task status, from 0 to 100. `100` indicates the task is completed.
       priority:
         type: integer
         format: int32
@@ -12464,11 +12464,6 @@ definitions:
         example: Design new **logo**
         position: 2
         description: Task name (Markdown supported).
-      description:
-        type: string
-        example: This is a *cool* task.
-        position: 3
-        description: Task description (Markdown supported).
       descriptionText:
         type: string
         example: This is a cool task.
@@ -12479,6 +12474,11 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is a *cool* task.
+        position: 3
+        description: Task description (Markdown supported).
       etc:
         type: integer
         format: int32
@@ -12495,12 +12495,6 @@ definitions:
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
-      status:
-        type: integer
-        format: int32
-        example: 0
-        position: 4
-        description: Task status, from 0 to 100. `100` indicates the task is completed.
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -12517,6 +12511,12 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      status:
+        type: integer
+        format: int32
+        example: 0
+        position: 4
+        description: Task status, from 0 to 100. `100` indicates the task is completed.
       priority:
         type: integer
         format: int32
@@ -12696,22 +12696,22 @@ definitions:
   UpdateAppvCatBody:
     type: object
     properties:
-      claimers:
-        type: array
-        description: |-
-          (Optional) New claimers list — users allowed to request approval in this category.
-
-          - `null`: anyone can request.
-          - `[]` (empty list): admins only.
-          - List of user OIDs: those specific users.
-        items:
-          type: string
       approvers:
         type: array
         description: |-
           (Optional) New approvers list — users allowed to approve, reject, or request changes in this category.
 
           - `null`: anyone can respond.
+          - `[]` (empty list): admins only.
+          - List of user OIDs: those specific users.
+        items:
+          type: string
+      claimers:
+        type: array
+        description: |-
+          (Optional) New claimers list — users allowed to request approval in this category.
+
+          - `null`: anyone can request.
           - `[]` (empty list): admins only.
           - List of user OIDs: those specific users.
         items:
@@ -12723,10 +12723,18 @@ definitions:
   UpdateChatBody:
     type: object
     properties:
-      description:
+      start:
         type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
@@ -12766,18 +12774,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      start:
+      description:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -12801,10 +12801,18 @@ definitions:
   UpdateDocBody:
     type: object
     properties:
-      description:
+      start:
         type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
@@ -12844,18 +12852,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      start:
+      description:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -12868,25 +12868,27 @@ definitions:
   UpdateFieldBody:
     type: object
     properties:
-      options:
-        type: array
-        description: (Optional, `select` only) Replacement option list (replaces the entire set).
-        items:
-          $ref: '#/definitions/FieldOption'
-      hidden:
+      withTime:
         type: boolean
         example: false
-        description: (Optional) Hide this field from the task detail panel.
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
       lookup:
         type: object
         description: (Optional, `lookup` only) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity. Replaces the entire map.
         additionalProperties:
           $ref: '#/definitions/Number'
-      conditionFormat:
-        type: array
-        description: (Optional) Replacement conditional-format rules (replaces the entire list).
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      formula:
+        type: string
+        example: SUM(Subtask.Amount)
+        description: (Optional, `formula` only) Formula expression.
       durationFormat:
         type: string
         example: hh:mm
@@ -12900,29 +12902,6 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      formula:
-        type: string
-        example: SUM(Subtask.Amount)
-        description: (Optional, `formula` only) Formula expression.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
       resultType:
         type: string
         example: number
@@ -12934,10 +12913,26 @@ definitions:
           - date
           - duration
           - checkbox
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       clearOnDup:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      conditionFormat:
+        type: array
+        description: (Optional) Replacement conditional-format rules (replaces the entire list).
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
       lookupType:
         type: string
         example: User
@@ -12947,10 +12942,15 @@ definitions:
           - Task
           - Project
           - Organization
-      multiple:
+      hidden:
         type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      options:
+        type: array
+        description: (Optional, `select` only) Replacement option list (replaces the entire set).
+        items:
+          $ref: '#/definitions/FieldOption'
       type:
         type: string
         example: number
@@ -12981,10 +12981,18 @@ definitions:
   UpdateInsightBody:
     type: object
     properties:
-      description:
+      start:
         type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
@@ -13024,18 +13032,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      start:
+      description:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -13090,14 +13090,6 @@ definitions:
   UpdateProjectBody:
     type: object
     properties:
-      description:
-        type: string
-        example: '**Great** project to start with.'
-        description: (Optional) New description for this project (Markdown supported).
-      public:
-        type: boolean
-        example: true
-        description: (Optional) Public toggle. Specify true to make this project public; specify false to make it private.
       start:
         type: string
         example: '2024-01-02'
@@ -13110,6 +13102,14 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Archive toggle. Specify true to archive this project; specify false to unarchive.
+      description:
+        type: string
+        example: '**Great** project to start with.'
+        description: (Optional) New description for this project (Markdown supported).
+      public:
+        type: boolean
+        example: true
+        description: (Optional) Public toggle. Specify true to make this project public; specify false to make it private.
       followers:
         type: array
         description: |-
@@ -13176,10 +13176,18 @@ definitions:
         description: (Optional) List of changes that add or remove tasks from this sublist. See `Change` for the operation schema.
         items:
           $ref: '#/definitions/Change'
-      description:
+      start:
         type: string
-        example: '**Great** record to start with.'
-        description: (Optional) New description for this record (Markdown supported).
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this record.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
       iconColor:
         type: string
         example: '37'
@@ -13219,18 +13227,10 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      start:
+      description:
         type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this record.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.
+        example: '**Great** record to start with.'
+        description: (Optional) New description for this record (Markdown supported).
       name:
         type: string
         example: Highlight 101
@@ -13242,14 +13242,14 @@ definitions:
   UpdateTagBody:
     type: object
     properties:
-      project:
-        type: string
-        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
-        description: (Optional) Project OID that this tag is limited to. Used only when `global` is explicitly set to false; ignored otherwise.
       color:
         type: string
         example: '35'
         description: '(Optional) Tag color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `35`, `57`). NOT a CSS hex color.'
+      project:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: (Optional) Project OID that this tag is limited to. Used only when `global` is explicitly set to false; ignored otherwise.
       name:
         type: string
         example: Later
@@ -13261,20 +13261,6 @@ definitions:
   UpdateTaskBody:
     type: object
     properties:
-      description:
-        type: string
-        example: This is a **cool** task.
-        description: (Optional) New task description.
-      tags:
-        type: array
-        example:
-          - ITaVbkhh3iVcEcV3vuSLeE2k
-        description: |-
-          (Optional) Tags to replace the current tags on this task (OID or name).
-          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
-          Tag names are case-insensitive.
-        items:
-          type: string
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -13301,6 +13287,20 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      tags:
+        type: array
+        example:
+          - ITaVbkhh3iVcEcV3vuSLeE2k
+        description: |-
+          (Optional) Tags to replace the current tags on this task (OID or name).
+          This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
+          Tag names are case-insensitive.
+        items:
+          type: string
+      description:
+        type: string
+        example: This is a **cool** task.
+        description: (Optional) New task description.
       assignees:
         type: array
         example:
@@ -13492,12 +13492,6 @@ definitions:
         type: string
         example: New idea
         description: (Optional) New task name.
-      status:
-        type: integer
-        format: int32
-        example: 100
-        position: 4
-        description: (Optional) New status, between 0 and 100. Specify 100 to complete the task.
       etc:
         type: integer
         format: int32
@@ -13506,6 +13500,12 @@ definitions:
         description: |-
           (Optional) Estimated time to complete, in seconds. Must be non-negative or `null`.
           Specify `null` to clear the value.
+      status:
+        type: integer
+        format: int32
+        example: 100
+        position: 4
+        description: (Optional) New status, between 0 and 100. Specify 100 to complete the task.
       priority:
         type: integer
         format: int32
@@ -13530,14 +13530,14 @@ definitions:
   UpdateTimelogBody:
     type: object
     properties:
-      end:
-        type: string
-        example: '2026-04-26T10:45:00Z'
-        description: (Optional) New end timestamp (ISO 8601, UTC). Must be on or after the (new or existing) start. Sub-second precision is truncated to whole seconds. Omit or set `null` to preserve.
       start:
         type: string
         example: '2026-04-26T09:15:00Z'
         description: (Optional) New start timestamp (ISO 8601, UTC). Sub-second precision is truncated to whole seconds. Omit or set `null` to preserve.
+      end:
+        type: string
+        example: '2026-04-26T10:45:00Z'
+        description: (Optional) New end timestamp (ISO 8601, UTC). Must be on or after the (new or existing) start. Sub-second precision is truncated to whole seconds. Omit or set `null` to preserve.
       user:
         type: string
         example: john.doe@example.com
@@ -13593,10 +13593,6 @@ definitions:
         example: john@gmail.com
         description: Email address.
         allowEmptyValue: true
-      description:
-        type: string
-        example: This is *cool*!
-        description: Description (Markdown supported).
       descriptionText:
         type: string
         example: This is cool!
@@ -13605,6 +13601,10 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      description:
+        type: string
+        example: This is *cool*!
+        description: Description (Markdown supported).
       iconColor:
         type: string
         example: '37'
