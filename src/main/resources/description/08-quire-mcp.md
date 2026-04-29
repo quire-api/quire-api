@@ -74,6 +74,15 @@ ChatGPT supports remote MCP servers as **Connectors** (available on Plus, Pro, B
 3. Enter a name (for example, `Quire`) and the URL `https://mcp.quire.app/mcp`.
 4. Sign in to Quire when prompted and approve access.
 
+### Perplexity
+
+Perplexity supports remote MCP servers as **Custom Connectors** on paid plans (Pro, Max, Enterprise).
+
+1. Open `perplexity.ai` and go to **Settings → Connectors**.
+2. Click **Add Connector → Advanced** (or **Add custom connector**).
+3. Enter a name (for example, `Quire`), set the URL to `https://mcp.quire.app/mcp`, and choose **Streamable HTTP** as the transport with **OAuth** as the authentication method.
+4. Save, then click **Connect** and sign in to Quire to approve access.
+
 ### Cursor
 
 Add the following entry to your MCP settings (`~/.cursor/mcp.json` or **Settings → MCP**):
