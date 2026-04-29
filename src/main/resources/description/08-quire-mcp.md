@@ -65,6 +65,29 @@ Then trigger the OAuth flow from inside Claude Code:
 
 Pick `quire`, follow the link to authorize, and you're done.
 
+### Gemini CLI
+
+Edit `~/.gemini/settings.json` (user scope) or `.gemini/settings.json` (project scope):
+
+```json
+{
+  "mcpServers": {
+    "quire": {
+      "httpUrl": "https://mcp.quire.app/mcp",
+      "authProviderType": "dynamic_discovery"
+    }
+  }
+}
+```
+
+Restart Gemini CLI, then trigger OAuth:
+
+```
+/mcp auth quire
+```
+
+`dynamic_discovery` makes the CLI auto-detect the OAuth requirement, register a client, and open a browser to authorize. (OAuth requires that your local machine can receive a redirect on `http://localhost:7777/oauth/callback`.)
+
 ### ChatGPT
 
 ChatGPT supports remote MCP servers as **Connectors** (available on Plus, Pro, Business, Enterprise, and Edu plans).
