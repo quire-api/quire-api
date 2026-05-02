@@ -1,5 +1,6 @@
 package io.quire.api.model.approval;
 
+import io.quire.api.model.SimpleEntityWithId;
 import io.quire.api.model.SimpleIdentity;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -31,7 +32,9 @@ public class AppvCat {
         value = "Users allowed to request approval in this category.\n\n"
               + "- Omitted from the response: anyone can request.\n"
               + "- `[]` (empty list): admins only.\n"
-              + "- List of user OIDs: those specific users.",
+              + "- List of user OIDs: those specific users.\n\n"
+              + "For ID-based access, prefer `claimerRefs`, which "
+              + "returns `{oid, id}` pairs.",
         position = 20
     )
     public List<String> getClaimers() { return null; }
@@ -41,10 +44,31 @@ public class AppvCat {
               + "this category.\n\n"
               + "- Omitted from the response: anyone can respond.\n"
               + "- `[]` (empty list): admins only.\n"
-              + "- List of user OIDs: those specific users.",
+              + "- List of user OIDs: those specific users.\n\n"
+              + "For ID-based access, prefer `approverRefs`, which "
+              + "returns `{oid, id}` pairs.",
         position = 20
     )
     public List<String> getApprovers() { return null; }
+
+    @ApiModelProperty(
+        value = "Claimers as `{oid, id}` pairs — same shape as "
+              + "`?return=compact`. Recommended over `claimers` for "
+              + "callers using ID-based access. Tri-state semantics "
+              + "match `claimers`: omitted = anyone; `[]` = admins only; "
+              + "list = those specific users.",
+        position = 21
+    )
+    public List<SimpleEntityWithId> getClaimerRefs() { return null; }
+
+    @ApiModelProperty(
+        value = "Approvers as `{oid, id}` pairs — same shape as "
+              + "`?return=compact`. Recommended over `approvers` for "
+              + "callers using ID-based access. Tri-state semantics "
+              + "match `approvers`.",
+        position = 21
+    )
+    public List<SimpleEntityWithId> getApproverRefs() { return null; }
 
     @ApiModelProperty(
         value = "User who created this category.",

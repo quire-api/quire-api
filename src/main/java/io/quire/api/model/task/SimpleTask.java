@@ -100,15 +100,32 @@ public class SimpleTask extends StampedEntity {
     public List<SimpleIdentity> getAssignees() { return null; }
 
     @ApiModelProperty(
-        value = "IDs of tasks that depend on this task.",
+        value = "IDs of tasks that depend on this task.\n\n"
+              + "For ID-based access, prefer `successorRefs`, which "
+              + "returns `{oid, id}` pairs.",
         example = "['#135', '#26']"
     )
     public List<String> getSuccessors() { return null; }
     @ApiModelProperty(
-        value = "IDs of tasks that this task depends on.",
+        value = "IDs of tasks that this task depends on.\n\n"
+              + "For ID-based access, prefer `predecessorRefs`, which "
+              + "returns `{oid, id}` pairs.",
         example = "['#17', '#66', '#91']"
     )
     public List<String> getPredecessors() { return null; }
+
+    @ApiModelProperty(
+        value = "Successors as `{oid, id}` pairs — same shape as "
+              + "`?return=compact`. Recommended over `successors` for "
+              + "callers using ID-based access."
+    )
+    public List<TaskRef> getSuccessorRefs() { return null; }
+    @ApiModelProperty(
+        value = "Predecessors as `{oid, id}` pairs — same shape as "
+              + "`?return=compact`. Recommended over `predecessors` for "
+              + "callers using ID-based access."
+    )
+    public List<TaskRef> getPredecessorRefs() { return null; }
 
     @ApiModelProperty(
         value = "Whether the task is currently peekabooed (arhived).",
