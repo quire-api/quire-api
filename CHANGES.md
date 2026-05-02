@@ -1,5 +1,13 @@
 # Changelog
 
+## May 2, 2026
+
+- **Task / Approval API:** Added `{oid, id}` companion fields alongside existing OID-only response fields, for ID-friendly access (#24609). Old fields stay on the wire for backward compatibility; new code should prefer the `*Refs` / `*Ref` form.
+    - `SimpleTask`: `successorRefs`, `predecessorRefs` — list of `{oid, id}` task refs (same shape as `?return=compact`).
+    - `AppvCat`: `claimerRefs`, `approverRefs` — list of `{oid, id}` user refs. Tri-state semantics match the existing `claimers` / `approvers` (omitted = anyone; `[]` = admins only; list = those specific users).
+    - `Approval`: `requesterRef`, `approverRef` — scalar `{oid, id}` user refs. `approverRef` is null while `state` is `awaiting`.
+    - No input changes — `successors` / `claimers` / `addSuccessors` / etc. already accept OID, `#id`, integer ID, and (for users) email.
+
 ## Apr 27, 2026
 
 - **Task API:** Added the bulk-approve endpoint for applying a single approval transition (`request` / `approve` / `reject` / `change`) to N tasks in one call. Same body shape, atomic / skip-not-found / `items[i]:` error / rate-limit conventions as the bulk-add / bulk-update / bulk-remove / bulk-move / bulk-transfer endpoints.
