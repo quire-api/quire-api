@@ -124,6 +124,21 @@ $(function() {
       if ($section.length) {
         $section.addClass('expand');
       }
+
+      // The expand/collapse above reflows the sidebar; if the now-active
+      // link has been pushed outside the sidebar's scroll viewport, nudge
+      // #sidebar's scrollTop just enough to bring it back into view.
+      var sb = $sidebar[0];
+      var navEl = element[0];
+      if (sb && navEl) {
+        var sbRect = sb.getBoundingClientRect();
+        var navRect = navEl.getBoundingClientRect();
+        if (navRect.top < sbRect.top) {
+          sb.scrollTop += navRect.top - sbRect.top;
+        } else if (navRect.bottom > sbRect.bottom) {
+          sb.scrollTop += navRect.bottom - sbRect.bottom;
+        }
+      }
     });
 
     //

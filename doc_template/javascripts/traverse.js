@@ -61,7 +61,7 @@ Traverse.defaults = {
 Traverse.prototype._init = function() {
   var id = this.$element[0].id, // || Foundation.GetYoDigits(6, 'traverse'),
       _this = this;
-  this.$targets = $('.introduction .doc-copy > h1, [data-traverse-target]');
+  this.$targets = $('.introduction .doc-copy > h1, .introduction .doc-copy > h2, [data-traverse-target]');
   this.$links = this.$element.find('a');
   this.$element.attr({
     'data-resize': id,
@@ -177,8 +177,16 @@ Traverse.prototype.reflow = function(){
      curIdx = curVisible.length ? curVisible.length - 1 : 0;
    }
 
+   var $target = this.$targets.eq(curIdx);
+   var targetId = $target.attr('id') || $target.attr('data-traverse-target');
+   var $next = targetId ? this.$links.filter('[href="#' + targetId + '"]').first() : $();
+   if ($next.length === 0) {
+     // No matching nav link for this target — leave the active link as-is.
+     this.scrollPos = winPos;
+     return;
+   }
+
    var $prev = this.$active;
-   var $next = this.$links.eq(curIdx);
    this.$active.removeClass(this.options.activeClass);
    this.$active = $next.addClass(this.options.activeClass);
 
