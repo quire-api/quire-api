@@ -88,6 +88,29 @@ Restart Gemini CLI, then trigger OAuth:
 
 `dynamic_discovery` makes the CLI auto-detect the OAuth requirement, register a client, and open a browser to authorize. (OAuth requires that your local machine can receive a redirect on `http://localhost:7777/oauth/callback`.)
 
+### Codex CLI
+
+Add the server with one command:
+
+```bash
+codex mcp add quire --url https://mcp.quire.app/mcp
+```
+
+Or edit `~/.codex/config.toml` directly:
+
+```toml
+[mcp_servers.quire]
+url = "https://mcp.quire.app/mcp"
+```
+
+Then trigger the OAuth flow:
+
+```bash
+codex mcp login quire
+```
+
+Codex CLI opens a browser where you sign in to Quire and approve access. (If your environment needs a fixed callback port, set `mcp_oauth_callback_port` at the top of `config.toml`.)
+
 ### ChatGPT
 
 ChatGPT supports remote MCP servers as **Connectors** (available on Plus, Pro, Business, Enterprise, and Edu plans).
