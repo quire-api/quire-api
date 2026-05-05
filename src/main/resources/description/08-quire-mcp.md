@@ -129,6 +129,22 @@ Perplexity supports remote MCP servers as **Custom Connectors** on paid plans (P
 3. Enter a name (for example, `Quire`), set the URL to `https://mcp.quire.app/mcp`, and choose **Streamable HTTP** as the transport with **OAuth** as the authentication method.
 4. Save, then click **Connect** and sign in to Quire to approve access.
 
+### Microsoft Copilot Studio
+
+Copilot Studio connects to remote MCP servers through the **MCP onboarding wizard** in your agent.
+
+1. Open your agent in Copilot Studio and go to the **Tools** page.
+2. Select **Add a tool → New tool → Model Context Protocol**.
+3. Fill in the wizard:
+    * **Server name**: `Quire`
+    * **Server description**: a short summary the agent orchestrator can use to decide when to call the server (for example, "Manage Quire projects, tasks, and comments").
+    * **Server URL**: `https://mcp.quire.app/mcp`
+    * **Authentication**: **OAuth 2.0** → **Dynamic discovery**.
+4. Select **Create**, then **Next**. On **Add tool**, choose **Create a new connection**, sign in to Quire, and approve access.
+5. Click **Add to agent**.
+
+Dynamic discovery uses Quire's OAuth metadata to register a client and complete authorization automatically — no client ID or secret needs to be configured by hand.
+
 ### Cursor
 
 Add the following entry to your MCP settings (`~/.cursor/mcp.json` or **Settings → MCP**):
