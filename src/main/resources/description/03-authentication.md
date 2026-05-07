@@ -94,11 +94,12 @@ To retrieve the access token, you have to post a request to `https://quire.io/oa
 | code | {your-authorization-code} |
 | client\_id | {your-client-ID} |
 | client\_secret | {your-client-secret} |
+| redirect\_uri | Required if you specified `redirect_uri` in the previous authorization step. The value must be identical to the one used there. |
 
 ```bash
 curl -X POST \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "grant_type=authorization_code&code=Your_code_from_previous_step&client_id=Your_app_client_id&client_secret=Your_app_client_secret" \
+  -d "grant_type=authorization_code&code=Your_code_from_previous_step&client_id=Your_app_client_id&client_secret=Your_app_client_secret&redirect_uri=Your_redirect_uri" \
   https://quire.io/oauth/token
 ```
 
@@ -121,7 +122,7 @@ Quire supports <a href="https://tools.ietf.org/html/rfc7636">PKCE (RFC 7636)</a>
 1. Add `code_challenge` and `code_challenge_method=S256` to the authorization request.
 2. Send `code_verifier` instead of `client_secret` when exchanging the authorization code for a token.
 
-> **Note:** Only `S256` is supported. PKCE tokens do not include a `refresh_token`.
+> **Note:** Only `S256` is supported. PKCE tokens do not include a `refresh_token`. The `redirect_uri` rule above also applies — if you specified one at the authorization step, you must echo the same value when exchanging the code.
 
 ### Use Access Token to Access Quire API
 
