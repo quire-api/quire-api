@@ -1,5 +1,9 @@
 # Changelog
 
+## May 7, 2026
+
+- **OAuth:** [Loopback redirect URIs](https://quire.io/dev/api/#authentication) (`127.0.0.1`, `[::1]`, `localhost`) now accept **any port** at request time, per [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3). Scheme, host, and path must still match the registered URI exactly. Lets installed apps (CLIs, desktop tools) bind to a free ephemeral port without pinning users to a fixed one. Non-loopback URIs are unchanged.
+
 ## May 2, 2026
 
 - **Task / Approval API:** Added `{oid, id}` companion fields alongside existing OID-only response fields, for ID-friendly access (#24609). Old fields stay on the wire for backward compatibility; new code should prefer the `*Refs` / `*Ref` form.
