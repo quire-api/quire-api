@@ -131,12 +131,18 @@ The token should be kept carefully and permanently since you need it to access e
 
 ### PKCE Support
 
-Quire supports <a href="https://tools.ietf.org/html/rfc7636">PKCE (RFC 7636)</a> for public clients such as single-page apps. To use it:
+Quire supports <a href="https://tools.ietf.org/html/rfc7636">PKCE (RFC 7636)</a> for public clients such as single-page apps and installed CLIs. To use it:
 
 1. Add `code_challenge` and `code_challenge_method=S256` to the authorization request.
 2. Send `code_verifier` instead of `client_secret` when exchanging the authorization code for a token.
 
-> **Note:** Only `S256` is supported. PKCE tokens do not include a `refresh_token`. The `redirect_uri` rule above also applies — if you specified one at the authorization step, you must echo the same value when exchanging the code.
+> **Note:** Only `S256` is supported. The `redirect_uri` rule above also applies — if you specified one at the authorization step, you must echo the same value when exchanging the code.
+
+#### Access token lifetime
+
+PKCE-issued access tokens are valid for **7 days** (vs. 1 hour for confidential clients), and the response does **not** include a `refresh_token` — public clients have no `client_secret` with which to authenticate the refresh-token grant. When the access token expires, run the authorization flow again to obtain a new one.
+
+The `expires_in` field of the token response reflects the actual remaining lifetime, in seconds.
 
 ### Use Access Token to Access Quire API
 
