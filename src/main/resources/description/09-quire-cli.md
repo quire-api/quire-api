@@ -8,7 +8,7 @@ Once you are signed in, you can list and search projects, create or update tasks
 
 ## Install
 
-The CLI ships through two channels.
+The CLI ships through three channels.
 
 ### npm (recommended)
 
@@ -26,6 +26,17 @@ npx @quire-io/quire-cli --help
 ```
 
 The package is published as [`@quire-io/quire-cli`](https://www.npmjs.com/package/@quire-io/quire-cli); the installed binary is named `quire`.
+
+### Homebrew
+
+For macOS or Linux users with [Homebrew](https://brew.sh):
+
+```bash
+brew install quire-io/quire/quire
+quire --version
+```
+
+This installs the same single-file binary that GitHub Releases ships, via the [`quire-io/homebrew-quire`](https://github.com/quire-io/homebrew-quire) tap. After the first install, `brew upgrade quire` keeps you on the latest version.
 
 ### Single-file binary
 
@@ -59,6 +70,7 @@ How you update the CLI depends on how you installed it:
 | Installed via | Upgrade command |
 | --- | --- |
 | `npm i -g` | `npm i -g @quire-io/quire-cli@latest` |
+| Homebrew | `brew upgrade quire` |
 | `npx` | nothing — `npx @quire-io/quire-cli` always pulls the latest unless you pinned a version |
 | GitHub Releases binary | re-download from the [Releases page](https://github.com/quire-io/quire-cli/releases) and replace the binary on `$PATH` |
 
