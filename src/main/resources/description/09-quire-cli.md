@@ -52,6 +52,18 @@ quire --version
 
 The binaries embed Node 22 LTS, so no separate runtime is required.
 
+## Updating
+
+How you update the CLI depends on how you installed it:
+
+| Installed via | Upgrade command |
+| --- | --- |
+| `npm i -g` | `npm i -g @quire-io/quire-cli@latest` |
+| `npx` | nothing — `npx @quire-io/quire-cli` always pulls the latest unless you pinned a version |
+| GitHub Releases binary | re-download from the [Releases page](https://github.com/quire-io/quire-cli/releases) and replace the binary on `$PATH` |
+
+Check your installed version with `quire --version` and compare against the [Releases page](https://github.com/quire-io/quire-cli/releases).
+
 ## Get started
 
 ```bash
