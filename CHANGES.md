@@ -1,5 +1,9 @@
 # Changelog
 
+## May 8, 2026
+
+- **OAuth (PKCE):** PKCE-issued access tokens now last **7 days** (vs. 1 hour for confidential clients). Public clients (CLIs, single-page apps) can't authenticate the refresh-token grant, so this avoids forcing hourly re-authorization. The token response continues to omit `refresh_token` for PKCE flows; when the access token expires, run the authorization flow again. The `expires_in` field reflects the actual remaining lifetime. See [PKCE Support](https://quire.io/dev/api/#authentication).
+
 ## May 7, 2026
 
 - **OAuth:** [Loopback redirect URIs](https://quire.io/dev/api/#authentication) (`127.0.0.1`, `[::1]`, `localhost`) now accept **any port** at request time, per [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3). Scheme, host, and path must still match the registered URI exactly. Lets installed apps (CLIs, desktop tools) bind to a free ephemeral port without pinning users to a fixed one. Non-loopback URIs are unchanged.
