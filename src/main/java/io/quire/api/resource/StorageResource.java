@@ -24,15 +24,16 @@ import javax.ws.rs.core.Response;
       + "  - Enterprise: **1,000** records.\n"
       + "- **Per write**: each `PUT` value is capped at **4 KiB** "
       + "(JSON-serialized request body). Uniform across plans.\n"
-      + "- **Rate limit (per OApp)**: across every storage endpoint and "
-      + "all access tokens of the OApp combined, calls are bounded at "
-      + "**200 / minute** and **3,000 / hour**.\n\n"
+      + "- **Rate limit**: every storage call counts against the calling "
+      + "user's standard per-organization rate limit (see [Rate Limits]"
+      + "(#section/Rate-Limits)) — same bucket and plan-tier as the rest "
+      + "of the API. No separate per-OApp ceiling.\n\n"
       + "Exceeding any of these returns:\n"
       + "- `402 Payment Required` (`ecQuotaExceeded`) — record cap reached "
       + "for the current plan; upgrade or delete keys to free space.\n"
       + "- `413 Payload Too Large` (`ecTooLarge`) — value exceeds 4 KiB.\n"
       + "- `429 Too Many Requests` (with `Retry-After` header in seconds) — "
-      + "OApp's per-minute or per-hour rate limit hit."
+      + "organization's per-minute or per-hour rate limit hit."
 )
 @Produces({"application/json"})
 public class StorageResource {
@@ -49,7 +50,7 @@ public class StorageResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of stored entries (may be empty).",
             response = StorageList.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — OApp rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
     })
     public Response getAllValues() { return null; }
 
@@ -66,7 +67,7 @@ public class StorageResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of matching entries (may be empty).",
             response = StorageList.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — OApp rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
     })
     public Response getValues(
         @ApiParam(
@@ -89,7 +90,7 @@ public class StorageResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — stored value.", response = StorageMap.class),
         @ApiResponse(code = 404, message = "Not Found — no value stored under this key for the current access token."),
-        @ApiResponse(code = 429, message = "Too Many Requests — OApp rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
     })
     public Response getValue(
         @ApiParam(value = "The key name.", example = "latest", required = true)
@@ -110,7 +111,7 @@ public class StorageResource {
         @ApiResponse(code = 400, message = "Bad Request — malformed JSON."),
         @ApiResponse(code = 402, message = "Payment Required — record cap reached for the current plan. Delete keys or upgrade."),
         @ApiResponse(code = 413, message = "Payload Too Large — value exceeds the 4 KiB per-write cap."),
-        @ApiResponse(code = 429, message = "Too Many Requests — OApp rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
     })
     public Response updateValue(
         @ApiParam(value = "The key name.", example = "latest", required = true)
@@ -133,7 +134,7 @@ public class StorageResource {
     )
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content"),
-        @ApiResponse(code = 429, message = "Too Many Requests — OApp rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
     })
     public Response deleteValue(
         @ApiParam(value = "The key name.", example = "latest", required = true)
