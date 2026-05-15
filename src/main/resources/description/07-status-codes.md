@@ -3,6 +3,7 @@
 | Code | Meaning                | Description
 |------|------------------------|--------------------------------
 | 200  | Success                | Request successful
+| 204  | No Content             | Request successful; the endpoint has no response body to return.
 | 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.
 | 401  | Unauthorized           | Invalid or expired token.
 | 402  | Payment required       | The organization’s subscription does not permit use of this app.
