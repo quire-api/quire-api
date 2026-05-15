@@ -4,13 +4,17 @@ To protect the stability of the API and keep it available to all users, Quire en
 Requests that hit any of our rate limits will receive a `429 Too Many Requests` response.
 We may change these quotas or add new quotas in the future.
 
-Here are the limits for free plans.
+Here are the limits by plan.
 
 | Plan | Maximum requests per organization, per *minute* | Maximum requests per organization, per *hour*
 |---------|------|-------
-| Free | 25  | 120
+| Free | 50 | 200
+| Professional | 300 | 1,250
+| Premium | 1,000 | 5,000
+| Enterprise | 100 &times; members | 500 &times; members
 
 > Note: the limit is per-organization. It sums up the total number of all accesses from all applications for each organization.
+> Enterprise quotas scale with the number of paid members in the organization.
 > For more quota, please refer to [Pricing](/pricing).
 
 When a rate limit is exceeded, the response includes a standard [`Retry-After`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After) header
