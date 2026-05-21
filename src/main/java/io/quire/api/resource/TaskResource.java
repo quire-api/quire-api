@@ -1431,13 +1431,13 @@ public class TaskResource {
               + "single-task calls. Charged upfront; if the cost would "
               + "exceed the quota, the whole batch is rejected with `429` "
               + "before any item is processed.\n\n"
-              + "**Dry-run**: pass `?dry_run=true` to preview the call "
+              + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
               + "body shape on success and same `{code, message}` (with "
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
-              + "without `?dry_run` will succeed (subject to concurrent "
+              + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
               + "**Caveat — returned identifiers are not stable**: the "
               + "`oid` and `id` values in a dry-run response are "
@@ -1468,7 +1468,7 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
               + "rate-limit cost (`items.length` units, halved for "
-              + "`?dry_run=true`) would exceed the caller's per-minute / "
+              + "`?dry-run=true`) would exceed the caller's per-minute / "
               + "per-hour API quota, OR the batch would exceed the "
               + "project's task quota.",
             response = ErrorResponse.class)
@@ -1496,7 +1496,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @POST
@@ -1534,7 +1534,7 @@ public class TaskResource {
               + "immediately after task `42`.\n\n"
               + "See `POST /task/bulk-add/id/{projectId}` for full body / "
               + "response semantics, atomic-rollback rules, `?return=` "
-              + "and `?dry_run=` details.",
+              + "and `?dry-run=` details.",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1579,7 +1579,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @POST
@@ -1593,7 +1593,7 @@ public class TaskResource {
               + "See the by-ID forms `POST /task/bulk-add/id/{projectId}` "
               + "and `POST /task/bulk-add/id/{projectId}/{taskId}` for body "
               + "shape, atomic semantics, sliding-chain order preservation, "
-              + "`?dry_run=`, and response details.",
+              + "`?dry-run=`, and response details.",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1639,7 +1639,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @PUT
@@ -1687,13 +1687,13 @@ public class TaskResource {
               + "is `items.length` — the same total cost as `N` equivalent "
               + "single-task PUTs. The cost does not adjust for skipped "
               + "items; the per-item resolve still runs.\n\n"
-              + "**Dry-run**: pass `?dry_run=true` to preview the call "
+              + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
               + "body shape on success and same `{code, message}` (with "
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
-              + "without `?dry_run` will succeed (subject to concurrent "
+              + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
               + "Rate-limit cost: `ceil(N / 2)` units for a dry-run "
               + "(minimum 1) vs. `N` units for a real call.",
@@ -1720,7 +1720,7 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
               + "rate-limit cost (`items.length` units, halved for "
-              + "`?dry_run=true`) would exceed the caller's per-minute / "
+              + "`?dry-run=true`) would exceed the caller's per-minute / "
               + "per-hour API quota.",
             response = ErrorResponse.class)
     })
@@ -1744,7 +1744,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @PUT
@@ -1753,7 +1753,7 @@ public class TaskResource {
         value = "Bulk-update N tasks in a project by OID.",
         notes = "OID-form of `PUT /task/bulk-update/id/{projectId}` — see "
               + "that endpoint for body shape, atomic semantics, "
-              + "skip-not-found behaviour, `?dry_run=`, and "
+              + "skip-not-found behaviour, `?dry-run=`, and "
               + "response details.",
         response = Task.class,
         responseContainer = "List"
@@ -1788,7 +1788,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @DELETE
@@ -1833,13 +1833,13 @@ public class TaskResource {
               + "is `items.length` — the same total cost as `N` equivalent "
               + "single-task DELETEs. The cost does not adjust for skipped "
               + "items.\n\n"
-              + "**Dry-run**: pass `?dry_run=true` to preview the call "
+              + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
               + "body shape on success and same `{code, message}` (with "
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
-              + "without `?dry_run` will succeed (subject to concurrent "
+              + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls). Rate-limit cost: "
               + "`ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` "
               + "units for a real call.",
@@ -1865,7 +1865,7 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
               + "rate-limit cost (`items.length` units, halved for "
-              + "`?dry_run=true`) would exceed the caller's per-minute / "
+              + "`?dry-run=true`) would exceed the caller's per-minute / "
               + "per-hour API quota.",
             response = ErrorResponse.class)
     })
@@ -1888,7 +1888,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @DELETE
@@ -1897,7 +1897,7 @@ public class TaskResource {
         value = "Bulk-remove N tasks from a project by OID.",
         notes = "OID-form of `DELETE /task/bulk-remove/id/{projectId}` — "
               + "see that endpoint for body shape, atomic semantics, "
-              + "skip-not-found behaviour, `?dry_run=`, and "
+              + "skip-not-found behaviour, `?dry-run=`, and "
               + "response details.",
         response = Object.class,
         responseContainer = "List"
@@ -1931,7 +1931,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     // -------- Bulk move (#24554) --------
@@ -1987,13 +1987,13 @@ public class TaskResource {
               + "against the per-minute / per-hour API quota, where `N` "
               + "is `items.length` — same total cost as `N` equivalent "
               + "single-task moves.\n\n"
-              + "**Dry-run**: pass `?dry_run=true` to preview the call "
+              + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
               + "body shape on success and same `{code, message}` (with "
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
-              + "without `?dry_run` will succeed (subject to concurrent "
+              + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls). Rate-limit cost: "
               + "`ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` "
               + "units for a real call.\n\n"
@@ -2071,7 +2071,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @PUT
@@ -2081,7 +2081,7 @@ public class TaskResource {
         notes = "OID-form of `PUT /task/bulk-move/id/{projectId}` — see "
               + "that endpoint for body shape, atomic / skip-not-found "
               + "semantics, sliding-chain order preservation, "
-              + "`?dry_run=`, and rate-limit details.\n\n"
+              + "`?dry-run=`, and rate-limit details.\n\n"
               + "Note: `{ref}` (in `?task=`) is a task OID (or `root`) "
               + "in this URL form, matching the by-OID grammar.",
         response = TaskWithParentInfo.class,
@@ -2133,7 +2133,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     // -------- Bulk transfer (#24555) --------
@@ -2190,14 +2190,14 @@ public class TaskResource {
               + "against the per-minute / per-hour API quota, where `N` "
               + "is `items.length` — same total cost as `N` equivalent "
               + "single-task transfers.\n\n"
-              + "**Dry-run**: pass `?dry_run=true` to preview the call "
+              + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes in **either** the source "
               + "or target project. Same per-item validation and "
               + "permission checks (source AND target) as a real call; "
               + "same response body shape on success and same `{code, "
               + "message}` (with `items[i]:` prefix) on failure. A `200` "
               + "from a dry-run is a strong signal that re-issuing the "
-              + "identical body without `?dry_run` will succeed (subject "
+              + "identical body without `?dry-run` will succeed (subject "
               + "to concurrent edits between the two calls). Rate-limit "
               + "cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. "
               + "`N` units for a real call.",
@@ -2303,7 +2303,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @PUT
@@ -2313,7 +2313,7 @@ public class TaskResource {
         notes = "OID-form of `PUT /task/bulk-transfer/id/{sourceProjectId}` "
               + "— see that endpoint for body shape, atomic / skip-not-"
               + "found semantics, sliding-chain order preservation, "
-              + "auto-remap flags, `?dry_run=`, and rate-limit "
+              + "auto-remap flags, `?dry-run=`, and rate-limit "
               + "details.\n\n"
               + "Note: `?project=` and `?task=` are OIDs (or `root` / "
               + "`-`) in this URL form, matching the by-OID grammar.",
@@ -2381,7 +2381,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     // -------- Bulk approve --------
@@ -2407,13 +2407,13 @@ public class TaskResource {
               + "single-task `POST /task/approve/id/{projectId}/{taskId}`. Any per-item "
               + "permission failure rolls back the whole batch with an "
               + "`items[i]: ...` prefixed error.\n\n"
-              + "**Dry-run**: pass `?dry_run=true` to preview the call "
+              + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
               + "body shape on success and same `{code, message}` (with "
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
-              + "without `?dry_run` will succeed (subject to concurrent "
+              + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls). Rate-limit cost: "
               + "`ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` "
               + "units for a real call.",
@@ -2486,7 +2486,7 @@ public class TaskResource {
             example = "true",
             allowableValues = "true, false"
         )
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @POST
@@ -2495,7 +2495,7 @@ public class TaskResource {
         value = "Bulk-approve N tasks in a project by OID.",
         notes = "OID-form of `POST /task/bulk-approve/id/{projectId}` — "
               + "see that endpoint for body shape, query params, "
-              + "atomic / skip-not-found semantics, `?dry_run=`, "
+              + "atomic / skip-not-found semantics, `?dry-run=`, "
               + "and rate-limit details.",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
@@ -2512,7 +2512,7 @@ public class TaskResource {
         @ApiParam(allowableValues = "full, compact")
         @QueryParam("return") String returnMode,
         @ApiParam(allowableValues = "true, false")
-        @QueryParam("dry_run") String dryRun
+        @QueryParam("dry-run") String dryRun
     ) { return null; }
 
     @DELETE
