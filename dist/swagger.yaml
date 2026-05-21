@@ -5240,6 +5240,12 @@ paths:
         ```
 
         **Rate-limit cost**: each bulk call costs `N` units against the per-minute / per-hour API quota, where `N` is the number of submitted items — the same total cost as `N` equivalent single-task calls. Charged upfront; if the cost would exceed the quota, the whole batch is rejected with `429` before any item is processed.
+
+        **Dry-run**: pass `?dry_run=true` to preview the call without persisting any changes. Same per-item validation and permission checks as a real call; same response body shape on success and same `{code, message}` (with `items[i]:` prefix) on failure. A `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry_run` will succeed (subject to concurrent edits between the two calls).
+
+        **Caveat — returned identifiers are not stable**: the `oid` and `id` values in a dry-run response are discarded along with everything else. A follow-up real call allocates fresh identifiers, so don't persist or reference dry-run OIDs / IDs across calls.
+
+        **Rate-limit cost**: a dry-run costs `ceil(N / 2)` units (minimum 1), where `N` is `items.length`. A real call costs `N` units.
       operationId: bulkAddTaskById
       produces:
         - application/json
@@ -5266,6 +5272,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Set to `true` to preview the call without persisting any changes. Same validation, permissions, and response shape as a real call. Returned `oid` / `id` values are discarded — don't store them. Rate-limit cost is `ceil(N / 2)` (minimum 1). See the endpoint notes for full details.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of created tasks (one per submitted item, root only for nested subtrees).
@@ -5290,7 +5305,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
         '429':
-          description: Too Many Requests — the batch's rate-limit cost (`items.length` units) would exceed the caller's per-minute / per-hour API quota, OR the batch would exceed the project's task quota.
+          description: Too Many Requests — the batch's rate-limit cost (`items.length` units, halved for `?dry_run=true`) would exceed the caller's per-minute / per-hour API quota, OR the batch would exceed the project's task quota.
           schema:
             $ref: '#/definitions/ErrorResponse'
   /task/bulk-add/id/{projectId}/{taskId}:
@@ -5330,7 +5345,7 @@ paths:
 
         All three become siblings of task `42`, in submitted order, immediately after task `42`.
 
-        See `POST /task/bulk-add/id/{projectId}` for full body / response semantics, atomic-rollback rules, and `?return=` details.
+        See `POST /task/bulk-add/id/{projectId}` for full body / response semantics, atomic-rollback rules, `?return=` and `?dry_run=` details.
       operationId: bulkAddTaskAtTaskById
       produces:
         - application/json
@@ -5373,6 +5388,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Preview mode — see `POST /task/bulk-add/id/{projectId}`.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of created tasks.
@@ -5408,7 +5432,7 @@ paths:
       description: |-
         Creates up to **300 tasks** anchored at the entity identified by `oid` — a project OID creates root tasks, a task OID creates subtasks (or siblings, depending on `?position=`).
 
-        See the by-ID forms `POST /task/bulk-add/id/{projectId}` and `POST /task/bulk-add/id/{projectId}/{taskId}` for body shape, atomic semantics, sliding-chain order preservation, and response details.
+        See the by-ID forms `POST /task/bulk-add/id/{projectId}` and `POST /task/bulk-add/id/{projectId}/{taskId}` for body shape, atomic semantics, sliding-chain order preservation, `?dry_run=`, and response details.
       operationId: bulkAddTaskByOid
       produces:
         - application/json
@@ -5445,6 +5469,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Preview mode — see `POST /task/bulk-add/id/{projectId}`.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of created tasks.
@@ -5489,6 +5522,8 @@ paths:
         ```
 
         **Permissions** — same per-task role checks as the single-task `POST /task/approve/id/{projectId}/{taskId}`. Any per-item permission failure rolls back the whole batch with an `items[i]: ...` prefixed error.
+
+        **Dry-run**: pass `?dry_run=true` to preview the call without persisting any changes. Same per-item validation and permission checks as a real call; same response body shape on success and same `{code, message}` (with `items[i]:` prefix) on failure. A `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry_run` will succeed (subject to concurrent edits between the two calls). Rate-limit cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` units for a real call.
       operationId: bulkApproveTaskById
       produces:
         - application/json
@@ -5533,6 +5568,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Set to `true` to preview the call without persisting any changes. Same validation, permissions, and response shape as a real call. Rate-limit cost is `ceil(N / 2)` (minimum 1). See the endpoint notes for full details.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of updated tasks (same length as the request body; `null` for skipped items whose task wasn't found).
@@ -5561,7 +5605,7 @@ paths:
       tags:
         - task
       summary: Bulk-approve N tasks in a project by OID.
-      description: OID-form of `POST /task/bulk-approve/id/{projectId}` — see that endpoint for body shape, query params, atomic / skip-not-found semantics, and rate-limit details.
+      description: OID-form of `POST /task/bulk-approve/id/{projectId}` — see that endpoint for body shape, query params, atomic / skip-not-found semantics, `?dry_run=`, and rate-limit details.
       operationId: bulkApproveTaskByOid
       produces:
         - application/json
@@ -5599,6 +5643,13 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          required: false
+          type: string
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: successful operation
@@ -5646,6 +5697,8 @@ paths:
 
         **Rate-limit cost**: each bulk call costs `N` units against the per-minute / per-hour API quota, where `N` is `items.length` — same total cost as `N` equivalent single-task moves.
 
+        **Dry-run**: pass `?dry_run=true` to preview the call without persisting any changes. Same per-item validation and permission checks as a real call; same response body shape on success and same `{code, message}` (with `items[i]:` prefix) on failure. A `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry_run` will succeed (subject to concurrent edits between the two calls). Rate-limit cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` units for a real call.
+
         All items must belong to the project in the URL. Cross-project moves go through bulk-transfer (see #24555).
       operationId: bulkMoveTaskById
       produces:
@@ -5690,6 +5743,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Set to `true` to preview the call without persisting any changes. Same validation, permissions, and response shape as a real call. Rate-limit cost is `ceil(N / 2)` (minimum 1). See the endpoint notes for full details.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of moved tasks (slots for not-found items are `null`).
@@ -5723,7 +5785,7 @@ paths:
         - task
       summary: Bulk-move N tasks within a project by OID.
       description: |-
-        OID-form of `PUT /task/bulk-move/id/{projectId}` — see that endpoint for body shape, atomic / skip-not-found semantics, sliding-chain order preservation, and rate-limit details.
+        OID-form of `PUT /task/bulk-move/id/{projectId}` — see that endpoint for body shape, atomic / skip-not-found semantics, sliding-chain order preservation, `?dry_run=`, and rate-limit details.
 
         Note: `{ref}` (in `?task=`) is a task OID (or `root`) in this URL form, matching the by-OID grammar.
       operationId: bulkMoveTaskByOid
@@ -5768,6 +5830,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Preview mode — see `PUT /task/bulk-move/id/{projectId}`.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of moved tasks.
@@ -5833,6 +5904,8 @@ paths:
         `?return=compact` is a no-op here (the response is already in identifier shape).
 
         **Rate-limit cost**: each bulk call costs `N` units against the per-minute / per-hour API quota, where `N` is `items.length` — the same total cost as `N` equivalent single-task DELETEs. The cost does not adjust for skipped items.
+
+        **Dry-run**: pass `?dry_run=true` to preview the call without persisting any changes. Same per-item validation and permission checks as a real call; same response body shape on success and same `{code, message}` (with `items[i]:` prefix) on failure. A `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry_run` will succeed (subject to concurrent edits between the two calls). Rate-limit cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` units for a real call.
       operationId: bulkRemoveTaskById
       produces:
         - application/json
@@ -5850,6 +5923,15 @@ paths:
             type: array
             items:
               type: object
+        - name: dry_run
+          in: query
+          description: (Optional) Set to `true` to preview the call without persisting any changes. Same validation, permissions, and response shape as a real call. Rate-limit cost is `ceil(N / 2)` (minimum 1). See the endpoint notes for full details.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of `{oid}` elements (slots for not-found items are `null`).
@@ -5872,7 +5954,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
         '429':
-          description: Too Many Requests — the batch's rate-limit cost (`items.length` units) would exceed the caller's per-minute / per-hour API quota.
+          description: Too Many Requests — the batch's rate-limit cost (`items.length` units, halved for `?dry_run=true`) would exceed the caller's per-minute / per-hour API quota.
           schema:
             $ref: '#/definitions/ErrorResponse'
   /task/bulk-remove/{projectOid}:
@@ -5880,7 +5962,7 @@ paths:
       tags:
         - task
       summary: Bulk-remove N tasks from a project by OID.
-      description: OID-form of `DELETE /task/bulk-remove/id/{projectId}` — see that endpoint for body shape, atomic semantics, skip-not-found behaviour, and response details.
+      description: OID-form of `DELETE /task/bulk-remove/id/{projectId}` — see that endpoint for body shape, atomic semantics, skip-not-found behaviour, `?dry_run=`, and response details.
       operationId: bulkRemoveTaskByOid
       produces:
         - application/json
@@ -5898,6 +5980,15 @@ paths:
             type: array
             items:
               type: object
+        - name: dry_run
+          in: query
+          description: (Optional) Preview mode — see `DELETE /task/bulk-remove/id/{projectId}`.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of `{oid}` elements.
@@ -5964,6 +6055,8 @@ paths:
         **Order preservation (sliding chain)**: items are transferred in submitted order — items 1..N-1 land *after the previous successful transfer*, regardless of `?position=`.
 
         **Rate-limit cost**: each bulk call costs `N` units against the per-minute / per-hour API quota, where `N` is `items.length` — same total cost as `N` equivalent single-task transfers.
+
+        **Dry-run**: pass `?dry_run=true` to preview the call without persisting any changes in **either** the source or target project. Same per-item validation and permission checks (source AND target) as a real call; same response body shape on success and same `{code, message}` (with `items[i]:` prefix) on failure. A `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry_run` will succeed (subject to concurrent edits between the two calls). Rate-limit cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` units for a real call.
       operationId: bulkTransferTaskById
       produces:
         - application/json
@@ -6037,6 +6130,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Set to `true` to preview the call without persisting any changes in either the source or target project. Same validation, permissions, and response shape as a real call. Rate-limit cost is `ceil(N / 2)` (minimum 1). See the endpoint notes for full details.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of transferred tasks (slots for not-found items are `null`).
@@ -6070,7 +6172,7 @@ paths:
         - task
       summary: Bulk-transfer N tasks across projects by OID.
       description: |-
-        OID-form of `PUT /task/bulk-transfer/id/{sourceProjectId}` — see that endpoint for body shape, atomic / skip-not-found semantics, sliding-chain order preservation, auto-remap flags, and rate-limit details.
+        OID-form of `PUT /task/bulk-transfer/id/{sourceProjectId}` — see that endpoint for body shape, atomic / skip-not-found semantics, sliding-chain order preservation, auto-remap flags, `?dry_run=`, and rate-limit details.
 
         Note: `?project=` and `?task=` are OIDs (or `root` / `-`) in this URL form, matching the by-OID grammar.
       operationId: bulkTransferTaskByOid
@@ -6145,6 +6247,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Preview mode — see `PUT /task/bulk-transfer/id/{sourceProjectId}`.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of transferred tasks.
@@ -6211,6 +6322,10 @@ paths:
         **Skip-not-found**: items whose target task can't be found (already removed, never existed, etc.) are silently skipped — the corresponding response slot is `null` and the rest of the batch proceeds. This makes the endpoint **idempotent** for agents — safe to re-submit after a partial network failure or concurrent removal without diffing state first. Shape errors (both / neither `oid` and `id`, malformed ref) still 400 + rollback — those are typos, not state races.
 
         **Rate-limit cost**: each bulk call costs `N` units against the per-minute / per-hour API quota, where `N` is `items.length` — the same total cost as `N` equivalent single-task PUTs. The cost does not adjust for skipped items; the per-item resolve still runs.
+
+        **Dry-run**: pass `?dry_run=true` to preview the call without persisting any changes. Same per-item validation and permission checks as a real call; same response body shape on success and same `{code, message}` (with `items[i]:` prefix) on failure. A `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry_run` will succeed (subject to concurrent edits between the two calls).
+
+        Rate-limit cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` units for a real call.
       operationId: bulkUpdateTaskById
       produces:
         - application/json
@@ -6237,6 +6352,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Set to `true` to preview the call without persisting any changes. Same validation, permissions, and response shape as a real call. Rate-limit cost is `ceil(N / 2)` (minimum 1). See the endpoint notes for full details.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of updated tasks (slots for not-found items are `null`).
@@ -6261,7 +6385,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
         '429':
-          description: Too Many Requests — the batch's rate-limit cost (`items.length` units) would exceed the caller's per-minute / per-hour API quota.
+          description: Too Many Requests — the batch's rate-limit cost (`items.length` units, halved for `?dry_run=true`) would exceed the caller's per-minute / per-hour API quota.
           schema:
             $ref: '#/definitions/ErrorResponse'
   /task/bulk-update/{projectOid}:
@@ -6269,7 +6393,7 @@ paths:
       tags:
         - task
       summary: Bulk-update N tasks in a project by OID.
-      description: OID-form of `PUT /task/bulk-update/id/{projectId}` — see that endpoint for body shape, atomic semantics, skip-not-found behaviour, and response details.
+      description: OID-form of `PUT /task/bulk-update/id/{projectId}` — see that endpoint for body shape, atomic semantics, skip-not-found behaviour, `?dry_run=`, and response details.
       operationId: bulkUpdateTaskByOid
       produces:
         - application/json
@@ -6296,6 +6420,15 @@ paths:
           enum:
             - full
             - compact
+        - name: dry_run
+          in: query
+          description: (Optional) Preview mode — see `PUT /task/bulk-update/id/{projectId}`.
+          required: false
+          type: string
+          x-example: 'true'
+          enum:
+            - 'true'
+            - 'false'
       responses:
         '200':
           description: OK — array of updated tasks.
@@ -9273,6 +9406,10 @@ definitions:
       - name
       - type
     properties:
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -9281,20 +9418,20 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money`/`formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: (Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers.
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       hidden:
         type: boolean
         example: false
@@ -9360,10 +9497,6 @@ definitions:
         description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
         items:
           $ref: '#/definitions/FieldConditionFormat'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       name:
         type: string
         example: Priority
@@ -9401,6 +9534,10 @@ definitions:
         type: string
         example: '2026-04-26T09:00:00Z'
         description: Start timestamp (ISO 8601, UTC). Sub-second precision is truncated to whole seconds.
+      user:
+        type: string
+        example: john.doe@example.com
+        description: (Optional) User identifier (OID, ID, or email) the log is credited to. Omitted, `null`, or empty defaults to the authenticated caller. Unknown users return `400 Bad Request`.
       billable:
         type: boolean
         example: true
@@ -9409,10 +9546,6 @@ definitions:
         type: string
         example: Pair-programming session
         description: (Optional) Free-form note for the log. Omitted, `null`, or empty stores no note.
-      user:
-        type: string
-        example: john.doe@example.com
-        description: (Optional) User identifier (OID, ID, or email) the log is credited to. Omitted, `null`, or empty defaults to the authenticated caller. Unknown users return `400 Bad Request`.
   Approval:
     type: object
     properties:
@@ -9493,16 +9626,16 @@ definitions:
           For ID-based access, prefer `approverRefs`, which returns `{oid, id}` pairs.
         items:
           type: string
-      approverRefs:
-        type: array
-        position: 21
-        description: Approvers as `{oid, id}` pairs — same shape as `?return=compact`. Recommended over `approvers` for callers using ID-based access. Tri-state semantics match `approvers`.
-        items:
-          $ref: '#/definitions/SimpleEntityWithId'
       claimerRefs:
         type: array
         position: 21
         description: 'Claimers as `{oid, id}` pairs — same shape as `?return=compact`. Recommended over `claimers` for callers using ID-based access. Tri-state semantics match `claimers`: omitted = anyone; `[]` = admins only; list = those specific users.'
+        items:
+          $ref: '#/definitions/SimpleEntityWithId'
+      approverRefs:
+        type: array
+        position: 21
+        description: Approvers as `{oid, id}` pairs — same shape as `?return=compact`. Recommended over `approvers` for callers using ID-based access. Tri-state semantics match `approvers`.
         items:
           $ref: '#/definitions/SimpleEntityWithId'
       createdBy:
@@ -9560,15 +9693,6 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description.
-      removeAssignees:
-        type: array
-        example: '["alice@example.com"]'
-        description: |-
-          (Optional) Assignees to remove (OID, ID, or email).
-
-          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
-        items:
-          type: string
       tags:
         type: array
         example: '["urgent", "design"]'
@@ -9578,16 +9702,6 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
-      milestone:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a milestone. Default: false.'
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -9614,46 +9728,6 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      recurrence:
-        description: |-
-          (Optional) Recurrence details. `null` if the task is not recurring.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
-          - `interval`: Interval between occurrences. Default: 1.
-          - `until`: End date. Default: never ends.
-          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
-          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
-          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
-          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
-            Note: `byweekday` and `bydayno` cannot both be specified.
-          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
-          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
-        $ref: '#/definitions/Recurrence'
-      peekaboo:
-        type: object
-        example: 'true'
-        description: |-
-          (Optional) Peekaboo setting. Accepts a boolean or a positive integer:
-
-          - `true`: Hide indefinitely (task and subtasks).
-          - positive integer: Number of days to hide.
-          - `false`: Undo previous peekaboo.
-
-          Default: false.
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
-      assignees:
-        type: array
-        example: '["me", "alice@example.com"]'
-        description: |-
-          (Optional) Assignees to replace the current assignees (OID, ID, or email).
-          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
-
-          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
-        items:
-          type: string
       followers:
         type: array
         example: '["bob@example.com"]'
@@ -9668,57 +9742,6 @@ definitions:
           App follower syntax:
           - `app|team` or `app|team|channel`
           - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      successors:
-        type: array
-        example: '["#13"]'
-        description: |-
-          (Optional) Successors to replace the current successors (task OID or ID).
-
-          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
-
-          - Text / Email / Hyperlink: string.
-          - Number / Money: numeric value (no currency symbol).
-          - Checkbox: `true` or `false`.
-          - Select: option name (string).
-          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
-          - Duration: number of seconds.
-          - **User**: user OID, user ID, or email — server resolves to the user's OID.
-          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
-          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
-
-          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
-      addTags:
-        type: array
-        example: '["urgent"]'
-        description: |-
-          (Optional) Tags to add to this task (OID or name).
-          Tag names are case-insensitive.
-        items:
-          type: string
-      removeTags:
-        type: array
-        example: '["draft"]'
-        description: |-
-          (Optional) Tags to remove from this task (OID or name).
-          Tag names are case-insensitive.
-        items:
-          type: string
-      addAssignees:
-        type: array
-        example: '["me"]'
-        description: |-
-          (Optional) Assignees to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include all assignees of the parent task
         items:
           type: string
       addFollowers:
@@ -9752,6 +9775,47 @@ definitions:
           - `app|/path` → appended to the hook URL.
         items:
           type: string
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
+      addTags:
+        type: array
+        example: '["urgent"]'
+        description: |-
+          (Optional) Tags to add to this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+      removeTags:
+        type: array
+        example: '["draft"]'
+        description: |-
+          (Optional) Tags to remove from this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+      addAssignees:
+        type: array
+        example: '["me"]'
+        description: |-
+          (Optional) Assignees to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include all assignees of the parent task
+        items:
+          type: string
+      removeAssignees:
+        type: array
+        example: '["alice@example.com"]'
+        description: |-
+          (Optional) Assignees to remove (OID, ID, or email).
+
+          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
+        items:
+          type: string
       addSuccessors:
         type: array
         example: '["#13"]'
@@ -9770,6 +9834,75 @@ definitions:
           IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
         items:
           type: string
+      assignees:
+        type: array
+        example: '["me", "alice@example.com"]'
+        description: |-
+          (Optional) Assignees to replace the current assignees (OID, ID, or email).
+          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
+
+          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
+        items:
+          type: string
+      recurrence:
+        description: |-
+          (Optional) Recurrence details. `null` if the task is not recurring.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
+          - `interval`: Interval between occurrences. Default: 1.
+          - `until`: End date. Default: never ends.
+          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
+          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
+          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
+          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
+            Note: `byweekday` and `bydayno` cannot both be specified.
+          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
+          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
+        $ref: '#/definitions/Recurrence'
+      peekaboo:
+        type: object
+        example: 'true'
+        description: |-
+          (Optional) Peekaboo setting. Accepts a boolean or a positive integer:
+
+          - `true`: Hide indefinitely (task and subtasks).
+          - positive integer: Number of days to hide.
+          - `false`: Undo previous peekaboo.
+
+          Default: false.
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
+      milestone:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a milestone. Default: false.'
+      successors:
+        type: array
+        example: '["#13"]'
+        description: |-
+          (Optional) Successors to replace the current successors (task OID or ID).
+
+          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
+
+          - Text / Email / Hyperlink: string.
+          - Number / Money: numeric value (no currency symbol).
+          - Checkbox: `true` or `false`.
+          - Select: option name (string).
+          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
+          - Duration: number of seconds.
+          - **User**: user OID, user ID, or email — server resolves to the user's OID.
+          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
+          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
+
+          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
       name:
         type: string
         example: New idea
@@ -9818,14 +9951,14 @@ definitions:
         type: string
         example: 2MmYOpJH_ZLeehIjjytH1Rwr
         description: OID of the task to include or exclude.
-      exclude:
-        type: boolean
-        example: false
-        description: 'Whether to exclude the task. Default: false (include).'
       single:
         type: boolean
         example: false
         description: 'Whether the operation applies only to the specified task. Default: false — all descendant tasks are also included or excluded. Note: this does not change descendants that were explicitly included or excluded in prior operations.'
+      exclude:
+        type: boolean
+        example: false
+        description: 'Whether to exclude the task. Default: false (include).'
   Chat:
     type: object
     properties:
@@ -9833,14 +9966,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?chat=Highlight101
         description: URL of this chat on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -9970,23 +10103,23 @@ definitions:
         type: string
         position: 50
         description: URL of this comment on the Quire website.
-      editedBy:
-        position: 50
-        description: User who last edited this comment, or null if not edited.
-        $ref: '#/definitions/SimpleIdentity'
-      pinAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
+      pinAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.
       pinBy:
         position: 50
         description: User who pinned this comment, or null if not pinned.
+        $ref: '#/definitions/SimpleIdentity'
+      editedBy:
+        position: 50
+        description: User who last edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
@@ -10100,14 +10233,14 @@ definitions:
         type: string
         example: Adjust style
         description: Content of the new comment (Markdown supported).
-      asUser:
-        type: boolean
-        example: true
-        description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
       pinned:
         type: boolean
         example: false
         description: '(Optional) Whether to pin this comment. Default: false.'
+      asUser:
+        type: boolean
+        example: true
+        description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
   CreateDocBody:
     type: object
     required:
@@ -10412,16 +10545,6 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this task as created by the app.
-          Default: false (created by the authorizing user).
-      milestone:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a milestone. Default: false.'
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -10448,6 +10571,39 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      followers:
+        type: array
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+        description: |-
+          (Optional) List of user identifiers (OID, ID, or email) who follow this task.
+
+          - Use "me" for the current user.
+          - Use "inherit" to include followers of the parent task.
+          - Use "app" for the application itself to follow (receive notifications).
+
+          For app followers, additional syntaxes are supported:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this task as created by the app.
+          Default: false (created by the authorizing user).
+      assignees:
+        type: array
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+        description: |-
+          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
+
+          - Use "me" to indicate the current user.
+          - Use "inherit" to include all assignees of the parent task.
+        items:
+          type: string
       recurrence:
         description: |-
           (Optional) Recurrence details. Null if the task is not recurring.
@@ -10481,33 +10637,10 @@ definitions:
         type: boolean
         example: true
         description: '(Optional) Whether this task is a section. Default: false.'
-      assignees:
-        type: array
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-        description: |-
-          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
-
-          - Use "me" to indicate the current user.
-          - Use "inherit" to include all assignees of the parent task.
-        items:
-          type: string
-      followers:
-        type: array
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-        description: |-
-          (Optional) List of user identifiers (OID, ID, or email) who follow this task.
-
-          - Use "me" for the current user.
-          - Use "inherit" to include followers of the parent task.
-          - Use "app" for the application itself to follow (receive notifications).
-
-          For app followers, additional syntaxes are supported:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
+      milestone:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a milestone. Default: false.'
       successors:
         type: array
         example: '["#13"]'
@@ -10579,14 +10712,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?doc=Highlight101
         description: URL of this document on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -10750,6 +10883,10 @@ definitions:
     required:
       - type
     properties:
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -10758,20 +10895,20 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money` or `formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       hidden:
         type: boolean
         example: false
@@ -10837,10 +10974,6 @@ definitions:
         description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
         items:
           $ref: '#/definitions/FieldConditionFormat'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       type:
         type: string
         example: number
@@ -10870,6 +11003,10 @@ definitions:
         type: string
         example: Priority
         description: Field name (equals the path `fieldName` for update/rename/move, or the `name` supplied in the body for add).
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -10878,20 +11015,20 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money` or `formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       hidden:
         type: boolean
         example: false
@@ -10957,10 +11094,6 @@ definitions:
         description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
         items:
           $ref: '#/definitions/FieldConditionFormat'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       type:
         type: string
         example: number
@@ -11000,14 +11133,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?insight=View101
         description: URL of this insight view on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -11125,14 +11258,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameText:
-        type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
       nameHtml:
         type: string
         example: My Organization
         description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
       name:
         type: string
         example: My Organization
@@ -11204,14 +11337,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameText:
-        type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
       nameHtml:
         type: string
         example: My Organization
         description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
       name:
         type: string
         example: My Organization
@@ -11328,14 +11461,14 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
       nameHtml:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
       rootCount:
         type: integer
         format: int32
@@ -11374,11 +11507,6 @@ definitions:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       start:
         type: string
         example: '2024-01-02'
@@ -11394,23 +11522,28 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       publicAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      attachments:
-        type: array
-        position: 60
-        description: Attachments associated with this project.
-        items:
-          $ref: '#/definitions/Attachment'
       followers:
         type: array
         position: 60
         description: Users who follow this project.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      attachments:
+        type: array
+        position: 60
+        description: Attachments associated with this project.
+        items:
+          $ref: '#/definitions/Attachment'
       approvalCategories:
         type: array
         position: 70
@@ -11467,14 +11600,14 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
       nameHtml:
         type: string
         example: My Project
         description: Project name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
       rootCount:
         type: integer
         format: int32
@@ -11517,11 +11650,6 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       start:
         type: string
         example: '2024-01-02'
@@ -11537,23 +11665,28 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this record was last edited.
       publicAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      attachments:
-        type: array
-        position: 60
-        description: Attachments associated with this project.
-        items:
-          $ref: '#/definitions/Attachment'
       followers:
         type: array
         position: 60
         description: Users who follow this project.
         items:
           $ref: '#/definitions/SimpleIdentity'
+      attachments:
+        type: array
+        position: 60
+        description: Attachments associated with this project.
+        items:
+          $ref: '#/definitions/Attachment'
       approvalCategories:
         type: array
         position: 70
@@ -11595,26 +11728,26 @@ definitions:
   RateLimitBucket:
     type: object
     properties:
-      limit:
-        type: integer
-        format: int32
-        example: 1250
-        description: Maximum number of calls allowed in this window. `-1` indicates no limit.
       remaining:
         type: integer
         format: int32
         example: 1208
         description: 'Remaining calls: `max(limit - used, 0)`, or `-1` if unlimited.'
-      reset:
+      limit:
         type: integer
-        format: int64
-        example: 1774863600
-        description: Unix epoch (seconds) of the next wall-clock boundary at which the `used` counter will reset.
+        format: int32
+        example: 1250
+        description: Maximum number of calls allowed in this window. `-1` indicates no limit.
       used:
         type: integer
         format: int32
         example: 42
         description: Number of calls consumed so far in the current window.
+      reset:
+        type: integer
+        format: int64
+        example: 1774863600
+        description: Unix epoch (seconds) of the next wall-clock boundary at which the `used` counter will reset.
   Recurrence:
     type: object
     properties:
@@ -11854,14 +11987,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?sublist=Highlight101
         description: URL of this sublist on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -11962,14 +12095,14 @@ definitions:
   Subscription:
     type: object
     properties:
-      plan:
-        type: string
-        example: Professional
-        description: Plan name (e.g., Free, Professional, Premium, Enterprise).
       due:
         type: string
         example: '2038-02-22T02:06:58Z'
         description: Subscription due/renewal timestamp in UTC (ISO 8601).
+      plan:
+        type: string
+        example: Professional
+        description: Plan name (e.g., Free, Professional, Premium, Enterprise).
       expired:
         type: boolean
         example: false
@@ -12052,16 +12185,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       name:
         type: string
         example: Design new **logo**
@@ -12082,22 +12215,22 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
-      etc:
-        type: integer
-        format: int32
-        example: 500
-        position: 4
-        description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      etc:
+        type: integer
+        format: int32
+        example: 500
+        position: 4
+        description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       status:
         type: integer
         format: int32
@@ -12334,16 +12467,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       name:
         type: string
         example: Design new **logo**
@@ -12364,22 +12497,22 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
-      etc:
-        type: integer
-        format: int32
-        example: 500
-        position: 4
-        description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      etc:
+        type: integer
+        format: int32
+        example: 500
+        position: 4
+        description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       status:
         type: integer
         format: int32
@@ -12593,16 +12726,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       name:
         type: string
         example: Design new **logo**
@@ -12623,22 +12756,22 @@ definitions:
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
-      recurrence:
-        position: 4
-        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
-        $ref: '#/definitions/RecurrenceX'
-      etc:
-        type: integer
-        format: int32
-        example: 500
-        position: 4
-        description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
       timelogs:
         type: array
         position: 4
         description: The time log entries associated with this task.
         items:
           $ref: '#/definitions/Timelog'
+      etc:
+        type: integer
+        format: int32
+        example: 500
+        position: 4
+        description: The estimated time to complete the task, expressed in seconds. If null, no estimate has been specified.
+      recurrence:
+        position: 4
+        description: Contains the recurrence details of this task. If `null`, the task does not repeat.
+        $ref: '#/definitions/RecurrenceX'
       status:
         type: integer
         format: int32
@@ -13012,6 +13145,10 @@ definitions:
   UpdateFieldBody:
     type: object
     properties:
+      private:
+        type: boolean
+        example: false
+        description: (Optional) Restrict access to non-guest members only.
       percent:
         type: boolean
         example: false
@@ -13020,20 +13157,20 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money`/`formula` only) Currency symbol. Pass `$` to reset a money field to its default.
-      private:
-        type: boolean
-        example: false
-        description: (Optional) Restrict access to non-guest members only.
-      options:
-        type: array
-        description: (Optional, `select` only) Replacement option list (replaces the entire set).
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: (Optional, `lookup` only) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity. Replaces the entire map.
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Optional, `select` only) Replacement option list (replaces the entire set).
+        items:
+          $ref: '#/definitions/FieldOption'
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       hidden:
         type: boolean
         example: false
@@ -13099,10 +13236,6 @@ definitions:
         description: (Optional) Replacement conditional-format rules (replaces the entire list).
         items:
           $ref: '#/definitions/FieldConditionFormat'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       type:
         type: string
         example: number
@@ -13409,16 +13542,6 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description.
-      removeAssignees:
-        type: array
-        example:
-          - Job4NSW9xK6Owcke8iKj7zyH
-        description: |-
-          (Optional) Assignees to remove (OID, ID, or email).
-
-          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
-        items:
-          type: string
       tags:
         type: array
         example:
@@ -13429,16 +13552,6 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
-      milestone:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a milestone. Default: false.'
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -13465,50 +13578,6 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      recurrence:
-        description: |-
-          (Optional) Recurrence details. `null` if the task is not recurring.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
-          - `interval`: Interval between occurrences. Default: 1.
-          - `until`: End date. Default: never ends.
-          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
-          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
-          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
-          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
-            Note: `byweekday` and `bydayno` cannot both be specified.
-          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
-          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
-        $ref: '#/definitions/Recurrence'
-      peekaboo:
-        type: object
-        example: true
-        description: |-
-          (Optional) Peekaboo setting. Accepts a boolean or a positive integer:
-
-          - `true`: Hide indefinitely (task and subtasks).
-          - positive integer: Number of days to hide.
-          - `false`: Undo previous peekaboo.
-
-          Default: false.
-        anyOf:
-          - type: boolean
-          - type: integer
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
-      assignees:
-        type: array
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-        description: |-
-          (Optional) Assignees to replace the current assignees (OID, ID, or email).
-          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
-
-          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
-        items:
-          type: string
       followers:
         type: array
         example:
@@ -13525,60 +13594,6 @@ definitions:
           App follower syntax:
           - `app|team` or `app|team|channel`
           - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      successors:
-        type: array
-        example: '["#13"]'
-        description: |-
-          (Optional) Successors to replace the current successors (task OID or ID).
-
-          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
-
-          - Text / Email / Hyperlink: string.
-          - Number / Money: numeric value (no currency symbol).
-          - Checkbox: `true` or `false`.
-          - Select: option name (string).
-          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
-          - Duration: number of seconds.
-          - **User**: user OID, user ID, or email — server resolves to the user's OID.
-          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
-          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
-
-          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
-      addTags:
-        type: array
-        example:
-          - X6nmx9XjEO2wKbqeB1pRT43C
-        description: |-
-          (Optional) Tags to add to this task (OID or name).
-          Tag names are case-insensitive.
-        items:
-          type: string
-      removeTags:
-        type: array
-        example:
-          - mPAQrYU1qt8wAYAInKRlTnvl
-        description: |-
-          (Optional) Tags to remove from this task (OID or name).
-          Tag names are case-insensitive.
-        items:
-          type: string
-      addAssignees:
-        type: array
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-        description: |-
-          (Optional) Assignees to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include all assignees of the parent task
         items:
           type: string
       addFollowers:
@@ -13614,6 +13629,51 @@ definitions:
           - `app|/path` → appended to the hook URL.
         items:
           type: string
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
+      addTags:
+        type: array
+        example:
+          - X6nmx9XjEO2wKbqeB1pRT43C
+        description: |-
+          (Optional) Tags to add to this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+      removeTags:
+        type: array
+        example:
+          - mPAQrYU1qt8wAYAInKRlTnvl
+        description: |-
+          (Optional) Tags to remove from this task (OID or name).
+          Tag names are case-insensitive.
+        items:
+          type: string
+      addAssignees:
+        type: array
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+        description: |-
+          (Optional) Assignees to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include all assignees of the parent task
+        items:
+          type: string
+      removeAssignees:
+        type: array
+        example:
+          - Job4NSW9xK6Owcke8iKj7zyH
+        description: |-
+          (Optional) Assignees to remove (OID, ID, or email).
+
+          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
+        items:
+          type: string
       addSuccessors:
         type: array
         example: '["#13"]'
@@ -13632,6 +13692,79 @@ definitions:
           IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
         items:
           type: string
+      assignees:
+        type: array
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+        description: |-
+          (Optional) Assignees to replace the current assignees (OID, ID, or email).
+          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
+
+          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
+        items:
+          type: string
+      recurrence:
+        description: |-
+          (Optional) Recurrence details. `null` if the task is not recurring.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
+          - `interval`: Interval between occurrences. Default: 1.
+          - `until`: End date. Default: never ends.
+          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
+          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
+          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
+          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
+            Note: `byweekday` and `bydayno` cannot both be specified.
+          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
+          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
+        $ref: '#/definitions/Recurrence'
+      peekaboo:
+        type: object
+        example: true
+        description: |-
+          (Optional) Peekaboo setting. Accepts a boolean or a positive integer:
+
+          - `true`: Hide indefinitely (task and subtasks).
+          - positive integer: Number of days to hide.
+          - `false`: Undo previous peekaboo.
+
+          Default: false.
+        anyOf:
+          - type: boolean
+          - type: integer
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
+      milestone:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a milestone. Default: false.'
+      successors:
+        type: array
+        example: '["#13"]'
+        description: |-
+          (Optional) Successors to replace the current successors (task OID or ID).
+
+          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
+
+          - Text / Email / Hyperlink: string.
+          - Number / Money: numeric value (no currency symbol).
+          - Checkbox: `true` or `false`.
+          - Select: option name (string).
+          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
+          - Duration: number of seconds.
+          - **User**: user OID, user ID, or email — server resolves to the user's OID.
+          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
+          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
+
+          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
       name:
         type: string
         example: New idea
@@ -13682,6 +13815,10 @@ definitions:
         type: string
         example: '2026-04-26T09:15:00Z'
         description: (Optional) New start timestamp (ISO 8601, UTC). Sub-second precision is truncated to whole seconds. Omit or set `null` to preserve.
+      user:
+        type: string
+        example: john.doe@example.com
+        description: (Optional) New user the log is credited to (OID, ID, or email). Omit or set `null` to preserve. Send empty string to reset to the authenticated caller.
       billable:
         type: boolean
         example: false
@@ -13690,10 +13827,6 @@ definitions:
         type: string
         example: Updated note
         description: (Optional) New note. Omit or set `null` to preserve. Send empty string to clear.
-      user:
-        type: string
-        example: john.doe@example.com
-        description: (Optional) New user the log is credited to (OID, ID, or email). Omit or set `null` to preserve. Send empty string to reset to the authenticated caller.
   User:
     type: object
     properties:
@@ -13711,14 +13844,14 @@ definitions:
         type: string
         example: https://quire.io/u/john
         description: URL of this user on the Quire website.
-      nameText:
-        type: string
-        example: John
-        description: User name with Markdown removed.
       nameHtml:
         type: string
         example: John
         description: User name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: John
+        description: User name with Markdown removed.
       name:
         type: string
         example: John
