@@ -6,9 +6,9 @@ import io.swagger.annotations.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Path("/rate_limit")
+@Path("/rate-limit")
 @Api(
-    value = "rate_limit",
+    value = "rate-limit",
     description =
         "Inspect the current API rate-limit usage for an organization.\n"
       + "Calls to this endpoint do not count against the rate limit, so "
