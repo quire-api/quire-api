@@ -1007,14 +1007,41 @@ public class TaskResource {
               + "approver (for `approve` / `reject` / `change`) of the "
               + "category. The original requester is preserved across "
               + "`approve` / `reject` / `change` transitions.\n\n"
-              + "Example: `POST /task/approve/id/my_project/42?category=Legal&state=approve` "
-              + "(the request body is unused and may be empty).\n\n"
+              + "**Request body (optional).** Supply a JSON object with a "
+              + "`description` field to post a companion comment on the "
+              + "task as a side effect of the approval call. Same shape as "
+              + "[`POST /comment`](#operation--comment--taskOid--post): "
+              + "`{\"description\": \"<markdown>\", \"pinned\": false, "
+              + "\"asUser\": false}`. `description` is required when the "
+              + "body is supplied; `pinned` and `asUser` are optional.\n\n"
+              + "The stored comment is prefixed with a bold "
+              + "`**<stream>: <status>**` line + a blank line + the "
+              + "supplied `description` — for example, "
+              + "`{\"description\": \"Please tweak the wording.\"}` on a "
+              + "`state=change` call with `?category=Legal` stores "
+              + "`**Legal: Request changes**\\n\\nPlease tweak the wording.` "
+              + "Apply this prefix on every `state` value; do **not** "
+              + "include it in `description` yourself.\n\n"
+              + "Omit the body (or send an empty one) to record only the "
+              + "transition. The created comment is **not** included in "
+              + "the response — call `GET /comment/list/{taskOid}` "
+              + "afterward to fetch it.\n\n"
+              + "Examples:\n"
+              + "```\n"
+              + "POST /task/approve/id/my_project/42?category=Legal&state=approve\n"
+              + "(empty body — just records the approval)\n"
+              + "\n"
+              + "POST /task/approve/id/my_project/42?category=Legal&state=change\n"
+              + "{\"description\": \"Please tweak the wording.\"}\n"
+              + "```\n\n"
               + "To cancel an approval, use "
-              + "`DELETE /task/revoke-approval/id/{projectId}/{taskId}`.\n\n"
+              + "`DELETE /task/revoke-approval/id/{projectId}/{taskId}` — "
+              + "not this endpoint.\n\n"
               + "Returns `400 Bad Request` if `?state=` is missing or "
-              + "unknown; `403 Forbidden` if the caller isn't a claimer / "
-              + "approver; `404 Not Found` if the task or `?category=` "
-              + "doesn't exist.",
+              + "unknown, or the body has unknown fields, an empty "
+              + "`description`, or a non-object shape; `403 Forbidden` "
+              + "if the caller isn't a claimer / approver; `404 Not Found` "
+              + "if the task or `?category=` doesn't exist.",
         response = Approval.class
     )
     public Response approveTaskById(
@@ -1023,6 +1050,13 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
         @ApiParam(value = "Task ID.", required = true, example = "42")
         @PathParam("taskId") int taskId,
+        @ApiParam(
+            value = "(Optional) Companion comment to post on the task "
+                  + "after the approval transition. Omit (or send an "
+                  + "empty body) to skip the comment.",
+            required = false
+        )
+        ApproveTaskBody body,
         @ApiParam(
             value = "Approval transition to apply. Same vocabulary as "
                   + "`bulk-approve`.",
@@ -1054,12 +1088,20 @@ public class TaskResource {
         value = "Set or transition a task's approval state by OID.",
         notes = "OID-form of `POST /task/approve/id/{projectId}/{taskId}` "
               + "— see that endpoint for `?state=` / `?category=` grammar, "
-              + "permission rules, and error semantics.",
+              + "the optional companion-comment body, permission rules, "
+              + "and error semantics.",
         response = Approval.class
     )
     public Response approveTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
         @PathParam("oid") String oid,
+        @ApiParam(
+            value = "(Optional) Companion comment to post on the task. "
+                  + "Same shape as [`POST /comment`](#operation--comment--taskOid--post). "
+                  + "Omit (or send an empty body) to skip the comment.",
+            required = false
+        )
+        ApproveTaskBody body,
         @ApiParam(required = true, example = "approve",
             allowableValues = "request, approve, reject, change")
         @QueryParam("state") String state,
