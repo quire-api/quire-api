@@ -8,6 +8,8 @@ import io.swagger.annotations.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+import java.util.List;
+
 @Path("/insight")
 @Api(
     value = "insight",
@@ -181,6 +183,175 @@ public class InsightResource {
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId
+    ) { return null; }
+
+    // -------- Run --------
+    //
+    // Both URL forms share the same notes (intentional duplication — keeps
+    // the by-id form self-contained for MCP / agent consumers, which may
+    // see only one endpoint at a time).
+
+    private static final String RUN_NOTES =
+        "Runs the Insight and returns its **computed** result — one "
+      + "aggregated row per group, as a JSON 2D array. The Insight's "
+      + "stored formula and column layout (the `tableCols` field of the "
+      + "Insight) drive what's evaluated.\n\n"
+      + "**Response shape:** `[[<headers>], [<row>], ...]`. Row 0 is the "
+      + "column-label header row; the first column is the synthesized "
+      + "group-by column (`assignee` for `?group-by=member`, `section` "
+      + "for `?group-by=section`); remaining columns come from the "
+      + "Insight's `tableCols`. Header labels are raw field-name strings "
+      + "(locale-independent), matching `/task/list`, `/search/*`, and "
+      + "`export-json`.\n\n"
+      + "Example (group-by=section, two sections plus one sectionless "
+      + "task; `score` is a project cfNumber, `f1` is an Insight "
+      + "cfFormula):\n"
+      + "```json\n"
+      + "[\n"
+      + "  [\"section\", \"name\", \"priority\", \"score\", \"f1\"],\n"
+      + "  [{\"oid\":\"T1\",\"id\":7,\"name\":\"Backend\"}, null, 2, 30, 63],\n"
+      + "  [{\"oid\":\"T2\",\"id\":8,\"name\":\"Frontend\"}, null, 1, 70, 142],\n"
+      + "  [null,                                          null, 2, 50, 102]\n"
+      + "]\n"
+      + "```\n\n"
+      + "**Row order:** alphabetical by the group entity's name (case-"
+      + "insensitive, simple-markdown stripped); `null` group (unassigned "
+      + "/ sectionless tasks) sorts last.\n\n"
+      + "**Aggregation per column** is driven by the field's calc type "
+      + "(per-field default, or the user's `tableCols` override):\n"
+      + "- `name` → `null` (no aggregation; not applicable)\n"
+      + "- `status` → avg, `priority` → max\n"
+      + "- `start` → min, `due` / `completedAt` → max\n"
+      + "- `cfNumber` / `cfMoney` / `cfDuration` / `cfLookup` → sum\n"
+      + "- `cfDate` → max\n"
+      + "- `cfFormula` → sum (default)\n\n"
+      + "**Cell value types** (how to parse each cell):\n"
+      + "- text / number / boolean → as-is JSON.\n"
+      + "- date (`start` / `due` / `cfDate`) → `yyyy-MM-dd` when it has "
+      + "no time, otherwise an ISO-8601 UTC datetime "
+      + "(`2026-06-20T09:00:00Z`).\n"
+      + "- money (`cfMoney`) → the numeric amount only (currency symbol "
+      + "and decimal count are dropped).\n"
+      + "- duration (`cfDuration`) and time-log totals → an integer "
+      + "number of seconds.\n"
+      + "- entity (member / section / task ref) → `{oid, id, name}`; a "
+      + "user's `id` is a string, a task's / section's `id` is an "
+      + "integer; `name` is plain text (markdown stripped). Deleted-user "
+      + "assignees become a censored placeholder so their group stays "
+      + "distinct from the unassigned (`null`) group.\n"
+      + "- `null` → empty / not applicable (e.g. the `name` column on an "
+      + "aggregated row, or a column with no value for the group).\n\n"
+      + "**Project-scoped Insights only.** Other owner types return `400`.\n\n"
+      + "**Formula-token limitation:** project-scope task collections — "
+      + "`tasks`, `subtasks`, `activetasks`, `completedtasks` — are "
+      + "**not supported** in `cfFormula` columns evaluated through "
+      + "this endpoint. Evaluating any of them would scan every task in "
+      + "the project, which is deliberately not exposed on the public "
+      + "API. Cells that reference these tokens render as JSON `null`; "
+      + "the rest of the row is unaffected. Workarounds:\n"
+      + "- Reference the row's own task fields (e.g. `priority`, `due`, "
+      + "or a project-level `cfNumber` / `cfFormula` column).\n"
+      + "- Use `subtasks` (or `activesubtasks` / `completedsubtasks`) "
+      + "to walk children of the row's task.\n"
+      + "- Pre-compute the project-wide aggregate as a `cfFormula` on "
+      + "the Project (those are evaluated separately and DO have access "
+      + "to project task collections).\n\n"
+      + "**Rate limit:** standard 1 unit (via grantLoad) + a soft "
+      + "post-charge of `ceil(tasksLoaded / 250) - 1` extra units. "
+      + "`tasksLoaded` reflects the `?status=`-filtered task set, so a "
+      + "tighter `?status=` narrows the SQL load and lowers the charge.";
+
+    @GET
+    @Path("/run/{oid}")
+    @ApiOperation(
+        value = "Run an Insight and return its computed result (by OID).",
+        notes = RUN_NOTES
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — JSON 2D array (header row + data rows; data rows may be empty).", responseContainer = "List", response = List.class),
+        @ApiResponse(code = 400, message = "Bad Request — unknown `?group-by` / `?status` value, or non-project-scoped Insight."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks read permission on the Insight."),
+        @ApiResponse(code = 404, message = "Not Found — Insight does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — rate-limit exceeded.")
+    })
+    public Response getInsightResult(
+        @ApiParam(value = "Insight OID.", required = true)
+        @PathParam("oid") String oid,
+        @ApiParam(
+            value = "(Optional) Row grouping. `member` produces one row "
+                  + "per assignee (multi-assignee tasks contribute to "
+                  + "every group their assignees are in; unassigned tasks "
+                  + "fall into a `null` group). `section` produces one "
+                  + "row per section ancestor (tasks not under any "
+                  + "section fall into a `null` group). Case-insensitive.",
+            example = "member",
+            allowableValues = "member, section",
+            defaultValue = "member"
+        )
+        @QueryParam("group-by") String groupBy,
+        @ApiParam(
+            value = "(Optional) Task-state filter, applied at the SQL "
+                  + "load layer (narrower queries cost less — see "
+                  + "rate-limit note). `active` = not-yet-completed "
+                  + "tasks (state < completed). `completed` = completed "
+                  + "tasks. `all` = no filter. Case-insensitive.",
+            example = "active",
+            allowableValues = "active, completed, all",
+            defaultValue = "active"
+        )
+        @QueryParam("status") String status
+    ) { return null; }
+
+    @GET
+    @Path("/run/id/{ownerType}/{ownerId}/{insightId}")
+    @ApiOperation(
+        value = "Run an Insight and return its computed result (by ID).",
+        notes = RUN_NOTES
+    )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK — JSON 2D array (header row + data rows; data rows may be empty).", responseContainer = "List", response = List.class),
+        @ApiResponse(code = 400, message = "Bad Request — unknown `?group-by` / `?status` value, or non-project-scoped Insight."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks read permission on the Insight."),
+        @ApiResponse(code = 404, message = "Not Found — Insight or owner does not exist."),
+        @ApiResponse(code = 429, message = "Too Many Requests — rate-limit exceeded.")
+    })
+    public Response getInsightResultById(
+        @ApiParam(
+            value = "Owner type. Only `project` is supported on this "
+                  + "endpoint; other types return `400`.",
+            allowableValues = "project",
+            required = true,
+            example = "project"
+        )
+        @PathParam("ownerType") String ownerType,
+        @ApiParam(value = "Project ID (the owner ID).",
+                  required = true, example = "my_project")
+        @PathParam("ownerId") String ownerId,
+        @ApiParam(value = "Insight ID.", required = true, example = "insight1")
+        @PathParam("insightId") String insightId,
+        @ApiParam(
+            value = "(Optional) Row grouping. `member` produces one row "
+                  + "per assignee (multi-assignee tasks contribute to "
+                  + "every group their assignees are in; unassigned tasks "
+                  + "fall into a `null` group). `section` produces one "
+                  + "row per section ancestor (tasks not under any "
+                  + "section fall into a `null` group). Case-insensitive.",
+            example = "member",
+            allowableValues = "member, section",
+            defaultValue = "member"
+        )
+        @QueryParam("group-by") String groupBy,
+        @ApiParam(
+            value = "(Optional) Task-state filter, applied at the SQL "
+                  + "load layer (narrower queries cost less — see "
+                  + "rate-limit note). `active` = not-yet-completed "
+                  + "tasks (state < completed). `completed` = completed "
+                  + "tasks. `all` = no filter. Case-insensitive.",
+            example = "active",
+            allowableValues = "active, completed, all",
+            defaultValue = "active"
+        )
+        @QueryParam("status") String status
     ) { return null; }
 
     // -------- Update --------
