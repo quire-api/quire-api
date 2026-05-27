@@ -1,5 +1,16 @@
 # Changelog
 
+## May 27, 2026
+
+- **Insight API:** Added [`GET /insight/run/{insightOid}`](https://quire.io/dev/api/#operation--insight-run--insightOid--get) (and the by-id form `GET /insight/run/id/project/{projectId}/{insightId}`) that runs the Insight and returns the computed result — one aggregated row per group, JSON 2D array shape `[[headers...], [row...], ...]`. Project-scoped Insights only. Query params: `?group-by=member|section` (default `member`), `?status=active|completed|all` (default `active`), both case-insensitive, `400` on unknown values. Status is applied at the SQL load layer so narrower queries cost less. Rate-limit: standard 1-unit grantLoad charge + soft post-charge of `ceil(tasksLoaded / 250) - 1` extra units. See the endpoint's docs for the formula-token limitation (#24834).
+- **Task API:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) (and the by-OID form) now accepts an **optional request body** that posts a companion comment on the task as a side effect of the approval call. Body shape mirrors [`POST /comment`](https://quire.io/dev/api/#operation--comment--taskOid--post):
+    ```
+    POST /task/approve/id/my_project/42?category=Legal&state=change
+    {"description": "Please tweak the wording."}
+    ```
+    `description` is required when the body is supplied; `pinned` and `asUser` are optional. The stored comment is auto-prefixed with `**<stream>: <status>**\n\n` so the assignee can tell which approval it belongs to — for the example above, the stored description is `**Legal: Request changes**\n\nPlease tweak the wording.` Apply the prefix on every `state` value (`request` / `approve` / `reject` / `change`) since the transition and the comment are independent server ops. Omit the body (or send an empty one) to preserve the existing transition-only behavior; the created comment is not part of the approval response — fetch it via `GET /comment/list/{taskOid}` afterward. `400 Bad Request` on unknown body fields, empty `description`, or a non-object body. `bulk-approve` is unchanged for now — its body is already a top-level task-ref array, so adding a comment there would be a breaking shape change (#24855).
+- **Task Search API:** Number, Money, and Duration custom-field filters on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get) (and the OID / search-organization / search-folder forms) now accept the same `op:value` grammar as date fields, instead of exact match only: `ge:`, `gt:`, `le:`, `lt:`, `eq:`, `ne:`, `between:<v1>,<v2>` (inclusive on both ends), `notBetween:<v1>,<v2>`, and `isNull` / `isNotNull` (operators case-insensitive). A bare value remains an exact match (same as `eq:`). Examples: `?cost=ge:100`, `?cost=between:50,150`, `?effort=between:8h,40h`, `?cost=isNull`. Invalid operands return `400 Bad Request` (#24851).
+
 ## May 22, 2026
 
 - **Rate-limit API:** Renamed from `/rate_limit` to [`/rate-limit`](https://quire.io/dev/api/#tag--rate-limit). `/rate_limit` continues to work as a deprecated alias; it will be retired in a future release.

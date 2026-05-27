@@ -211,7 +211,7 @@ public class InsightResource {
       + "  [\"section\", \"name\", \"priority\", \"score\", \"f1\"],\n"
       + "  [{\"oid\":\"T1\",\"id\":7,\"name\":\"Backend\"}, null, 2, 30, 63],\n"
       + "  [{\"oid\":\"T2\",\"id\":8,\"name\":\"Frontend\"}, null, 1, 70, 142],\n"
-      + "  [null,                                          null, 2, 50, 102]\n"
+      + "  [null, null, 2, 50, 102]\n"
       + "]\n"
       + "```\n\n"
       + "**Row order:** alphabetical by the group entity's name (case-"
