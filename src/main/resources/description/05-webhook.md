@@ -214,7 +214,7 @@ For example, `app|/soc/id8|box51`. Then, `box51` will be part of the JSON object
 
 When receiving the notification, your Web Hook shall return a status code between 200 and 299 to indicate success.
 
-If a status code other than above is returned, we will retry 15 minutes later, then 1 hour later and 1 day later.
+If a status code other than above is returned, we will retry 2 hours later, then 1 day later.
 
 ## Activities Types
 
