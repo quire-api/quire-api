@@ -1,5 +1,14 @@
 # Changelog
 
+## Jun 4, 2026
+
+- **Chat & Doc API:** chat channels and documents now support follower management, matching the Task API.
+    - **Responses** now include `followers` and `mutes` (lists of users) — see [chat](https://quire.io/dev/api/#tag--chat) / [doc](https://quire.io/dev/api/#tag--doc).
+    - **Create** ([`POST /chat/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--chat--ownerType---ownerOid--post), [`POST /doc/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--doc--ownerType---ownerOid--post), and the by-ID forms) accepts an optional `followers` list — user OID, ID, or email, plus `"me"` and `"app"` (with the `app|team` / `app|/path` syntaxes). The current user is added to the followers automatically.
+    - **Update** ([`PUT /chat/{oid}`](https://quire.io/dev/api/#operation--chat--oid--put), [`PUT /doc/{oid}`](https://quire.io/dev/api/#operation--doc--oid--put), and the by-ID forms) accepts `followers` (replaces the whole list), `addFollowers`, and `removeFollowers`.
+    - Documents are followable only when owned by a project; sending `followers` / `addFollowers` / `removeFollowers` for an organization-, folder-, or smart-folder-owned document returns `400 Bad Request`. (Chat channels are always project-owned.)
+- **Task API:** the current user is now added to a new task's `followers` automatically on [`POST /task/{projectOid}`](https://quire.io/dev/api/#operation--task--projectOid--post) (and the by-ID form) — previously only Quire's own clients added the creator.
+
 ## May 27, 2026
 
 - **Insight API:** Added [`GET /insight/run/{insightOid}`](https://quire.io/dev/api/#operation--insight-run--insightOid--get) (and the by-id form `GET /insight/run/id/project/{projectId}/{insightId}`) that runs the Insight and returns the computed result — one aggregated row per group, JSON 2D array shape `[[headers...], [row...], ...]`. Project-scoped Insights only. Query params: `?group-by=member|section` (default `member`), `?status=active|completed|all` (default `active`), both case-insensitive, `400` on unknown values. Status is applied at the SQL load layer so narrower queries cost less. Rate-limit: standard 1-unit grantLoad charge + soft post-charge of `ceil(tasksLoaded / 250) - 1` extra units. See the endpoint's docs for the formula-token limitation (#24834).
