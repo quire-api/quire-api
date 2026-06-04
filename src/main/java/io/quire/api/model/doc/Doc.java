@@ -1,7 +1,10 @@
 package io.quire.api.model.doc;
 
+import io.quire.api.model.*;
 import io.quire.api.model.work.*;
 import io.swagger.annotations.*;
+
+import java.util.List;
 
 public class Doc extends Work {
 
@@ -18,4 +21,17 @@ public class Doc extends Work {
         position = 99
     )
     public DocOwner getOwner() { return null; }
+
+    @ApiModelProperty(
+        value = "The list of users following this document.",
+        position = 60
+    )
+    public List<SimpleIdentity> getFollowers() { return null; }
+
+    @ApiModelProperty(
+        value = "The list of users who have muted this document and will not "
+              + "receive notifications about it.",
+        position = 60
+    )
+    public List<SimpleIdentity> getMutes() { return null; }
 }

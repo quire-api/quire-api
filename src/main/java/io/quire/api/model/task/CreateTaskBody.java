@@ -130,7 +130,8 @@ public class CreateTaskBody {
     public boolean getAsUser() { return false; }
 
     @ApiModelProperty(
-        value = "(Optional) List of user identifiers (OID, ID, or email) who follow this task.\n\n"
+        value = "(Optional) List of user identifiers (OID, ID, or email) who follow this task. "
+              + "The current user is added to the followers automatically.\n\n"
               + "- Use \"me\" for the current user.\n"
               + "- Use \"inherit\" to include followers of the parent task.\n"
               + "- Use \"app\" for the application itself to follow (receive notifications).\n\n"
