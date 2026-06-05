@@ -8,6 +8,9 @@
     - **Update** ([`PUT /chat/{oid}`](https://quire.io/dev/api/#operation--chat--oid--put), [`PUT /doc/{oid}`](https://quire.io/dev/api/#operation--doc--oid--put), and the by-ID forms) accepts `followers` (replaces the whole list), `addFollowers`, and `removeFollowers`.
     - Documents are followable only when owned by a project; sending `followers` / `addFollowers` / `removeFollowers` for an organization-, folder-, or smart-folder-owned document returns `400 Bad Request`. (Chat channels are always project-owned.)
 - **Task API:** the current user is now added to a new task's `followers` automatically on [`POST /task/{projectOid}`](https://quire.io/dev/api/#operation--task--projectOid--post) (and the by-ID form) — previously only Quire's own clients added the creator.
+- **Webhook (deprecation):** Two legacy Notification Event fields are now **deprecated** and will be **removed after Dec 31, 2027**. Both continue to be sent until the sunset date.
+    - `tasks` (added Jul 2023) → use `taskSummaries` (available since Feb 2026), which carries the same per-task detail.
+    - `project` (the bare project OID) → use `projectSummary` (available since Feb 2026), the `{oid, id}` form.
 
 ## May 27, 2026
 
