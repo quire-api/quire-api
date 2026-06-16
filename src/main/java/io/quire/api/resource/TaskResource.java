@@ -440,7 +440,8 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this task."),
-        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — project settings block completing the task (an open predecessor, or a pending approval). Resolve it, then retry.")
     })
     public Response updateTask(
         @ApiParam(value = "Task OID.", required = true)
@@ -491,7 +492,8 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — updated task record.", response = TaskWithParentInfo.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this task."),
-        @ApiResponse(code = 404, message = "Not Found — task does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — task does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — project settings block completing the task (an open predecessor, or a pending approval). Resolve it, then retry.")
     })
     public Response updateTaskById(
         @ApiParam(
@@ -1757,6 +1759,10 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 404, message = "Not Found — project does not "
               + "exist. (Item-level not-found is silent skip.)",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 409, message = "Conflict — project settings "
+              + "block completing an item (an open predecessor, or a "
+              + "pending approval) (whole batch rolled back).",
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),

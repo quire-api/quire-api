@@ -32,7 +32,9 @@ public class UpdateTaskBody {
     public int getPriority() { return 0; }
 
     @ApiModelProperty(
-        value = "(Optional) New status, between 0 and 100. Specify 100 to complete the task.",
+        value = "(Optional) New status, between 0 and 100. Specify 100 to complete the task. "
+              + "Completion may be rejected (409 Conflict) when project settings require all "
+              + "predecessors to be completed first, or require an approval to be granted.",
         example = "100",
         position = 4
     )
