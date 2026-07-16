@@ -854,12 +854,14 @@ public class TaskResource {
     @Path("/attach/{taskOid}/{filename}")
     @ApiOperation(
         value = "Upload an attachment to a task by OID.",
-        notes = "Uploads an attachment to an existing task.",
+        notes = "Uploads an attachment to an existing task.\n\n"
+              + "Executable files (`.exe`, `.com`, `.bat`) are rejected unless the "
+              + "project has enabled uploading executable files.",
         response = SimpleAttachment.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created attachment.", response = SimpleAttachment.class),
-        @ApiResponse(code = 400, message = "Bad Request — filename or payload invalid."),
+        @ApiResponse(code = 400, message = "Bad Request — filename or payload invalid, or an executable file is not allowed for this project."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this task."),
         @ApiResponse(code = 404, message = "Not Found — task does not exist.")
     })
@@ -885,12 +887,14 @@ public class TaskResource {
     @Path("/attach/id/{projectId}/{taskId}/{filename}")
     @ApiOperation(
         value = "Upload an attachment to a task by ID.",
-        notes = "Uploads an attachment to an existing task.",
+        notes = "Uploads an attachment to an existing task.\n\n"
+              + "Executable files (`.exe`, `.com`, `.bat`) are rejected unless the "
+              + "project has enabled uploading executable files.",
         response = SimpleAttachment.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created attachment.", response = SimpleAttachment.class),
-        @ApiResponse(code = 400, message = "Bad Request — filename or payload invalid."),
+        @ApiResponse(code = 400, message = "Bad Request — filename or payload invalid, or an executable file is not allowed for this project."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this task."),
         @ApiResponse(code = 404, message = "Not Found — task does not exist.")
     })

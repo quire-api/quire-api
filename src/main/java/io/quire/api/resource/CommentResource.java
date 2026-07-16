@@ -266,12 +266,14 @@ public class CommentResource {
     @Path("/attach/{commentOid}/{filename}")
     @ApiOperation(
         value = "Upload an attachment to a comment (by comment OID).",
-        notes = "Uploads an attachment to an existing comment.",
+        notes = "Uploads an attachment to an existing comment.\n\n"
+              + "Executable files (`.exe`, `.com`, `.bat`) are rejected unless the "
+              + "project has enabled uploading executable files.",
         response = SimpleAttachment.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — attachment record.", response = SimpleAttachment.class),
-        @ApiResponse(code = 400, message = "Bad Request — bad payload or filename."),
+        @ApiResponse(code = 400, message = "Bad Request — bad payload or filename, or an executable file is not allowed for this project."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this comment."),
         @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
     })
