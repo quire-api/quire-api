@@ -2,7 +2,7 @@
 
 Quire offers an [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that lets AI assistants — Claude, ChatGPT, Cursor, VS Code, and other MCP-compatible clients — work with your Quire workspace through natural language.
 
-Once connected, the assistant can list and search your projects, create or update tasks and subtasks, post comments, manage tags, sublists, statuses, documents, chats, insights, and more — all on your behalf and within the permissions you grant.
+Once connected, the assistant can list and search your projects, create or update tasks and subtasks, post comments, manage tags, sublists, statuses, documents, chats, insights, dashboards, and more — all on your behalf and within the permissions you grant.
 
 > Quire MCP is built on top of the same Quire REST API documented here, so anything an integration can do via REST is reachable from an AI assistant once it is connected.
 
@@ -33,6 +33,7 @@ The Quire MCP server exposes the full Quire object model as MCP tools. At a high
 | **Tags & Statuses** | Manage the project's tag library and workflow statuses |
 | **Documents** | Create, read, update, and delete project documents |
 | **Chats & Insights** | Start chat threads, post chat comments, and manage insight reports and their fields |
+| **Dashboards** | Create, read, update, archive, and delete dashboards for a project, organization, or folder (widget contents are not yet exposed) |
 | **Partners** | List and inspect partner workspaces |
 | **URL resolver** | Turn any pasted Quire URL (task, project, document, …) into the underlying object |
 
