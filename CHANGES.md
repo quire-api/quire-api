@@ -1,5 +1,15 @@
 # Changelog
 
+## Jul 20, 2026
+
+- **Dashboard API:** Added the [dashboard](https://quire.io/dev/api/#tag--dashboard) endpoints — dashboards are collections of widgets owned by a project, organization, or folder. Supports the standard work-item CRUD, in both OID and ID URL forms:
+    - **Create** — [`POST /dashboard/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--dashboard--ownerType---ownerOid--post) and the by-ID form.
+    - **Read** — [`GET /dashboard/{oid}`](https://quire.io/dev/api/#operation--dashboard--oid--get), the by-ID form, and [`GET /dashboard/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--dashboard-list--ownerType---ownerOid--get) (plus its by-ID form).
+    - **Update** — [`PUT /dashboard/{oid}`](https://quire.io/dev/api/#operation--dashboard--oid--put) and the by-ID form; set `archived: true` / `false` to archive or unarchive.
+    - **Delete** — [`DELETE /dashboard/{oid}`](https://quire.io/dev/api/#operation--dashboard--oid--delete) and the by-ID form.
+    - **Undo remove** — [`PUT /dashboard/undo-remove/{oid}`](https://quire.io/dev/api/#operation--dashboard-undo-remove--oid--put) and the by-ID form; idempotent, subject to the dashboard-per-owner quota (`429` when the plan limit is reached).
+    - Widget definitions and widget display are not yet part of the public API.
+
 ## Jun 4, 2026
 
 - **Chat & Doc API:** chat channels and documents now support follower management, matching the Task API.
