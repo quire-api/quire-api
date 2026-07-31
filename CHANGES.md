@@ -1,5 +1,13 @@
 # Changelog
 
+## Jul 31, 2026
+
+- **Comment API (removal):** Removed long-deprecated URL forms. All of them have supported replacements:
+    - `GET`/`PUT`/`DELETE` on `/comment/{projectOid}/{commentOid}` and `/comment/id/{projectId}/{commentOid}` → use [`/comment/{commentOid}`](https://quire.io/dev/api/#operation--comment--commentOid--get); a comment OID is unique on its own, so the project segment is no longer accepted. (Supersedes the Apr 27, 2021 entry.)
+    - `PUT /comment/undo-remove/id/{projectId}/{commentOid}` → use [`PUT /comment/undo-remove/{commentOid}`](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put); comment undo-remove is OID-addressed only.
+    - Chat-channel comments without the `/chat/` segment (`POST /comment/{chatOid}`, `GET /comment/list/{chatOid}`, and the `/id/` forms with a chat ID) → use [`POST /comment/chat/{chatOid}`](https://quire.io/dev/api/#operation--comment-chat--chatOid--post) and [`GET /comment/list/chat/{chatOid}`](https://quire.io/dev/api/#operation--comment-list-chat--chatOid--get) (or their `/chat/id/` forms).
+    - The removed forms now return `400 Bad Request`, except the chat forms without `/chat/`, which return `404 Not Found`.
+
 ## Jul 20, 2026
 
 - **Dashboard API:** Added the [dashboard](https://quire.io/dev/api/#tag--dashboard) endpoints — dashboards are collections of widgets owned by a project, organization, or folder. Supports the standard work-item CRUD, in both OID and ID URL forms:
@@ -188,7 +196,7 @@
 - **Project API:** [`PUT /project/{oid}`](https://quire.io/dev/api/#operation--project--oid--put) now accepts `name`, `description`, `start`, `due`, `archived` (bool toggle), and `public` (bool toggle) in addition to follower deltas. The project response now includes `start`, `due`, `archivedAt`, and `publicAt`.
 - **Organization API:** [`PUT /organization/{oid}`](https://quire.io/dev/api/#operation--organization--oid--put) now accepts `name` and `description` in addition to follower deltas. The organization response now includes `editedAt`.
 - **Rate Limit API:** Added [`GET /rate_limit/{organizationOid}`](https://quire.io/dev/api/#operation--rate_limit--oid--get) (and `GET /rate_limit/id/{organizationId}`) to inspect current per-hour and per-minute API usage for an organization. Calls to this endpoint do not count against the rate limit.
-- **Undo-remove APIs:** Added `PUT /{entity}/undo-remove/{oid}` (and `/id/...` variants) to restore a previously-removed [task](https://quire.io/dev/api/#operation--task-undo-remove--oid--put), [comment](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put), [sublist](https://quire.io/dev/api/#operation--sublist-undo-remove--oid--put), [document](https://quire.io/dev/api/#operation--doc-undo-remove--oid--put), [chat channel](https://quire.io/dev/api/#operation--chat-undo-remove--oid--put), or [insight view](https://quire.io/dev/api/#operation--insight-undo-remove--oid--put). The endpoints are idempotent, and task/sublist/doc/chat/insight undo-remove is subject to the plan's per-type creation quota.
+- **Undo-remove APIs:** Added `PUT /{entity}/undo-remove/{oid}` (and `/id/...` variants; comment's `/id/...` form was later removed — see Jul 31, 2026) to restore a previously-removed [task](https://quire.io/dev/api/#operation--task-undo-remove--oid--put), [comment](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put), [sublist](https://quire.io/dev/api/#operation--sublist-undo-remove--oid--put), [document](https://quire.io/dev/api/#operation--doc-undo-remove--oid--put), [chat channel](https://quire.io/dev/api/#operation--chat-undo-remove--oid--put), or [insight view](https://quire.io/dev/api/#operation--insight-undo-remove--oid--put). The endpoints are idempotent, and task/sublist/doc/chat/insight undo-remove is subject to the plan's per-type creation quota.
 - **Insight API:** Added the [Insight API](https://quire.io/dev/api/#tag-insight) to create, read, update, and delete insight views, matching the shape of the existing Sublist / Doc / Chat APIs. Custom-field configuration (`tableCols`, `fields`) is not yet exposed; follow-up is planned.
 
 ## Apr 20, 2026
