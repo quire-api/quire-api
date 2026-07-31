@@ -1988,7 +1988,7 @@ ul.no-bullet, ol.no-bullet {
   color: #F5F5F5;
 }
 .button:hover, .button:focus {
-  background-color: rgb(19.55, 102.85, 158.1);
+  background-color: rgb(7.6666666667%, 40.3333333333%, 62%);
   color: #F5F5F5;
 }
 .button.tiny {
@@ -2011,7 +2011,7 @@ ul.no-bullet, ol.no-bullet {
   color: #F5F5F5;
 }
 .button.primary:hover, .button.primary:focus {
-  background-color: rgb(18.4, 96.8, 148.8);
+  background-color: rgb(7.2156862745%, 37.9607843137%, 58.3529411765%);
   color: #F5F5F5;
 }
 .button.secondary {
@@ -2019,7 +2019,7 @@ ul.no-bullet, ol.no-bullet {
   color: #F5F5F5;
 }
 .button.secondary:hover, .button.secondary:focus {
-  background-color: rgb(94.4, 94.4, 94.4);
+  background-color: rgb(37.0196078431%, 37.0196078431%, 37.0196078431%);
   color: #F5F5F5;
 }
 .button.success {
@@ -2027,7 +2027,7 @@ ul.no-bullet, ol.no-bullet {
   color: #181D25;
 }
 .button.success:hover, .button.success:focus {
-  background-color: rgb(34.2386266094, 187.3613733906, 91.3030042918);
+  background-color: rgb(13.4269123959%, 73.4750483885%, 35.8050997223%);
   color: #181D25;
 }
 .button.warning {
@@ -2035,7 +2035,7 @@ ul.no-bullet, ol.no-bullet {
   color: #181D25;
 }
 .button.warning:hover, .button.warning:focus {
-  background-color: rgb(216, 146.7, 0);
+  background-color: rgb(84.7058823529%, 57.5294117647%, 0%);
   color: #181D25;
 }
 .button.alert {
@@ -2043,7 +2043,7 @@ ul.no-bullet, ol.no-bullet {
   color: #181D25;
 }
 .button.alert:hover, .button.alert:focus {
-  background-color: rgb(217.756937799, 23.043062201, 55.3033492823);
+  background-color: rgb(85.3948775683%, 9.0364949808%, 21.6875879538%);
   color: #181D25;
 }
 .button.disabled, .button[disabled] {
@@ -2105,8 +2105,8 @@ ul.no-bullet, ol.no-bullet {
   color: #1779ba;
 }
 .button.hollow:hover, .button.hollow:focus {
-  border-color: rgb(11.5, 60.5, 93);
-  color: rgb(11.5, 60.5, 93);
+  border-color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
+  color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
 }
 .button.hollow:hover.disabled, .button.hollow:hover[disabled], .button.hollow:focus.disabled, .button.hollow:focus[disabled] {
   border: 1px solid #1779ba;
@@ -2117,8 +2117,8 @@ ul.no-bullet, ol.no-bullet {
   color: #1779ba;
 }
 .button.hollow.primary:hover, .button.hollow.primary:focus {
-  border-color: rgb(11.5, 60.5, 93);
-  color: rgb(11.5, 60.5, 93);
+  border-color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
+  color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
 }
 .button.hollow.primary:hover.disabled, .button.hollow.primary:hover[disabled], .button.hollow.primary:focus.disabled, .button.hollow.primary:focus[disabled] {
   border: 1px solid #1779ba;
@@ -2141,8 +2141,8 @@ ul.no-bullet, ol.no-bullet {
   color: #3adb76;
 }
 .button.hollow.success:hover, .button.hollow.success:focus {
-  border-color: rgb(21.3991416309, 117.1008583691, 57.0643776824);
-  color: rgb(21.3991416309, 117.1008583691, 57.0643776824);
+  border-color: rgb(8.3918202474%, 45.9219052428%, 22.3781873264%);
+  color: rgb(8.3918202474%, 45.9219052428%, 22.3781873264%);
 }
 .button.hollow.success:hover.disabled, .button.hollow.success:hover[disabled], .button.hollow.success:focus.disabled, .button.hollow.success:focus[disabled] {
   border: 1px solid #3adb76;
@@ -2153,8 +2153,8 @@ ul.no-bullet, ol.no-bullet {
   color: #FFB20F;
 }
 .button.hollow.warning:hover, .button.hollow.warning:focus {
-  border-color: rgb(135, 91.6875, 0);
-  color: rgb(135, 91.6875, 0);
+  border-color: rgb(52.9411764706%, 35.9558823529%, 0%);
+  color: rgb(52.9411764706%, 35.9558823529%, 0%);
 }
 .button.hollow.warning:hover.disabled, .button.hollow.warning:hover[disabled], .button.hollow.warning:focus.disabled, .button.hollow.warning:focus[disabled] {
   border: 1px solid #FFB20F;
@@ -2165,8 +2165,8 @@ ul.no-bullet, ol.no-bullet {
   color: #EB425E;
 }
 .button.hollow.alert:hover, .button.hollow.alert:focus {
-  border-color: rgb(136.0980861244, 14.4019138756, 34.5645933014);
-  color: rgb(136.0980861244, 14.4019138756, 34.5645933014);
+  border-color: rgb(53.3717984802%, 5.647809363%, 13.5547424712%);
+  color: rgb(53.3717984802%, 5.647809363%, 13.5547424712%);
 }
 .button.hollow.alert:hover.disabled, .button.hollow.alert:hover[disabled], .button.hollow.alert:focus.disabled, .button.hollow.alert:focus[disabled] {
   border: 1px solid #EB425E;
@@ -2183,8 +2183,8 @@ ul.no-bullet, ol.no-bullet {
   color: #1779ba;
 }
 .button.clear:hover, .button.clear:focus {
-  border-color: rgb(11.5, 60.5, 93);
-  color: rgb(11.5, 60.5, 93);
+  border-color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
+  color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
 }
 .button.clear:hover.disabled, .button.clear:hover[disabled], .button.clear:focus.disabled, .button.clear:focus[disabled] {
   border: 1px solid #1779ba;
@@ -2198,8 +2198,8 @@ ul.no-bullet, ol.no-bullet {
   color: #1779ba;
 }
 .button.clear.primary:hover, .button.clear.primary:focus {
-  border-color: rgb(11.5, 60.5, 93);
-  color: rgb(11.5, 60.5, 93);
+  border-color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
+  color: rgb(4.5098039216%, 23.7254901961%, 36.4705882353%);
 }
 .button.clear.primary:hover.disabled, .button.clear.primary:hover[disabled], .button.clear.primary:focus.disabled, .button.clear.primary:focus[disabled] {
   border: 1px solid #1779ba;
@@ -2228,8 +2228,8 @@ ul.no-bullet, ol.no-bullet {
   color: #3adb76;
 }
 .button.clear.success:hover, .button.clear.success:focus {
-  border-color: rgb(21.3991416309, 117.1008583691, 57.0643776824);
-  color: rgb(21.3991416309, 117.1008583691, 57.0643776824);
+  border-color: rgb(8.3918202474%, 45.9219052428%, 22.3781873264%);
+  color: rgb(8.3918202474%, 45.9219052428%, 22.3781873264%);
 }
 .button.clear.success:hover.disabled, .button.clear.success:hover[disabled], .button.clear.success:focus.disabled, .button.clear.success:focus[disabled] {
   border: 1px solid #3adb76;
@@ -2243,8 +2243,8 @@ ul.no-bullet, ol.no-bullet {
   color: #FFB20F;
 }
 .button.clear.warning:hover, .button.clear.warning:focus {
-  border-color: rgb(135, 91.6875, 0);
-  color: rgb(135, 91.6875, 0);
+  border-color: rgb(52.9411764706%, 35.9558823529%, 0%);
+  color: rgb(52.9411764706%, 35.9558823529%, 0%);
 }
 .button.clear.warning:hover.disabled, .button.clear.warning:hover[disabled], .button.clear.warning:focus.disabled, .button.clear.warning:focus[disabled] {
   border: 1px solid #FFB20F;
@@ -2258,8 +2258,8 @@ ul.no-bullet, ol.no-bullet {
   color: #EB425E;
 }
 .button.clear.alert:hover, .button.clear.alert:focus {
-  border-color: rgb(136.0980861244, 14.4019138756, 34.5645933014);
-  color: rgb(136.0980861244, 14.4019138756, 34.5645933014);
+  border-color: rgb(53.3717984802%, 5.647809363%, 13.5547424712%);
+  color: rgb(53.3717984802%, 5.647809363%, 13.5547424712%);
 }
 .button.clear.alert:hover.disabled, .button.clear.alert:hover[disabled], .button.clear.alert:focus.disabled, .button.clear.alert:focus[disabled] {
   border: 1px solid #EB425E;
@@ -2548,7 +2548,7 @@ select[multiple] {
 
 .is-invalid-input:not(:focus) {
   border-color: #EB425E;
-  background-color: rgb(244, 227.1, 229.9);
+  background-color: rgb(95.6862745098%, 89.0588235294%, 90.1568627451%);
 }
 .is-invalid-input:not(:focus)::placeholder {
   color: #EB425E;
@@ -2799,7 +2799,7 @@ thead {
 }
 
 tfoot {
-  background: rgb(242.25, 242.25, 242.25);
+  background: rgb(95%, 95%, 95%);
   color: #181D25;
 }
 
@@ -2862,13 +2862,13 @@ table.hover thead tr:hover {
   background-color: rgba(0, 0, 0, 0);
 }
 table.hover tfoot tr:hover {
-  background-color: rgb(237.15, 237.15, 237.15);
+  background-color: rgb(93%, 93%, 93%);
 }
 table.hover tbody tr:hover {
-  background-color: rgb(249.9, 249.9, 249.9);
+  background-color: rgb(98%, 98%, 98%);
 }
 table.hover:not(.unstriped) tr:nth-of-type(even):hover {
-  background-color: rgb(237.15, 237.15, 237.15);
+  background-color: rgb(93%, 93%, 93%);
 }
 
 .table-scroll {
