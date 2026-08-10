@@ -116,7 +116,10 @@ public class UpdateTaskBody {
               + "Notes:\n"
               + "- Seconds are not supported.\n"
               + "- `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).\n"
-              + "- To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds)."
+              + "- To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).\n"
+              + "- `null` clears it. It is rejected if the task is recurring, since a recurring "
+              + "task always has a due; pass `recurrence`: `null` in the same request to stop "
+              + "repeating and clear the due together."
     )
     public String getDue() { return null; }
 
@@ -131,7 +134,10 @@ public class UpdateTaskBody {
               + "- `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.\n"
               + "  Note: `byweekday` and `bydayno` cannot both be specified.\n"
               + "- `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.\n"
-              + "- `sincelatest`: Daily only. Repeat based on the last completion date. Default: false."
+              + "- `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.\n\n"
+              + "A recurring task always has a `due`. If the task has none and `due` is omitted, it "
+              + "is derived from the recurrence: the nearest occurrence since today. The request is "
+              + "rejected if the derived due precedes `start`; specify `due` explicitly in that case."
     )
     public Recurrence getRecurrence() { return null; }
 

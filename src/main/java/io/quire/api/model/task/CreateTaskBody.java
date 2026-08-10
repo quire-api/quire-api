@@ -96,7 +96,10 @@ public class CreateTaskBody {
               + "- `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.\n"
               + "  Note: `byweekday` and `bydayno` cannot both be specified.\n"
               + "- `dupsubtasks`: Whether to duplicate subtasks when completed. Default: true.\n"
-              + "- `sincelatest`: For `daily` only. Whether to repeat based on last completion date. Default: false."
+              + "- `sincelatest`: For `daily` only. Whether to repeat based on last completion date. Default: false.\n\n"
+              + "A recurring task always has a `due`. If `due` is omitted, it is derived from the "
+              + "recurrence: the nearest occurrence since today. The request is rejected if the "
+              + "derived due precedes `start`; specify `due` explicitly in that case."
     )
     public Recurrence getRecurrence() { return null; }
 
