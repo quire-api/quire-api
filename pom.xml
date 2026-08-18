@@ -14,7 +14,7 @@
         <swagger-core-version>1.5.21</swagger-core-version>
 
         <jackson-version>2.18.6</jackson-version>
-        <jackson-databind-version>2.12.7.1</jackson-databind-version>
+        <jackson-databind-version>2.22.0</jackson-databind-version>
         <jackson-threetenbp-version>2.6.4</jackson-threetenbp-version>
         <client-lib-version>0.0.1</client-lib-version>
     </properties>
