@@ -256,10 +256,7 @@ public class InsightResource {
       + "- Pre-compute the project-wide aggregate as a `cfFormula` on "
       + "the Project (those are evaluated separately and DO have access "
       + "to project task collections).\n\n"
-      + "**Rate limit:** standard 1 unit (via grantLoad) + a soft "
-      + "post-charge of `ceil(tasksLoaded / 250) - 1` extra units. "
-      + "`tasksLoaded` reflects the `?status=`-filtered task set, so a "
-      + "tighter `?status=` narrows the SQL load and lowers the charge.";
+      + "**Rate limit:** see [Rate Limits](#rate-limits).";
 
     @GET
     @Path("/run/{oid}")

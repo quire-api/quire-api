@@ -174,10 +174,7 @@ public class ProjectResource {
         value = "Export a project to CSV by ID.",
         notes = "Returns a CSV string containing the project, tasks, and related data.\n"
               + "Available on the Professional plan and above.\n"
-              + "**Rate-limit cost**: proportional to the number of tasks actually "
-              + "exported — i.e. those matching the `status` filter, not the project total — "
-              + "`max(1, ceil(tasks / 100))` units. So a 100-task export costs 1, "
-              + "a 1,000-task export costs 10. (Plus a small fixed export overhead.)",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = String.class
     )
     @ApiResponses({
@@ -213,10 +210,7 @@ public class ProjectResource {
         value = "Export a project to CSV by OID.",
         notes = "Returns a CSV string containing the project, tasks, and related data.\n"
               + "Available on the Professional plan and above.\n"
-              + "**Rate-limit cost**: proportional to the number of tasks actually "
-              + "exported — i.e. those matching the `status` filter, not the project total — "
-              + "`max(1, ceil(tasks / 100))` units. So a 100-task export costs 1, "
-              + "a 1,000-task export costs 10. (Plus a small fixed export overhead.)",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = String.class
     )
     @ApiResponses({
@@ -254,10 +248,7 @@ public class ProjectResource {
         value = "Export a project to JSON by ID.",
         notes = "Returns a JSON map containing the project, all tasks, and related data.\n"
               + "Available on the Professional plan and above.\n"
-              + "**Rate-limit cost**: proportional to the number of tasks actually "
-              + "exported — i.e. those matching the `status` filter, not the project total — "
-              + "`max(1, ceil(tasks / 100))` units. So a 100-task export costs 1, "
-              + "a 1,000-task export costs 10. (Plus a small fixed export overhead.)",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = ProjectJsonMap.class
     )
     @ApiResponses({
@@ -276,10 +267,7 @@ public class ProjectResource {
         value = "Export a project to JSON by OID.",
         notes = "Returns a JSON map containing the project, all tasks, and related data.\n"
               + "Available on the Professional plan and above.\n"
-              + "**Rate-limit cost**: proportional to the number of tasks actually "
-              + "exported — i.e. those matching the `status` filter, not the project total — "
-              + "`max(1, ceil(tasks / 100))` units. So a 100-task export costs 1, "
-              + "a 1,000-task export costs 10. (Plus a small fixed export overhead.)",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = ProjectJsonMap.class
     )
     @ApiResponses({

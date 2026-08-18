@@ -183,14 +183,24 @@ public class TaskResource {
     @ApiOperation(
         value = "Get all root tasks of the given project or all subtasks of the given task.",
         notes = "Returns all root tasks of a project or all direct subtasks of a task by OID. "
-              + "If the OID is a project, root tasks are returned. If it is a task, its direct subtasks are returned.\n"
-              + "Note: only one level is returned—subtasks of subtasks are not included; retrieve them recursively.",
+              + "If the OID is a project, root tasks are returned. If it is a task, its direct subtasks are returned.\n\n"
+              + "One level is returned by default. When the OID is a **task**, `?depth=N` / "
+              + "`?depth=full` walks the subtree in a single call, exactly as on "
+              + "`GET /task/list/id/{projectId}/{taskId}` — see that endpoint for the depth "
+              + "grammar, per-plan node caps, and `cropped` semantics. `?depth>1` is not "
+              + "available when the OID is a project (there is no parent task to walk from); "
+              + "use the flat list per level instead.\n\n"
+              + "`?status=`, `?limit=` / `?cursor=` pagination, and `?return=compact` behave "
+              + "as on the by-ID forms.\n\n"
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = Task.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of tasks (may be empty).",
             response = Task.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `?status=` / `?depth=` / `?limit=` value, `?depth>1` when the OID is a project, `?depth>1` combined with `?limit`/`?cursor`, or `?cursor=` doesn't belong to this list."),
+        @ApiResponse(code = 402, message = "Payment Required — `?depth>1` requires the Professional plan or above."),
         @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
     })
     public Response getTasksByOid(
@@ -199,7 +209,51 @@ public class TaskResource {
                   + "Specify \"-\" to retrieve My Tasks (no specific project).",
             required = true
         )
-        @PathParam("oid") String oid
+        @PathParam("oid") String oid,
+
+        @ApiParam(
+            value = "Task status filter. "
+                  + "Specify a value 0–100, or use \"active\" for active tasks or \"completed\" for completed tasks.",
+            example = "active",
+            required = false
+        )
+        @QueryParam("status") String status,
+
+        @ApiParam(
+            value = "Subtree depth, only when the OID is a task. Omit or `1` for the "
+                  + "default flat single-level list. `?depth>1` requires the Professional "
+                  + "plan or above and cannot be combined with `?limit`/`?cursor`.",
+            example = "2",
+            required = false
+        )
+        @QueryParam("depth") String depth,
+
+        @ApiParam(
+            value = "Page size (1..1000). Omit for the default unpaginated full list, "
+                  + "or pass `no` to be explicit. When set and more results exist, "
+                  + "the last item in the response carries a `cursor` field.",
+            example = "100",
+            required = false
+        )
+        @QueryParam("limit") String limit,
+
+        @ApiParam(
+            value = "Continuation token. Pass back the `cursor` value from the last "
+                  + "item of the previous page to fetch the next page. Re-pass any "
+                  + "filter (`?status=`) and `?limit=` on the same call.",
+            required = false
+        )
+        @QueryParam("cursor") String cursor,
+
+        @ApiParam(
+            value = "Response shape. `full` (default) returns the standard task records; "
+                  + "`compact` returns identifier-only items — `{oid, id, tasks?, cropped?}` "
+                  + "in subtree mode, `{oid, id, cursor?}` in flat / paginated mode.",
+            example = "compact",
+            allowableValues = "full, compact",
+            required = false
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
@@ -221,10 +275,7 @@ public class TaskResource {
               + "Pair with `?return=compact` to render each item as `{oid, id, cursor?}` "
               + "for navigation/lookup workloads at minimal token cost.\n\n"
 
-              + "**Rate-limit cost**: proportional to the number of items returned — "
-              + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer items) costs 1, "
-              + "`?limit=1000` costs 10, `?limit=no` returning 5,000 items costs 50. "
-              + "Symmetric with bulk-write cost.\n\n"
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
 
               + "To retrieve all tasks (including all subtasks), use the search API.",
         response = Task.class,
@@ -246,6 +297,14 @@ public class TaskResource {
         @PathParam("projectId") String projectId,
 
         @ApiParam(
+            value = "Task status filter. "
+                  + "Specify a value 0–100, or use \"active\" for active tasks or \"completed\" for completed tasks.",
+            example = "active",
+            required = false
+        )
+        @QueryParam("status") String status,
+
+        @ApiParam(
             value = "Page size (1..1000). Omit for the default unpaginated full list, "
                   + "or pass `no` to be explicit. When set and more results exist, "
                   + "the last item in the response carries a `cursor` field.",
@@ -260,7 +319,16 @@ public class TaskResource {
                   + "filter (`?status=`) and `?limit=` on the same call.",
             required = false
         )
-        @QueryParam("cursor") String cursor
+        @QueryParam("cursor") String cursor,
+
+        @ApiParam(
+            value = "Response shape. `full` (default) returns the standard task records; "
+                  + "`compact` returns identifier-only items — `{oid, id, cursor?}`.",
+            example = "compact",
+            allowableValues = "full, compact",
+            required = false
+        )
+        @QueryParam("return") String returnMode
     ) { return null; }
 
     @GET
@@ -307,10 +375,7 @@ public class TaskResource {
               + "`?depth>1` cannot be combined with `?limit=` or `?cursor=` "
               + "(returns `400`).\n\n"
 
-              + "**Rate-limit cost**: proportional to the number of tasks returned "
-              + "across the whole tree — `max(1, ceil(items / 100))` units. So a flat "
-              + "`?limit=100` (or fewer) costs 1; a `?depth=full` returning 500 nodes "
-              + "costs 5; a `?depth=full` returning 2,000 (Premium cap) costs 20.",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1473,12 +1538,6 @@ public class TaskResource {
               + "```json\n"
               + "{ \"code\": 400, \"message\": \"items[1]: Invalid value for `priority`: 99 (expected -1, 0, 1, or 2)\" }\n"
               + "```\n\n"
-              + "**Rate-limit cost**: each bulk call costs `N` units against "
-              + "the per-minute / per-hour API quota, where `N` is the number "
-              + "of submitted items — the same total cost as `N` equivalent "
-              + "single-task calls. Charged upfront; if the cost would "
-              + "exceed the quota, the whole batch is rejected with `429` "
-              + "before any item is processed.\n\n"
               + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
@@ -1492,9 +1551,7 @@ public class TaskResource {
               + "discarded along with everything else. A follow-up real "
               + "call allocates fresh identifiers, so don't persist or "
               + "reference dry-run OIDs / IDs across calls.\n\n"
-              + "**Rate-limit cost**: a dry-run costs `ceil(N / 2)` "
-              + "units (minimum 1), where `N` is `items.length`. A real "
-              + "call costs `N` units.",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1515,10 +1572,9 @@ public class TaskResource {
               + "exceeds the API packet size limit.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost (`items.length` units, halved for "
-              + "`?dry-run=true`) would exceed the caller's per-minute / "
-              + "per-hour API quota, OR the batch would exceed the "
-              + "project's task quota.",
+              + "rate-limit cost (see [Rate Limits](#rate-limits)) "
+              + "would exceed the caller's per-minute / per-hour API "
+              + "quota, OR the batch would exceed the project's task quota.",
             response = ErrorResponse.class)
     })
     public Response bulkAddTaskById(
@@ -1539,8 +1595,8 @@ public class TaskResource {
                 + "without persisting any changes. Same validation, "
                 + "permissions, and response shape as a real call. "
                 + "Returned `oid` / `id` values are discarded — don't "
-                + "store them. Rate-limit cost is `ceil(N / 2)` "
-                + "(minimum 1). See the endpoint notes for full details.",
+                + "store them. Halves the rate-limit cost — see "
+                + "[Rate Limits](#rate-limits).",
             example = "true",
             allowableValues = "true, false"
         )
@@ -1730,11 +1786,8 @@ public class TaskResource {
               + "diffing state first. Shape errors (both / neither `oid` "
               + "and `id`, malformed ref) still 400 + rollback — those "
               + "are typos, not state races.\n\n"
-              + "**Rate-limit cost**: each bulk call costs `N` units "
-              + "against the per-minute / per-hour API quota, where `N` "
-              + "is `items.length` — the same total cost as `N` equivalent "
-              + "single-task PUTs. The cost does not adjust for skipped "
-              + "items; the per-item resolve still runs.\n\n"
+              + "The cost does not adjust for skipped items; the "
+              + "per-item resolve still runs.\n\n"
               + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
@@ -1743,8 +1796,7 @@ public class TaskResource {
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
-              + "Rate-limit cost: `ceil(N / 2)` units for a dry-run "
-              + "(minimum 1) vs. `N` units for a real call.",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = Task.class,
         responseContainer = "List"
     )
@@ -1771,9 +1823,8 @@ public class TaskResource {
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost (`items.length` units, halved for "
-              + "`?dry-run=true`) would exceed the caller's per-minute / "
-              + "per-hour API quota.",
+              + "rate-limit cost would exceed the caller's per-minute / "
+              + "per-hour API quota (see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkUpdateTaskById(
@@ -1791,8 +1842,8 @@ public class TaskResource {
             value = "(Optional) Set to `true` to preview the call "
                 + "without persisting any changes. Same validation, "
                 + "permissions, and response shape as a real call. "
-                + "Rate-limit cost is `ceil(N / 2)` (minimum 1). See "
-                + "the endpoint notes for full details.",
+                + "Halves the rate-limit cost — see "
+                + "[Rate Limits](#rate-limits).",
             example = "true",
             allowableValues = "true, false"
         )
@@ -1880,11 +1931,7 @@ public class TaskResource {
               + "OIDs.\n\n"
               + "`?return=compact` is a no-op here (the response is "
               + "already in identifier shape).\n\n"
-              + "**Rate-limit cost**: each bulk call costs `N` units "
-              + "against the per-minute / per-hour API quota, where `N` "
-              + "is `items.length` — the same total cost as `N` equivalent "
-              + "single-task DELETEs. The cost does not adjust for skipped "
-              + "items.\n\n"
+              + "The cost does not adjust for skipped items.\n\n"
               + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
@@ -1892,9 +1939,8 @@ public class TaskResource {
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
-              + "edits between the two calls). Rate-limit cost: "
-              + "`ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` "
-              + "units for a real call.",
+              + "edits between the two calls).\n\n"
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = Object.class,
         responseContainer = "List"
     )
@@ -1916,9 +1962,8 @@ public class TaskResource {
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost (`items.length` units, halved for "
-              + "`?dry-run=true`) would exceed the caller's per-minute / "
-              + "per-hour API quota.",
+              + "rate-limit cost would exceed the caller's per-minute / "
+              + "per-hour API quota (see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkRemoveTaskById(
@@ -1935,8 +1980,8 @@ public class TaskResource {
             value = "(Optional) Set to `true` to preview the call "
                 + "without persisting any changes. Same validation, "
                 + "permissions, and response shape as a real call. "
-                + "Rate-limit cost is `ceil(N / 2)` (minimum 1). See "
-                + "the endpoint notes for full details.",
+                + "Halves the rate-limit cost — see "
+                + "[Rate Limits](#rate-limits).",
             example = "true",
             allowableValues = "true, false"
         )
@@ -2035,10 +2080,6 @@ public class TaskResource {
               + "the previous successful move*, regardless of the URL "
               + "`?position=` — without this, `?position=after R` would "
               + "reverse the batch.\n\n"
-              + "**Rate-limit cost**: each bulk call costs `N` units "
-              + "against the per-minute / per-hour API quota, where `N` "
-              + "is `items.length` — same total cost as `N` equivalent "
-              + "single-task moves.\n\n"
               + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
@@ -2046,9 +2087,8 @@ public class TaskResource {
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
-              + "edits between the two calls). Rate-limit cost: "
-              + "`ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` "
-              + "units for a real call.\n\n"
+              + "edits between the two calls).\n\n"
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
               + "All items must belong to the project in the URL. "
               + "Cross-project moves go through bulk-transfer.",
         response = TaskWithParentInfo.class,
@@ -2076,8 +2116,8 @@ public class TaskResource {
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost (`items.length` units) would exceed the "
-              + "caller's per-minute / per-hour API quota.",
+              + "rate-limit cost would exceed the caller's per-minute / "
+              + "per-hour API quota (see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkMoveTaskById(
@@ -2118,8 +2158,8 @@ public class TaskResource {
             value = "(Optional) Set to `true` to preview the call "
                 + "without persisting any changes. Same validation, "
                 + "permissions, and response shape as a real call. "
-                + "Rate-limit cost is `ceil(N / 2)` (minimum 1). See "
-                + "the endpoint notes for full details.",
+                + "Halves the rate-limit cost — see "
+                + "[Rate Limits](#rate-limits).",
             example = "true",
             allowableValues = "true, false"
         )
@@ -2238,10 +2278,6 @@ public class TaskResource {
               + "transferred in submitted order — items 1..N-1 land "
               + "*after the previous successful transfer*, regardless "
               + "of `?position=`.\n\n"
-              + "**Rate-limit cost**: each bulk call costs `N` units "
-              + "against the per-minute / per-hour API quota, where `N` "
-              + "is `items.length` — same total cost as `N` equivalent "
-              + "single-task transfers.\n\n"
               + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes in **either** the source "
               + "or target project. Same per-item validation and "
@@ -2250,9 +2286,8 @@ public class TaskResource {
               + "message}` (with `items[i]:` prefix) on failure. A `200` "
               + "from a dry-run is a strong signal that re-issuing the "
               + "identical body without `?dry-run` will succeed (subject "
-              + "to concurrent edits between the two calls). Rate-limit "
-              + "cost: `ceil(N / 2)` units for a dry-run (minimum 1) vs. "
-              + "`N` units for a real call.",
+              + "to concurrent edits between the two calls).\n\n"
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -2278,8 +2313,9 @@ public class TaskResource {
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the "
-              + "batch's rate-limit cost (`items.length` units) would "
-              + "exceed the caller's per-minute / per-hour API quota.",
+              + "batch's rate-limit cost would exceed the caller's "
+              + "per-minute / per-hour API quota "
+              + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkTransferTaskById(
@@ -2349,9 +2385,8 @@ public class TaskResource {
             value = "(Optional) Set to `true` to preview the call "
                 + "without persisting any changes in either the source "
                 + "or target project. Same validation, permissions, and "
-                + "response shape as a real call. Rate-limit cost is "
-                + "`ceil(N / 2)` (minimum 1). See the endpoint notes "
-                + "for full details.",
+                + "response shape as a real call. Halves the rate-limit "
+                + "cost — see [Rate Limits](#rate-limits).",
             example = "true",
             allowableValues = "true, false"
         )
@@ -2466,9 +2501,8 @@ public class TaskResource {
               + "`items[i]:` prefix) on failure. A `200` from a dry-run "
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
-              + "edits between the two calls). Rate-limit cost: "
-              + "`ceil(N / 2)` units for a dry-run (minimum 1) vs. `N` "
-              + "units for a real call.",
+              + "edits between the two calls).\n\n"
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -2488,8 +2522,10 @@ public class TaskResource {
         @ApiResponse(code = 404, message = "Not Found — project or "
               + "approval `?category=` does not exist.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — bulk "
-              + "rate-limit cost is `N` units (one per item).",
+        @ApiResponse(code = 429, message = "Too Many Requests — the "
+              + "batch's rate-limit cost would exceed the caller's "
+              + "per-minute / per-hour API quota "
+              + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkApproveTaskById(
@@ -2533,8 +2569,8 @@ public class TaskResource {
             value = "(Optional) Set to `true` to preview the call "
                 + "without persisting any changes. Same validation, "
                 + "permissions, and response shape as a real call. "
-                + "Rate-limit cost is `ceil(N / 2)` (minimum 1). See "
-                + "the endpoint notes for full details.",
+                + "Halves the rate-limit cost — see "
+                + "[Rate Limits](#rate-limits).",
             example = "true",
             allowableValues = "true, false"
         )
@@ -2653,9 +2689,7 @@ public class TaskResource {
               + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
               + "use it verbatim from the previous response.\n\n"
 
-              + "**Rate-limit cost**: proportional to the number of items returned — "
-              + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer matches) costs 1, "
-              + "`?limit=1000` costs 10, `?limit=no` returning 5,000 matches costs 50.",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -2906,9 +2940,7 @@ public class TaskResource {
               + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
               + "use it verbatim from the previous response.\n\n"
 
-              + "**Rate-limit cost**: proportional to the number of items returned — "
-              + "`max(1, ceil(items / 100))` units. So `?limit=100` (or fewer matches) costs 1, "
-              + "`?limit=1000` costs 10, `?limit=no` returning 5,000 matches costs 50.",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )

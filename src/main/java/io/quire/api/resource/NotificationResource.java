@@ -34,9 +34,7 @@ public class NotificationResource {
           + "`404 Not Found`. The response is identical for every such case "
           + "so the endpoint cannot be used to probe user existence or "
           + "colleague relationships.\n\n"
-          + "Rate-limit cost: every 10 delivered recipients counts as 1 unit "
-          + "against the caller's per-minute / per-hour API rate limit "
-          + "(rounded up; minimum 1 unit per call)."
+          + "Rate-limit cost: see [Rate Limits](#rate-limits)."
     )
     @ApiResponses({
         @ApiResponse(
@@ -53,7 +51,7 @@ public class NotificationResource {
         ),
         @ApiResponse(
             code = 429,
-            message = "Too Many Requests — the rate-limit cost would exceed the caller's per-minute or per-hour API budget. No notification is sent."
+            message = "Too Many Requests — the rate-limit cost (see [Rate Limits](#rate-limits)) would exceed the caller's per-minute or per-hour API budget. No notification is sent."
         )
     })
     public Response createNotification(

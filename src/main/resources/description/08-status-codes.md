@@ -19,14 +19,19 @@
 
 ## Error Responses
 
-The following JSON data is returned in the response body when an error occurs.
+All `4xx` and `5xx` responses share a common JSON envelope, represented by the
+[`ErrorResponse`](#definition-ErrorResponse) schema:
 
 ```json
-{
-	"code": a_number,
-  "message": "an error message here"
-}
+{ "code": 400, "message": "Invalid value for `priority`: foo (expected -1, 0, 1, or 2)." }
 ```
+
+- `code` is the HTTP status code, echoed in the body.
+- `message` is a human-readable description, typically naming the offending field and —
+  for `400` — the expected format. Long submitted values are truncated.
+
+Each endpoint's `Responses` block lists the specific status codes that endpoint can emit;
+the body shape is this same envelope everywhere.
 
 | Error Code | Meaning
 |-----|-----------------------
