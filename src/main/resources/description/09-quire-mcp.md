@@ -114,12 +114,13 @@ Codex CLI opens a browser where you sign in to Quire and approve access. (If you
 
 ### ChatGPT
 
-ChatGPT supports remote MCP servers as **Connectors** (available on Plus, Pro, Business, Enterprise, and Edu plans).
+ChatGPT supports remote MCP servers as **Plugins** (available on Plus, Pro, Business, Enterprise, and Edu plans).
 
-1. Open `chatgpt.com` and go to **Settings → Connectors**.
-2. Click **Add connector**.
-3. Enter a name (for example, `Quire`) and the URL `https://mcp.quire.app/mcp`.
-4. Sign in to Quire when prompted and approve access.
+1. Open `chatgpt.com` and go to **Settings → Plugins**.
+2. Click **Browser plugins**.
+3. Click the **+ icon** at the upper right corner to add a new plugin.
+4. Enter a name (for example, `Quire`) and the URL `https://mcp.quire.app/mcp`.
+5. Sign in to Quire when prompted and approve access.
 
 ### Perplexity
 
