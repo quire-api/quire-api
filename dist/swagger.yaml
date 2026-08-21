@@ -701,12 +701,13 @@ info:
 
     ### ChatGPT
 
-    ChatGPT supports remote MCP servers as **Connectors** (available on Plus, Pro, Business, Enterprise, and Edu plans).
+    ChatGPT supports remote MCP servers as **Plugins** (available on Plus, Pro, Business, Enterprise, and Edu plans).
 
-    1. Open `chatgpt.com` and go to **Settings → Connectors**.
-    2. Click **Add connector**.
-    3. Enter a name (for example, `Quire`) and the URL `https://mcp.quire.app/mcp`.
-    4. Sign in to Quire when prompted and approve access.
+    1. Open `chatgpt.com` and go to **Settings → Plugins**.
+    2. Click **Browser plugins**.
+    3. Click the **+ icon** at the upper right corner to add a new plugin.
+    4. Enter a name (for example, `Quire`) and the URL `https://mcp.quire.app/mcp`.
+    5. Sign in to Quire when prompted and approve access.
 
     ### Perplexity
 
@@ -11194,16 +11195,48 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money`/`formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: (Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers.
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
+      conditionFormat:
+        type: array
+        description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -11241,38 +11274,6 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: (Optional) Conditional-format rules. Applicable to `date`, `number`, `money`, `duration`, `lookup`, and `formula` fields whose `resultType` resolves to one of those.
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       name:
         type: string
         example: Priority
@@ -11374,14 +11375,14 @@ definitions:
         type: string
         example: Please tweak the wording.
         description: 'Content of the companion comment (Markdown supported). Required if the body is supplied. The server prepends a bold `**<stream>: <status>**` line and a blank line before this text, so this field should contain only the human-written message — do not include the prefix yourself.'
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin the companion comment on the task. Default: `false`.'
       asUser:
         type: boolean
         example: false
         description: '(Optional) If `true`, the comment is attributed to the app rather than the authorizing user (matches the `asUser` flag on `POST /comment`). Default: `false`.'
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin the companion comment on the task. Default: `false`.'
   AppvCat:
     type: object
     properties:
@@ -11419,16 +11420,16 @@ definitions:
           For ID-based access, prefer `approverRefs`, which returns `{oid, id}` pairs.
         items:
           type: string
-      approverRefs:
-        type: array
-        position: 21
-        description: Approvers as `{oid, id}` pairs — same shape as `?return=compact`. Recommended over `approvers` for callers using ID-based access. Tri-state semantics match `approvers`.
-        items:
-          $ref: '#/definitions/SimpleEntityWithId'
       claimerRefs:
         type: array
         position: 21
         description: 'Claimers as `{oid, id}` pairs — same shape as `?return=compact`. Recommended over `claimers` for callers using ID-based access. Tri-state semantics match `claimers`: omitted = anyone; `[]` = admins only; list = those specific users.'
+        items:
+          $ref: '#/definitions/SimpleEntityWithId'
+      approverRefs:
+        type: array
+        position: 21
+        description: Approvers as `{oid, id}` pairs — same shape as `?return=compact`. Recommended over `approvers` for callers using ID-based access. Tri-state semantics match `approvers`.
         items:
           $ref: '#/definitions/SimpleEntityWithId'
       createdAt:
@@ -11482,10 +11483,57 @@ definitions:
         format: int32
         example: 42
         description: Target task ID. Exactly one of `oid` / `id` must be supplied per item.
+      removeFollowers:
+        type: array
+        example: '["bob@example.com"]'
+        description: |-
+          (Optional) Followers to remove (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: remove followers that were inherited from the parent task
+          - `"app"`: the application
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL.
+        items:
+          type: string
       description:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description.
+      addFollowers:
+        type: array
+        example: '["me"]'
+        description: |-
+          (Optional) Followers to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include followers of the parent task
+          - "app": the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      followers:
+        type: array
+        example: '["bob@example.com"]'
+        description: |-
+          (Optional) Followers to replace the current followers (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: include followers of the parent task
+          - `"app"`: the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
       tags:
         type: array
         example: '["urgent", "design"]'
@@ -11495,29 +11543,6 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      assignees:
-        type: array
-        example: '["me", "alice@example.com"]'
-        description: |-
-          (Optional) Assignees to replace the current assignees (OID, ID, or email).
-          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
-
-          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
-        items:
-          type: string
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) Start date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -11532,6 +11557,19 @@ definitions:
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
           - `null` clears it. It is rejected if the task is recurring, since a recurring task always has a due; pass `recurrence`: `null` in the same request to stop repeating and clear the due together.
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) Start date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       peekaboo:
         type: object
         example: 'true'
@@ -11543,6 +11581,72 @@ definitions:
           - `false`: Undo previous peekaboo.
 
           Default: false.
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
+      milestone:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a milestone. Default: false.'
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
+      successors:
+        type: array
+        example: '["#13"]'
+        description: |-
+          (Optional) Successors to replace the current successors (task OID or ID).
+
+          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
+
+          - Text / Email / Hyperlink: string.
+          - Number / Money: numeric value (no currency symbol).
+          - Checkbox: `true` or `false`.
+          - Select: option name (string).
+          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
+          - Duration: number of seconds.
+          - **User**: user OID, user ID, or email — server resolves to the user's OID.
+          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
+          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
+
+          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
+      recurrence:
+        description: |-
+          (Optional) Recurrence details. `null` if the task is not recurring.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
+          - `interval`: Interval between occurrences. Default: 1.
+          - `until`: End date. Default: never ends.
+          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
+          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
+          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
+          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
+            Note: `byweekday` and `bydayno` cannot both be specified.
+          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
+          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
+
+          A recurring task always has a `due`. If the task has none and `due` is omitted, it is derived from the recurrence: the nearest occurrence since today. The request is rejected if the derived due precedes `start`; specify `due` explicitly in that case.
+        $ref: '#/definitions/Recurrence'
+      assignees:
+        type: array
+        example: '["me", "alice@example.com"]'
+        description: |-
+          (Optional) Assignees to replace the current assignees (OID, ID, or email).
+          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
+
+          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
+        items:
+          type: string
       addTags:
         type: array
         example: '["urgent"]'
@@ -11578,37 +11682,6 @@ definitions:
           Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
         items:
           type: string
-      addFollowers:
-        type: array
-        example: '["me"]'
-        description: |-
-          (Optional) Followers to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include followers of the parent task
-          - "app": the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      removeFollowers:
-        type: array
-        example: '["bob@example.com"]'
-        description: |-
-          (Optional) Followers to remove (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: remove followers that were inherited from the parent task
-          - `"app"`: the application
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL.
-        items:
-          type: string
       addSuccessors:
         type: array
         example: '["#13"]'
@@ -11627,78 +11700,6 @@ definitions:
           IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
         items:
           type: string
-      recurrence:
-        description: |-
-          (Optional) Recurrence details. `null` if the task is not recurring.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
-          - `interval`: Interval between occurrences. Default: 1.
-          - `until`: End date. Default: never ends.
-          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
-          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
-          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
-          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
-            Note: `byweekday` and `bydayno` cannot both be specified.
-          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
-          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
-
-          A recurring task always has a `due`. If the task has none and `due` is omitted, it is derived from the recurrence: the nearest occurrence since today. The request is rejected if the derived due precedes `start`; specify `due` explicitly in that case.
-        $ref: '#/definitions/Recurrence'
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
-      milestone:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a milestone. Default: false.'
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
-      followers:
-        type: array
-        example: '["bob@example.com"]'
-        description: |-
-          (Optional) Followers to replace the current followers (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: include followers of the parent task
-          - `"app"`: the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      successors:
-        type: array
-        example: '["#13"]'
-        description: |-
-          (Optional) Successors to replace the current successors (task OID or ID).
-
-          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
-
-          - Text / Email / Hyperlink: string.
-          - Number / Money: numeric value (no currency symbol).
-          - Checkbox: `true` or `false`.
-          - Select: option name (string).
-          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
-          - Duration: number of seconds.
-          - **User**: user OID, user ID, or email — server resolves to the user's OID.
-          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
-          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
-
-          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
       name:
         type: string
         example: New idea
@@ -11762,14 +11763,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?chat=Highlight101
         description: URL of this chat on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -11790,15 +11791,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -11807,16 +11808,16 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this record, or null if not specified.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this record, or null if not specified.
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
@@ -11862,15 +11863,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -11911,6 +11912,11 @@ definitions:
         type: string
         position: 50
         description: URL of this comment on the Quire website.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -11924,11 +11930,6 @@ definitions:
         position: 50
         description: User who last edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
       owner:
         position: 99
         description: Object this comment was added to.
@@ -11984,6 +11985,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) Description of the record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -12019,10 +12024,6 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       name:
         type: string
         example: Highlight 101
@@ -12036,16 +12037,16 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 15
         description: (Optional) OID of the external team this record belongs to.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: (Optional) Target start date.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: (Optional) Target start date.
   CreateCommentBody:
     type: object
     required:
@@ -12055,14 +12056,14 @@ definitions:
         type: string
         example: Adjust style
         description: Content of the new comment (Markdown supported).
-      pinned:
-        type: boolean
-        example: false
-        description: '(Optional) Whether to pin this comment. Default: false.'
       asUser:
         type: boolean
         example: true
         description: '(Optional) If true, marks this comment as created by the app. Default: false (created by the authorizing user).'
+      pinned:
+        type: boolean
+        example: false
+        description: '(Optional) Whether to pin this comment. Default: false.'
   CreateDashboardBody:
     type: object
     required:
@@ -12072,6 +12073,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) Description of the record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -12107,10 +12112,6 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       name:
         type: string
         example: Highlight 101
@@ -12124,16 +12125,16 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 15
         description: (Optional) OID of the external team this record belongs to.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: (Optional) Target start date.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: (Optional) Target start date.
   CreateDocBody:
     type: object
     required:
@@ -12159,6 +12160,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) Description of the record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -12194,10 +12199,6 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       name:
         type: string
         example: Highlight 101
@@ -12211,16 +12212,16 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 15
         description: (Optional) OID of the external team this record belongs to.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: (Optional) Target start date.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: (Optional) Target start date.
   CreateInsightBody:
     type: object
     required:
@@ -12230,6 +12231,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) Description of the record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -12265,10 +12270,6 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       name:
         type: string
         example: Highlight 101
@@ -12282,16 +12283,16 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 15
         description: (Optional) OID of the external team this record belongs to.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: (Optional) Target start date.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: (Optional) Target start date.
   CreateNotificationBody:
     type: object
     required:
@@ -12352,6 +12353,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) Description of the record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -12387,10 +12392,6 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       name:
         type: string
         example: Highlight 101
@@ -12404,16 +12405,16 @@ definitions:
         example: rcBHBYXZSiyDRrHrWPutatfF
         position: 15
         description: (Optional) OID of the external team this record belongs to.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: (Optional) Target start date.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: (Optional) Target start date.
   CreateTagBody:
     type: object
     required:
@@ -12445,6 +12446,22 @@ definitions:
         description: (Optional) List of subtasks to create along with this task.
         items:
           $ref: '#/definitions/CreateTaskBody'
+      followers:
+        type: array
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+        description: |-
+          (Optional) List of user identifiers (OID, ID, or email) who follow this task. The current user is added to the followers automatically.
+
+          - Use "me" for the current user.
+          - Use "inherit" to include followers of the parent task.
+          - Use "app" for the application itself to follow (receive notifications).
+
+          For app followers, additional syntaxes are supported:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
       tags:
         type: array
         example:
@@ -12454,22 +12471,11 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      assignees:
-        type: array
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-        description: |-
-          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
-
-          - Use "me" to indicate the current user.
-          - Use "inherit" to include all assignees of the parent task.
-        items:
-          type: string
-      start:
+      due:
         type: string
-        example: '2018-12-20T00:00:00.000Z'
+        example: '2018-12-22T00:00:00.000Z'
         description: |-
-          (Optional) Start date/time in UTC.
+          (Optional) Due date/time in UTC.
 
           - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
           - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
@@ -12478,11 +12484,11 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
-      due:
+      start:
         type: string
-        example: '2018-12-22T00:00:00.000Z'
+        example: '2018-12-20T00:00:00.000Z'
         description: |-
-          (Optional) Due date/time in UTC.
+          (Optional) Start date/time in UTC.
 
           - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
           - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
@@ -12505,23 +12511,6 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
-      recurrence:
-        description: |-
-          (Optional) Recurrence details. Null if the task is not recurring.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
-          - `interval`: Interval between occurrences. Default: 1.
-          - `until`: End date. Default: never ends.
-          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
-          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
-          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[0,3]`).
-          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
-            Note: `byweekday` and `bydayno` cannot both be specified.
-          - `dupsubtasks`: Whether to duplicate subtasks when completed. Default: true.
-          - `sincelatest`: For `daily` only. Whether to repeat based on last completion date. Default: false.
-
-          A recurring task always has a `due`. If `due` is omitted, it is derived from the recurrence: the nearest occurrence since today. The request is rejected if the derived due precedes `start`; specify `due` explicitly in that case.
-        $ref: '#/definitions/Recurrence'
       section:
         type: boolean
         example: true
@@ -12536,22 +12525,6 @@ definitions:
         description: |-
           (Optional) If true, marks this task as created by the app.
           Default: false (created by the authorizing user).
-      followers:
-        type: array
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-        description: |-
-          (Optional) List of user identifiers (OID, ID, or email) who follow this task. The current user is added to the followers automatically.
-
-          - Use "me" for the current user.
-          - Use "inherit" to include followers of the parent task.
-          - Use "app" for the application itself to follow (receive notifications).
-
-          For app followers, additional syntaxes are supported:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
       successors:
         type: array
         example: '["#13"]'
@@ -12577,6 +12550,34 @@ definitions:
           - Multi-value (fields configured with `multiple: true`): provide a list.
 
           Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
+      recurrence:
+        description: |-
+          (Optional) Recurrence details. Null if the task is not recurring.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
+          - `interval`: Interval between occurrences. Default: 1.
+          - `until`: End date. Default: never ends.
+          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
+          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
+          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[0,3]`).
+          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
+            Note: `byweekday` and `bydayno` cannot both be specified.
+          - `dupsubtasks`: Whether to duplicate subtasks when completed. Default: true.
+          - `sincelatest`: For `daily` only. Whether to repeat based on last completion date. Default: false.
+
+          A recurring task always has a `due`. If `due` is omitted, it is derived from the recurrence: the nearest occurrence since today. The request is rejected if the derived due precedes `start`; specify `due` explicitly in that case.
+        $ref: '#/definitions/Recurrence'
+      assignees:
+        type: array
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+        description: |-
+          (Optional) A list of user identifiers (OID, ID, or email) to assign this task to.
+
+          - Use "me" to indicate the current user.
+          - Use "inherit" to include all assignees of the parent task.
+        items:
+          type: string
       name:
         type: string
         example: Design new **logo**
@@ -12623,14 +12624,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?dashboard=Board101
         description: URL of this dashboard on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -12651,15 +12652,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -12668,16 +12669,16 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this record, or null if not specified.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this record, or null if not specified.
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
@@ -12711,15 +12712,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -12735,14 +12736,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?doc=Highlight101
         description: URL of this document on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -12763,15 +12764,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -12780,16 +12781,16 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this record, or null if not specified.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this record, or null if not specified.
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
@@ -12835,15 +12836,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -12930,16 +12931,48 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money` or `formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
+      conditionFormat:
+        type: array
+        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -12977,38 +13010,6 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       type:
         type: string
         example: number
@@ -13050,16 +13051,48 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money` or `formula` only) Currency symbol. When omitted on a money field, defaults to `$`.
-      options:
-        type: array
-        description: (Required for `select`) Option list.
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: '(Required for `lookup`) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity (e.g. user OIDs when `lookupType=User`). Values are numbers. Example: `{"abc123": 1, "def456": 2}`.'
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Required for `select`) Option list.
+        items:
+          $ref: '#/definitions/FieldOption'
+      conditionFormat:
+        type: array
+        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -13097,38 +13130,6 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: '(Optional) Conditional-format rules. Applicable to `date` (date rules use `when`) and to `number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). A `formula` is resolved by its `resultType`: `date` → date rules, `number`/`money`/`duration` → value rules.'
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       type:
         type: string
         example: number
@@ -13168,14 +13169,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?insight=View101
         description: URL of this insight view on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -13196,15 +13197,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -13213,16 +13214,16 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this record, or null if not specified.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this record, or null if not specified.
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
@@ -13262,15 +13263,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -13293,14 +13294,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameText:
-        type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
       nameHtml:
         type: string
         example: My Organization
         description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
       name:
         type: string
         example: My Organization
@@ -13326,15 +13327,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -13372,14 +13373,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameText:
-        type: string
-        example: My Organization
-        description: Organization name with Markdown removed.
       nameHtml:
         type: string
         example: My Organization
         description: Organization name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Organization
+        description: Organization name with Markdown removed.
       name:
         type: string
         example: My Organization
@@ -13405,15 +13406,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -13496,19 +13497,19 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      nameHtml:
+        type: string
+        example: My Project
+        description: Project name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Project
-        description: Project name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: My Project
@@ -13529,44 +13530,44 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
         description: Object identifier (OID), a UUID-like unique string.
-      publicAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this project. Null if not set.
-      due:
-        type: string
-        example: '2024-05-25'
-        position: 50
-        description: Target due date for this project. Null if not set.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was last edited.
+      due:
+        type: string
+        example: '2024-05-25'
+        position: 50
+        description: Target due date for this project. Null if not set.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this project. Null if not set.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      publicAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
       followers:
         type: array
         position: 60
@@ -13635,19 +13636,19 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
+      nameHtml:
+        type: string
+        example: My Project
+        description: Project name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: My Project
+        description: Project name with Markdown removed.
       rootCount:
         type: integer
         format: int32
         example: 5
         description: Number of root (top-level) tasks in this project.
-      nameText:
-        type: string
-        example: My Project
-        description: Project name with Markdown removed.
-      nameHtml:
-        type: string
-        example: My Project
-        description: Project name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: My Project
@@ -13668,15 +13669,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -13685,31 +13686,31 @@ definitions:
         position: 9
         description: Subscription details for this project.
         $ref: '#/definitions/Subscription'
-      publicAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this project. Null if not set.
-      due:
-        type: string
-        example: '2024-05-25'
-        position: 50
-        description: Target due date for this project. Null if not set.
       editedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was last edited.
+      due:
+        type: string
+        example: '2024-05-25'
+        position: 50
+        description: Target due date for this project. Null if not set.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this project. Null if not set.
       archivedAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was archived (peekaboo). Null if not archived.
+      publicAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
       followers:
         type: array
         position: 60
@@ -13763,16 +13764,16 @@ definitions:
   RateLimitBucket:
     type: object
     properties:
-      remaining:
-        type: integer
-        format: int32
-        example: 1208
-        description: 'Remaining calls: `max(limit - used, 0)`, or `-1` if unlimited.'
       limit:
         type: integer
         format: int32
         example: 1250
         description: Maximum number of calls allowed in this window. `-1` indicates no limit.
+      remaining:
+        type: integer
+        format: int32
+        example: 1208
+        description: 'Remaining calls: `max(limit - used, 0)`, or `-1` if unlimited.'
       used:
         type: integer
         format: int32
@@ -13944,15 +13945,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -14022,14 +14023,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?sublist=Highlight101
         description: URL of this sublist on the Quire website.
-      nameText:
-        type: string
-        example: Highlight 101
-        description: Name with Markdown removed.
       nameHtml:
         type: string
         example: Highlight 101
         description: Name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Highlight 101
+        description: Name with Markdown removed.
       name:
         type: string
         example: Highlight 101
@@ -14050,15 +14051,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
@@ -14067,16 +14068,16 @@ definitions:
         position: 15
         description: External team this record belongs to. Null if the record is not accessible to external-team members.
         $ref: '#/definitions/SimpleTaggingEntity'
-      start:
-        type: string
-        example: '2024-01-02'
-        position: 50
-        description: Target start date for this record, or null if not specified.
       due:
         type: string
         example: '2024-05-25'
         position: 50
         description: Target due date for this record, or null if not specified.
+      start:
+        type: string
+        example: '2024-01-02'
+        position: 50
+        description: Target start date for this record, or null if not specified.
       archivedAt:
         type: string
         example: '2020-02-22T02:06:58.158Z'
@@ -14110,15 +14111,15 @@ definitions:
         type: string
         example: my_id
         description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       name:
         type: string
         example: Foo
@@ -14134,14 +14135,14 @@ definitions:
         type: string
         example: Professional
         description: Plan name (e.g., Free, Professional, Premium, Enterprise).
-      expired:
-        type: boolean
-        example: false
-        description: Whether the subscription is expired. Available only when a due date is present.
       due:
         type: string
         example: '2038-02-22T02:06:58Z'
         description: Subscription due/renewal timestamp in UTC (ISO 8601).
+      expired:
+        type: boolean
+        example: false
+        description: Whether the subscription is expired. Available only when a due date is present.
   Tag:
     type: object
     properties:
@@ -14220,16 +14221,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       name:
         type: string
         example: Design new **logo**
@@ -14272,14 +14273,6 @@ definitions:
         example: 0
         position: 4
         description: Task status, from 0 to 100. `100` indicates the task is completed.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: |-
-          Start date/time in UTC.
-          If a time component is present, milliseconds are set to `001`.
-          If date-only, milliseconds are `000` (and hour, minute, second are also zero).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -14288,22 +14281,30 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: |-
+          Start date/time in UTC.
+          If a time component is present, milliseconds are set to `001`.
+          If date-only, milliseconds are `000` (and hour, minute, second are also zero).
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
         description: A list of users who assigned this task. Each item in assignors corresponds by index to the matching item in assignees (e.g., the first assignee was assigned by the first assignor).
         items:
           $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       partnerBy:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
@@ -14502,16 +14503,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       name:
         type: string
         example: Design new **logo**
@@ -14554,14 +14555,6 @@ definitions:
         example: 0
         position: 4
         description: Task status, from 0 to 100. `100` indicates the task is completed.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: |-
-          Start date/time in UTC.
-          If a time component is present, milliseconds are set to `001`.
-          If date-only, milliseconds are `000` (and hour, minute, second are also zero).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -14570,22 +14563,30 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: |-
+          Start date/time in UTC.
+          If a time component is present, milliseconds are set to `001`.
+          If date-only, milliseconds are `000` (and hour, minute, second are also zero).
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
         description: A list of users who assigned this task. Each item in assignors corresponds by index to the matching item in assignees (e.g., the first assignee was assigned by the first assignor).
         items:
           $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       partnerBy:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
@@ -14761,16 +14762,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameText:
-        type: string
-        example: Design new logo
-        position: 2
-        description: Task name with Markdown removed.
       nameHtml:
         type: string
         example: Design new <b>logo</b>
         position: 2
         description: Task name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: Design new logo
+        position: 2
+        description: Task name with Markdown removed.
       name:
         type: string
         example: Design new **logo**
@@ -14813,14 +14814,6 @@ definitions:
         example: 0
         position: 4
         description: Task status, from 0 to 100. `100` indicates the task is completed.
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        position: 4
-        description: |-
-          Start date/time in UTC.
-          If a time component is present, milliseconds are set to `001`.
-          If date-only, milliseconds are `000` (and hour, minute, second are also zero).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -14829,22 +14822,30 @@ definitions:
           Due date/time in UTC.
           If a time component is present, milliseconds are set to `001`.
           If date-only, milliseconds are `000` (and hour, minute, second are also zero).
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        position: 4
+        description: |-
+          Start date/time in UTC.
+          If a time component is present, milliseconds are set to `001`.
+          If date-only, milliseconds are `000` (and hour, minute, second are also zero).
       priority:
         type: integer
         format: int32
         example: 0
         position: 4
         description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
         description: A list of users who assigned this task. Each item in assignors corresponds by index to the matching item in assignees (e.g., the first assignee was assigned by the first assignor).
         items:
           $ref: '#/definitions/SimpleIdentity'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       partnerBy:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
@@ -15035,18 +15036,6 @@ definitions:
   UpdateChatBody:
     type: object
     properties:
-      addFollowers:
-        type: array
-        example: '["me"]'
-        description: |-
-          (Optional) Followers (OID, ID, or email) to add.
-
-          - `"me"` — the current user.
-          - `"app"` — the application follows.
-
-          App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
-        items:
-          type: string
       removeFollowers:
         type: array
         example: '["bob@example.com"]'
@@ -15055,6 +15044,18 @@ definitions:
 
           - `"me"` — the current user.
           - `"app"` — the application.
+
+          App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
+        items:
+          type: string
+      addFollowers:
+        type: array
+        example: '["me"]'
+        description: |-
+          (Optional) Followers (OID, ID, or email) to add.
+
+          - `"me"` — the current user.
+          - `"app"` — the application follows.
 
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
@@ -15075,6 +15076,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -15110,18 +15115,14 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
       due:
         type: string
         example: '2024-05-25'
         description: (Optional) Target due date for this record.
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
       archived:
         type: boolean
         example: true
@@ -15153,6 +15154,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -15188,18 +15193,14 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
       due:
         type: string
         example: '2024-05-25'
         description: (Optional) Target due date for this record.
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
       archived:
         type: boolean
         example: true
@@ -15216,18 +15217,6 @@ definitions:
   UpdateDocBody:
     type: object
     properties:
-      addFollowers:
-        type: array
-        example: '["me"]'
-        description: |-
-          (Optional) Followers (OID, ID, or email) to add.
-
-          - `"me"` — the current user.
-          - `"app"` — the application follows.
-
-          App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
-        items:
-          type: string
       removeFollowers:
         type: array
         example: '["bob@example.com"]'
@@ -15236,6 +15225,18 @@ definitions:
 
           - `"me"` — the current user.
           - `"app"` — the application.
+
+          App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
+        items:
+          type: string
+      addFollowers:
+        type: array
+        example: '["me"]'
+        description: |-
+          (Optional) Followers (OID, ID, or email) to add.
+
+          - `"me"` — the current user.
+          - `"app"` — the application follows.
 
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
@@ -15256,6 +15257,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -15291,18 +15296,14 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
       due:
         type: string
         example: '2024-05-25'
         description: (Optional) Target due date for this record.
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
       archived:
         type: boolean
         example: true
@@ -15331,16 +15332,48 @@ definitions:
         type: string
         example: USD
         description: (Optional, `money`/`formula` only) Currency symbol. Pass `$` to reset a money field to its default.
-      options:
-        type: array
-        description: (Optional, `select` only) Replacement option list (replaces the entire set).
-        items:
-          $ref: '#/definitions/FieldOption'
       lookup:
         type: object
         description: (Optional, `lookup` only) Map from lookup key to numeric value. Keys are OIDs of the configured `lookupType` entity. Replaces the entire map.
         additionalProperties:
           $ref: '#/definitions/Number'
+      options:
+        type: array
+        description: (Optional, `select` only) Replacement option list (replaces the entire set).
+        items:
+          $ref: '#/definitions/FieldOption'
+      conditionFormat:
+        type: array
+        description: (Optional) Replacement conditional-format rules (replaces the entire list).
+        items:
+          $ref: '#/definitions/FieldConditionFormat'
+      hidden:
+        type: boolean
+        example: false
+        description: (Optional) Hide this field from the task detail panel.
+      clearOnDup:
+        type: boolean
+        example: false
+        description: (Optional) Clear this field when duplicating a task.
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -15378,38 +15411,6 @@ definitions:
           - Task
           - Project
           - Organization
-      conditionFormat:
-        type: array
-        description: (Optional) Replacement conditional-format rules (replaces the entire list).
-        items:
-          $ref: '#/definitions/FieldConditionFormat'
-      clearOnDup:
-        type: boolean
-        example: false
-        description: (Optional) Clear this field when duplicating a task.
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
-      hidden:
-        type: boolean
-        example: false
-        description: (Optional) Hide this field from the task detail panel.
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       type:
         type: string
         example: number
@@ -15436,6 +15437,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -15471,18 +15476,14 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
       due:
         type: string
         example: '2024-05-25'
         description: (Optional) Target due date for this record.
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
       archived:
         type: boolean
         example: true
@@ -15499,6 +15500,13 @@ definitions:
   UpdateOrganizationBody:
     type: object
     properties:
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove from this organization (user OIDs).
+          Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
+        items:
+          type: string
       description:
         type: string
         example: '**Great** organization to start with.'
@@ -15516,13 +15524,6 @@ definitions:
           - `app|/path` → appended to the hook URL when invoking the registered hook.
             Example: hook `https://super.app/hooks/standard` + follower `app|/soc1/33456/a7`
             → `https://super.app/hooks/standard/soc1/33456/a7`
-        items:
-          type: string
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove from this organization (user OIDs).
-          Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
         items:
           type: string
       followers:
@@ -15545,18 +15546,19 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Public toggle. Specify true to make this project public; specify false to make it private.
+      removeFollowers:
+        type: array
+        description: |-
+          (Optional) Followers to remove from this project (user OIDs).
+          Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
+        items:
+          type: string
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
       description:
         type: string
         example: '**Great** project to start with.'
         description: (Optional) New description for this project (Markdown supported).
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this project.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this project.
       addFollowers:
         type: array
         description: |-
@@ -15574,15 +15576,6 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      removeFollowers:
-        type: array
-        description: |-
-          (Optional) Followers to remove from this project (user OIDs).
-          Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
-        items:
-          type: string
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
       followers:
         type: array
         description: |-
@@ -15595,6 +15588,14 @@ definitions:
         example:
           - tzufRLqCnud74dARyDSvjWDl
           - app
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this project.
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this project.
       archived:
         type: boolean
         example: true
@@ -15631,6 +15632,10 @@ definitions:
         type: string
         example: '**Great** record to start with.'
         description: (Optional) New description for this record (Markdown supported).
+      iconColor:
+        type: string
+        example: '37'
+        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
       image:
         type: string
         example: icon-view-kanban
@@ -15666,18 +15671,14 @@ definitions:
           - icon-meh-o
           - icon-bullseye
           - icon-square-dotted-o
-      iconColor:
-        type: string
-        example: '37'
-        description: '(Optional) Icon color index from Quire''s predefined palette. Two-digit code `[0-5][0-7]`: first digit 0-5, second digit 0-7 (e.g. `00`, `37`, `57`). NOT a CSS hex color.'
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this record.
       due:
         type: string
         example: '2024-05-25'
         description: (Optional) Target due date for this record.
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this record.
       archived:
         type: boolean
         example: true
@@ -15712,10 +15713,61 @@ definitions:
   UpdateTaskBody:
     type: object
     properties:
+      removeFollowers:
+        type: array
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
+        description: |-
+          (Optional) Followers to remove (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: remove followers that were inherited from the parent task
+          - `"app"`: the application
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL.
+        items:
+          type: string
       description:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description.
+      addFollowers:
+        type: array
+        example:
+          - sfsvLbDVPvi1QMf2GkDn7VSy
+        description: |-
+          (Optional) Followers to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include followers of the parent task
+          - "app": the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      followers:
+        type: array
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
+        description: |-
+          (Optional) Followers to replace the current followers (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: include followers of the parent task
+          - `"app"`: the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
       tags:
         type: array
         example:
@@ -15726,30 +15778,6 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      assignees:
-        type: array
-        example:
-          - 6QMKkEPBVWETLWrXqws94ALU
-        description: |-
-          (Optional) Assignees to replace the current assignees (OID, ID, or email).
-          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
-
-          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
-        items:
-          type: string
-      start:
-        type: string
-        example: '2018-12-20T00:00:00.000Z'
-        description: |-
-          (Optional) Start date/time in UTC.
-
-          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
-          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
-
-          Notes:
-          - Seconds are not supported.
-          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
-          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       due:
         type: string
         example: '2018-12-22T00:00:00.000Z'
@@ -15764,6 +15792,19 @@ definitions:
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
           - `null` clears it. It is rejected if the task is recurring, since a recurring task always has a due; pass `recurrence`: `null` in the same request to stop repeating and clear the due together.
+      start:
+        type: string
+        example: '2018-12-20T00:00:00.000Z'
+        description: |-
+          (Optional) Start date/time in UTC.
+
+          - With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).
+          - Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).
+
+          Notes:
+          - Seconds are not supported.
+          - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
+          - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
       peekaboo:
         type: object
         example: true
@@ -15778,6 +15819,73 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
+      section:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a section. Default: false.'
+      milestone:
+        type: boolean
+        example: true
+        description: '(Optional) Whether this task is a milestone. Default: false.'
+      asUser:
+        type: boolean
+        example: true
+        description: |-
+          (Optional) If true, marks this update as performed by the app.
+          Default: false (updated by the authorizing user).
+      successors:
+        type: array
+        example: '["#13"]'
+        description: |-
+          (Optional) Successors to replace the current successors (task OID or ID).
+
+          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
+        items:
+          type: string
+      yourField:
+        type: object
+        description: |-
+          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
+
+          - Text / Email / Hyperlink: string.
+          - Number / Money: numeric value (no currency symbol).
+          - Checkbox: `true` or `false`.
+          - Select: option name (string).
+          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
+          - Duration: number of seconds.
+          - **User**: user OID, user ID, or email — server resolves to the user's OID.
+          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
+          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
+
+          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
+      recurrence:
+        description: |-
+          (Optional) Recurrence details. `null` if the task is not recurring.
+
+          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
+          - `interval`: Interval between occurrences. Default: 1.
+          - `until`: End date. Default: never ends.
+          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
+          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
+          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
+          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
+            Note: `byweekday` and `bydayno` cannot both be specified.
+          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
+          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
+
+          A recurring task always has a `due`. If the task has none and `due` is omitted, it is derived from the recurrence: the nearest occurrence since today. The request is rejected if the derived due precedes `start`; specify `due` explicitly in that case.
+        $ref: '#/definitions/Recurrence'
+      assignees:
+        type: array
+        example:
+          - 6QMKkEPBVWETLWrXqws94ALU
+        description: |-
+          (Optional) Assignees to replace the current assignees (OID, ID, or email).
+          This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.
+
+          Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
+        items:
+          type: string
       addTags:
         type: array
         example:
@@ -15817,39 +15925,6 @@ definitions:
           Accepts the same special values as `addAssignees`: `"me"` (the current user) and `"inherit"` (all assignees of the parent task).
         items:
           type: string
-      addFollowers:
-        type: array
-        example:
-          - sfsvLbDVPvi1QMf2GkDn7VSy
-        description: |-
-          (Optional) Followers to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include followers of the parent task
-          - "app": the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      removeFollowers:
-        type: array
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
-        description: |-
-          (Optional) Followers to remove (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: remove followers that were inherited from the parent task
-          - `"app"`: the application
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL.
-        items:
-          type: string
       addSuccessors:
         type: array
         example: '["#13"]'
@@ -15868,80 +15943,6 @@ definitions:
           IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
         items:
           type: string
-      recurrence:
-        description: |-
-          (Optional) Recurrence details. `null` if the task is not recurring.
-
-          - `freq`: `daily`, `weekly`, `monthly`, `yearly`.
-          - `interval`: Interval between occurrences. Default: 1.
-          - `until`: End date. Default: never ends.
-          - `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.
-          - `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.
-          - `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).
-          - `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.
-            Note: `byweekday` and `bydayno` cannot both be specified.
-          - `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.
-          - `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.
-
-          A recurring task always has a `due`. If the task has none and `due` is omitted, it is derived from the recurrence: the nearest occurrence since today. The request is rejected if the derived due precedes `start`; specify `due` explicitly in that case.
-        $ref: '#/definitions/Recurrence'
-      section:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a section. Default: false.'
-      milestone:
-        type: boolean
-        example: true
-        description: '(Optional) Whether this task is a milestone. Default: false.'
-      asUser:
-        type: boolean
-        example: true
-        description: |-
-          (Optional) If true, marks this update as performed by the app.
-          Default: false (updated by the authorizing user).
-      followers:
-        type: array
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-        description: |-
-          (Optional) Followers to replace the current followers (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: include followers of the parent task
-          - `"app"`: the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      successors:
-        type: array
-        example: '["#13"]'
-        description: |-
-          (Optional) Successors to replace the current successors (task OID or ID).
-
-          IDs can be specified as `#id` or `id`. Integer IDs are also accepted.
-        items:
-          type: string
-      yourField:
-        type: object
-        description: |-
-          PLACEHOLDER — do NOT send a key literally named `yourField`. Instead, use the custom field's own name (as defined via `/project/add-field`) as the JSON key, with a value matching the field's type:
-
-          - Text / Email / Hyperlink: string.
-          - Number / Money: numeric value (no currency symbol).
-          - Checkbox: `true` or `false`.
-          - Select: option name (string).
-          - Date: ISO 8601 timestamp (`yyyy-MM-dd'T'HH:mm:ssZ`) or date-only (`yyyy-MM-dd`).
-          - Duration: number of seconds.
-          - **User**: user OID, user ID, or email — server resolves to the user's OID.
-          - **Task**: task OID, integer task ID, or `#<id>` string — server resolves to the task's OID (scoped to this project).
-          - Multi-value (fields configured with `multiple: true`): provide a list. Pass `null` to clear the field.
-
-          Example body fragment: `{"Priority": 3, "Owners": ["alice", "bob@example.com"], "Depends": ["#42"]}`.
       name:
         type: string
         example: New idea
@@ -16007,28 +16008,28 @@ definitions:
   User:
     type: object
     properties:
+      locale:
+        type: string
+        example: en_GB
+        description: The locale of the current user, or null if the user is not the current one.
       timeZone:
         type: object
         example: '`{''offset'': 0, ''name'': ''Europe/London''}`'
         description: The time zone of the current user, or null if the user is not the current one.
         additionalProperties:
           type: object
-      locale:
-        type: string
-        example: en_GB
-        description: The locale of the current user, or null if the user is not the current one.
       url:
         type: string
         example: https://quire.io/u/john
         description: URL of this user on the Quire website.
-      nameText:
-        type: string
-        example: John
-        description: User name with Markdown removed.
       nameHtml:
         type: string
         example: John
         description: User name rendered as an HTML fragment converted from Markdown.
+      nameText:
+        type: string
+        example: John
+        description: User name with Markdown removed.
       name:
         type: string
         example: John
@@ -16037,15 +16038,15 @@ definitions:
         type: string
         example: john
         description: User ID.
-      website:
-        type: string
-        example: https://coolwebsites.com
-        description: Website URL.
-        allowEmptyValue: true
       email:
         type: string
         example: john@gmail.com
         description: Email address.
+        allowEmptyValue: true
+      website:
+        type: string
+        example: https://coolwebsites.com
+        description: Website URL.
         allowEmptyValue: true
       description:
         type: string
@@ -16059,15 +16060,15 @@ definitions:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       image:
         type: string
         example: https://quire.s3.amazonaws.com/oid/image.jpg
         description: Image URL representing this record.
         allowEmptyValue: true
-      iconColor:
-        type: string
-        example: '37'
-        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
       oid:
         type: string
         example: Dyh2YkFcu9uLgLFIeN1kB4Ld
