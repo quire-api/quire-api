@@ -15,7 +15,7 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         example = "This is a **cool** task.",
-        value = "(Optional) New task description."
+        value = "(Optional) New task description. An embedded `data:` image is rejected — upload the image as an attachment instead."
     )
     public String getDescription() { return null; }
 

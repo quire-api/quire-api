@@ -13,7 +13,7 @@ public class UpdateOrganizationBody {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) New description for this organization (Markdown supported).",
+        value = "(Optional) New description for this organization (Markdown supported). An embedded `data:` image is rejected — upload the image as an attachment instead.",
         example = "**Great** organization to start with."
     )
     public String getDescription() { return null; }

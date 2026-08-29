@@ -16,7 +16,7 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         example = "This is a *cool* task.",
-        value = "(Optional) A description of the task."
+        value = "(Optional) A description of the task. An embedded `data:` image is rejected — upload the image as an attachment instead."
     )
     public String getDescription() { return null; }
 

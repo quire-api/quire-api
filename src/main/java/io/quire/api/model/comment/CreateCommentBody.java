@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class CreateCommentBody {
 
     @ApiModelProperty(
-        value = "Content of the new comment (Markdown supported).",
+        value = "Content of the new comment (Markdown supported). An embedded `data:` image is rejected — upload the image as an attachment instead.",
         example = "Adjust style",
         required = true
     )

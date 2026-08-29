@@ -13,7 +13,7 @@ public class UpdateProjectBody {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) New description for this project (Markdown supported).",
+        value = "(Optional) New description for this project (Markdown supported). An embedded `data:` image is rejected — upload the image as an attachment instead.",
         example = "**Great** project to start with."
     )
     public String getDescription() { return null; }

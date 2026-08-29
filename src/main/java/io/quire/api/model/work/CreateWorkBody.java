@@ -19,7 +19,7 @@ public class CreateWorkBody {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Description of the record (Markdown supported).",
+        value = "(Optional) Description of the record (Markdown supported). An embedded `data:` image is rejected — upload the image as an attachment instead.",
         example = "**Great** record to start with."
     )
     public String getDescription() { return null; }

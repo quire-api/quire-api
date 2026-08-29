@@ -38,6 +38,7 @@ public class ApproveTaskBody {
 
     @ApiModelProperty(
         value = "Content of the companion comment (Markdown supported). "
+              + "An embedded `data:` image is rejected — upload the image as an attachment instead. "
               + "Required if the body is supplied. The server prepends "
               + "a bold `**<stream>: <status>**` line and a blank line "
               + "before this text, so this field should contain only the "
