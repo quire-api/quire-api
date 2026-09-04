@@ -18,7 +18,7 @@
     "oatts": "1.2.3",
     "js-yaml": "^4.1.1",
     "lodash.merge": ">=4.6.2",
-    "spectacle-docs": "1.0.7",
+    "spectacle-docs": "file:tool/vendor/spectacle-docs-1.0.7.tgz",
     "sass": "^1.80.3"
   },
   "overrides": {
