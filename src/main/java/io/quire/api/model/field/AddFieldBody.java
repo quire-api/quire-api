@@ -105,9 +105,10 @@ public class AddFieldBody {
     public String getFormula() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `formula` only) Expected result type.",
+        value = "(Optional, `formula` only) Expected result type. "
+              + "Omit for auto: the result is then formatted by its own type.",
         example = "number",
-        allowableValues = "text, number, money, date, duration, checkbox"
+        allowableValues = "number, money, duration"
     )
     public String getResultType() { return null; }
 
