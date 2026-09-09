@@ -98,10 +98,9 @@ public class UpdateFieldBody {
     public String getFormula() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `formula` only) Expected result type. "
-              + "Omit for auto: the result is then formatted by its own type.",
+        value = "(Optional, `formula` only) Expected result type.",
         example = "number",
-        allowableValues = "number, money, duration"
+        allowableValues = "text, number, money, date, duration, checkbox"
     )
     public String getResultType() { return null; }
 

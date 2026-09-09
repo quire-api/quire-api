@@ -94,10 +94,9 @@ public class FieldDefinition {
     public String getFormula() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `formula` only) Expected result type. "
-              + "Omit for auto: the result is then formatted by its own type.",
+        value = "(Optional, `formula` only) Expected result type.",
         example = "number",
-        allowableValues = "number, money, duration"
+        allowableValues = "text, number, money, date, duration, checkbox"
     )
     public String getResultType() { return null; }
 
@@ -125,8 +124,8 @@ public class FieldDefinition {
         value = "(Optional) Conditional-format rules. "
               + "Applicable to `date` (date rules use `when`) and to "
               + "`number`/`money`/`duration`/`lookup` (value rules use `op`/`first`/`second`). "
-              + "A `formula` is resolved by its `resultType` "
-              + "(`number`/`money`/`duration` → value rules)."
+              + "A `formula` is resolved by its `resultType`: "
+              + "`date` → date rules, `number`/`money`/`duration` → value rules."
     )
     public List<FieldConditionFormat> getConditionFormat() { return null; }
 }
