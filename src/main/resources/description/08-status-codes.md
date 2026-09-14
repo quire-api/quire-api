@@ -7,7 +7,7 @@
 | 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.
 | 401  | Unauthorized           | Invalid or expired token.
 | 402  | Payment required       | The organization’s subscription does not permit use of this app, the subscription has expired, or a plan quota/limit has been reached (body `code` `469` or `470` — see below).
-| 403  | Forbidden              | Not authorized to access the resource.
+| 403  | Forbidden              | Not authorized to access the resource, or temporarily blocked (body `code` `471` — see below).
 | 404  | Not Found              | The specified resource could not be found.
 | 405  | Method not allowed     | Method not allowed or supported.
 | 409  | Conflict               | There is already a resource with the same criteria.
@@ -27,8 +27,9 @@ All `4xx` and `5xx` responses share a common JSON envelope, represented by the
 ```
 
 - `code` is the HTTP status code, echoed in the body — except for `402`, where it is `469`
-  (a plan quota/limit has been reached) or `470` (the subscription has expired) so clients
-  can tell the two apart without parsing `message`.
+  (a plan quota/limit has been reached) or `470` (the subscription has expired), and for
+  `403`, where it is `471` if the account is temporarily blocked. These let clients tell
+  the cases apart without parsing `message`.
 - `message` is a human-readable description, typically naming the offending field and —
   for `400` — the expected format. Long submitted values are truncated.
 
@@ -47,5 +48,6 @@ the body shape is this same envelope everywhere.
 | 429 | Too many invocations (the [rate limit](#rate-limits)).
 | 469 | Quota exceeded, such as number of projects, number of members, and other plan limits. Returned with HTTP `402`.
 | 470 | Subscription expired. Returned with HTTP `402`.
+| 471 | Temporarily blocked; try again later. Returned with HTTP `403`.
 | 500 | General invocation error. Most likely, an internal error.
 
