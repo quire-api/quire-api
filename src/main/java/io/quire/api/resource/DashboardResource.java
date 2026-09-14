@@ -34,7 +34,7 @@ public class DashboardResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — dashboard quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
     public Response createDashboard(
         @ApiParam(
@@ -73,7 +73,7 @@ public class DashboardResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — dashboard quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
     public Response createDashboardById(
         @ApiParam(
@@ -274,7 +274,7 @@ public class DashboardResource {
             + "Idempotent: if the dashboard is not currently removed, this is "
             + "a no-op and returns the current dashboard record.\n\n"
             + "Subject to the dashboard-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's dashboard limit is "
+            + "`402 Payment Required` if the plan's dashboard limit is "
             + "already reached.",
         response = Dashboard.class
     )
@@ -282,7 +282,7 @@ public class DashboardResource {
         @ApiResponse(code = 200, message = "OK — restored dashboard record.", response = Dashboard.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — dashboard does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — dashboard quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
     public Response undoRemoveDashboardByOid(
         @ApiParam(value = "OID of the dashboard to restore.", required = true)
@@ -306,7 +306,7 @@ public class DashboardResource {
             + "Idempotent: if the dashboard is not currently removed, this is "
             + "a no-op and returns the current dashboard record.\n\n"
             + "Subject to the dashboard-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's dashboard limit is "
+            + "`402 Payment Required` if the plan's dashboard limit is "
             + "already reached.",
         response = Dashboard.class
     )
@@ -314,7 +314,7 @@ public class DashboardResource {
         @ApiResponse(code = 200, message = "OK — restored dashboard record.", response = Dashboard.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — dashboard or owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — dashboard quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
     public Response undoRemoveDashboardById(
         @ApiParam(

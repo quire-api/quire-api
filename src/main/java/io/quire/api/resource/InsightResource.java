@@ -32,7 +32,7 @@ public class InsightResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — insight quota reached.")
     })
     public Response createInsight(
         @ApiParam(
@@ -69,7 +69,7 @@ public class InsightResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — insight quota reached.")
     })
     public Response createInsightById(
         @ApiParam(
@@ -432,7 +432,7 @@ public class InsightResource {
             + "Idempotent: if the insight is not currently removed, this is "
             + "a no-op and returns the current insight record.\n\n"
             + "Subject to the insight-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's insight limit is "
+            + "`402 Payment Required` if the plan's insight limit is "
             + "already reached.",
         response = Insight.class
     )
@@ -440,7 +440,7 @@ public class InsightResource {
         @ApiResponse(code = 200, message = "OK — restored insight record.", response = Insight.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — insight does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — insight quota reached.")
     })
     public Response undoRemoveInsightByOid(
         @ApiParam(value = "OID of the insight to restore.", required = true)
@@ -464,7 +464,7 @@ public class InsightResource {
             + "Idempotent: if the insight is not currently removed, this is "
             + "a no-op and returns the current insight record.\n\n"
             + "Subject to the insight-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's insight limit is "
+            + "`402 Payment Required` if the plan's insight limit is "
             + "already reached.",
         response = Insight.class
     )
@@ -472,7 +472,7 @@ public class InsightResource {
         @ApiResponse(code = 200, message = "OK — restored insight record.", response = Insight.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — insight quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — insight quota reached.")
     })
     public Response undoRemoveInsightById(
         @ApiParam(
@@ -564,7 +564,7 @@ public class InsightResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — insight does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — custom-field quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — custom-field quota reached.")
     })
     public Response addInsightField(
         @ApiParam(value = "Insight OID.", required = true)
@@ -733,7 +733,7 @@ public class InsightResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — custom-field quota reached.")
+        @ApiResponse(code = 402, message = "Payment Required — custom-field quota reached.")
     })
     public Response addInsightFieldById(
         @ApiParam(

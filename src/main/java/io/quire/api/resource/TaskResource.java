@@ -999,7 +999,7 @@ public class TaskResource {
             + "Idempotent: if the task is not currently removed, this is a "
             + "no-op and returns the current task record.\n\n"
             + "Subject to the task-creation quota (same as creating a new "
-            + "task): may return `429 Too Many Requests` if the "
+            + "task): may return `402 Payment Required` if the "
             + "organization is at the plan's task limit.",
         response = TaskWithParentInfo.class
     )
@@ -1007,7 +1007,7 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — restored task record.", response = TaskWithParentInfo.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this task."),
         @ApiResponse(code = 404, message = "Not Found — task does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization is at the plan's task limit.")
+        @ApiResponse(code = 402, message = "Payment Required — organization is at the plan's task limit.")
     })
     public Response undoRemoveTaskByOid(
         @ApiParam(value = "Task OID.", required = true)
@@ -1031,7 +1031,7 @@ public class TaskResource {
             + "Idempotent: if the task is not currently removed, this is a "
             + "no-op and returns the current task record.\n\n"
             + "Subject to the task-creation quota (same as creating a new "
-            + "task): may return `429 Too Many Requests` if the "
+            + "task): may return `402 Payment Required` if the "
             + "organization is at the plan's task limit.",
         response = TaskWithParentInfo.class
     )
@@ -1039,7 +1039,7 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — restored task record.", response = TaskWithParentInfo.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this task."),
         @ApiResponse(code = 404, message = "Not Found — task does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization is at the plan's task limit.")
+        @ApiResponse(code = 402, message = "Payment Required — organization is at the plan's task limit.")
     })
     public Response undoRemoveTaskById(
         @ApiParam(
@@ -1563,6 +1563,9 @@ public class TaskResource {
               + "array, empty, over the 300-item cap, or any per-item "
               + "validation failure (whole batch rolled back).",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required — the batch "
+              + "would exceed the project's task quota.",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "permission to add tasks to the project.",
             response = ErrorResponse.class),
@@ -1574,7 +1577,7 @@ public class TaskResource {
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
               + "rate-limit cost (see [Rate Limits](#rate-limits)) "
               + "would exceed the caller's per-minute / per-hour API "
-              + "quota, OR the batch would exceed the project's task quota.",
+              + "quota.",
             response = ErrorResponse.class)
     })
     public Response bulkAddTaskById(
@@ -1647,6 +1650,8 @@ public class TaskResource {
             response = Task.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request.",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required.",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),
         @ApiResponse(code = 404, message = "Not Found — project or anchor "
@@ -1705,6 +1710,8 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — array of created tasks.",
             response = Task.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required.",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),

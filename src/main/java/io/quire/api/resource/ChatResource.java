@@ -245,7 +245,7 @@ public class ChatResource {
             + "Idempotent: if the channel is not currently removed, this is "
             + "a no-op and returns the current channel record.\n\n"
             + "Subject to the chat-channel-per-project quota: may return "
-            + "`429 Too Many Requests` if the plan's chat-channel limit is "
+            + "`402 Payment Required` if the plan's chat-channel limit is "
             + "already reached.",
         response = Chat.class
     )
@@ -276,7 +276,7 @@ public class ChatResource {
             + "Idempotent: if the channel is not currently removed, this is "
             + "a no-op and returns the current channel record.\n\n"
             + "Subject to the chat-channel-per-project quota: may return "
-            + "`429 Too Many Requests` if the plan's chat-channel limit is "
+            + "`402 Payment Required` if the plan's chat-channel limit is "
             + "already reached.",
         response = Chat.class
     )

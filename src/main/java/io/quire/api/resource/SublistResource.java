@@ -248,7 +248,7 @@ public class SublistResource {
             + "Idempotent: if the sublist is not currently removed, this is "
             + "a no-op and returns the current sublist record.\n\n"
             + "Subject to the sublist-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's sublist limit is "
+            + "`402 Payment Required` if the plan's sublist limit is "
             + "already reached.",
         response = Sublist.class
     )
@@ -279,7 +279,7 @@ public class SublistResource {
             + "Idempotent: if the sublist is not currently removed, this is "
             + "a no-op and returns the current sublist record.\n\n"
             + "Subject to the sublist-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's sublist limit is "
+            + "`402 Payment Required` if the plan's sublist limit is "
             + "already reached.",
         response = Sublist.class
     )

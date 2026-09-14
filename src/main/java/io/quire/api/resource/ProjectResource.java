@@ -380,7 +380,7 @@ public class ProjectResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — plan's custom-field limit is reached.")
+        @ApiResponse(code = 402, message = "Payment Required — plan's custom-field limit is reached.")
     })
     public Response addProjectField(
         @ApiParam(value = "Project OID.", required = true)
@@ -424,7 +424,7 @@ public class ProjectResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist."),
-        @ApiResponse(code = 429, message = "Too Many Requests — plan's custom-field limit is reached.")
+        @ApiResponse(code = 402, message = "Payment Required — plan's custom-field limit is reached.")
     })
     public Response addProjectFieldById(
         @ApiParam(value = "Project ID.", required = true, example = "my_project")

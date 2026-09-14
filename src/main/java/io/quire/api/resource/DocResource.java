@@ -252,7 +252,7 @@ public class DocResource {
             + "Idempotent: if the document is not currently removed, this is "
             + "a no-op and returns the current document record.\n\n"
             + "Subject to the document-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's document limit is "
+            + "`402 Payment Required` if the plan's document limit is "
             + "already reached.",
         response = Doc.class
     )
@@ -283,7 +283,7 @@ public class DocResource {
             + "Idempotent: if the document is not currently removed, this is "
             + "a no-op and returns the current document record.\n\n"
             + "Subject to the document-per-owner quota: may return "
-            + "`429 Too Many Requests` if the plan's document limit is "
+            + "`402 Payment Required` if the plan's document limit is "
             + "already reached.",
         response = Doc.class
     )
