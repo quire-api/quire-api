@@ -3,6 +3,8 @@ package io.quire.api.model.work;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 public class CreateWorkBody {
 
     @ApiModelProperty(
@@ -53,6 +55,30 @@ public class CreateWorkBody {
         position = 15
     )
     public String getPartner() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Users who can see this record, and the only ones "
+              + "it is shown to. Each entry is a user ID, OID, or email, or "
+              + "`\"me\"` for the authenticated user.\n\n"
+              + "- Omit the field, or pass null — every member of the owner can "
+              + "see it. This is the default.\n"
+              + "- Pass `[]` — only the owner's admins can see it.\n"
+              + "- Pass a list — only those users can see it.\n\n"
+              + "Rejected with `400` when:\n"
+              + "- a listed user is not a member of the owner. Unlike a task's "
+              + "`assignees`, which silently drops a non-member, this is an "
+              + "error: dropping the last one would leave `[]`, which means "
+              + "something else entirely.\n"
+              + "- the list is non-empty and does not include the authenticated "
+              + "user — you would not be able to see what you just created.\n"
+              + "- `partner` is also set, since an external-team record is "
+              + "already shared with all members of the project and of the team.\n\n"
+              + "Settable only when creating the record. It cannot be changed "
+              + "afterwards, so recreate the record to change who can see it.",
+        example = "[\"me\", \"john\"]",
+        position = 60
+    )
+    public List<String> getMembers() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Target start date.",

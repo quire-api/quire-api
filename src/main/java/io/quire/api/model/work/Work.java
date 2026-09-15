@@ -3,6 +3,8 @@ package io.quire.api.model.work;
 import io.quire.api.model.*;
 import io.swagger.annotations.*;
 
+import java.util.List;
+
 public class Work extends Identity {
 
     @ApiModelProperty(
@@ -40,6 +42,19 @@ public class Work extends Identity {
         position = 15
     )
     public SimpleTaggingEntity getPartner() { return null; }
+
+    @ApiModelProperty(
+        value = "Users who can see this record, and the only ones it is shown "
+              + "to.\n\n"
+              + "- `null` — every member of the owner can see it.\n"
+              + "- `[]` — only the owner's admins can.\n"
+              + "- a list — only those users can.\n\n"
+              + "All three are returned explicitly, so the states can be told "
+              + "apart. Set it when creating the record; it cannot be changed "
+              + "afterwards.",
+        position = 60
+    )
+    public List<SimpleIdentity> getMembers() { return null; }
 
     @ApiModelProperty(
         value = "Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.",
