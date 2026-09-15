@@ -33,16 +33,20 @@ public class CreateReminderBody {
     public Recurrence getRecurrence() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Minutes before the fire time to notify, one "
+        value = "(Optional) When to notify before the fire time, one "
               + "notification each. Omit it for a single notification at the "
-              + "fire time, which is the default (`[0]`).\n\n"
-              + "Each entry must be 0 or greater — a lead counts back from the "
-              + "fire time, and nothing fires after it — and there may be at "
-              + "most 30 of them.",
-        example = "[0, 60]",
+              + "fire time, which is the default "
+              + "(`[{\"minutes\": 0}]`).\n\n"
+              + "Each entry is an object naming exactly one of `minutes` (an "
+              + "absolute offset) and `days` (calendar days, so a lead "
+              + "spanning a daylight-saving transition keeps its wall-clock "
+              + "time), the latter taking an optional `at` clock.\n\n"
+              + "Neither may be negative — a lead counts back from the fire "
+              + "time, and nothing fires after it — nor exceed 10,000 days "
+              + "ahead of it, and there may be at most 30 of them.",
         position = 4
     )
-    public List<Integer> getLeads() { return null; }
+    public List<ReminderLead> getLeads() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Text to show instead of the default message "
