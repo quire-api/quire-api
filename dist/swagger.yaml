@@ -545,14 +545,14 @@ info:
     | 204  | No Content             | Request successful; the endpoint has no response body to return.
     | 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.
     | 401  | Unauthorized           | Invalid or expired token.
-    | 402  | Payment required       | The organization’s subscription does not permit use of this app.
-    | 403  | Forbidden              | Not authorized to access the resource.
+    | 402  | Payment required       | The organization’s subscription does not permit use of this app, the subscription has expired, or a plan quota/limit has been reached (body `code` `469` or `470` — see below).
+    | 403  | Forbidden              | Not authorized to access the resource, or temporarily blocked (body `code` `471` — see below).
     | 404  | Not Found              | The specified resource could not be found.
     | 405  | Method not allowed     | Method not allowed or supported.
     | 409  | Conflict               | There is already a resource with the same criteria.
     | 413  | Content too large      | The request's content is larger than 1MB.
     | 418  | Not valid JSON content | The request's content doesn't appear to be JSON.
-    | 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls
+    | 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls (and only that; carries a `Retry-After` header).
     | 500  | Internal Server Error  | There is an unexpected error.
     | 503  | Service Unavailable    | Server is down for maintenance.
 
@@ -565,7 +565,10 @@ info:
     { "code": 400, "message": "Invalid value for `priority`: foo (expected -1, 0, 1, or 2)." }
     ```
 
-    - `code` is the HTTP status code, echoed in the body.
+    - `code` is the HTTP status code, echoed in the body — except for `402`, where it is `469`
+      (a plan quota/limit has been reached) or `470` (the subscription has expired), and for
+      `403`, where it is `471` if the account is temporarily blocked. These let clients tell
+      the cases apart without parsing `message`.
     - `message` is a human-readable description, typically naming the offending field and —
       for `400` — the expected format. Long submitted values are truncated.
 
@@ -581,8 +584,10 @@ info:
     | 404 | Resource not found.
     | 405 | Method not allowed.
     | 413 | Request too large.
-    | 429 | Too many invocations.
-    | 469 | Quota exceeded, such as number of projects and number of members.
+    | 429 | Too many invocations (the [rate limit](#rate-limits)).
+    | 469 | Quota exceeded, such as number of projects, number of members, and other plan limits. Returned with HTTP `402`.
+    | 470 | Subscription expired. Returned with HTTP `402`.
+    | 471 | Temporarily blocked; try again later. Returned with HTTP `403`.
     | 500 | General invocation error. Most likely, an internal error.
 
     # Quire MCP Server
@@ -1047,6 +1052,8 @@ tags:
     description: |-
       Inspect the current API rate-limit usage for an organization.
       Calls to this endpoint do not count against the rate limit, so you can query it even when you have been throttled.
+  - name: reminder
+    description: A reminder notifies the people it names, either before a task's start or due date or at a time of its own.
   - name: status
     description: Task statuses represent progress values for tasks.
   - name: storage
@@ -1314,7 +1321,7 @@ paths:
       description: |-
         Restores a previously-removed chat channel. Idempotent: if the channel is not currently removed, this is a no-op and returns the current channel record.
 
-        Subject to the chat-channel-per-project quota: may return `429 Too Many Requests` if the plan's chat-channel limit is already reached.
+        Subject to the chat-channel-per-project quota: may return `402 Payment Required` if the plan's chat-channel limit is already reached.
       operationId: undoRemoveChatById
       produces:
         - application/json
@@ -1362,7 +1369,7 @@ paths:
       description: |-
         Restores a previously-removed chat channel. Idempotent: if the channel is not currently removed, this is a no-op and returns the current channel record.
 
-        Subject to the chat-channel-per-project quota: may return `429 Too Many Requests` if the plan's chat-channel limit is already reached.
+        Subject to the chat-channel-per-project quota: may return `402 Payment Required` if the plan's chat-channel limit is already reached.
       operationId: undoRemoveChatByOid
       produces:
         - application/json
@@ -2018,12 +2025,12 @@ paths:
             $ref: '#/definitions/Dashboard'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — dashboard quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — owner does not exist.
-        '429':
-          description: Too Many Requests — dashboard quota reached.
   /dashboard/id/{ownerType}/{ownerId}/{dashboardId}:
     get:
       tags:
@@ -2216,7 +2223,7 @@ paths:
       description: |-
         Restores a previously-removed dashboard. Idempotent: if the dashboard is not currently removed, this is a no-op and returns the current dashboard record.
 
-        Subject to the dashboard-per-owner quota: may return `429 Too Many Requests` if the plan's dashboard limit is already reached.
+        Subject to the dashboard-per-owner quota: may return `402 Payment Required` if the plan's dashboard limit is already reached.
       operationId: undoRemoveDashboardById
       produces:
         - application/json
@@ -2253,12 +2260,12 @@ paths:
           description: OK — restored dashboard record.
           schema:
             $ref: '#/definitions/Dashboard'
+        '402':
+          description: Payment Required — dashboard quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — dashboard or owner does not exist.
-        '429':
-          description: Too Many Requests — dashboard quota reached.
   /dashboard/undo-remove/{oid}:
     put:
       tags:
@@ -2267,7 +2274,7 @@ paths:
       description: |-
         Restores a previously-removed dashboard. Idempotent: if the dashboard is not currently removed, this is a no-op and returns the current dashboard record.
 
-        Subject to the dashboard-per-owner quota: may return `429 Too Many Requests` if the plan's dashboard limit is already reached.
+        Subject to the dashboard-per-owner quota: may return `402 Payment Required` if the plan's dashboard limit is already reached.
       operationId: undoRemoveDashboardByOid
       produces:
         - application/json
@@ -2291,12 +2298,12 @@ paths:
           description: OK — restored dashboard record.
           schema:
             $ref: '#/definitions/Dashboard'
+        '402':
+          description: Payment Required — dashboard quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — dashboard does not exist.
-        '429':
-          description: Too Many Requests — dashboard quota reached.
   /dashboard/{oid}:
     get:
       tags:
@@ -2430,12 +2437,12 @@ paths:
             $ref: '#/definitions/Dashboard'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — dashboard quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — owner does not exist.
-        '429':
-          description: Too Many Requests — dashboard quota reached.
   /doc/id/{ownerType}/{ownerId}:
     post:
       tags:
@@ -2666,7 +2673,7 @@ paths:
       description: |-
         Restores a previously-removed document. Idempotent: if the document is not currently removed, this is a no-op and returns the current document record.
 
-        Subject to the document-per-owner quota: may return `429 Too Many Requests` if the plan's document limit is already reached.
+        Subject to the document-per-owner quota: may return `402 Payment Required` if the plan's document limit is already reached.
       operationId: undoRemoveDocById
       produces:
         - application/json
@@ -2713,7 +2720,7 @@ paths:
       description: |-
         Restores a previously-removed document. Idempotent: if the document is not currently removed, this is a no-op and returns the current document record.
 
-        Subject to the document-per-owner quota: may return `429 Too Many Requests` if the plan's document limit is already reached.
+        Subject to the document-per-owner quota: may return `402 Payment Required` if the plan's document limit is already reached.
       operationId: undoRemoveDocByOid
       produces:
         - application/json
@@ -2927,12 +2934,12 @@ paths:
             $ref: '#/definitions/FieldDefinitionWithName'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — custom-field quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — insight or owner does not exist.
-        '429':
-          description: Too Many Requests — custom-field quota reached.
   /insight/add-field/{oid}:
     post:
       tags:
@@ -2975,12 +2982,12 @@ paths:
             $ref: '#/definitions/FieldDefinitionWithName'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — custom-field quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — insight does not exist.
-        '429':
-          description: Too Many Requests — custom-field quota reached.
   /insight/id/{ownerType}/{ownerId}:
     post:
       tags:
@@ -3025,12 +3032,12 @@ paths:
             $ref: '#/definitions/Insight'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — insight quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — owner does not exist.
-        '429':
-          description: Too Many Requests — insight quota reached.
   /insight/id/{ownerType}/{ownerId}/{insightId}:
     get:
       tags:
@@ -3702,7 +3709,7 @@ paths:
       description: |-
         Restores a previously-removed insight view. Idempotent: if the insight is not currently removed, this is a no-op and returns the current insight record.
 
-        Subject to the insight-per-owner quota: may return `429 Too Many Requests` if the plan's insight limit is already reached.
+        Subject to the insight-per-owner quota: may return `402 Payment Required` if the plan's insight limit is already reached.
       operationId: undoRemoveInsightById
       produces:
         - application/json
@@ -3739,12 +3746,12 @@ paths:
           description: OK — restored insight record.
           schema:
             $ref: '#/definitions/Insight'
+        '402':
+          description: Payment Required — insight quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — insight or owner does not exist.
-        '429':
-          description: Too Many Requests — insight quota reached.
   /insight/undo-remove/{oid}:
     put:
       tags:
@@ -3753,7 +3760,7 @@ paths:
       description: |-
         Restores a previously-removed insight view. Idempotent: if the insight is not currently removed, this is a no-op and returns the current insight record.
 
-        Subject to the insight-per-owner quota: may return `429 Too Many Requests` if the plan's insight limit is already reached.
+        Subject to the insight-per-owner quota: may return `402 Payment Required` if the plan's insight limit is already reached.
       operationId: undoRemoveInsightByOid
       produces:
         - application/json
@@ -3777,12 +3784,12 @@ paths:
           description: OK — restored insight record.
           schema:
             $ref: '#/definitions/Insight'
+        '402':
+          description: Payment Required — insight quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — insight does not exist.
-        '429':
-          description: Too Many Requests — insight quota reached.
   /insight/update-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}:
     put:
       tags:
@@ -4030,12 +4037,12 @@ paths:
             $ref: '#/definitions/Insight'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — insight quota reached.
         '403':
           description: Forbidden — caller lacks permission (or Admin scope required).
         '404':
           description: Not Found — owner does not exist.
-        '429':
-          description: Too Many Requests — insight quota reached.
   /notification:
     post:
       tags:
@@ -4432,12 +4439,12 @@ paths:
             $ref: '#/definitions/FieldDefinitionWithName'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — plan's custom-field limit is reached.
         '403':
           description: Forbidden — caller lacks permission (Admin scope may be required).
         '404':
           description: Not Found — project does not exist.
-        '429':
-          description: Too Many Requests — plan's custom-field limit is reached.
   /project/add-field/{oid}:
     post:
       tags:
@@ -4478,12 +4485,12 @@ paths:
             $ref: '#/definitions/FieldDefinitionWithName'
         '400':
           description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — plan's custom-field limit is reached.
         '403':
           description: Forbidden — caller lacks permission (Admin scope may be required).
         '404':
           description: Not Found — project does not exist.
-        '429':
-          description: Too Many Requests — plan's custom-field limit is reached.
   /project/export-csv/id/{id}:
     get:
       tags:
@@ -5438,6 +5445,430 @@ paths:
             $ref: '#/definitions/RateLimit'
         '404':
           description: Not Found — organization does not exist.
+  /reminder/id/task/{projectId}/{taskId}:
+    post:
+      tags:
+        - reminder
+      summary: Create a reminder on a task, by ID.
+      description: Creates a reminder on the given task. The reminder belongs to that task's project.
+      operationId: createTaskReminderById
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project the task belongs to.
+          required: true
+          type: string
+          x-example: my_project
+        - name: taskId
+          in: path
+          description: ID of the task.
+          required: true
+          type: string
+          x-example: '1234'
+        - in: body
+          name: body
+          description: Reminder to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateReminderBody'
+        - name: return
+          in: query
+          description: '(Optional) Response shape: `full` (default) for the full record, or `compact` for identifiers only. See API description for `?return=` semantics.'
+          required: false
+          type: string
+          x-example: compact
+          enum:
+            - full
+            - compact
+      responses:
+        '200':
+          description: OK — created reminder record.
+          schema:
+            $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — reminders need a Professional plan or above.
+        '403':
+          description: Forbidden — caller lacks permission to create a reminder here.
+        '404':
+          description: Not Found — the task does not exist, or is in the trash.
+  /reminder/id/{ownerType}/{ownerId}:
+    post:
+      tags:
+        - reminder
+      summary: Create a reminder by owner ID.
+      description: |-
+        Creates a reminder under the given project, organization, folder or smart folder (by ID).
+
+        > For a reminder on a task, use `POST /reminder/id/task/{projectId}/{taskId}` — a task ID is unique only within its project, so it needs both.
+      operationId: createReminderById
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: 'What the reminder belongs to: `project`, `organization`, `folder`, or `smart-folder`. Always required.'
+          required: true
+          type: string
+          x-example: project
+        - name: ownerId
+          in: path
+          description: ID of what the reminder belongs to. Pass `-` with `ownerType` `project` for the caller's own inbox.
+          required: true
+          type: string
+          x-example: my_project
+        - in: body
+          name: body
+          description: Reminder to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateReminderBody'
+        - name: return
+          in: query
+          description: '(Optional) Response shape: `full` (default) for the full record, or `compact` for identifiers only. See API description for `?return=` semantics.'
+          required: false
+          type: string
+          x-example: compact
+          enum:
+            - full
+            - compact
+      responses:
+        '200':
+          description: OK — created reminder record.
+          schema:
+            $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — reminders need a Professional plan or above.
+        '403':
+          description: Forbidden — caller lacks permission to create a reminder here.
+        '404':
+          description: Not Found — owner does not exist.
+  /reminder/list/id/task/{projectId}/{taskId}:
+    get:
+      tags:
+        - reminder
+      summary: List a task's reminders, by ID.
+      description: Returns the reminders the caller can see on the given task.
+      operationId: getTaskRemindersById
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project the task belongs to.
+          required: true
+          type: string
+          x-example: my_project
+        - name: taskId
+          in: path
+          description: ID of the task.
+          required: true
+          type: string
+          x-example: '1234'
+        - name: limit
+          in: query
+          description: |-
+            (Optional) Page size, 1..1000. Omit it to return every reminder in one bare array, which is the default; pass `no` to ask for that explicitly.
+
+            With `?limit=N`, the **last** item of the response carries an extra `cursor` field when more reminders remain; pass it back as `?cursor=` for the next page. The last page carries none, which is how you know you are done. Nothing carries one in an unpaginated response.
+          required: false
+          type: string
+          x-example: '100'
+        - name: cursor
+          in: query
+          description: |-
+            (Optional) Resume after this item. Pass the `cursor` of the last item of the previous page, verbatim.
+
+            Reminders are ordered by `oid`. That order is stable, but it is **not** chronological — do not read it as oldest-first, and sort by the field you care about after fetching.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK — list of reminder records (may be empty).
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — invalid `limit` or `cursor`.
+        '403':
+          description: Forbidden — caller lacks permission to read this task.
+        '404':
+          description: Not Found — task does not exist.
+  /reminder/list/id/{ownerType}/{ownerId}:
+    get:
+      tags:
+        - reminder
+      summary: List reminders by owner ID.
+      description: |-
+        Returns the reminders the caller can see under the given owner (by ID).
+
+        > For a single task's reminders, use `GET /reminder/list/id/task/{projectId}/{taskId}`.
+      operationId: getRemindersById
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: 'What the reminders belong to: `project`, `organization`, `folder`, or `smart-folder`. Always required.'
+          required: true
+          type: string
+          x-example: project
+        - name: ownerId
+          in: path
+          description: ID of what the reminders belong to. Pass `-` with `ownerType` `project` for the caller's own inbox.
+          required: true
+          type: string
+          x-example: my_project
+        - name: limit
+          in: query
+          description: |-
+            (Optional) Page size, 1..1000. Omit it to return every reminder in one bare array, which is the default; pass `no` to ask for that explicitly.
+
+            With `?limit=N`, the **last** item of the response carries an extra `cursor` field when more reminders remain; pass it back as `?cursor=` for the next page. The last page carries none, which is how you know you are done. Nothing carries one in an unpaginated response.
+          required: false
+          type: string
+          x-example: '100'
+        - name: cursor
+          in: query
+          description: |-
+            (Optional) Resume after this item. Pass the `cursor` of the last item of the previous page, verbatim.
+
+            Reminders are ordered by `oid`. That order is stable, but it is **not** chronological — do not read it as oldest-first, and sort by the field you care about after fetching.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK — list of reminder records (may be empty).
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — invalid `limit` or `cursor`.
+        '403':
+          description: Forbidden — caller lacks permission to read this owner.
+        '404':
+          description: Not Found — owner does not exist.
+  /reminder/list/{ownerType}/{ownerOid}:
+    get:
+      tags:
+        - reminder
+      summary: List reminders by owner OID.
+      description: |-
+        Returns the reminders the caller can see under the given owner.
+
+        A project's list includes the reminders on its tasks, not only the standalone ones — narrow it with `ownerType` `task` to get a single task's. Reminders on a task that is in the trash are left out, since there is nothing to act on while it is there; they come back if the task is restored, and stay reachable by OID meanwhile.
+      operationId: getRemindersByOid
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: |-
+            What the reminder belongs to: `project`, `organization`, `folder`, `smart-folder`, or `task`.
+
+            **Always required.** The sublist, doc, chat, insight and dashboard endpoints let you omit it and assume `project`; this one does not.
+
+            With `task`, the reminder is attached to that task and belongs to the task's project. A reminder cannot be moved to another task afterwards, and the task is chosen here rather than in the body — there is no `task` field to send.
+          required: true
+          type: string
+          x-example: project
+        - name: ownerOid
+          in: path
+          description: |-
+            OID of what the reminder belongs to — a project, organization, folder, smart folder, or task, per `ownerType`.
+
+            Pass `-` with `ownerType` `project` for the caller's own inbox, i.e. a personal reminder, visible to nobody else.
+          required: true
+          type: string
+        - name: limit
+          in: query
+          description: |-
+            (Optional) Page size, 1..1000. Omit it to return every reminder in one bare array, which is the default; pass `no` to ask for that explicitly.
+
+            With `?limit=N`, the **last** item of the response carries an extra `cursor` field when more reminders remain; pass it back as `?cursor=` for the next page. The last page carries none, which is how you know you are done. Nothing carries one in an unpaginated response.
+          required: false
+          type: string
+          x-example: '100'
+        - name: cursor
+          in: query
+          description: |-
+            (Optional) Resume after this item. Pass the `cursor` of the last item of the previous page, verbatim.
+
+            Reminders are ordered by `oid`. That order is stable, but it is **not** chronological — do not read it as oldest-first, and sort by the field you care about after fetching.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK — list of reminder records (may be empty).
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — invalid `limit` or `cursor`.
+        '403':
+          description: Forbidden — caller lacks permission to read this owner.
+        '404':
+          description: Not Found — owner does not exist.
+  /reminder/{oid}:
+    get:
+      tags:
+        - reminder
+      summary: Get a reminder by OID.
+      description: |-
+        Returns the reminder with the given OID.
+
+        > A reminder has no ID of its own, so this is the only way to fetch one; the `/id/` forms address its owner, not the reminder.
+      operationId: getReminderByOid
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of the reminder.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK — reminder record.
+          schema:
+            $ref: '#/definitions/Reminder'
+        '403':
+          description: Forbidden — the reminder does not name the caller among those who can see it.
+        '404':
+          description: Not Found — reminder does not exist.
+    put:
+      tags:
+        - reminder
+      summary: Update a reminder by OID.
+      description: |-
+        Updates the reminder with the given OID.
+
+        Only `when`, `recurrence`, `leads` and `name` can be changed. What the reminder belongs to, the task it is attached to, its `members` and its `partner` are all fixed when it is created — recreate the reminder to change any of them.
+      operationId: updateReminderByOid
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of the reminder to update.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateReminderBody'
+        - name: return
+          in: query
+          description: '(Optional) Response shape: `full` (default) for the full record, or `compact` for identifiers only. See API description for `?return=` semantics.'
+          required: false
+          type: string
+          x-example: compact
+          enum:
+            - full
+            - compact
+      responses:
+        '200':
+          description: OK — updated reminder record.
+          schema:
+            $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — body validation failed, or a field that cannot be changed was sent.
+        '403':
+          description: Forbidden — the reminder does not name the caller among those who can see it.
+        '404':
+          description: Not Found — reminder does not exist.
+    delete:
+      tags:
+        - reminder
+      summary: Delete a reminder by OID.
+      description: |-
+        Deletes the reminder with the given OID. Unlike a task or a sublist, a reminder is not moved to the trash and cannot be restored.
+
+        > Note: Returns `204 No Content` regardless of whether the reminder exists.
+      operationId: deleteReminderByOid
+      produces:
+        - application/json
+      parameters:
+        - name: oid
+          in: path
+          description: OID of the reminder to delete.
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: Forbidden — the reminder does not name the caller among those who can see it.
+  /reminder/{ownerType}/{ownerOid}:
+    post:
+      tags:
+        - reminder
+      summary: Create a reminder by owner OID.
+      description: |-
+        Creates a reminder on the given task, or under the given project, organization, folder or smart folder.
+
+        What the reminder fires from depends on the task: a task with a start or due date supplies the time, so send `leads` alone; otherwise `when` is required. Sending `when` or `recurrence` in the first case is rejected with `400`, since they would be ignored.
+      operationId: createReminderByOid
+      produces:
+        - application/json
+      parameters:
+        - name: ownerType
+          in: path
+          description: |-
+            What the reminder belongs to: `project`, `organization`, `folder`, `smart-folder`, or `task`.
+
+            **Always required.** The sublist, doc, chat, insight and dashboard endpoints let you omit it and assume `project`; this one does not.
+
+            With `task`, the reminder is attached to that task and belongs to the task's project. A reminder cannot be moved to another task afterwards, and the task is chosen here rather than in the body — there is no `task` field to send.
+          required: true
+          type: string
+          x-example: task
+        - name: ownerOid
+          in: path
+          description: |-
+            OID of what the reminder belongs to — a project, organization, folder, smart folder, or task, per `ownerType`.
+
+            Pass `-` with `ownerType` `project` for the caller's own inbox, i.e. a personal reminder, visible to nobody else.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Reminder to create
+          required: true
+          schema:
+            $ref: '#/definitions/CreateReminderBody'
+        - name: return
+          in: query
+          description: '(Optional) Response shape: `full` (default) for the full record, or `compact` for identifiers only. See API description for `?return=` semantics.'
+          required: false
+          type: string
+          x-example: compact
+          enum:
+            - full
+            - compact
+      responses:
+        '200':
+          description: OK — created reminder record.
+          schema:
+            $ref: '#/definitions/Reminder'
+        '400':
+          description: Bad Request — body validation failed.
+        '402':
+          description: Payment Required — reminders need a Professional plan or above.
+        '403':
+          description: Forbidden — caller lacks permission to create a reminder here.
+        '404':
+          description: Not Found — the owner does not exist, or the task is in the trash.
   /status/id/{projectId}:
     post:
       tags:
@@ -6148,7 +6579,7 @@ paths:
       description: |-
         Restores a previously-removed sublist. Idempotent: if the sublist is not currently removed, this is a no-op and returns the current sublist record.
 
-        Subject to the sublist-per-owner quota: may return `429 Too Many Requests` if the plan's sublist limit is already reached.
+        Subject to the sublist-per-owner quota: may return `402 Payment Required` if the plan's sublist limit is already reached.
       operationId: undoRemoveSublistById
       produces:
         - application/json
@@ -6198,7 +6629,7 @@ paths:
       description: |-
         Restores a previously-removed sublist. Idempotent: if the sublist is not currently removed, this is a no-op and returns the current sublist record.
 
-        Subject to the sublist-per-owner quota: may return `429 Too Many Requests` if the plan's sublist limit is already reached.
+        Subject to the sublist-per-owner quota: may return `402 Payment Required` if the plan's sublist limit is already reached.
       operationId: undoRemoveSublistByOid
       produces:
         - application/json
@@ -6997,6 +7428,10 @@ paths:
           description: Bad Request — body not a JSON array, empty, over the 300-item cap, or any per-item validation failure (whole batch rolled back).
           schema:
             $ref: '#/definitions/ErrorResponse'
+        '402':
+          description: Payment Required — the batch would exceed the project's task quota.
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '403':
           description: Forbidden — caller lacks permission to add tasks to the project.
           schema:
@@ -7010,7 +7445,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
         '429':
-          description: Too Many Requests — the batch's rate-limit cost (see [Rate Limits](#rate-limits)) would exceed the caller's per-minute / per-hour API quota, OR the batch would exceed the project's task quota.
+          description: Too Many Requests — the batch's rate-limit cost (see [Rate Limits](#rate-limits)) would exceed the caller's per-minute / per-hour API quota.
           schema:
             $ref: '#/definitions/ErrorResponse'
   /task/bulk-add/id/{projectId}/{taskId}:
@@ -7113,6 +7548,10 @@ paths:
           description: Bad Request.
           schema:
             $ref: '#/definitions/ErrorResponse'
+        '402':
+          description: Payment Required.
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '403':
           description: Forbidden.
           schema:
@@ -7192,6 +7631,10 @@ paths:
               $ref: '#/definitions/Task'
         '400':
           description: Bad Request.
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '402':
+          description: Payment Required.
           schema:
             $ref: '#/definitions/ErrorResponse'
         '403':
@@ -10662,7 +11105,7 @@ paths:
       description: |-
         Restores a previously-removed task. Idempotent: if the task is not currently removed, this is a no-op and returns the current task record.
 
-        Subject to the task-creation quota (same as creating a new task): may return `429 Too Many Requests` if the organization is at the plan's task limit.
+        Subject to the task-creation quota (same as creating a new task): may return `402 Payment Required` if the organization is at the plan's task limit.
       operationId: undoRemoveTaskById
       produces:
         - application/json
@@ -10694,12 +11137,12 @@ paths:
           description: OK — restored task record.
           schema:
             $ref: '#/definitions/TaskWithParentInfo'
+        '402':
+          description: Payment Required — organization is at the plan's task limit.
         '403':
           description: Forbidden — caller lacks permission to restore this task.
         '404':
           description: Not Found — task does not exist.
-        '429':
-          description: Too Many Requests — organization is at the plan's task limit.
   /task/undo-remove/{oid}:
     put:
       tags:
@@ -10708,7 +11151,7 @@ paths:
       description: |-
         Restores a previously-removed task. Idempotent: if the task is not currently removed, this is a no-op and returns the current task record.
 
-        Subject to the task-creation quota (same as creating a new task): may return `429 Too Many Requests` if the organization is at the plan's task limit.
+        Subject to the task-creation quota (same as creating a new task): may return `402 Payment Required` if the organization is at the plan's task limit.
       operationId: undoRemoveTaskByOid
       produces:
         - application/json
@@ -10732,12 +11175,12 @@ paths:
           description: OK — restored task record.
           schema:
             $ref: '#/definitions/TaskWithParentInfo'
+        '402':
+          description: Payment Required — organization is at the plan's task limit.
         '403':
           description: Forbidden — caller lacks permission to restore this task.
         '404':
           description: Not Found — task does not exist.
-        '429':
-          description: Too Many Requests — organization is at the plan's task limit.
   /task/update-timelog/id/{projectId}/{taskId}:
     put:
       tags:
@@ -11205,14 +11648,6 @@ definitions:
         description: (Required for `select`) Option list.
         items:
           $ref: '#/definitions/FieldOption'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
       hidden:
         type: boolean
         example: false
@@ -11221,6 +11656,21 @@ definitions:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -11234,17 +11684,10 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       formula:
         type: string
         example: SUM(Subtask.Amount)
@@ -11311,10 +11754,6 @@ definitions:
         type: string
         example: '2026-04-26T09:00:00Z'
         description: Start timestamp (ISO 8601, UTC). Sub-second precision is truncated to whole seconds.
-      note:
-        type: string
-        example: Pair-programming session
-        description: (Optional) Free-form note for the log. Omitted, `null`, or empty stores no note.
       user:
         type: string
         example: john.doe@example.com
@@ -11323,6 +11762,10 @@ definitions:
         type: boolean
         example: true
         description: (Optional) Whether this log is billable. Omitted or `null` defaults to `true`.
+      note:
+        type: string
+        example: Pair-programming session
+        description: (Optional) Free-form note for the log. Omitted, `null`, or empty stores no note.
   Approval:
     type: object
     properties:
@@ -11487,22 +11930,6 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description. An embedded `data:` image is rejected — upload the image as an attachment instead.
-      removeFollowers:
-        type: array
-        example: '["bob@example.com"]'
-        description: |-
-          (Optional) Followers to remove (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: remove followers that were inherited from the parent task
-          - `"app"`: the application
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL.
-        items:
-          type: string
       tags:
         type: array
         example: '["urgent", "design"]'
@@ -11510,37 +11937,6 @@ definitions:
           (Optional) Tags to replace the current tags on this task (OID or name).
           This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
           Tag names are case-insensitive.
-        items:
-          type: string
-      addFollowers:
-        type: array
-        example: '["me"]'
-        description: |-
-          (Optional) Followers to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include followers of the parent task
-          - "app": the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      followers:
-        type: array
-        example: '["bob@example.com"]'
-        description: |-
-          (Optional) Followers to replace the current followers (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: include followers of the parent task
-          - `"app"`: the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
         items:
           type: string
       start:
@@ -11570,6 +11966,53 @@ definitions:
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
           - `null` clears it. It is rejected if the task is recurring, since a recurring task always has a due; pass `recurrence`: `null` in the same request to stop repeating and clear the due together.
+      followers:
+        type: array
+        example: '["bob@example.com"]'
+        description: |-
+          (Optional) Followers to replace the current followers (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: include followers of the parent task
+          - `"app"`: the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      addFollowers:
+        type: array
+        example: '["me"]'
+        description: |-
+          (Optional) Followers to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include followers of the parent task
+          - "app": the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      removeFollowers:
+        type: array
+        example: '["bob@example.com"]'
+        description: |-
+          (Optional) Followers to remove (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: remove followers that were inherited from the parent task
+          - `"app"`: the application
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL.
+        items:
+          type: string
       addTags:
         type: array
         example: '["urgent"]'
@@ -11748,14 +12191,14 @@ definitions:
         type: string
         example: 2MmYOpJH_ZLeehIjjytH1Rwr
         description: OID of the task to include or exclude.
-      exclude:
-        type: boolean
-        example: false
-        description: 'Whether to exclude the task. Default: false (include).'
       single:
         type: boolean
         example: false
         description: 'Whether the operation applies only to the specified task. Default: false — all descendant tasks are also included or excluded. Note: this does not change descendants that were explicitly included or excluded in prior operations.'
+      exclude:
+        type: boolean
+        example: false
+        description: 'Whether to exclude the task. Default: false (include).'
   Chat:
     type: object
     properties:
@@ -11763,14 +12206,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?chat=Highlight101
         description: URL of this chat on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -11783,14 +12226,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -11833,6 +12276,19 @@ definitions:
         type: array
         position: 60
         description: The list of users who have muted this chat channel and will not receive notifications about it.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      members:
+        type: array
+        position: 60
+        description: |-
+          Users who can see this record, and the only ones it is shown to.
+
+          - `null` — every member of the owner can see it.
+          - `[]` — only the owner's admins can.
+          - a list — only those users can.
+
+          All three are returned explicitly, so the states can be told apart. Set it when creating the record; it cannot be changed afterwards.
         items:
           $ref: '#/definitions/SimpleIdentity'
       owner:
@@ -11892,31 +12348,22 @@ definitions:
         example: It is *cool*!
         position: 1
         description: Comment content (Markdown supported).
-      descriptionText:
-        type: string
-        example: It is cool!
-        position: 1
-        description: Comment content with Markdown removed.
       descriptionHtml:
         type: string
         example: It is <i>cool</i>!
         position: 1
         description: Comment content rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: It is cool!
+        position: 1
+        description: Comment content with Markdown removed.
       attachments:
         type: array
         position: 8
         description: Attachments associated with this comment.
         items:
           $ref: '#/definitions/Attachment'
-      url:
-        type: string
-        position: 50
-        description: URL of this comment on the Quire website.
-      editedAt:
-        type: string
-        example: '2018-12-22T02:06:58.158Z'
-        position: 50
-        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
       pinAt:
         type: string
         example: '2018-12-22T02:06:58.158Z'
@@ -11930,6 +12377,15 @@ definitions:
         position: 50
         description: User who last edited this comment, or null if not edited.
         $ref: '#/definitions/SimpleIdentity'
+      url:
+        type: string
+        position: 50
+        description: URL of this comment on the Quire website.
+      editedAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 50
+        description: Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.
       owner:
         position: 99
         description: Object this comment was added to.
@@ -12047,6 +12503,25 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      members:
+        type: array
+        example: '["me", "john"]'
+        position: 60
+        description: |-
+          (Optional) Users who can see this record, and the only ones it is shown to. Each entry is a user ID, OID, or email, or `"me"` for the authenticated user.
+
+          - Omit the field, or pass null — every member of the owner can see it. This is the default.
+          - Pass `[]` — only the owner's admins can see it.
+          - Pass a list — only those users can see it.
+
+          Rejected with `400` when:
+          - a listed user is not a member of the owner. Unlike a task's `assignees`, which silently drops a non-member, this is an error: dropping the last one would leave `[]`, which means something else entirely.
+          - the list is non-empty and does not include the authenticated user — you would not be able to see what you just created.
+          - `partner` is also set, since an external-team record is already shared with all members of the project and of the team.
+
+          Settable only when creating the record. It cannot be changed afterwards, so recreate the record to change who can see it.
+        items:
+          type: string
   CreateCommentBody:
     type: object
     required:
@@ -12135,6 +12610,25 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      members:
+        type: array
+        example: '["me", "john"]'
+        position: 60
+        description: |-
+          (Optional) Users who can see this record, and the only ones it is shown to. Each entry is a user ID, OID, or email, or `"me"` for the authenticated user.
+
+          - Omit the field, or pass null — every member of the owner can see it. This is the default.
+          - Pass `[]` — only the owner's admins can see it.
+          - Pass a list — only those users can see it.
+
+          Rejected with `400` when:
+          - a listed user is not a member of the owner. Unlike a task's `assignees`, which silently drops a non-member, this is an error: dropping the last one would leave `[]`, which means something else entirely.
+          - the list is non-empty and does not include the authenticated user — you would not be able to see what you just created.
+          - `partner` is also set, since an external-team record is already shared with all members of the project and of the team.
+
+          Settable only when creating the record. It cannot be changed afterwards, so recreate the record to change who can see it.
+        items:
+          type: string
   CreateDocBody:
     type: object
     required:
@@ -12222,6 +12716,25 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      members:
+        type: array
+        example: '["me", "john"]'
+        position: 60
+        description: |-
+          (Optional) Users who can see this record, and the only ones it is shown to. Each entry is a user ID, OID, or email, or `"me"` for the authenticated user.
+
+          - Omit the field, or pass null — every member of the owner can see it. This is the default.
+          - Pass `[]` — only the owner's admins can see it.
+          - Pass a list — only those users can see it.
+
+          Rejected with `400` when:
+          - a listed user is not a member of the owner. Unlike a task's `assignees`, which silently drops a non-member, this is an error: dropping the last one would leave `[]`, which means something else entirely.
+          - the list is non-empty and does not include the authenticated user — you would not be able to see what you just created.
+          - `partner` is also set, since an external-team record is already shared with all members of the project and of the team.
+
+          Settable only when creating the record. It cannot be changed afterwards, so recreate the record to change who can see it.
+        items:
+          type: string
   CreateInsightBody:
     type: object
     required:
@@ -12293,6 +12806,25 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      members:
+        type: array
+        example: '["me", "john"]'
+        position: 60
+        description: |-
+          (Optional) Users who can see this record, and the only ones it is shown to. Each entry is a user ID, OID, or email, or `"me"` for the authenticated user.
+
+          - Omit the field, or pass null — every member of the owner can see it. This is the default.
+          - Pass `[]` — only the owner's admins can see it.
+          - Pass a list — only those users can see it.
+
+          Rejected with `400` when:
+          - a listed user is not a member of the owner. Unlike a task's `assignees`, which silently drops a non-member, this is an error: dropping the last one would leave `[]`, which means something else entirely.
+          - the list is non-empty and does not include the authenticated user — you would not be able to see what you just created.
+          - `partner` is also set, since an external-team record is already shared with all members of the project and of the team.
+
+          Settable only when creating the record. It cannot be changed afterwards, so recreate the record to change who can see it.
+        items:
+          type: string
   CreateNotificationBody:
     type: object
     required:
@@ -12320,6 +12852,66 @@ definitions:
         type: string
         example: Unable to synchronize
         description: Notification message.
+  CreateReminderBody:
+    type: object
+    properties:
+      when:
+        type: string
+        example: '2027-01-15T09:00:00.000Z'
+        position: 2
+        description: |-
+          When this reminder fires (UTC, ISO 8601). A plain instant — there is no all-day reminder, so a bare date is midnight UTC.
+
+          **Required** for a reminder that has no task, or whose task has neither a start nor a due date.
+
+          **Rejected with `400`** when the task already has a start or due date: the reminder then fires from the task's own schedule, and a `when` of its own would be ignored. Send `leads` alone in that case.
+      recurrence:
+        position: 3
+        description: |-
+          (Optional) How this reminder repeats; `when` is the first occurrence.
+
+          **Rejected with `400`** on a reminder whose task has a start or due date — it then repeats with its task's schedule, so a rule of its own would be ignored.
+        $ref: '#/definitions/Recurrence'
+      leads:
+        type: array
+        position: 4
+        description: |-
+          (Optional) When to notify before the fire time, one notification each. Omit it for a single notification at the fire time, which is the default (`[{"minutes": 0}]`).
+
+          Each entry is an object naming exactly one of `minutes` (an absolute offset) and `days` (calendar days, so a lead spanning a daylight-saving transition keeps its wall-clock time), the latter taking an optional `at` clock.
+
+          Neither may be negative — a lead counts back from the fire time, and nothing fires after it — nor exceed 10,000 days ahead of it, and there may be at most 30 of them.
+        items:
+          $ref: '#/definitions/ReminderLead'
+      name:
+        type: string
+        example: Pay the **bill**
+        position: 5
+        description: (Optional) Text to show instead of the default message (Markdown supported).
+      partner:
+        type: string
+        example: rcBHBYXZSiyDRrHrWPutatfF
+        position: 15
+        description: |-
+          (Optional) OID of the external team to share this reminder with; it then reaches every member of the project and of that team.
+
+          Only a project's reminder can carry one, and it cannot be combined with `members` — both are `400`. On a reminder attached to a task, it must be that task's own team. Settable only when creating the reminder.
+      members:
+        type: array
+        example: '["me", "john"]'
+        position: 60
+        description: |-
+          (Optional) Users who can see this reminder, and the only ones it notifies. Each entry is a user ID, OID, or email, or `"me"` for the authenticated user.
+
+          - Omit the field, or pass null — every member of the owner. This is the default.
+          - Pass `[]` — only the owner's admins.
+          - Pass a list — only those users.
+
+          Rejected with `400` when a listed user is not a member of the owner, when a non-empty list does not include the authenticated user, or when `partner` is also set.
+
+          Settable only when creating the reminder. It cannot be changed afterwards, so recreate the reminder to change who can see it. A personal reminder (created under `-`) is always its owner's alone, so no one else can be named.
+        items:
+          type: string
   CreateStatusBody:
     type: object
     required:
@@ -12415,6 +13007,25 @@ definitions:
         example: '2024-05-25'
         position: 50
         description: (Optional) Target due date.
+      members:
+        type: array
+        example: '["me", "john"]'
+        position: 60
+        description: |-
+          (Optional) Users who can see this record, and the only ones it is shown to. Each entry is a user ID, OID, or email, or `"me"` for the authenticated user.
+
+          - Omit the field, or pass null — every member of the owner can see it. This is the default.
+          - Pass `[]` — only the owner's admins can see it.
+          - Pass a list — only those users can see it.
+
+          Rejected with `400` when:
+          - a listed user is not a member of the owner. Unlike a task's `assignees`, which silently drops a non-member, this is an error: dropping the last one would leave `[]`, which means something else entirely.
+          - the list is non-empty and does not include the authenticated user — you would not be able to see what you just created.
+          - `partner` is also set, since an external-team record is already shared with all members of the project and of the team.
+
+          Settable only when creating the record. It cannot be changed afterwards, so recreate the record to change who can see it.
+        items:
+          type: string
   CreateTagBody:
     type: object
     required:
@@ -12455,22 +13066,6 @@ definitions:
           Tag names are case-insensitive.
         items:
           type: string
-      followers:
-        type: array
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-        description: |-
-          (Optional) List of user identifiers (OID, ID, or email) who follow this task. The current user is added to the followers automatically.
-
-          - Use "me" for the current user.
-          - Use "inherit" to include followers of the parent task.
-          - Use "app" for the application itself to follow (receive notifications).
-
-          For app followers, additional syntaxes are supported:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
       start:
         type: string
         example: '2018-12-20T00:00:00.000Z'
@@ -12497,6 +13092,22 @@ definitions:
           - Seconds are not supported.
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
+      followers:
+        type: array
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+        description: |-
+          (Optional) List of user identifiers (OID, ID, or email) who follow this task. The current user is added to the followers automatically.
+
+          - Use "me" for the current user.
+          - Use "inherit" to include followers of the parent task.
+          - Use "app" for the application itself to follow (receive notifications).
+
+          For app followers, additional syntaxes are supported:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
       assignees:
         type: array
         example:
@@ -12624,14 +13235,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?dashboard=Board101
         description: URL of this dashboard on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -12644,14 +13255,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -12684,6 +13295,19 @@ definitions:
         example: '2020-02-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
+      members:
+        type: array
+        position: 60
+        description: |-
+          Users who can see this record, and the only ones it is shown to.
+
+          - `null` — every member of the owner can see it.
+          - `[]` — only the owner's admins can.
+          - a list — only those users can.
+
+          All three are returned explicitly, so the states can be told apart. Set it when creating the record; it cannot be changed afterwards.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
         description: Owner this dashboard belongs to.
@@ -12736,14 +13360,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?doc=Highlight101
         description: URL of this document on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -12756,14 +13380,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -12806,6 +13430,19 @@ definitions:
         type: array
         position: 60
         description: The list of users who have muted this document and will not receive notifications about it.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      members:
+        type: array
+        position: 60
+        description: |-
+          Users who can see this record, and the only ones it is shown to.
+
+          - `null` — every member of the owner can see it.
+          - `[]` — only the owner's admins can.
+          - a list — only those users can.
+
+          All three are returned explicitly, so the states can be told apart. Set it when creating the record; it cannot be changed afterwards.
         items:
           $ref: '#/definitions/SimpleIdentity'
       owner:
@@ -12882,6 +13519,19 @@ definitions:
         type: string
         example: '42'
         description: 'Palette color index. Format: two digits `[0-5][0-7]` (first = row 0-5, second = column 0-7). Examples: `00`, `13`, `57`. NOT a CSS hex color.'
+      op:
+        type: string
+        example: '>='
+        description: (Value fields) Comparison operator.
+        enum:
+          - '>='
+          - '>'
+          - <=
+          - <
+          - '='
+          - '!='
+          - between
+          - notBetween
       when:
         type: string
         example: today
@@ -12897,19 +13547,6 @@ definitions:
           - lastWeek
           - thisWeek
           - nextWeek
-      op:
-        type: string
-        example: '>='
-        description: (Value fields) Comparison operator.
-        enum:
-          - '>='
-          - '>'
-          - <=
-          - <
-          - '='
-          - '!='
-          - between
-          - notBetween
       first:
         example: '100'
         description: (Value fields) First operand. For `duration`, must be an integer number of seconds.
@@ -12941,14 +13578,6 @@ definitions:
         description: (Required for `select`) Option list.
         items:
           $ref: '#/definitions/FieldOption'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
       hidden:
         type: boolean
         example: false
@@ -12957,6 +13586,21 @@ definitions:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -12970,17 +13614,10 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       formula:
         type: string
         example: SUM(Subtask.Amount)
@@ -13061,14 +13698,6 @@ definitions:
         description: (Required for `select`) Option list.
         items:
           $ref: '#/definitions/FieldOption'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
       hidden:
         type: boolean
         example: false
@@ -13077,6 +13706,21 @@ definitions:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -13090,17 +13734,10 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       formula:
         type: string
         example: SUM(Subtask.Amount)
@@ -13169,14 +13806,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?insight=View101
         description: URL of this insight view on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -13189,14 +13826,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -13229,6 +13866,19 @@ definitions:
         example: '2020-02-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
+      members:
+        type: array
+        position: 60
+        description: |-
+          Users who can see this record, and the only ones it is shown to.
+
+          - `null` — every member of the owner can see it.
+          - `[]` — only the owner's admins can.
+          - a list — only those users can.
+
+          All three are returned explicitly, so the states can be told apart. Set it when creating the record; it cannot be changed afterwards.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       fields:
         type: object
         position: 70
@@ -13294,14 +13944,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
+      nameHtml:
+        type: string
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: My Organization
@@ -13319,14 +13969,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -13373,14 +14023,14 @@ definitions:
         example: info@company.com
         description: Organization email address.
         allowEmptyValue: true
-      nameHtml:
-        type: string
-        example: My Organization
-        description: Organization name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: My Organization
         description: Organization name with Markdown removed.
+      nameHtml:
+        type: string
+        example: My Organization
+        description: Organization name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: My Organization
@@ -13398,14 +14048,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -13497,14 +14147,14 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      nameHtml:
-        type: string
-        example: My Project
-        description: Project name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: My Project
         description: Project name with Markdown removed.
+      nameHtml:
+        type: string
+        example: My Project
+        description: Project name rendered as an HTML fragment converted from Markdown.
       rootCount:
         type: integer
         format: int32
@@ -13522,14 +14172,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -13568,18 +14218,18 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this project.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       attachments:
         type: array
         position: 60
         description: Attachments associated with this project.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this project.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       approvalCategories:
         type: array
         position: 70
@@ -13636,14 +14286,14 @@ definitions:
       organization:
         description: Organization this project belongs to.
         $ref: '#/definitions/SimpleIdentity'
-      nameHtml:
-        type: string
-        example: My Project
-        description: Project name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: My Project
         description: Project name with Markdown removed.
+      nameHtml:
+        type: string
+        example: My Project
+        description: Project name rendered as an HTML fragment converted from Markdown.
       rootCount:
         type: integer
         format: int32
@@ -13661,14 +14311,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -13711,18 +14361,18 @@ definitions:
         example: '2018-12-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this project was made public. Null if not public.
-      followers:
-        type: array
-        position: 60
-        description: Users who follow this project.
-        items:
-          $ref: '#/definitions/SimpleIdentity'
       attachments:
         type: array
         position: 60
         description: Attachments associated with this project.
         items:
           $ref: '#/definitions/Attachment'
+      followers:
+        type: array
+        position: 60
+        description: Users who follow this project.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       approvalCategories:
         type: array
         position: 70
@@ -13764,26 +14414,26 @@ definitions:
   RateLimitBucket:
     type: object
     properties:
-      limit:
-        type: integer
-        format: int32
-        example: 1250
-        description: Maximum number of calls allowed in this window. `-1` indicates no limit.
       remaining:
         type: integer
         format: int32
         example: 1208
         description: 'Remaining calls: `max(limit - used, 0)`, or `-1` if unlimited.'
-      reset:
+      limit:
         type: integer
-        format: int64
-        example: 1774863600
-        description: Unix epoch (seconds) of the next wall-clock boundary at which the `used` counter will reset.
+        format: int32
+        example: 1250
+        description: Maximum number of calls allowed in this window. `-1` indicates no limit.
       used:
         type: integer
         format: int32
         example: 42
         description: Number of calls consumed so far in the current window.
+      reset:
+        type: integer
+        format: int64
+        example: 1774863600
+        description: Unix epoch (seconds) of the next wall-clock boundary at which the `used` counter will reset.
   Recurrence:
     type: object
     properties:
@@ -13907,6 +14557,175 @@ definitions:
         type: string
         example: wrSpgghWFCzPHBqiShSurDeD
         description: OID of the user who created this reference.
+  Reminder:
+    type: object
+    properties:
+      oid:
+        type: string
+        example: iDsPd.QP_qM.hN.Trymukn8b
+        description: Object identifier (OID), a UUID-like unique string.
+      task:
+        position: 1
+        description: |-
+          Task this reminder is attached to, or null if it stands on its own. A reminder cannot be moved to another task.
+
+          Only `oid`, `id`, `name` and `url` are returned here; fetch the task itself for its dates.
+        $ref: '#/definitions/ReminderTask'
+      when:
+        type: string
+        example: '2027-01-15T09:00:00.000Z'
+        position: 2
+        description: |-
+          When this reminder fires, if it fires at a time of its own (UTC, ISO 8601).
+
+          Null whenever `task` has a start or due date: the reminder then fires from that date instead, and `leads` counts back from it. The dates are not part of this response, so to show when a reminder will fire, fetch its task and use its due date, or its start date if it has no due date.
+      recurrence:
+        position: 3
+        description: 'How this reminder repeats, or null if it does not. Always null while the reminder is anchored: it then repeats with its task''s own schedule.'
+        $ref: '#/definitions/RecurrenceX'
+      leads:
+        type: array
+        position: 4
+        description: |-
+          When to notify before the fire time, one notification each. `[{"minutes": 0}]` means a single notification at the fire time, and is what a reminder created without `leads` has.
+
+          Each entry is an object naming exactly one of `minutes` (an absolute offset) and `days` (calendar days, so a lead spanning a daylight-saving transition keeps its wall-clock time), the latter taking an optional `at` clock.
+
+          Neither may be negative — a lead counts back from the fire time, and nothing fires after it — nor exceed 10,000 days ahead of it, and there may be at most 30 of them.
+        items:
+          $ref: '#/definitions/ReminderLead'
+      nameText:
+        type: string
+        example: Pay the bill
+        position: 5
+        description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Pay the <strong>bill</strong>
+        position: 5
+        description: Name rendered as an HTML fragment converted from Markdown.
+      name:
+        type: string
+        example: Pay the **bill**
+        position: 5
+        description: Text shown instead of the default message (Markdown supported), or null to use the default.
+      partner:
+        position: 15
+        description: External team this reminder is shared with, or null. When set, it reaches every member of the project and of that team.
+        $ref: '#/definitions/SimpleTaggingEntity'
+      members:
+        type: array
+        position: 60
+        description: |-
+          Users who can see this reminder, and the only ones it notifies.
+
+          - `null` — every member of the owner.
+          - `[]` — only the owner's admins.
+          - a list — only those users.
+
+          All three are returned explicitly, so the states can be told apart. Set it when creating the reminder; it cannot be changed afterwards.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
+      owner:
+        position: 99
+        description: 'Project, organization, folder or smart folder this reminder belongs to. Fixed when the reminder is created: a reminder on a task always belongs to that task''s project, and one created under `-` belongs to the caller''s own inbox.'
+        $ref: '#/definitions/ReminderOwner'
+      url:
+        type: string
+        example: https://quire.io/w/my_project?reminder=iDsPd.QP_qM.hN.Trymukn8b
+        position: 99
+        description: URL of the page this reminder is shown on.
+      createdAt:
+        type: string
+        example: '2018-12-22T02:06:58.158Z'
+        position: 99
+        description: Creation timestamp in UTC (ISO 8601).
+      createdBy:
+        position: 99
+        description: User who created this record.
+        $ref: '#/definitions/SimpleIdentity'
+  ReminderLead:
+    type: object
+    properties:
+      minutes:
+        type: integer
+        format: int32
+        example: 30
+        position: 1
+        description: |-
+          How many minutes before the fire time to notify — an absolute offset, so 30 stays 30 real minutes wherever the clocks move in between.
+
+          Exactly one of `minutes` and `days` must be given. An hour is simply 60 minutes: there is no `hours`, and a lead is stored and returned in whichever of the two forms it was sent.
+      days:
+        type: integer
+        format: int32
+        example: 1
+        position: 2
+        description: |-
+          How many calendar days before the fire time to notify. Unlike `minutes`, this counts *days*, not 24-hour spans, so a lead spanning a daylight-saving transition still notifies at the same wall-clock time.
+
+          Exactly one of `minutes` and `days` must be given. A week is simply 7 days: there is no `weeks`.
+      at:
+        type: string
+        example: '09:00'
+        position: 3
+        description: |-
+          (Optional, and only with `days`) The time of day to notify at, as `HH:mm` on a 24-hour clock — `"09:00"`, `"23:30"`. A 12-hour clock is rejected with `400`.
+
+          Omit it to notify at the fire time's own time of day, which then follows that time if it later moves.
+
+          The clock is read in the time zone of the member who created the reminder, since one notification serves its whole audience and some one zone has to be chosen.
+  ReminderOwner:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Project
+        description: 'Kind of the owner: `Project`, `Organization`, `Folder` or `Lot` (a smart folder). A personal reminder reports `Project` — it belongs to the owner''s own inbox, which is a project.'
+      url:
+        type: string
+        example: https://quire.io/w/prj_id
+        description: URL of this owner on the Quire website.
+      id:
+        type: string
+        example: my_id
+        description: Identifier for this record.
+      iconColor:
+        type: string
+        example: '37'
+        description: 'Color index for the icon from Quire’s predefined palette. Two-digit code: first digit 0–5, second digit 0–7 (e.g., `37`).'
+      image:
+        type: string
+        example: https://quire.s3.amazonaws.com/oid/image.jpg
+        description: Image URL representing this record.
+        allowEmptyValue: true
+      name:
+        type: string
+        example: Foo
+        description: Display name.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: Object identifier (OID), a UUID-like unique string.
+  ReminderTask:
+    type: object
+    properties:
+      url:
+        type: string
+        example: https://quire.io/w/my_project/1234
+        description: URL of this task on the Quire website.
+      id:
+        type: string
+        example: '1234'
+        description: Task id, unique within its project.
+      name:
+        type: string
+        example: Foo
+        description: Display name.
+      oid:
+        type: string
+        example: Dyh2YkFcu9uLgLFIeN1kB4Ld
+        description: Object identifier (OID), a UUID-like unique string.
   SimpleAttachment:
     type: object
     properties:
@@ -14023,14 +14842,14 @@ definitions:
         type: string
         example: https://quire.io/w/my_project?sublist=Highlight101
         description: URL of this sublist on the Quire website.
-      nameHtml:
-        type: string
-        example: Highlight 101
-        description: Name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Highlight 101
         description: Name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Highlight 101
+        description: Name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Highlight 101
@@ -14043,14 +14862,14 @@ definitions:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
@@ -14083,6 +14902,19 @@ definitions:
         example: '2020-02-22T02:06:58.158Z'
         position: 50
         description: Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.
+      members:
+        type: array
+        position: 60
+        description: |-
+          Users who can see this record, and the only ones it is shown to.
+
+          - `null` — every member of the owner can see it.
+          - `[]` — only the owner's admins can.
+          - a list — only those users can.
+
+          All three are returned explicitly, so the states can be told apart. Set it when creating the record; it cannot be changed afterwards.
+        items:
+          $ref: '#/definitions/SimpleIdentity'
       owner:
         position: 99
         description: Project this sublist belongs to.
@@ -14135,14 +14967,14 @@ definitions:
         type: string
         example: '2038-02-22T02:06:58Z'
         description: Subscription due/renewal timestamp in UTC (ISO 8601).
-      expired:
-        type: boolean
-        example: false
-        description: Whether the subscription is expired. Available only when a due date is present.
       plan:
         type: string
         example: Professional
         description: Plan name (e.g., Free, Professional, Premium, Enterprise).
+      expired:
+        type: boolean
+        example: false
+        description: Whether the subscription is expired. Available only when a due date is present.
   Tag:
     type: object
     properties:
@@ -14221,16 +15053,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Design new logo
         position: 2
         description: Task name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
@@ -14241,16 +15073,22 @@ definitions:
         example: This is a *cool* task.
         position: 3
         description: Task description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Task description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Task description with Markdown removed.
+      timelogs:
+        type: array
+        position: 4
+        description: The time log entries associated with this task.
+        items:
+          $ref: '#/definitions/Timelog'
       etc:
         type: integer
         format: int32
@@ -14261,12 +15099,6 @@ definitions:
         position: 4
         description: Contains the recurrence details of this task. If `null`, the task does not repeat.
         $ref: '#/definitions/RecurrenceX'
-      timelogs:
-        type: array
-        position: 4
-        description: The time log entries associated with this task.
-        items:
-          $ref: '#/definitions/Timelog'
       status:
         type: integer
         format: int32
@@ -14295,10 +15127,6 @@ definitions:
         example: 0
         position: 4
         description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -14309,6 +15137,10 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -14503,16 +15335,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Design new logo
         position: 2
         description: Task name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
@@ -14523,16 +15355,22 @@ definitions:
         example: This is a *cool* task.
         position: 3
         description: Task description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Task description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Task description with Markdown removed.
+      timelogs:
+        type: array
+        position: 4
+        description: The time log entries associated with this task.
+        items:
+          $ref: '#/definitions/Timelog'
       etc:
         type: integer
         format: int32
@@ -14543,12 +15381,6 @@ definitions:
         position: 4
         description: Contains the recurrence details of this task. If `null`, the task does not repeat.
         $ref: '#/definitions/RecurrenceX'
-      timelogs:
-        type: array
-        position: 4
-        description: The time log entries associated with this task.
-        items:
-          $ref: '#/definitions/Timelog'
       status:
         type: integer
         format: int32
@@ -14577,10 +15409,6 @@ definitions:
         example: 0
         position: 4
         description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -14591,6 +15419,10 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -14762,16 +15594,16 @@ definitions:
         example: 12
         position: 1
         description: Task id.
-      nameHtml:
-        type: string
-        example: Design new <b>logo</b>
-        position: 2
-        description: Task name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: Design new logo
         position: 2
         description: Task name with Markdown removed.
+      nameHtml:
+        type: string
+        example: Design new <b>logo</b>
+        position: 2
+        description: Task name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: Design new **logo**
@@ -14782,16 +15614,22 @@ definitions:
         example: This is a *cool* task.
         position: 3
         description: Task description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is a cool task.
-        position: 3
-        description: Task description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is a <i>cool</i> task.
         position: 3
         description: Task description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is a cool task.
+        position: 3
+        description: Task description with Markdown removed.
+      timelogs:
+        type: array
+        position: 4
+        description: The time log entries associated with this task.
+        items:
+          $ref: '#/definitions/Timelog'
       etc:
         type: integer
         format: int32
@@ -14802,12 +15640,6 @@ definitions:
         position: 4
         description: Contains the recurrence details of this task. If `null`, the task does not repeat.
         $ref: '#/definitions/RecurrenceX'
-      timelogs:
-        type: array
-        position: 4
-        description: The time log entries associated with this task.
-        items:
-          $ref: '#/definitions/Timelog'
       status:
         type: integer
         format: int32
@@ -14836,10 +15668,6 @@ definitions:
         example: 0
         position: 4
         description: 'Task priority, from -1 (lowest) to 2 (highest). Default: 0.'
-      partner:
-        position: 5
-        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
-        $ref: '#/definitions/SimpleTaggingEntity'
       assignors:
         type: array
         position: 5
@@ -14850,6 +15678,10 @@ definitions:
         position: 5
         description: The user who assigned this task to the external team. If `null`, the task is not associated with any external team.
         $ref: '#/definitions/SimpleIdentity'
+      partner:
+        position: 5
+        description: The external team to which this task belongs. If `null`, this task is not associated with any external team.
+        $ref: '#/definitions/SimpleTaggingEntity'
       assignees:
         type: array
         position: 5
@@ -15036,14 +15868,14 @@ definitions:
   UpdateChatBody:
     type: object
     properties:
-      removeFollowers:
+      followers:
         type: array
-        example: '["bob@example.com"]'
+        example: '["me"]'
         description: |-
-          (Optional) Followers (OID, ID, or email) to remove.
+          (Optional) Followers (OID, ID, or email) to replace the current followers.
 
           - `"me"` — the current user.
-          - `"app"` — the application.
+          - `"app"` — the application follows (receives notifications).
 
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
@@ -15060,14 +15892,14 @@ definitions:
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
           type: string
-      followers:
+      removeFollowers:
         type: array
-        example: '["me"]'
+        example: '["bob@example.com"]'
         description: |-
-          (Optional) Followers (OID, ID, or email) to replace the current followers.
+          (Optional) Followers (OID, ID, or email) to remove.
 
           - `"me"` — the current user.
-          - `"app"` — the application follows (receives notifications).
+          - `"app"` — the application.
 
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
@@ -15217,14 +16049,14 @@ definitions:
   UpdateDocBody:
     type: object
     properties:
-      removeFollowers:
+      followers:
         type: array
-        example: '["bob@example.com"]'
+        example: '["me"]'
         description: |-
-          (Optional) Followers (OID, ID, or email) to remove.
+          (Optional) Followers (OID, ID, or email) to replace the current followers. Applies only when the owner is a project; rejected (400) for organization, folder, or smart-folder documents.
 
           - `"me"` — the current user.
-          - `"app"` — the application.
+          - `"app"` — the application follows (receives notifications).
 
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
@@ -15241,14 +16073,14 @@ definitions:
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
           type: string
-      followers:
+      removeFollowers:
         type: array
-        example: '["me"]'
+        example: '["bob@example.com"]'
         description: |-
-          (Optional) Followers (OID, ID, or email) to replace the current followers. Applies only when the owner is a project; rejected (400) for organization, folder, or smart-folder documents.
+          (Optional) Followers (OID, ID, or email) to remove.
 
           - `"me"` — the current user.
-          - `"app"` — the application follows (receives notifications).
+          - `"app"` — the application.
 
           App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.
         items:
@@ -15342,14 +16174,6 @@ definitions:
         description: (Optional, `select` only) Replacement option list (replaces the entire set).
         items:
           $ref: '#/definitions/FieldOption'
-      multiple:
-        type: boolean
-        example: true
-        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
-      withTime:
-        type: boolean
-        example: false
-        description: (Optional, `date` only) Include time-of-day in addition to the date.
       hidden:
         type: boolean
         example: false
@@ -15358,6 +16182,21 @@ definitions:
         type: boolean
         example: false
         description: (Optional) Clear this field when duplicating a task.
+      withTime:
+        type: boolean
+        example: false
+        description: (Optional, `date` only) Include time-of-day in addition to the date.
+      ndecimal:
+        type: integer
+        format: int32
+        example: 2
+        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
+        enum:
+          - -1
+          - 0
+          - 1
+          - 2
+          - 3
       durationFormat:
         type: string
         example: hh:mm
@@ -15371,17 +16210,10 @@ definitions:
           - dd:hh:mm:ss
           - dd:hh:mm
           - dd:hh
-      ndecimal:
-        type: integer
-        format: int32
-        example: 2
-        description: (Optional, `number`/`money` only) Number of decimal digits. `-1` means no rounding.
-        enum:
-          - -1
-          - 0
-          - 1
-          - 2
-          - 3
+      multiple:
+        type: boolean
+        example: true
+        description: (Optional) Allow multiple values. Applies to `select`, `user`, `task`, and `file` (always true for `file`).
       formula:
         type: string
         example: SUM(Subtask.Amount)
@@ -15504,10 +16336,12 @@ definitions:
         type: string
         example: '**Great** organization to start with.'
         description: (Optional) New description for this organization (Markdown supported). An embedded `data:` image is rejected — upload the image as an attachment instead.
-      removeFollowers:
+      followers:
         type: array
         description: |-
-          (Optional) Followers to remove from this organization (user OIDs).
+          (Optional) Followers to replace the current followers of this organization (user OIDs).
+          This replaces all existing followers. To modify incrementally, use `addFollowers` or `removeFollowers`.
+
           Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
         items:
           type: string
@@ -15526,12 +16360,10 @@ definitions:
             → `https://super.app/hooks/standard/soc1/33456/a7`
         items:
           type: string
-      followers:
+      removeFollowers:
         type: array
         description: |-
-          (Optional) Followers to replace the current followers of this organization (user OIDs).
-          This replaces all existing followers. To modify incrementally, use `addFollowers` or `removeFollowers`.
-
+          (Optional) Followers to remove from this organization (user OIDs).
           Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
         items:
           type: string
@@ -15550,15 +16382,30 @@ definitions:
         type: string
         example: '**Great** project to start with.'
         description: (Optional) New description for this project (Markdown supported). An embedded `data:` image is rejected — upload the image as an attachment instead.
-      removeFollowers:
+      start:
+        type: string
+        example: '2024-01-02'
+        description: (Optional) Target start date for this project.
+      due:
+        type: string
+        example: '2024-05-25'
+        description: (Optional) Target due date for this project.
+      archived:
+        type: boolean
+        example: true
+        description: (Optional) Archive toggle. Specify true to archive this project; specify false to unarchive.
+      followers:
         type: array
         description: |-
-          (Optional) Followers to remove from this project (user OIDs).
+          (Optional) Followers to replace the current followers of this project (user OIDs).
+          This replaces all existing followers. To modify incrementally, use `addFollowers` or `removeFollowers`.
+
           Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
         items:
           type: string
         example:
-          - aBuz4MwfZ5CasOae6stnFa2f
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
       addFollowers:
         type: array
         description: |-
@@ -15576,34 +16423,53 @@ definitions:
           type: string
         example:
           - sfsvLbDVPvi1QMf2GkDn7VSy
-      followers:
+      removeFollowers:
         type: array
         description: |-
-          (Optional) Followers to replace the current followers of this project (user OIDs).
-          This replaces all existing followers. To modify incrementally, use `addFollowers` or `removeFollowers`.
-
+          (Optional) Followers to remove from this project (user OIDs).
           Accepts the same special values as `addFollowers`: `"me"` (the current user) and `"app"` / `"app|team"` / `"app|team|channel"` / `"app|/path"` (the application).
         items:
           type: string
         example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-      start:
-        type: string
-        example: '2024-01-02'
-        description: (Optional) Target start date for this project.
-      due:
-        type: string
-        example: '2024-05-25'
-        description: (Optional) Target due date for this project.
-      archived:
-        type: boolean
-        example: true
-        description: (Optional) Archive toggle. Specify true to archive this project; specify false to unarchive.
+          - aBuz4MwfZ5CasOae6stnFa2f
       name:
         type: string
         example: My Project
         description: (Optional) New display name for this project (Markdown supported).
+  UpdateReminderBody:
+    type: object
+    properties:
+      when:
+        type: string
+        example: '2027-03-20T18:30:00.000Z'
+        position: 2
+        description: |-
+          (Optional) When this reminder fires (UTC, ISO 8601).
+
+          **Rejected with `400`** on a reminder whose task has a start or due date — it fires from the task's schedule, so a `when` of its own would be ignored — and also when set to null on one that has no other time to fire from.
+      recurrence:
+        position: 3
+        description: |-
+          (Optional) How this reminder repeats; null stops it repeating.
+
+          **Rejected with `400`** on a reminder whose task has a start or due date, for the same reason as `when`.
+        $ref: '#/definitions/Recurrence'
+      leads:
+        type: array
+        position: 4
+        description: |-
+          (Optional) When to notify before the fire time, one notification each. Replaces the current list.
+
+          Each entry is an object naming exactly one of `minutes` (an absolute offset) and `days` (calendar days, so a lead spanning a daylight-saving transition keeps its wall-clock time), the latter taking an optional `at` clock.
+
+          Neither may be negative — a lead counts back from the fire time, and nothing fires after it — nor exceed 10,000 days ahead of it, and there may be at most 30 of them.
+        items:
+          $ref: '#/definitions/ReminderLead'
+      name:
+        type: string
+        example: Pay the **bill** today
+        position: 5
+        description: (Optional) Text to show instead of the default message (Markdown supported). Pass null to fall back to the default.
   UpdateStatusBody:
     type: object
     properties:
@@ -15717,23 +16583,6 @@ definitions:
         type: string
         example: This is a **cool** task.
         description: (Optional) New task description. An embedded `data:` image is rejected — upload the image as an attachment instead.
-      removeFollowers:
-        type: array
-        example:
-          - aBuz4MwfZ5CasOae6stnFa2f
-        description: |-
-          (Optional) Followers to remove (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: remove followers that were inherited from the parent task
-          - `"app"`: the application
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL.
-        items:
-          type: string
       tags:
         type: array
         example:
@@ -15742,40 +16591,6 @@ definitions:
           (Optional) Tags to replace the current tags on this task (OID or name).
           This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.
           Tag names are case-insensitive.
-        items:
-          type: string
-      addFollowers:
-        type: array
-        example:
-          - sfsvLbDVPvi1QMf2GkDn7VSy
-        description: |-
-          (Optional) Followers to add (OID, ID, or email).
-          Special values:
-          - "me": the current user
-          - "inherit": include followers of the parent task
-          - "app": the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
-        items:
-          type: string
-      followers:
-        type: array
-        example:
-          - tzufRLqCnud74dARyDSvjWDl
-          - app
-        description: |-
-          (Optional) Followers to replace the current followers (OID, ID, or email).
-
-          Special values:
-          - `"me"`: the current user
-          - `"inherit"`: include followers of the parent task
-          - `"app"`: the application follows (receives notifications)
-
-          App follower syntax:
-          - `app|team` or `app|team|channel`
-          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
         items:
           type: string
       start:
@@ -15805,6 +16620,57 @@ definitions:
           - `2020-10-30T00:00:00` is treated as `2020-10-30` (date only).
           - To specify exactly midnight UTC, use `2020-10-30T00:00` (no seconds).
           - `null` clears it. It is rejected if the task is recurring, since a recurring task always has a due; pass `recurrence`: `null` in the same request to stop repeating and clear the due together.
+      followers:
+        type: array
+        example:
+          - tzufRLqCnud74dARyDSvjWDl
+          - app
+        description: |-
+          (Optional) Followers to replace the current followers (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: include followers of the parent task
+          - `"app"`: the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      addFollowers:
+        type: array
+        example:
+          - sfsvLbDVPvi1QMf2GkDn7VSy
+        description: |-
+          (Optional) Followers to add (OID, ID, or email).
+          Special values:
+          - "me": the current user
+          - "inherit": include followers of the parent task
+          - "app": the application follows (receives notifications)
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).
+        items:
+          type: string
+      removeFollowers:
+        type: array
+        example:
+          - aBuz4MwfZ5CasOae6stnFa2f
+        description: |-
+          (Optional) Followers to remove (OID, ID, or email).
+
+          Special values:
+          - `"me"`: the current user
+          - `"inherit"`: remove followers that were inherited from the parent task
+          - `"app"`: the application
+
+          App follower syntax:
+          - `app|team` or `app|team|channel`
+          - `app|/path` → appended to the hook URL.
+        items:
+          type: string
       addTags:
         type: array
         example:
@@ -15993,10 +16859,6 @@ definitions:
         type: string
         example: '2026-04-26T09:15:00Z'
         description: (Optional) New start timestamp (ISO 8601, UTC). Sub-second precision is truncated to whole seconds. Omit or set `null` to preserve.
-      note:
-        type: string
-        example: Updated note
-        description: (Optional) New note. Omit or set `null` to preserve. Send empty string to clear.
       user:
         type: string
         example: john.doe@example.com
@@ -16005,6 +16867,10 @@ definitions:
         type: boolean
         example: false
         description: (Optional) New billable flag. Omit or set `null` to preserve.
+      note:
+        type: string
+        example: Updated note
+        description: (Optional) New note. Omit or set `null` to preserve. Send empty string to clear.
   User:
     type: object
     properties:
@@ -16022,14 +16888,14 @@ definitions:
         type: string
         example: https://quire.io/u/john
         description: URL of this user on the Quire website.
-      nameHtml:
-        type: string
-        example: John
-        description: User name rendered as an HTML fragment converted from Markdown.
       nameText:
         type: string
         example: John
         description: User name with Markdown removed.
+      nameHtml:
+        type: string
+        example: John
+        description: User name rendered as an HTML fragment converted from Markdown.
       name:
         type: string
         example: John
@@ -16038,28 +16904,28 @@ definitions:
         type: string
         example: john
         description: User ID.
-      email:
-        type: string
-        example: john@gmail.com
-        description: Email address.
-        allowEmptyValue: true
       website:
         type: string
         example: https://coolwebsites.com
         description: Website URL.
         allowEmptyValue: true
+      email:
+        type: string
+        example: john@gmail.com
+        description: Email address.
+        allowEmptyValue: true
       description:
         type: string
         example: This is *cool*!
         description: Description (Markdown supported).
-      descriptionText:
-        type: string
-        example: This is cool!
-        description: Description with Markdown removed.
       descriptionHtml:
         type: string
         example: This is <i>cool</i>!
         description: Description rendered as an HTML fragment converted from Markdown.
+      descriptionText:
+        type: string
+        example: This is cool!
+        description: Description with Markdown removed.
       iconColor:
         type: string
         example: '37'
