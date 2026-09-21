@@ -1,5 +1,29 @@
 # Changelog
 
+## Sep 21, 2026
+
+- **Reminder API:** Added the [reminder](https://quire.io/dev/api/#tag--reminder) endpoints. A reminder notifies the people it names, either before a task's start or due date or at a time of its own.
+    - **Create** — [`POST /reminder/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder--ownerType---ownerOid--post), plus [`POST /reminder/id/{ownerType}/{ownerId}`](https://quire.io/dev/api/#operation--reminder-id--ownerType---ownerId--post) and, for a task, [`POST /reminder/id/task/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--reminder-id-task--projectId---taskId--post) (a task ID is unique only within its project).
+    - **Read** — [`GET /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--get) and [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get), with the by-ID forms. A project's list includes the reminders on its tasks, not only the standalone ones; narrow it with `ownerType` `task`.
+    - **Update** — [`PUT /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--put); only `when`, `recurrence`, `leads` and `name` can be changed.
+    - **Delete** — [`DELETE /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--delete). A reminder is not moved to the trash and cannot be restored.
+    - **`ownerType` is always required** — unlike the work endpoints, there is no implied `project`. It is one of `project`, `organization`, `folder`, `smart-folder`, or `task`. Pass `-` as the project for the caller's own inbox, i.e. a personal reminder.
+    - **What it fires from:** a reminder on a task with a start or due date fires from that date, and sending `when` or `recurrence` for one is rejected with `400`; otherwise `when` is required. `leads` gives when to notify before that time, one notification each — `{"minutes": 30}` for an absolute offset, or `{"days": 1, "at": "09:00"}` for a calendar one, which keeps its wall-clock time across a daylight-saving transition. It defaults to a single notification at the time itself.
+    - **Paging:** the list endpoints accept `?limit=` (1..1000, or `no`) and `?cursor=`, in the same shape as [`/task/list`](https://quire.io/dev/api/#operation--task-list-id--projectId--get) — the last item of a page carries a `cursor` when more remain. Reminders are ordered by `oid`: stable, but **not** chronological, so don't read it as oldest-first.
+    - **Who sees it** follows the same `members` model as a work, with the same create-only rule (below): `null` for every member of the owner, `[]` for its admins, or a list of users. A reminder on a task in the trash is left out of the lists while it is there, but stays reachable by OID.
+- **Members when creating a work:** [sublists](https://quire.io/dev/api/#operation--sublist--ownerType---ownerOid--post), [docs](https://quire.io/dev/api/#operation--doc--ownerType---ownerOid--post), [chat channels](https://quire.io/dev/api/#operation--chat--ownerType---ownerOid--post), [insights](https://quire.io/dev/api/#operation--insight--ownerType---ownerOid--post) and [dashboards](https://quire.io/dev/api/#operation--dashboard--ownerType---ownerOid--post) now accept `members`, so a record can be created visible only to the users you choose. It was previously returned but could not be set.
+    - Omit `members` (or pass null) for every member of the owner, as before; pass an empty list for the owner's admins only; pass a list of users (OID, ID, email, or `"me"`) for just those users.
+    - Every user listed must be a member of the owner, and the list must include yourself — otherwise you could not see what you just created. A user who is not a member is rejected with `400`, rather than being dropped silently the way a task's `assignees` are.
+    - `members` cannot be combined with `partner`, which already shares the record with all members of the project and of the external team; the pair is rejected with `400`.
+    - `members` can only be set when creating a record. Changing it afterwards is not supported yet.
+- **`members` in responses:** a work's `members` is now a list of user objects (`oid`, `id`, `name`, …), matching `followers` and `mutes`, where it was previously a list of OID strings. It is `null` when every member of the owner can see the record, and an empty list when only its admins can — both are returned explicitly, so the three states can be told apart.
+- **Error responses:** the HTTP status now reflects the kind of failure, and `429` is reserved for rate limits.
+    - **Plan limits and quotas** (task limit, custom fields, dashboard, insight, sublist, chat, doc) now return `402 Payment Required` with body `code` `469`, where they previously returned `429`.
+    - **An expired subscription** returns `402` with the new body `code` `470`, so it can be told apart from a plan limit without parsing `message`. Previously it too returned `429`, which invited clients to back off and retry a condition that only resubscribing can clear.
+    - **`429 Too Many Requests`** is now returned only for the per-minute / per-hour API rate limit, and always carries a `Retry-After` header.
+    - **A temporarily blocked account** returns `403 Forbidden` with the new body `code` `471`.
+    - **Validation errors** — a missing name, or a duplicate or reserved id, for example — now carry body `code` `400` instead of `469`. `469` appears only alongside `402`.
+
 ## Jul 31, 2026
 
 - **Comment API (removal):** Removed long-deprecated URL forms. All of them have supported replacements:
