@@ -62,8 +62,10 @@ public class CreateReminderBody {
               + "team.\n\n"
               + "Only a project's reminder can carry one, and it cannot be "
               + "combined with `members` — both are `400`. On a reminder "
-              + "attached to a task, it must be that task's own team. Settable "
-              + "only when creating the reminder.",
+              + "attached to a task, it must be that task's own team. Sharing "
+              + "with a team is part of Shared reminders, which needs the "
+              + "Premium plan or above (`402` otherwise). Settable only when "
+              + "creating the reminder.",
         example = "rcBHBYXZSiyDRrHrWPutatfF",
         position = 15
     )
@@ -73,10 +75,17 @@ public class CreateReminderBody {
         value = "(Optional) Users who can see this reminder, and the only ones "
               + "it notifies. Each entry is a user ID, OID, or email, or "
               + "`\"me\"` for the authenticated user.\n\n"
-              + "- Omit the field, or pass null — every member of the owner. "
-              + "This is the default.\n"
+              + "- Omit the field — only the authenticated user. This is the "
+              + "default.\n"
+              + "- Pass null — every member of the owner.\n"
               + "- Pass `[]` — only the owner's admins.\n"
               + "- Pass a list — only those users.\n\n"
+              + "> Unlike a work's `members`, omitting the field does **not** "
+              + "mean every member: pass `null` explicitly for that.\n\n"
+              + "Omitting it or naming only yourself (such as `[\"me\"]`) "
+              + "keeps the reminder yours; anything else shares it — the "
+              + "Shared reminders feature, which needs the Premium plan or "
+              + "above (`402` otherwise).\n\n"
               + "Rejected with `400` when a listed user is not a member of the "
               + "owner, when a non-empty list does not include the "
               + "authenticated user, or when `partner` is also set.\n\n"

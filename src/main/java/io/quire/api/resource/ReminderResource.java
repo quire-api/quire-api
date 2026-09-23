@@ -71,7 +71,7 @@ public class ReminderResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created reminder record.", response = Reminder.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above."),
+        @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above, and Shared reminders (`members` other than yourself, or `partner`) need Premium or above."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here."),
         @ApiResponse(code = 404, message = "Not Found — the owner does not exist, or the task is in the trash.")
     })
@@ -101,7 +101,7 @@ public class ReminderResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created reminder record.", response = Reminder.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above."),
+        @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above, and Shared reminders (`members` other than yourself, or `partner`) need Premium or above."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
@@ -138,7 +138,7 @@ public class ReminderResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created reminder record.", response = Reminder.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above."),
+        @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above, and Shared reminders (`members` other than yourself, or `partner`) need Premium or above."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here."),
         @ApiResponse(code = 404, message = "Not Found — the task does not exist, or is in the trash.")
     })
