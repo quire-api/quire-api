@@ -50,6 +50,24 @@ public class ReminderResource {
       + "**not** chronological — do not read it as oldest-first, and sort by "
       + "the field you care about after fetching.";
 
+    private static final String TIMING =
+        "(Optional) Lists only the reminders that fire:\n\n"
+      + "- `standalone`: at their own `when` — those with no task, or on a "
+      + "task with neither a start nor a due date.\n"
+      + "- `anchored`: from their task's due date, or its start date if it "
+      + "has no due date. Their `when` is null.\n\n"
+      + "Omit it to list both. `?timing=standalone&status=active` lists the "
+      + "reminders still to fire at a time of their own, e.g. to sync them "
+      + "to a calendar.";
+
+    private static final String STATUS =
+        "(Optional) Which reminders to list:\n\n"
+      + "- `active`: only those with a notification still to come — not one "
+      + "whose notifications are all past, nor one on a completed or "
+      + "archived task.\n"
+      + "- `all` (default): every reminder.\n\n"
+      + "A page still holds `limit` reminders while that many remain.";
+
     private static final String RETURN_MODE =
         "(Optional) Response shape: `full` (default) for the full record, or "
       + "`compact` for identifiers only. See API description for `?return=` "
@@ -181,8 +199,9 @@ public class ReminderResource {
         notes = "Returns the reminders the caller can see under the given "
               + "owner.\n\n"
               + "A project's list includes the reminders on its tasks, not "
-              + "only the standalone ones — narrow it with `ownerType` `task` "
-              + "to get a single task's. Reminders on a task that is in the "
+              + "only the task-less ones — narrow it with `ownerType` `task` "
+              + "to get a single task's, or with `timing` and `status`. "
+              + "Reminders on a task that is in the "
               + "trash are left out, since there is nothing to act on while it "
               + "is there; they come back if the task is restored, and stay "
               + "reachable by OID meanwhile.",
@@ -191,7 +210,7 @@ public class ReminderResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of reminder records (may be empty).", response = Reminder.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid `limit` or `cursor`."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `limit`, `cursor`, `timing` or `status`."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to read this owner."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
@@ -204,7 +223,13 @@ public class ReminderResource {
         @ApiParam(value = LIMIT, example = "100")
         @QueryParam("limit") String limit,
         @ApiParam(value = CURSOR)
-        @QueryParam("cursor") String cursor
+        @QueryParam("cursor") String cursor,
+        @ApiParam(value = TIMING, allowableValues = "standalone, anchored",
+            example = "standalone")
+        @QueryParam("timing") String timing,
+        @ApiParam(value = STATUS, allowableValues = "active, all",
+            example = "active")
+        @QueryParam("status") String status
     ) { return null; }
 
     @GET
@@ -220,7 +245,7 @@ public class ReminderResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of reminder records (may be empty).", response = Reminder.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid `limit` or `cursor`."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `limit`, `cursor`, `timing` or `status`."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to read this owner."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
@@ -243,7 +268,13 @@ public class ReminderResource {
         @ApiParam(value = LIMIT, example = "100")
         @QueryParam("limit") String limit,
         @ApiParam(value = CURSOR)
-        @QueryParam("cursor") String cursor
+        @QueryParam("cursor") String cursor,
+        @ApiParam(value = TIMING, allowableValues = "standalone, anchored",
+            example = "standalone")
+        @QueryParam("timing") String timing,
+        @ApiParam(value = STATUS, allowableValues = "active, all",
+            example = "active")
+        @QueryParam("status") String status
     ) { return null; }
 
     @GET
@@ -256,7 +287,7 @@ public class ReminderResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of reminder records (may be empty).", response = Reminder.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid `limit` or `cursor`."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid `limit`, `cursor`, `timing` or `status`."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to read this task."),
         @ApiResponse(code = 404, message = "Not Found — task does not exist.")
     })
@@ -269,7 +300,13 @@ public class ReminderResource {
         @ApiParam(value = LIMIT, example = "100")
         @QueryParam("limit") String limit,
         @ApiParam(value = CURSOR)
-        @QueryParam("cursor") String cursor
+        @QueryParam("cursor") String cursor,
+        @ApiParam(value = TIMING, allowableValues = "standalone, anchored",
+            example = "standalone")
+        @QueryParam("timing") String timing,
+        @ApiParam(value = STATUS, allowableValues = "active, all",
+            example = "active")
+        @QueryParam("status") String status
     ) { return null; }
 
     @PUT

@@ -92,6 +92,8 @@ A notification is the information about an update (aka., an activity). Here is a
 
 * The `data` map may also include an optional `value` field, which provides detailed information as a map. For example, for an assignment notification, `value` includes the assignee’s ID, name, and URL.
 
+* For a reminder's change (types `84`, `87`, `88`, `192`, `193` and `194` in [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md)), `value` is the reminder itself, as [Get a reminder by OID](#operation--reminder--oid--get) returns it, or only its `oid` once removed.
+
 * If the notification is about a *start* or *due* change, the `data` map will include an additional `due` field. This value is a date/time formatted in the user’s locale and time zone.
 
 * If the event notifies a task update and the task has a parent, the parent information is included in the `parent` field. The `parent` field is a `map` containing the task’s oid and id. If the task’s parent also has a parent, the map includes a nested `parent` field as well.
