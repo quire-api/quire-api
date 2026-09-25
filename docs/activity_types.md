@@ -52,11 +52,16 @@
 | 50 | Revokes an approval rejection for a task. | Task | |
 | 51 | Revokes a change request for a task. | Task | |
 | [52](#transfer-task) | Transfers a task to another project. | Task | |
+| 84 | Adds a reminder to a task. | Task | |
+| 87 | Edits a task's reminder. | Task | |
+| 88 | Removes a task's reminder. | Task | |
 
 **Notes**
 
 - For types `5`, `6`, and `11`, two extra fields are included:  
   `status` (new value) and `previousStatus` (prior value).
+- For types `84`, `87`, and `88`, `value` is the reminder, as `GET /reminder/{oid}` returns it — only its `oid` for `88`, since the reminder is gone.
+- A reminder that changes because its task did (the task gaining or losing its date, being duplicated or transferred) sends none of these; the task's own activity reports it.
 
 ### taskSummaries
 
@@ -166,6 +171,13 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 181 | Edits a chat message. | Project |
 | 182 | Adds a field to an insight view of a project. | Project |
 | 183 | Removes a field from an insight view of a project. | Project |
+| 192 | Adds a reminder to a project. | Project |
+| 193 | Edits a project's reminder. | Project |
+| 194 | Removes a project's reminder. | Project |
+
+**Notes**
+
+- For types `192`, `193`, and `194`, `value` is the reminder, as `GET /reminder/{oid}` returns it — only its `oid` for `194`, since the reminder is gone.
 
 ---
 

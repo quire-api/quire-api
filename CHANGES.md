@@ -1,5 +1,12 @@
 # Changelog
 
+## Sep 25, 2026
+
+- **Reminder list filters:** [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get) and its by-ID forms accept two optional parameters. Omitted, the list is unchanged.
+    - `?timing=standalone` lists the reminders firing at a time of their own (`when`): with no task, or on a task with neither a start nor a due date. `?timing=anchored` lists those firing from their task's date, whose `when` is null.
+    - `?status=active` lists only the reminders with a notification still to come (`all`, the default, every one). A page still holds `limit` reminders while that many remain.
+- **Reminder webhooks:** adding, editing or removing a project's reminder now notifies its webhooks: types `84`, `87` and `88` for a reminder on a task, and `192`, `193` and `194` for one without. `value` is the reminder, as [`GET /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--get) returns it, or only its `oid` once removed. See [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
+
 ## Sep 21, 2026
 
 - **Reminder API:** Added the [reminder](https://quire.io/dev/api/#tag--reminder) endpoints. A reminder notifies the people it names, either before a task's start or due date or at a time of its own.
