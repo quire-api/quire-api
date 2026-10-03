@@ -57,11 +57,26 @@ public class CreateWorkBody {
     public String getPartner() { return null; }
 
     @ApiModelProperty(
+        value = "(Optional) Hide this record from guests and from the visitors "
+              + "of a public project or of a share link, like a custom field's "
+              + "`private`. A choice only when `members` is null and `partner` "
+              + "is null; defaults to false (everyone). Otherwise it is always "
+              + "true: a record shared with an external team, with selected "
+              + "members or with the admins only is hidden from them, so "
+              + "`false` is rejected with `400`.",
+        example = "false",
+        position = 16
+    )
+    public Boolean getPrivate() { return null; }
+
+    @ApiModelProperty(
         value = "(Optional) Users who can see this record, and the only ones "
               + "it is shown to. Each entry is a user ID, OID, or email, or "
               + "`\"me\"` for the authenticated user.\n\n"
               + "- Omit the field, or pass null — every member of the owner can "
-              + "see it. This is the default. (A reminder differs: omitting its "
+              + "see it, and so can guests and the visitors of a public project "
+              + "or of a share link unless `private`. This is the default. (A "
+              + "reminder differs: omitting its "
               + "`members` means only the authenticated user.)\n"
               + "- Pass `[]` — only the owner's admins can see it.\n"
               + "- Pass a list — only those users can see it.\n\n"

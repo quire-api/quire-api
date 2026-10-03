@@ -63,4 +63,14 @@ public class UpdateWorkBody {
         example = "true"
     )
     public boolean getArchived() { return false; }
+
+    @ApiModelProperty(
+        value = "(Optional) Hide this record from guests and from the visitors "
+              + "of a public project or of a share link, like a custom field's "
+              + "`private`. A choice only when `members` is null and `partner` "
+              + "is null; otherwise it is always true, and `false` is rejected "
+              + "with `400`.",
+        example = "false"
+    )
+    public Boolean getPrivate() { return null; }
 }

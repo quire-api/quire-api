@@ -46,7 +46,9 @@ public class Work extends Identity {
     @ApiModelProperty(
         value = "Users who can see this record, and the only ones it is shown "
               + "to.\n\n"
-              + "- `null` — every member of the owner can see it.\n"
+              + "- `null` — every member of the owner can see it; `private` "
+              + "tells whether guests and the visitors of a public project or "
+              + "of a share link can too.\n"
               + "- `[]` — only the owner's admins can.\n"
               + "- a list — only those users can.\n\n"
               + "All three are returned explicitly, so the states can be told "
@@ -55,6 +57,18 @@ public class Work extends Identity {
         position = 60
     )
     public List<SimpleIdentity> getMembers() { return null; }
+
+    @ApiModelProperty(
+        value = "Whether this record is hidden from guests and from the visitors "
+              + "of a public project or of a share link, like a custom field's "
+              + "`private`. Present only when `members` is null and `partner` "
+              + "is null — the one case where it is a choice. A record shared "
+              + "with an external team, with selected members or with the "
+              + "admins only is always hidden from them.",
+        example = "true",
+        position = 61
+    )
+    public Boolean getPrivate() { return null; }
 
     @ApiModelProperty(
         value = "Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.",
