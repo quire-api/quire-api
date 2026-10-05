@@ -2695,7 +2695,9 @@ public class TaskResource {
               + "    → 12 items; no cursor on last item → stop\n"
               + "```\n"
               + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
-              + "use it verbatim from the previous response.\n\n"
+              + "use it verbatim from the previous response. Paging reaches at most "
+              + "1,000,000 rows deep; a deeper `cursor` is rejected with 400 — narrow "
+              + "the search with filters instead.\n\n"
 
               + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = TaskWithParentInfo.class,
@@ -2704,7 +2706,7 @@ public class TaskResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. malformed `cursor`)."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
@@ -2948,7 +2950,9 @@ public class TaskResource {
               + "    → 12 items; no cursor on last item → stop\n"
               + "```\n"
               + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
-              + "use it verbatim from the previous response.\n\n"
+              + "use it verbatim from the previous response. Paging reaches at most "
+              + "1,000,000 rows deep; a deeper `cursor` is rejected with 400 — narrow "
+              + "the search with filters instead.\n\n"
 
               + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
         response = TaskWithParentInfo.class,
@@ -2957,7 +2961,7 @@ public class TaskResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. malformed `cursor`)."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
@@ -3195,7 +3199,7 @@ public class TaskResource {
         @ApiParam(
             value = "Continuation token from the previous page's last item. "
                   + "See **Pagination** in the operation notes for the loop. "
-                  + "Cannot be combined with `?sublist=`.",
+                  + "Cannot be combined with `?sublist=`. At most 1,000,000 rows deep.",
             required = false
         )
         @QueryParam("cursor") String cursor
