@@ -51,10 +51,42 @@ public class UpdateFieldBody {
     public Boolean getClearOnDup() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Restrict access to non-guest members only.",
+        value = "(Optional) Hide this field and its values from guests and from "
+              + "the visitors of a public project or of a share link. A choice "
+              + "only without `viewMembers`; with it, the field is always hidden "
+              + "from them, so `false` is rejected with `400`.",
         example = "false"
     )
     public Boolean getPrivate() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Users who can view this field and its values, besides "
+              + "the admins, who always can. Each entry is a user ID, OID, or "
+              + "email, or `\"me\"` for the authenticated user, and must be a "
+              + "member of the field's owner, an external team's member "
+              + "included. Pass `[]` for the admins only, or null for everyone "
+              + "`private` allows.",
+        example = "[\"me\", \"john\"]"
+    )
+    public List<String> getViewMembers() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Users who can edit the values, besides the admins, "
+              + "who always can, in the same form as `viewMembers`. Editing also "
+              + "requires viewing the field. Pass `[]` for the admins only, or "
+              + "null for anyone who can edit the task. Not applied while "
+              + "`locked`.",
+        example = "[\"me\"]"
+    )
+    public List<String> getEditMembers() { return null; }
+
+    @ApiModelProperty(
+        value = "(Optional) Lock the values: no one can edit them in Quire, "
+              + "admins included, while the API still can, e.g., to push values "
+              + "from another system.",
+        example = "false"
+    )
+    public Boolean getLocked() { return null; }
 
     @ApiModelProperty(
         value = "(Optional, `date` only) Include time-of-day in addition to the date.",
