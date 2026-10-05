@@ -2658,7 +2658,8 @@ public class TaskResource {
         notes = "Returns tasks that match the specified criteria in the project.\n\n"
               + "### Custom Field Filtering\n\n"
               + "You can filter by custom fields by passing the field name as a query parameter "
-              + "(case-insensitive). For example, `?cost=13` or `?approvedBy=john.doe`.\n\n"
+              + "(case-insensitive). For example, `?cost=13` or `?approvedBy=john.doe`. "
+              + "A field you can't view is an unknown query parameter.\n\n"
               + "Supported field types and value formats:\n\n"
               + "**Operator grammar** — Number, Money, Duration, and Date fields share a common set of "
               + "operators (case-insensitive): `ge:<v>`, `gt:<v>`, `le:<v>`, `lt:<v>`, `eq:<v>`, `ne:<v>`, "
@@ -2715,7 +2716,8 @@ public class TaskResource {
         )
         @PathParam("projectOid") String projectOid,
         @ApiParam(
-            value = "Full-text query against task name, description, and attachments.\n"
+            value = "Full-text query against task name, description, attachments, "
+                  + "and the values of the custom fields you can view.\n"
                   + "Note: does not include comment content or comment attachments.\n"
                   + "Indexing can take ~10 seconds or more after updates."
         )
@@ -2909,7 +2911,8 @@ public class TaskResource {
         notes = "Returns tasks that match the specified criteria in the project.\n\n"
               + "### Custom Field Filtering\n\n"
               + "You can filter by custom fields by passing the field name as a query parameter "
-              + "(case-insensitive). For example, `?cost=13` or `?approvedBy=john.doe`.\n\n"
+              + "(case-insensitive). For example, `?cost=13` or `?approvedBy=john.doe`. "
+              + "A field you can't view is an unknown query parameter.\n\n"
               + "Supported field types and value formats:\n\n"
               + "**Operator grammar** — Number, Money, Duration, and Date fields share a common set of "
               + "operators (case-insensitive): `ge:<v>`, `gt:<v>`, `le:<v>`, `lt:<v>`, `eq:<v>`, `ne:<v>`, "
@@ -2967,7 +2970,8 @@ public class TaskResource {
         )
         @PathParam("projectId") String projectId,
         @ApiParam(
-            value = "Full-text query against task name, description, and attachments.\n"
+            value = "Full-text query against task name, description, attachments, "
+                  + "and the values of the custom fields you can view.\n"
                   + "Note: does not include comment content or comment attachments.\n"
                   + "Indexing can take ~10 seconds or more after updates."
         )
@@ -3218,7 +3222,8 @@ public class TaskResource {
         @ApiParam(value = "Organization OID.", required = true)
         @PathParam("organizationOid") String organizationOid,
         @ApiParam(
-            value = "Full-text query against task name, description, and attachments.\n"
+            value = "Full-text query against task name, description, attachments, "
+                  + "and the values of the custom fields you can view.\n"
                   + "Note: does not include comment content or comment attachments.\n"
                   + "Indexing can take ~10 seconds or more after updates."
         )
@@ -3421,7 +3426,8 @@ public class TaskResource {
         @ApiParam(value = "Organization ID.", required = true, example = "my_org")
         @PathParam("organizationId") String organizationId,
         @ApiParam(
-            value = "Full-text query against task name, description, and attachments.\n"
+            value = "Full-text query against task name, description, attachments, "
+                  + "and the values of the custom fields you can view.\n"
                   + "Note: does not include comment content or comment attachments.\n"
                   + "Indexing can take ~10 seconds or more after updates."
         )
@@ -3624,7 +3630,8 @@ public class TaskResource {
         @ApiParam(value = "Folder OID.", required = true)
         @PathParam("folderOid") String folderOid,
         @ApiParam(
-            value = "Full-text query against task name, description, and attachments.\n"
+            value = "Full-text query against task name, description, attachments, "
+                  + "and the values of the custom fields you can view.\n"
                   + "Note: does not include comment content or comment attachments.\n"
                   + "Indexing can take ~10 seconds or more after updates."
         )
@@ -3827,7 +3834,8 @@ public class TaskResource {
         @ApiParam(value = "Folder ID.", required = true, example = "my_folder")
         @PathParam("folderId") String folderId,
         @ApiParam(
-            value = "Full-text query against task name, description, and attachments.\n"
+            value = "Full-text query against task name, description, attachments, "
+                  + "and the values of the custom fields you can view.\n"
                   + "Note: does not include comment content or comment attachments.\n"
                   + "Indexing can take ~10 seconds or more after updates."
         )
