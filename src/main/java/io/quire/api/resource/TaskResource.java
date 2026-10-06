@@ -2694,7 +2694,9 @@ public class TaskResource {
               + "GET /task/search/id/my_project?status=active&limit=30&cursor=crsr11k\n"
               + "    → 12 items; no cursor on last item → stop\n"
               + "```\n"
-              + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
+              + "With `?sublist=`, no item carries a `cursor`: pass a `limit` big "
+              + "enough (or `no`) to get every match. Passing `?cursor=` with it is "
+              + "rejected with 400. The cursor token is opaque — "
               + "use it verbatim from the previous response. Paging reaches at most "
               + "1,000,000 rows deep; a deeper `cursor` is rejected with 400 — narrow "
               + "the search with filters instead.\n\n"
@@ -2704,7 +2706,7 @@ public class TaskResource {
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist (never with `?sublist=`).",
             response = TaskWithParentInfo.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
@@ -2949,7 +2951,9 @@ public class TaskResource {
               + "GET /task/search/id/my_project?status=active&limit=30&cursor=crsr11k\n"
               + "    → 12 items; no cursor on last item → stop\n"
               + "```\n"
-              + "Cannot be combined with `?sublist=`. The cursor token is opaque — "
+              + "With `?sublist=`, no item carries a `cursor`: pass a `limit` big "
+              + "enough (or `no`) to get every match. Passing `?cursor=` with it is "
+              + "rejected with 400. The cursor token is opaque — "
               + "use it verbatim from the previous response. Paging reaches at most "
               + "1,000,000 rows deep; a deeper `cursor` is rejected with 400 — narrow "
               + "the search with filters instead.\n\n"
@@ -2959,7 +2963,7 @@ public class TaskResource {
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist (never with `?sublist=`).",
             response = TaskWithParentInfo.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this project."),
