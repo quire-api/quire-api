@@ -58,17 +58,17 @@ public class FieldDefinition {
     public Boolean getPrivate() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) The users who can view this field and its values, "
-              + "besides the admins, who always can. An empty list means the "
-              + "admins only. Absent means everyone `private` allows. The API "
-              + "returns only the fields the caller can view.",
+        value = "(Optional) The users who can view this field's values; an "
+              + "admin not named sees the definition, not the values. An empty "
+              + "list means the admins only. Absent means everyone `private` "
+              + "allows. The API returns only the fields the caller can view.",
         example = "[{\"oid\":\"iDsPd.QP_qM.hN.Trymukn8b\",\"id\":\"john\",\"name\":\"John\"}]"
     )
     public List<SimpleIdentity> getViewMembers() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) The users who can edit the values, besides the "
-              + "admins, who always can. An empty list means the admins only. "
+        value = "(Optional) The users who can edit the values; an admin not "
+              + "named can't. An empty list means the admins only. "
               + "Absent means anyone who can edit the task. Editing also "
               + "requires viewing the field. Not applied while `locked`.",
         example = "[]"

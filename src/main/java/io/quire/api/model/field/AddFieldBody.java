@@ -67,8 +67,8 @@ public class AddFieldBody {
     public Boolean getPrivate() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Users who can view this field and its values, besides "
-              + "the admins, who always can. Each entry is a user ID, OID, or "
+        value = "(Optional) Users who can view this field's values; an admin "
+              + "not named sees the definition, not the values. Each entry is a user ID, OID, or "
               + "email, or `\"me\"` for the authenticated user, and must be a "
               + "member of the field's owner, an external team's member "
               + "included. Pass `[]` for the admins only, or null for everyone "
@@ -78,8 +78,8 @@ public class AddFieldBody {
     public List<String> getViewMembers() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Users who can edit the values, besides the admins, "
-              + "who always can, in the same form as `viewMembers`. Editing also "
+        value = "(Optional) Users who can edit the values, in the same form as "
+              + "`viewMembers`; an admin not named can't. Editing also "
               + "requires viewing the field. Pass `[]` for the admins only, or "
               + "null for anyone who can edit the task. Not applied while "
               + "`locked`.",
