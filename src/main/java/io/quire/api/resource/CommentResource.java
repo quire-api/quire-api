@@ -295,6 +295,95 @@ public class CommentResource {
         Object data
     ) { return null; }
 
+    // -------- Emojis --------
+    //
+    // The names are listed inline, not only in the Emojis section, so each
+    // endpoint stays self-contained for MCP / agent consumers, which may
+    // see only one endpoint at a time.
+
+    private static final String EMOJI_NAMES =
+        "😃 `smiley`, 😞 `disappointed`, 😐 `neutral_face`, 😂 `joy`, "
+      + "😍 `heart_eyes`, 😜 `stuck_out_tongue_winking_eye`, 😏 `smirk`, "
+      + "😱 `scream`, 😭 `sob`, 😡 `rage` (or `pout`), 👍 `+1` (or `thumbsup`), "
+      + "👎 `-1` (or `thumbsdown`), 🙌 `raised_hands`, 👊 `punch` (or `facepunch`, "
+      + "`fist_oncoming`), 💪 `muscle`, ❤️ `heart`, 🎉 `tada`, 🚀 `rocket`, "
+      + "💯 `100`, ⚠️ `warning`";
+
+    private static final String EMOJIS_PARAM =
+        "One or more emojis separated by commas, each as the emoji itself or "
+      + "its name (listed in the endpoint's description), percent-encoded. "
+      + "Names need no encoding, so prefer them, e.g. `+1,tada`. "
+      + "At most 20 per request. Duplicates and empty items are ignored.";
+
+    @POST
+    @Path("/add-emoji/{commentOid}/{emojis}")
+    @ApiOperation(
+        value = "Add emoji reactions to a comment (by comment OID).",
+        notes = "Adds the caller's reactions with the given emojis. The request "
+              + "has no body; the emojis are in the URL path.\n\n"
+              + "Only the emojis that Quire's reaction picker offers are accepted. "
+              + "Each can be given as the emoji itself or, more simply, by its "
+              + "name — the shortcode GitHub and Slack use — with or without "
+              + "colons and in any case: " + EMOJI_NAMES + ". "
+              + "❤ and ⚠ without the variation selector (U+FE0F) are accepted as "
+              + "❤️ and ⚠️. See also [Emojis](#emojis).\n\n"
+              + "All or nothing: if any emoji is invalid, none is added and "
+              + "`400` is returned. Adding a reaction the caller already has "
+              + "is a no-op.\n\n"
+              + "Anyone who can view the comment can react. A reaction always "
+              + "belongs to the authorizing user, never to the app. The "
+              + "comment's author is notified of each reaction added.\n\n"
+              + "Returns `204 No Content`. To see the reactions, read the "
+              + "comment with `GET /comment/{commentOid}`: its `emojis` lists "
+              + "each emoji with the users who reacted.\n\n"
+              + "Example: `POST /comment/add-emoji/iDsPd.QP_qM.hN.Trymukn8b/+1,tada` "
+              + "adds 👍 and 🎉, and so does "
+              + "`POST /comment/add-emoji/iDsPd.QP_qM.hN.Trymukn8b/%F0%9F%91%8D,%F0%9F%8E%89`."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content — reactions added (or already there)."),
+        @ApiResponse(code = 400, message = "Bad Request — an emoji or name is not accepted, none is given, or more than 20 are given."),
+        @ApiResponse(code = 403, message = "Forbidden — caller can't view this comment."),
+        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+    })
+    public Response addCommentEmojiByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid,
+        @ApiParam(value = EMOJIS_PARAM, required = true, example = "+1,tada")
+        @PathParam("emojis") String emojis
+    ) { return null; }
+
+    @DELETE
+    @Path("/remove-emoji/{commentOid}/{emojis}")
+    @ApiOperation(
+        value = "Remove emoji reactions from a comment (by comment OID).",
+        notes = "Removes the caller's reactions with the given emojis. The "
+              + "request has no body; the emojis are in the URL path.\n\n"
+              + "Each can be given as the emoji itself or by its name, with or "
+              + "without colons and in any case: " + EMOJI_NAMES + ". "
+              + "❤ and ⚠ without the variation selector (U+FE0F) are taken as "
+              + "❤️ and ⚠️. Any other non-empty value is accepted too, so a "
+              + "reaction with an emoji the picker no longer offers can still "
+              + "be removed. See also [Emojis](#emojis).\n\n"
+              + "Removing a reaction the caller doesn't have is a no-op.\n\n"
+              + "Returns `204 No Content`. To see the remaining reactions, read "
+              + "the comment with `GET /comment/{commentOid}`.\n\n"
+              + "Example: `DELETE /comment/remove-emoji/iDsPd.QP_qM.hN.Trymukn8b/+1` "
+              + "removes the caller's 👍."
+    )
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "No Content — reactions removed (or already absent)."),
+        @ApiResponse(code = 400, message = "Bad Request — no emoji is given, or more than 20 are given."),
+        @ApiResponse(code = 403, message = "Forbidden — caller can't view this comment."),
+        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+    })
+    public Response removeCommentEmojiByOid(
+        @ApiParam(value = "Comment OID.", required = true)
+        @PathParam("commentOid") String commentOid,
+        @ApiParam(value = EMOJIS_PARAM, required = true, example = "+1,tada")
+        @PathParam("emojis") String emojis
+    ) { return null; }
+
     // -------- Undo remove --------
 
     @PUT

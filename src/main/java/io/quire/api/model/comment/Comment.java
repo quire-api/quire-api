@@ -41,6 +41,15 @@ public class Comment extends StampedEntity {
     public List<Attachment> getAttachments() { return null; }
 
     @ApiModelProperty(
+        value = "Emoji reactions to this comment, in the order they were first added. "
+              + "Omitted if none. To add or remove the caller's reactions, use "
+              + "`POST /comment/add-emoji/{commentOid}/{emojis}` and "
+              + "`DELETE /comment/remove-emoji/{commentOid}/{emojis}`.",
+        position = 9
+    )
+    public List<CommentEmoji> getEmojis() { return null; }
+
+    @ApiModelProperty(
         value = "Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.",
         example = "2018-12-22T02:06:58.158Z",
         position = 50
