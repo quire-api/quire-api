@@ -16,6 +16,21 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class TaskResource {
 
+    // The organization and folder searches share these; the project
+    // searches spell out the same loop in their notes.
+    private static final String SEARCH_PAGING =
+        "**Pagination**: with `?limit=N` and more matches to come, the last "
+      + "item carries a `cursor`; pass it back as `?cursor=` with the same "
+      + "`?limit=` and filters for the next page, until a page's last item "
+      + "has none. The token is opaque — use it verbatim. Paging reaches "
+      + "at most 1,000,000 rows deep; a deeper `cursor` is rejected with "
+      + "400 — narrow the search with filters instead.";
+
+    private static final String SEARCH_CURSOR =
+        "Continuation token from the previous page's last item. See "
+      + "**Pagination** in the operation notes for the loop. At most "
+      + "1,000,000 rows deep.";
+
     @POST
     @Path("/{oid}")
     @ApiOperation(
@@ -2905,7 +2920,14 @@ public class TaskResource {
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
             example = "no"
         )
-        @QueryParam("limit") String limit
+        @QueryParam("limit") String limit,
+        @ApiParam(
+            value = "Continuation token from the previous page's last item. "
+                  + "See **Pagination** in the operation notes for the loop. "
+                  + "Cannot be combined with `?sublist=`. At most 1,000,000 rows deep.",
+            required = false
+        )
+        @QueryParam("cursor") String cursor
     ) { return null; }
 
     @GET
@@ -3215,14 +3237,15 @@ public class TaskResource {
         value = "Search tasks in an organization by organization OID.",
         notes = "Returns tasks that match the specified criteria in the given organization. "
               + "Tasks in archived projects are excluded.\n\n"
-              + "> Available for Professional plans and above",
+              + "> Available for Professional plans and above\n\n"
+              + SEARCH_PAGING,
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithProjectParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this organization."),
         @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
@@ -3410,7 +3433,9 @@ public class TaskResource {
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
             example = "no"
         )
-        @QueryParam("limit") String limit
+        @QueryParam("limit") String limit,
+        @ApiParam(value = SEARCH_CURSOR, required = false)
+        @QueryParam("cursor") String cursor
     ) { return null; }
 
     @GET
@@ -3419,14 +3444,15 @@ public class TaskResource {
         value = "Search tasks in an organization by organization ID.",
         notes = "Returns tasks that match the specified criteria in the given organization. "
               + "Tasks in archived projects are excluded.\n\n"
-              + "> Available for Professional plans and above",
+              + "> Available for Professional plans and above\n\n"
+              + SEARCH_PAGING,
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithProjectParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this organization."),
         @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
@@ -3614,7 +3640,9 @@ public class TaskResource {
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
             example = "no"
         )
-        @QueryParam("limit") String limit
+        @QueryParam("limit") String limit,
+        @ApiParam(value = SEARCH_CURSOR, required = false)
+        @QueryParam("cursor") String cursor
     ) { return null; }
 
     @GET
@@ -3623,14 +3651,15 @@ public class TaskResource {
         value = "Search tasks in a folder by folder OID.",
         notes = "Returns tasks that match the specified criteria in the given folder. "
               + "Tasks in archived projects are excluded.\n\n"
-              + "> Available for Professional plans and above",
+              + "> Available for Professional plans and above\n\n"
+              + SEARCH_PAGING,
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithProjectParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this folder."),
         @ApiResponse(code = 404, message = "Not Found — folder does not exist.")
     })
@@ -3818,7 +3847,9 @@ public class TaskResource {
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
             example = "no"
         )
-        @QueryParam("limit") String limit
+        @QueryParam("limit") String limit,
+        @ApiParam(value = SEARCH_CURSOR, required = false)
+        @QueryParam("cursor") String cursor
     ) { return null; }
 
     @GET
@@ -3827,14 +3858,15 @@ public class TaskResource {
         value = "Search tasks in a folder by folder ID.",
         notes = "Returns tasks that match the specified criteria in the given folder. "
               + "Tasks in archived projects are excluded.\n\n"
-              + "> Available for Professional plans and above",
+              + "> Available for Professional plans and above\n\n"
+              + SEARCH_PAGING,
         response = TaskWithProjectParentInfo.class,
         responseContainer = "List"
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty).",
+        @ApiResponse(code = 200, message = "OK — matching tasks (may be empty). With `?limit=N`, the last item may carry a `cursor` field if more results exist.",
             response = TaskWithProjectParentInfo.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "Bad Request — invalid query params."),
+        @ApiResponse(code = 400, message = "Bad Request — invalid query params (incl. a malformed or too deep `cursor`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to search this folder."),
         @ApiResponse(code = 404, message = "Not Found — folder does not exist.")
     })
@@ -4022,6 +4054,8 @@ public class TaskResource {
                   + "Note: On free plans, this cannot exceed 30 or `no` (unlimited).",
             example = "no"
         )
-        @QueryParam("limit") String limit
+        @QueryParam("limit") String limit,
+        @ApiParam(value = SEARCH_CURSOR, required = false)
+        @QueryParam("cursor") String cursor
     ) { return null; }
 }

@@ -61,7 +61,8 @@ public class FieldDefinition {
         value = "(Optional) The users who can view this field's values; an "
               + "admin not named sees the definition, not the values. An empty "
               + "list means the admins only. Absent means everyone `private` "
-              + "allows. The API returns only the fields the caller can view.",
+              + "allows. The API returns only the fields the caller can view, "
+              + "and only their values on a task.",
         example = "[{\"oid\":\"iDsPd.QP_qM.hN.Trymukn8b\",\"id\":\"john\",\"name\":\"John\"}]"
     )
     public List<SimpleIdentity> getViewMembers() { return null; }
@@ -70,7 +71,9 @@ public class FieldDefinition {
         value = "(Optional) The users who can edit the values; an admin not "
               + "named can't. An empty list means the admins only. "
               + "Absent means anyone who can edit the task. Editing also "
-              + "requires viewing the field. Not applied while `locked`.",
+              + "requires viewing the field. `locked` stops editing in Quire "
+              + "regardless of this list; the API ignores the lock, so this "
+              + "list still applies to API writes.",
         example = "[]"
     )
     public List<SimpleIdentity> getEditMembers() { return null; }

@@ -81,8 +81,9 @@ public class AddFieldBody {
         value = "(Optional) Users who can edit the values, in the same form as "
               + "`viewMembers`; an admin not named can't. Editing also "
               + "requires viewing the field. Pass `[]` for the admins only, or "
-              + "null for anyone who can edit the task. Not applied while "
-              + "`locked`.",
+              + "null for anyone who can edit the task. `locked` stops editing "
+              + "in Quire regardless of this list; the API ignores the lock, so "
+              + "this list still applies to API writes.",
         example = "[\"me\"]"
     )
     public List<String> getEditMembers() { return null; }

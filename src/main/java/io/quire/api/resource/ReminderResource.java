@@ -73,6 +73,14 @@ public class ReminderResource {
       + "`compact` for identifiers only. See API description for `?return=` "
       + "semantics.";
 
+    private static final String GUEST_CREATES_NONE =
+        "A guest can't create one: a reminder takes write access, which a "
+      + "guest lacks, so `403`.";
+
+    private static final String WHO_SEES =
+        "A guest sees only the reminders naming them. A visitor of a public "
+      + "project who is not a member sees none, as in the project view.";
+
     @POST
     @Path("/{ownerType}/{ownerOid}")
     @ApiOperation(
@@ -83,14 +91,15 @@ public class ReminderResource {
               + "a start or due date supplies the time, so send `leads` alone; "
               + "otherwise `when` is required. Sending `when` or `recurrence` "
               + "in the first case is rejected with `400`, since they would be "
-              + "ignored.",
+              + "ignored.\n\n"
+              + GUEST_CREATES_NONE,
         response = Reminder.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created reminder record.", response = Reminder.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above, and Shared reminders (`members` other than yourself, or `partner`) need Premium or above."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here (a guest included: a reminder takes write access)."),
         @ApiResponse(code = 404, message = "Not Found — the owner does not exist, or the task is in the trash.")
     })
     public Response createReminderByOid(
@@ -113,14 +122,15 @@ public class ReminderResource {
               + "folder or smart folder (by ID).\n\n"
               + "> For a reminder on a task, use "
               + "`POST /reminder/id/task/{projectId}/{taskId}` — a task ID is "
-              + "unique only within its project, so it needs both.",
+              + "unique only within its project, so it needs both.\n\n"
+              + GUEST_CREATES_NONE,
         response = Reminder.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created reminder record.", response = Reminder.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above, and Shared reminders (`members` other than yourself, or `partner`) need Premium or above."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here (a guest included: a reminder takes write access)."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
     public Response createReminderById(
@@ -150,14 +160,15 @@ public class ReminderResource {
     @ApiOperation(
         value = "Create a reminder on a task, by ID.",
         notes = "Creates a reminder on the given task. The reminder belongs "
-              + "to that task's project.",
+              + "to that task's project.\n\n"
+              + GUEST_CREATES_NONE,
         response = Reminder.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created reminder record.", response = Reminder.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 402, message = "Payment Required — reminders need a Professional plan or above, and Shared reminders (`members` other than yourself, or `partner`) need Premium or above."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a reminder here (a guest included: a reminder takes write access)."),
         @ApiResponse(code = 404, message = "Not Found — the task does not exist, or is in the trash.")
     })
     public Response createTaskReminderById(
@@ -204,7 +215,8 @@ public class ReminderResource {
               + "Reminders on a task that is in the "
               + "trash are left out, since there is nothing to act on while it "
               + "is there; they come back if the task is restored, and stay "
-              + "reachable by OID meanwhile.",
+              + "reachable by OID meanwhile.\n\n"
+              + WHO_SEES,
         response = Reminder.class,
         responseContainer = "List"
     )
@@ -239,7 +251,8 @@ public class ReminderResource {
         notes = "Returns the reminders the caller can see under the given "
               + "owner (by ID).\n\n"
               + "> For a single task's reminders, use "
-              + "`GET /reminder/list/id/task/{projectId}/{taskId}`.",
+              + "`GET /reminder/list/id/task/{projectId}/{taskId}`.\n\n"
+              + WHO_SEES,
         response = Reminder.class,
         responseContainer = "List"
     )
@@ -281,7 +294,8 @@ public class ReminderResource {
     @Path("/list/id/task/{projectId}/{taskId}")
     @ApiOperation(
         value = "List a task's reminders, by ID.",
-        notes = "Returns the reminders the caller can see on the given task.",
+        notes = "Returns the reminders the caller can see on the given task.\n\n"
+              + WHO_SEES,
         response = Reminder.class,
         responseContainer = "List"
     )
