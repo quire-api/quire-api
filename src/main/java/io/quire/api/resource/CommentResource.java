@@ -368,14 +368,16 @@ public class CommentResource {
               + "Removing a reaction the caller doesn't have is a no-op.\n\n"
               + "Returns `204 No Content`. To see the remaining reactions, read "
               + "the comment with `GET /comment/{commentOid}`.\n\n"
+              + "> Note: Like deleting a comment, returns `204 No Content` regardless "
+              + "of whether the comment exists. If it doesn't, or it has been "
+              + "deleted, nothing is changed.\n\n"
               + "Example: `DELETE /comment/remove-emoji/iDsPd.QP_qM.hN.Trymukn8b/+1` "
               + "removes the caller's 👍."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content — reactions removed (or already absent)."),
+        @ApiResponse(code = 204, message = "No Content — reactions removed (or already absent, or no such comment)."),
         @ApiResponse(code = 400, message = "Bad Request — no emoji is given, or more than 20 are given."),
-        @ApiResponse(code = 403, message = "Forbidden — caller can't view this comment."),
-        @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
+        @ApiResponse(code = 403, message = "Forbidden — caller can't view this comment.")
     })
     public Response removeCommentEmojiByOid(
         @ApiParam(value = "Comment OID.", required = true)
