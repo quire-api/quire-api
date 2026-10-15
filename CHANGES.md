@@ -1,5 +1,15 @@
 # Changelog
 
+## Oct 15, 2026
+
+- **Private works:** a sublist, doc, chat, insight or dashboard has a boolean `private`, like a custom field's: when true, guests and the visitors of a public project or of a share link don't see it. It is a choice only for a record with `members` null and `partner` null, and it is returned only then; it defaults to false (everyone). Otherwise it is always true: a record shared with an external team, with selected members or with the admins only is hidden from them, and `false` is rejected with `400`.
+- **Reminders of a public project:** the list is empty for a visitor who is not a member, as the project view is.
+- **Reminders and guests:** a guest member sees only the reminders naming them, and creates none (`403`: a reminder takes write access).
+- **Who can view and edit a custom field:** a field definition has `viewMembers` and `editMembers`, the users who can view the values, and who can edit them; an admin not named sees the definition but not the values, and can't edit them. An empty list means the admins only. A field with `viewMembers` is hidden from everyone else, so `private` is returned and accepted only without it. `locked` stops everyone from editing the values in Quire, admins included, while the API still can. The API returns only the fields and values the caller can view, and rejects a write to a field the caller can't edit with `400`. A task search doesn't match the values of a field the caller can't view, and such a field is an unknown query parameter.
+- **Task search paging depth:** a task search's `cursor` reaches at most 1,000,000 rows deep; a deeper one is rejected with `400`. Narrow the search with filters instead.
+- **Task search with `?sublist=`:** the last item no longer carries a `cursor`, which was rejected with `400` when passed back. Pass a `limit` big enough (or `no`) to get every match.
+- **Comment emojis:** a [comment](https://quire.io/dev/api/#operation--comment--commentOid--get) has `emojis`, its reactions: each an `emoji` and the `users` who reacted with it. It is omitted if there is none. [`POST /comment/add-emoji/{commentOid}/{emojis}`](https://quire.io/dev/api/#operation--comment-add-emoji--commentOid---emojis--post) adds the caller's reactions and [`DELETE /comment/remove-emoji/{commentOid}/{emojis}`](https://quire.io/dev/api/#operation--comment-remove-emoji--commentOid---emojis--delete) removes them. `{emojis}` is one or more percent-encoded emojis separated by commas, at most 20. An emoji can also be given by its name, the shortcode used by GitHub and Slack, such as `+1` or `tada`; see [Emojis](https://quire.io/dev/api/#emojis). Adding accepts only the emojis Quire's reaction picker offers; one invalid emoji rejects the whole request with `400`. Both return `204`, and adding a reaction already there or removing one already absent is a no-op.
+
 ## Sep 25, 2026
 
 - **Reminder list filters:** [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get) and its by-ID forms accept two optional parameters. Omitted, the list is unchanged.
