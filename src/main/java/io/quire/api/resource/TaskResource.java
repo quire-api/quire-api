@@ -1432,7 +1432,10 @@ public class TaskResource {
               + "only log:\n\n"
               + "```json\n"
               + "[]\n"
-              + "```",
+              + "```\n\n"
+              + "> Note: Like deleting a task, returns `204 No Content` if the "
+              + "task or the project doesn't exist, or the task has been "
+              + "deleted. Nothing is changed.",
         response = Timelog.class,
         responseContainer = "List"
     )
@@ -1442,8 +1445,10 @@ public class TaskResource {
             response = Timelog.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request — `start` / `end` "
               + "query params missing or malformed."),
+        @ApiResponse(code = 204, message = "No Content — the task doesn't "
+              + "exist, or has been deleted; nothing is changed."),
         @ApiResponse(code = 404, message = "Not Found — no log matches the "
-              + "triple, or the task does not exist.")
+              + "triple.")
     })
     public Response removeTaskTimelogById(
         @ApiParam(value = "Project ID.", required = true)
@@ -1477,7 +1482,9 @@ public class TaskResource {
         notes = "Removes a [time log](#definition-Timelog) from a task, "
               + "identifying the task by OID. See "
               + "`DELETE /task/remove-timelog/id/{projectId}/{taskId}` for "
-              + "the preferred by-ID form, full semantics, and an example response.",
+              + "the preferred by-ID form, full semantics, and an example response. "
+              + "Returns `204 No Content` if the task doesn't exist, or has been "
+              + "deleted.",
         response = Timelog.class,
         responseContainer = "List"
     )
@@ -1486,8 +1493,10 @@ public class TaskResource {
               + "array (empty when none remain).",
             response = Timelog.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request."),
+        @ApiResponse(code = 204, message = "No Content — the task doesn't "
+              + "exist, or has been deleted; nothing is changed."),
         @ApiResponse(code = 404, message = "Not Found — no log matches the "
-              + "triple, or the task does not exist.")
+              + "triple.")
     })
     public Response removeTaskTimelogByOid(
         @ApiParam(value = "Task OID.", required = true)
@@ -1950,7 +1959,8 @@ public class TaskResource {
               + "response slot is `null` and the rest of the batch "
               + "proceeds. This makes the endpoint **idempotent** for "
               + "agents — safe to re-submit duplicates or already-removed "
-              + "OIDs.\n\n"
+              + "OIDs. If the project itself doesn't exist, it returns "
+              + "`204 No Content` with no body, like deleting a task.\n\n"
               + "`?return=compact` is a no-op here (the response is "
               + "already in identifier shape).\n\n"
               + "The cost does not adjust for skipped items.\n\n"
@@ -1978,9 +1988,9 @@ public class TaskResource {
               + "permission on the project or any task in the batch "
               + "(whole batch rolled back).",
             response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Not Found — project does not "
-              + "exist. (Item-level not-found is silent skip.)",
-            response = ErrorResponse.class),
+        @ApiResponse(code = 204, message = "No Content — the project does "
+              + "not exist; nothing is removed. (Item-level not-found is "
+              + "silent skip.)"),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
@@ -2017,7 +2027,8 @@ public class TaskResource {
         notes = "OID-form of `DELETE /task/bulk-remove/id/{projectId}` — "
               + "see that endpoint for body shape, atomic semantics, "
               + "skip-not-found behaviour, `?dry-run=`, and "
-              + "response details.",
+              + "response details. Returns `204 No Content` if the project "
+              + "doesn't exist.",
         response = Object.class,
         responseContainer = "List"
     )
@@ -2028,8 +2039,8 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.",
-            response = ErrorResponse.class),
+        @ApiResponse(code = 204, message = "No Content — the project does "
+              + "not exist; nothing is removed."),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
         @ApiResponse(code = 429, message = "Too Many Requests.",
