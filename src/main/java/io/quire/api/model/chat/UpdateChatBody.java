@@ -10,7 +10,7 @@ import java.util.List;
  *
  * Inherits all fields from [UpdateWorkBody](#definition-UpdateWorkBody) —
  * {@code id}, {@code name}, {@code description}, {@code iconColor},
- * {@code image}, {@code start}, {@code due}, {@code archived} — and adds
+ * {@code image}, {@code archived} — and adds
  * follower management ({@code followers} / {@code addFollowers} /
  * {@code removeFollowers}). Any field omitted from the request leaves its
  * current value unchanged.

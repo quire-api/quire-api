@@ -95,18 +95,4 @@ public class CreateWorkBody {
         position = 60
     )
     public List<String> getMembers() { return null; }
-
-    @ApiModelProperty(
-        value = "(Optional) Target start date.",
-        example = "2024-01-02",
-        position = 50
-    )
-    public String getStart() { return null; }
-
-    @ApiModelProperty(
-        value = "(Optional) Target due date.",
-        example = "2024-05-25",
-        position = 50
-    )
-    public String getDue() { return null; }
 }
