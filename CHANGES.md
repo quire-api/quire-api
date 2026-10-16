@@ -2,6 +2,8 @@
 
 ## Oct 16, 2026
 
+- **Bulk batch size:** a bulk call holds no more items than the plan's per-minute rate limit, and at most 300: e.g. 50 on the Free plan, or 25 in a personal project on the Free plan. A larger batch is rejected with `402` (`code` `469`); split it. See [Rate Limits](https://quire.io/dev/api/#rate-limits).
+- **Personal project rate limits:** a personal project (My Tasks) now gets half of the plan's limits instead of a quarter, e.g. 25 per minute / 100 per hour on the Free plan.
 - **`createdBy` of a comment, tag or partner** is now a user object (`oid`, `id`, `name`, …), as documented and as other records return it, instead of the creator's OID. Read `createdBy.oid` for the OID.
 - **Apps in a task's user fields:** an app acting for a user (`asUser`) in a task's `createdBy`, `editedBy`, `followers` and the like is now returned as the app (`"id": "ap|<app ID>"` and the app's name), instead of a placeholder.
 - **Approval comments:** the doc now matches what the server has done since June. The comment an approval logs starts with a plain `<category>: <status>` line, no longer bold; the category name is left out for the default category, and the status is in the authorizing user's language, so don't parse it. [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) with `approve`, `reject` or `change` logs that comment even without a body, as [`POST /task/bulk-approve/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) does on each task; `request` logs one only with a body.
