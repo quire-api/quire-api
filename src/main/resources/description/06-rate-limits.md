@@ -18,7 +18,7 @@ Here are the limits by plan.
 > For more quota, please refer to [Pricing](/pricing).
 
 > Note: a **personal project** (the one behind My Tasks) is metered against its own bucket at a
-> quarter of the plan's limits — e.g. 12 per minute / 50 per hour on the Free plan.
+> half of the plan's limits — e.g. 25 per minute / 100 per hour on the Free plan.
 
 When a rate limit is exceeded, the response includes a standard [`Retry-After`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After) header
 whose value is the number of seconds to wait before retrying.
@@ -44,7 +44,7 @@ A few endpoint families scale their cost with how much work they actually do:
 | Endpoint family | Cost |
 |---|---|
 | Task `list`, subtree, and `search` (`GET`) | `max(1, ceil(items / 100))` units, where `items` is the number of tasks returned. So `?limit=100` (or fewer) costs 1, `?limit=1000` costs 10, `?limit=no` returning 5,000 items costs 50. |
-| Bulk write — `bulk-add`, `bulk-update`, `bulk-remove`, `bulk-move`, `bulk-transfer`, `bulk-approve` | `N` units, where `N` is `items.length` in the request body — the same total cost as `N` equivalent single-task calls. `?dry-run=true` halves it to `ceil(N / 2)` (minimum 1). |
+| Bulk write — `bulk-add`, `bulk-update`, `bulk-remove`, `bulk-move`, `bulk-transfer`, `bulk-approve` | `N` units, where `N` is `items.length` in the request body — the same total cost as `N` equivalent single-task calls. `?dry-run=true` halves it to `ceil(N / 2)` (minimum 1). A batch holds at most 300 items, and no more than the per-minute limit — e.g. 50 on the Free plan, or 25 in a personal project on the Free plan; a larger one is rejected with `402` (`code` `469`). |
 | Project CSV / JSON export | `5 + max(1, ceil(tasks / 100))` units — the same per-100 read cost as a list, plus a flat **5-unit export surcharge**. `tasks` counts only those matching the `?status=` filter, not the project total. So a 100-task export costs 6, a 1,000-task export costs 15, and a 5,000-task export costs 55. |
 | `POST /notification` | `ceil(recipients / 10)` units (minimum 1), counted from the resolved recipient list. Charged only after the recipients are resolved, so a call rejected with `404` costs nothing. |
 | `GET /insight/run/{oid}` | 1 unit, plus `ceil(tasksLoaded / 250) - 1` when more than 250 tasks are loaded. `tasksLoaded` reflects the `?status=`-filtered task set, so a tighter filter lowers the charge. |
@@ -60,7 +60,8 @@ The check rejects only when the counter is **already** at the limit; it does not
 call whose cost would push it past. So a single expensive call issued just under the
 ceiling still completes in full, and the overshoot is settled by rejecting the calls that
 follow. Budget from the costs above rather than expecting a `429` to stop you at exactly
-the limit.
+the limit. Since a batch can't hold more items than the per-minute limit, a bulk write
+overshoots by at most one minute's budget.
 
 ## Size limits
 

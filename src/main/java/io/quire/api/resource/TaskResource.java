@@ -39,6 +39,14 @@ public class TaskResource {
       + "`Rejected` or `Request changes` in English). Don't parse it: its "
       + "wording depends on the language.";
 
+    // The bulk endpoints share this.
+    private static final String BULK_CAP =
+        "**Batch size**: at most 300 items per call, and no more than the "
+      + "plan's per-minute rate limit — e.g. 50 on the Free plan, or 25 in "
+      + "a personal project on the Free plan (see [Rate Limits](#rate-limits)). "
+      + "A batch over the plan's cap is rejected with `402` (`code` `469`), "
+      + "one over 300 with `400`; split it.";
+
     @POST
     @Path("/{oid}")
     @ApiOperation(
@@ -1586,7 +1594,8 @@ public class TaskResource {
               + "discarded along with everything else. A follow-up real "
               + "call allocates fresh identifiers, so don't persist or "
               + "reference dry-run OIDs / IDs across calls.\n\n"
-              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
+              + BULK_CAP,
         response = Task.class,
         responseContainer = "List"
     )
@@ -1599,7 +1608,8 @@ public class TaskResource {
               + "validation failure (whole batch rolled back).",
             response = ErrorResponse.class),
         @ApiResponse(code = 402, message = "Payment Required — the batch "
-              + "would exceed the project's task quota.",
+              + "would exceed the project's task quota, or holds more "
+              + "items than the plan allows per call (see **Batch size**).",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "permission to add tasks to the project.",
@@ -1609,10 +1619,9 @@ public class TaskResource {
         @ApiResponse(code = 413, message = "Payload Too Large — body "
               + "exceeds the API packet size limit.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost (see [Rate Limits](#rate-limits)) "
-              + "would exceed the caller's per-minute / per-hour API "
-              + "quota.",
+        @ApiResponse(code = 429, message = "Too Many Requests — the caller's "
+              + "per-minute / per-hour API quota is already used up "
+              + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkAddTaskById(
@@ -1838,7 +1847,8 @@ public class TaskResource {
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
-              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
+              + BULK_CAP,
         response = Task.class,
         responseContainer = "List"
     )
@@ -1850,6 +1860,10 @@ public class TaskResource {
               + "array, empty, over the 300-item cap, item shape error "
               + "(both/neither oid+id, malformed ref), or any per-item "
               + "validation failure (whole batch rolled back).",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required — the batch "
+              + "holds more items than the plan allows per call (see "
+              + "**Batch size**).",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "permission on the project or any task in the batch "
@@ -1864,9 +1878,9 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost would exceed the caller's per-minute / "
-              + "per-hour API quota (see [Rate Limits](#rate-limits)).",
+        @ApiResponse(code = 429, message = "Too Many Requests — the caller's "
+              + "per-minute / per-hour API quota is already used up "
+              + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkUpdateTaskById(
@@ -1907,6 +1921,8 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — array of updated tasks.",
             response = Task.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required.",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),
@@ -1983,7 +1999,8 @@ public class TaskResource {
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
-              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
+              + BULK_CAP,
         response = Object.class,
         responseContainer = "List"
     )
@@ -1995,6 +2012,10 @@ public class TaskResource {
               + "array, empty, over the 300-item cap, or any item is a "
               + "malformed ref (whole batch rolled back).",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required — the batch "
+              + "holds more items than the plan allows per call (see "
+              + "**Batch size**).",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "permission on the project or any task in the batch "
               + "(whole batch rolled back).",
@@ -2004,9 +2025,9 @@ public class TaskResource {
               + "silent skip.)"),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost would exceed the caller's per-minute / "
-              + "per-hour API quota (see [Rate Limits](#rate-limits)).",
+        @ApiResponse(code = 429, message = "Too Many Requests — the caller's "
+              + "per-minute / per-hour API quota is already used up "
+              + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkRemoveTaskById(
@@ -2047,6 +2068,8 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — array of `{oid}` elements.",
             response = Object.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required.",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),
@@ -2133,6 +2156,7 @@ public class TaskResource {
               + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
               + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
+              + BULK_CAP + "\n\n"
               + "All items must belong to the project in the URL. "
               + "Cross-project moves go through bulk-transfer.",
         response = TaskWithParentInfo.class,
@@ -2149,6 +2173,10 @@ public class TaskResource {
               + "(item is an ancestor of `?task=`), or cross-project ref. "
               + "Whole batch rolled back.",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required — the batch "
+              + "holds more items than the plan allows per call (see "
+              + "**Batch size**).",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "permission on the project or any task in the batch "
               + "(whole batch rolled back).",
@@ -2159,9 +2187,9 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — the batch's "
-              + "rate-limit cost would exceed the caller's per-minute / "
-              + "per-hour API quota (see [Rate Limits](#rate-limits)).",
+        @ApiResponse(code = 429, message = "Too Many Requests — the caller's "
+              + "per-minute / per-hour API quota is already used up "
+              + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
     public Response bulkMoveTaskById(
@@ -2227,6 +2255,8 @@ public class TaskResource {
         @ApiResponse(code = 200, message = "OK — array of moved tasks.",
             response = TaskWithParentInfo.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request.",
+            response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required.",
             response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),
@@ -2331,7 +2361,8 @@ public class TaskResource {
               + "from a dry-run is a strong signal that re-issuing the "
               + "identical body without `?dry-run` will succeed (subject "
               + "to concurrent edits between the two calls).\n\n"
-              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
+              + BULK_CAP,
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -2346,6 +2377,10 @@ public class TaskResource {
               + "to the URL source project, or any per-item validation "
               + "failure. Whole batch rolled back.",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required — the batch "
+              + "holds more items than the plan allows per call (see "
+              + "**Batch size**).",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "permission on the source or target project, or on any "
               + "individual task in the batch. Whole batch rolled back.",
@@ -2356,9 +2391,8 @@ public class TaskResource {
             response = ErrorResponse.class),
         @ApiResponse(code = 413, message = "Payload Too Large.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — the "
-              + "batch's rate-limit cost would exceed the caller's "
-              + "per-minute / per-hour API quota "
+        @ApiResponse(code = 429, message = "Too Many Requests — the caller's "
+              + "per-minute / per-hour API quota is already used up "
               + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })
@@ -2456,6 +2490,8 @@ public class TaskResource {
             response = TaskWithParentInfo.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request.",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required.",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden.",
             response = ErrorResponse.class),
         @ApiResponse(code = 404, message = "Not Found — source or target "
@@ -2525,7 +2561,8 @@ public class TaskResource {
               + "`approve` / `reject` / `change`) to all tasks in the "
               + "batch. Body is a top-level JSON array of task references "
               + "(OID string, integer ID, or `\"#<id>\"` string; mixed "
-              + "forms allowed). Up to **300** items per call.\n\n"
+              + "forms allowed). Up to **300** items per call; see "
+              + "**Batch size** below.\n\n"
               + "**Same atomic / skip-not-found / `items[i]:` error / "
               + "rate-limit conventions** as the other bulk endpoints "
               + "(see `bulk-update` for details).\n\n"
@@ -2550,7 +2587,8 @@ public class TaskResource {
               + "is a strong signal that re-issuing the identical body "
               + "without `?dry-run` will succeed (subject to concurrent "
               + "edits between the two calls).\n\n"
-              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).",
+              + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
+              + BULK_CAP,
         response = TaskWithParentInfo.class,
         responseContainer = "List"
     )
@@ -2563,6 +2601,10 @@ public class TaskResource {
               + "missing or invalid `?state=`, malformed item ref, or "
               + "per-item validation error (with `items[i]:` prefix).",
             response = ErrorResponse.class),
+        @ApiResponse(code = 402, message = "Payment Required — the batch "
+              + "holds more items than the plan allows per call (see "
+              + "**Batch size**).",
+            response = ErrorResponse.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks "
               + "claimer / approver role on at least one item (whole "
               + "batch rolled back).",
@@ -2570,9 +2612,8 @@ public class TaskResource {
         @ApiResponse(code = 404, message = "Not Found — project or "
               + "approval `?category=` does not exist.",
             response = ErrorResponse.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — the "
-              + "batch's rate-limit cost would exceed the caller's "
-              + "per-minute / per-hour API quota "
+        @ApiResponse(code = 429, message = "Too Many Requests — the caller's "
+              + "per-minute / per-hour API quota is already used up "
               + "(see [Rate Limits](#rate-limits)).",
             response = ErrorResponse.class)
     })

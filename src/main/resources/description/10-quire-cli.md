@@ -102,7 +102,7 @@ The CLI exposes the full Quire object model as subcommands. Run `quire --help` f
 | **User & Organizations** | `quire whoami`, `quire user get`, `quire org list / get / update / limit` |
 | **Projects** | `quire project list / get / update / members / export`, `quire project field`, `quire project approval-category` |
 | **Tasks** | `quire task list / get / tree / search / subtasks / comments`, `quire task create / subtask / update / complete / uncomplete / move / transfer / delete`, `quire task dates / peekaboo / approve / revoke-approval`, `quire task timelog`, `quire mine` |
-| **Bulk operations** | `quire task bulk-create / bulk-update / bulk-delete / bulk-move / bulk-transfer / bulk-approve / bulk-subtasks` (up to 300 tasks per call) |
+| **Bulk operations** | `quire task bulk-create / bulk-update / bulk-delete / bulk-move / bulk-transfer / bulk-approve / bulk-subtasks` (up to 300 tasks per call; fewer on the Free plan or in a personal project, see [Rate Limits](#rate-limits)) |
 | **Sublists** | `quire sublist list / get / create / update / delete / add-task / remove-task / undo-remove` |
 | **Tags & Statuses** | `quire tag` and `quire status` (`list / get / create / update / delete`) |
 | **Comments & Attachments** | `quire comment list / get / add / update / delete`, `quire task attach`, `quire comment attach` |
