@@ -7,9 +7,10 @@ import io.swagger.annotations.ApiModelProperty;
  * {@code POST /task/approve/id/{projectId}/{taskId}} (or the OID form
  * {@code POST /task/approve/{taskOid}}).
  *
- * <p>The body is <em>optional</em>: omit it (or send an empty body) to
- * record only the approval transition. Send it to post a companion
- * comment on the task in addition to the transition.</p>
+ * <p>The body is <em>optional</em>. Without it, {@code approve} /
+ * {@code reject} / {@code change} still log a comment holding only the
+ * {@code <category>: <status>} header, as the apps do, and {@code request}
+ * logs nothing. Send it to add your own text to that comment.</p>
  *
  * <p>Example: {@code {"description": "Please tweak the wording."}}</p>
  *
@@ -18,13 +19,14 @@ import io.swagger.annotations.ApiModelProperty;
  * <li>The comment is created on the task as a side effect of the
  *     approval call (same transaction — if either operation fails, both
  *     roll back).</li>
- * <li>The stored comment description is prefixed with a bold
- *     {@code **<stream>: <status>**} line + a blank line + the supplied
- *     {@code description}. Example: posting
- *     {@code {"description": "Please tweak the wording."}} on a
- *     {@code state=change} call with {@code ?category=Legal} stores
- *     {@code **Legal: Request changes**\n\nPlease tweak the wording.}
- *     The prefix is applied for every {@code state} value.</li>
+ * <li>The stored comment description starts with a plain
+ *     {@code <category>: <status>} line + a blank line + the supplied
+ *     {@code description}. The category name is left out for the default
+ *     category, and the status is in the authorizing user's language.
+ *     Example: posting {@code {"description": "Please tweak the wording."}}
+ *     on a {@code state=change} call for a category named {@code Legal}
+ *     stores {@code Legal: Request changes\n\nPlease tweak the wording.}
+ *     The header is applied for every {@code state} value.</li>
  * <li>The created comment does <em>not</em> appear in the approval
  *     response. To fetch it, call
  *     {@code GET /comment/list/{taskOid}} after the approval call.</li>
@@ -40,9 +42,11 @@ public class ApproveTaskBody {
         value = "Content of the companion comment (Markdown supported). "
               + "An embedded `data:` image is rejected — upload the image as an attachment instead. "
               + "Required if the body is supplied. The server prepends "
-              + "a bold `**<stream>: <status>**` line and a blank line "
-              + "before this text, so this field should contain only the "
-              + "human-written message — do not include the prefix yourself.",
+              + "a `<category>: <status>` line (status in the authorizing "
+              + "user's language; no category name for the default "
+              + "category) and a blank line before this text, so this "
+              + "field should contain only the human-written message — "
+              + "do not include the header yourself.",
         example = "Please tweak the wording.",
         required = true
     )
