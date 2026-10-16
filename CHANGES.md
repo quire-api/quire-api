@@ -1,5 +1,11 @@
 # Changelog
 
+## Oct 16, 2026
+
+- **`createdBy` of a comment, tag or partner** is now a user object (`oid`, `id`, `name`, …), as documented and as other records return it, instead of the creator's OID. Read `createdBy.oid` for the OID.
+- **Apps in a task's user fields:** an app acting for a user (`asUser`) in a task's `createdBy`, `editedBy`, `followers` and the like is now returned as the app (`"id": "ap|<app ID>"` and the app's name), instead of a placeholder.
+- **Approval comments:** the doc now matches what the server has done since June. The comment an approval logs starts with a plain `<category>: <status>` line, no longer bold; the category name is left out for the default category, and the status is in the authorizing user's language, so don't parse it. [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) with `approve`, `reject` or `change` logs that comment even without a body, as [`POST /task/bulk-approve/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) does on each task; `request` logs one only with a body.
+
 ## Oct 15, 2026
 
 - **Private works:** a sublist, doc, chat, insight or dashboard has a boolean `private`, like a custom field's: when true, guests and the visitors of a public project or of a share link don't see it. It is a choice only for a record with `members` null and `partner` null, and it is returned only then; it defaults to false (everyone). Otherwise it is always true: a record shared with an external team, with selected members or with the admins only is hidden from them, and `false` is rejected with `400`.
