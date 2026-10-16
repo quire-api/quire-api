@@ -31,6 +31,14 @@ public class TaskResource {
       + "**Pagination** in the operation notes for the loop. At most "
       + "1,000,000 rows deep.";
 
+    // The approve and bulk-approve notes share this.
+    private static final String APPROVAL_COMMENT_HEADER =
+        "The header is a plain `<category>: <status>` line: the category's "
+      + "name, left out for the default category, then the status in the "
+      + "authorizing user's language (`Awaiting approval`, `Approved`, "
+      + "`Rejected` or `Request changes` in English). Don't parse it: its "
+      + "wording depends on the language.";
+
     @POST
     @Path("/{oid}")
     @ApiOperation(
@@ -1100,29 +1108,24 @@ public class TaskResource {
               + "`{\"description\": \"<markdown>\", \"pinned\": false, "
               + "\"asUser\": false}`. `description` is required when the "
               + "body is supplied; `pinned` and `asUser` are optional.\n\n"
-              + "The stored comment starts with a plain "
-              + "`<category>: <status>` line, then a blank line, then the "
-              + "supplied `description`. The category name is left out "
-              + "for the default category, and the status is in the "
-              + "authorizing user's language (`Awaiting approval`, "
-              + "`Approved`, `Rejected` or `Request changes` in English). "
+              + "The stored comment is a header, a blank line, then the "
+              + "supplied `description`. " + APPROVAL_COMMENT_HEADER + " "
               + "For example, `{\"description\": \"Please tweak the "
-              + "wording.\"}` on a `state=change` call for a category "
-              + "named `Legal` stores "
-              + "`Legal: Request changes\\n\\nPlease tweak the wording.` "
-              + "Don't include the header in `description` yourself, and "
-              + "don't parse it: its wording depends on the language.\n\n"
+              + "wording.\"}` on a `state=change` call for the category "
+              + "`legal`, named `Legal Review`, stores "
+              + "`Legal Review: Request changes\\n\\nPlease tweak the wording.` "
+              + "Don't include the header in `description` yourself.\n\n"
               + "Without a body, `approve` / `reject` / `change` still log "
-              + "a comment holding only that header, as the apps do; "
+              + "a comment holding only the header, as the apps do; "
               + "`request` logs nothing. The created comment is **not** "
               + "included in the response — call "
               + "`GET /comment/list/{taskOid}` afterward to fetch it.\n\n"
               + "Examples:\n"
               + "```\n"
-              + "POST /task/approve/id/my_project/42?category=Legal&state=approve\n"
+              + "POST /task/approve/id/my_project/42?category=legal&state=approve\n"
               + "(empty body — records the approval and logs a header-only comment)\n"
               + "\n"
-              + "POST /task/approve/id/my_project/42?category=Legal&state=change\n"
+              + "POST /task/approve/id/my_project/42?category=legal&state=change\n"
               + "{\"description\": \"Please tweak the wording.\"}\n"
               + "```\n\n"
               + "To cancel an approval, use "
@@ -1160,7 +1163,7 @@ public class TaskResource {
         @ApiParam(
             value = "(Optional) Approval category ID. Defaults to the "
                   + "project's default category (id `\"\"`).",
-            example = "Legal"
+            example = "legal"
         )
         @QueryParam("category") String category,
         @ApiParam(
@@ -2528,7 +2531,7 @@ public class TaskResource {
               + "(see `bulk-update` for details).\n\n"
               + "Example:\n"
               + "```\n"
-              + "POST /task/bulk-approve/id/my_project?category=Legal&state=approve\n"
+              + "POST /task/bulk-approve/id/my_project?category=legal&state=approve\n"
               + "Body: [42, \"#43\", \"iuRRiKoyrxdBFhFTTo\"]\n"
               + "```\n\n"
               + "**Permissions** — same per-task role checks as the "
@@ -2537,9 +2540,8 @@ public class TaskResource {
               + "`items[i]: ...` prefixed error.\n\n"
               + "**Comments** — like the single-task endpoint, `approve` / "
               + "`reject` / `change` log a comment on each task holding "
-              + "only the `<category>: <status>` header (see "
-              + "`POST /task/approve/id/{projectId}/{taskId}`); `request` "
-              + "logs nothing. There is no body field for comment text.\n\n"
+              + "only a header; `request` logs nothing. There is no body "
+              + "field for comment text. " + APPROVAL_COMMENT_HEADER + "\n\n"
               + "**Dry-run**: pass `?dry-run=true` to preview the call "
               + "without persisting any changes. Same per-item validation "
               + "and permission checks as a real call; same response "
@@ -2599,7 +2601,7 @@ public class TaskResource {
         @ApiParam(
             value = "(Optional) Approval category ID. Defaults to the "
                   + "project's default category (id `\"\"`).",
-            example = "Legal"
+            example = "legal"
         )
         @QueryParam("category") String category,
         @ApiParam(

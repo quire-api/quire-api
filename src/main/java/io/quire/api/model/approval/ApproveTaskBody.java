@@ -24,8 +24,9 @@ import io.swagger.annotations.ApiModelProperty;
  *     {@code description}. The category name is left out for the default
  *     category, and the status is in the authorizing user's language.
  *     Example: posting {@code {"description": "Please tweak the wording."}}
- *     on a {@code state=change} call for a category named {@code Legal}
- *     stores {@code Legal: Request changes\n\nPlease tweak the wording.}
+ *     on a {@code state=change} call for the category {@code legal},
+ *     named {@code Legal Review}, stores
+ *     {@code Legal Review: Request changes\n\nPlease tweak the wording.}
  *     The header is applied for every {@code state} value.</li>
  * <li>The created comment does <em>not</em> appear in the approval
  *     response. To fetch it, call
