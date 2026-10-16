@@ -178,7 +178,10 @@ public class CreateTaskBody {
     public Object getYourField() { return false; }
 
     @ApiModelProperty(
-        value = "(Optional) List of subtasks to create along with this task."
+        value = "(Optional) List of subtasks to create along with this task. "
+              + "Each one, at any depth, costs 1 rate-limit unit and counts "
+              + "toward the per-call cap of 300 tasks and the plan's "
+              + "per-minute limit; see [Rate Limits](#rate-limits)."
     )
     public List<CreateTaskBody> getTasks() { return null; }
 

@@ -47,16 +47,30 @@ public class TaskResource {
       + "A batch over the plan's cap is rejected with `402` (`code` `469`), "
       + "one over 300 with `400`; split it.";
 
+    // The task-create endpoints share this.
+    private static final String ADD_NESTED =
+        "**Nested `tasks`**: subtasks created in the same call. Each one "
+      + "costs 1 rate-limit unit, like a separate call, and a call creates "
+      + "at most 300 tasks, nested ones included, and no more than the "
+      + "plan's per-minute rate limit — e.g. 50 on the Free plan, or 25 in "
+      + "a personal project on the Free plan (see [Rate Limits](#rate-limits)). "
+      + "Over the plan's cap is rejected with `402` (`code` `469`), over 300 "
+      + "with `400`; split it.";
+
     @POST
     @Path("/{oid}")
     @ApiOperation(
         value = "Add a new root task, or relative to another task.",
-        notes = "Adds a new task to a project, under another task, or before or after another task.",
+        notes = "Adds a new task to a project, under another task, or before or after another task.\n\n"
+              + ADD_NESTED,
         response = Task.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created task.", response = Task.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 402, message = "Payment Required — the call "
+              + "creates more tasks than the plan allows per call (see "
+              + "**Nested `tasks`**)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a task here."),
         @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
     })
@@ -123,12 +137,16 @@ public class TaskResource {
               + "> `Priority` / `Owners` in this example are **custom-field** keys "
               + "from the project's own `/project/add-field` definitions — they are "
               + "not fixed API fields and are only recognised by name. See "
-              + "`CreateTaskBody.yourField` for the rules on each custom-field type.",
+              + "`CreateTaskBody.yourField` for the rules on each custom-field type.\n\n"
+              + ADD_NESTED,
         response = Task.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created task.", response = Task.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 402, message = "Payment Required — the call "
+              + "creates more tasks than the plan allows per call (see "
+              + "**Nested `tasks`**)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a task to this project."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
@@ -161,12 +179,16 @@ public class TaskResource {
         value = "Add a new task relative to another task.",
         notes = "Adds a new task under another task, or before or after another task. "
               + "See `POST /task/id/{projectId}` for a full request-body example — "
-              + "the body shape is identical.",
+              + "the body shape is identical.\n\n"
+              + ADD_NESTED,
         response = Task.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created task.", response = Task.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 402, message = "Payment Required — the call "
+              + "creates more tasks than the plan allows per call (see "
+              + "**Nested `tasks`**)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to add a task here."),
         @ApiResponse(code = 404, message = "Not Found — project or parent task does not exist.")
     })
@@ -1595,7 +1617,8 @@ public class TaskResource {
               + "call allocates fresh identifiers, so don't persist or "
               + "reference dry-run OIDs / IDs across calls.\n\n"
               + "**Rate-limit cost**: see [Rate Limits](#rate-limits).\n\n"
-              + BULK_CAP,
+              + BULK_CAP + " Nested `tasks` count as items too, for both "
+              + "the cost and the batch size.",
         response = Task.class,
         responseContainer = "List"
     )
