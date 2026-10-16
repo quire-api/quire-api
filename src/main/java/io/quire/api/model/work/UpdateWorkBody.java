@@ -47,18 +47,6 @@ public class UpdateWorkBody {
     public String getImage() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Target start date for this record.",
-        example = "2024-01-02"
-    )
-    public String getStart() { return null; }
-
-    @ApiModelProperty(
-        value = "(Optional) Target due date for this record.",
-        example = "2024-05-25"
-    )
-    public String getDue() { return null; }
-
-    @ApiModelProperty(
         value = "(Optional) Archive toggle. Specify true to archive this record; specify false to unarchive.",
         example = "true"
     )
