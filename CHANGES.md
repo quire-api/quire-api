@@ -1,5 +1,10 @@
 # Changelog
 
+## Oct 19, 2026
+
+- **`asUser` in bulk calls and nested tasks:** each item of [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) and [`bulk-update`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put) now honors its own `asUser`, as documented; it was rejected with `400`. A nested task in `tasks` may carry `asUser` only if it matches its top-level task's, since a tree is created by one author; a different value is rejected with `400`.
+- **`asUser` on an approval's comment:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) with `"asUser": true` in its body now posts the comment as the app, as documented and as `POST /comment` does; it was posted as the authorizing user. The approval itself stays the user's.
+
 ## Oct 16, 2026
 
 - **Malformed nested `tasks`:** a `tasks` value that isn't a list, or an entry in it that isn't a task object, is rejected with `400` instead of failing with `500`.
