@@ -226,7 +226,8 @@ public class UpdateTaskBody {
     @ApiModelProperty(
         example = "true",
         value = "(Optional) If true, marks this update as performed by the app.\n"
-              + "Default: false (updated by the authorizing user)."
+              + "Default: false (updated by the authorizing user). "
+              + "In `bulk-update`, each item has its own."
     )
     public boolean getAsUser() { return false; }
 

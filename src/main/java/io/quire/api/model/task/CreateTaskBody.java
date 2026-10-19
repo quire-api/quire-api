@@ -128,7 +128,11 @@ public class CreateTaskBody {
     @ApiModelProperty(
         example = "true",
         value = "(Optional) If true, marks this task as created by the app.\n"
-              + "Default: false (created by the authorizing user)."
+              + "Default: false (created by the authorizing user). "
+              + "In `bulk-add`, each item has its own. A nested task's "
+              + "`asUser` must match its top-level task's (a tree is "
+              + "created by one author); otherwise the call is rejected "
+              + "with `400`."
     )
     public boolean getAsUser() { return false; }
 
