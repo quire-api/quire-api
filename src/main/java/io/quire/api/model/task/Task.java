@@ -17,7 +17,9 @@ public class Task extends SimpleTask {
 		+ "If null, no estimate has been specified.",
 		example = "500", position = 4)
 	public int getEtc() { return 0; }
-	@ApiModelProperty(value = "The time log entries associated with this task.",
+	@ApiModelProperty(value = "The time log entries associated with this task. "
+		+ "Omitted for a guest member, and for a non-member of a public project, "
+		+ "when the project hides time logs from guests (its default).",
 		position = 4)
 	public List<Timelog> getTimelogs() { return null; }
 
