@@ -14,8 +14,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class FieldDefinitionWithName extends FieldDefinition {
 
     @ApiModelProperty(
-        value = "Field name (equals the path `fieldName` for update/rename/move, "
-              + "or the `name` supplied in the body for add).",
+        value = "Field name (equals the `name` query parameter for update/move, "
+              + "`new-name` for rename, or the `name` supplied in the body for add).",
         example = "Priority",
         required = true
     )

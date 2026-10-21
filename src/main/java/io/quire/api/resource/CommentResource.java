@@ -282,6 +282,8 @@ public class CommentResource {
         @PathParam("commentOid") String commentOid,
         @ApiParam(
             value = "Attachment file name, e.g., `readme.txt`.\n\n"
+                  + "Percent-encode it, e.g., `My%20Report.pdf` for `My Report.pdf`. "
+                  + "It can't contain `/` or `\\`.\n\n"
                   + "Provide a meaningful extension so the browser can recognize the MIME type "
                   + "(e.g., `revenue.pdf`, `contacts.json`).\n\n"
                   + "Alternatively, set the MIME type via the `Content-Type` header.",

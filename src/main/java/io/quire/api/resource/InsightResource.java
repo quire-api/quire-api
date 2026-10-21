@@ -542,10 +542,17 @@ public class InsightResource {
     // -------- Custom fields --------
     //
     // Each field-extension endpoint is offered in two URL forms:
-    //   by-OID: /insight/<ext>/{insightOid}[/{fieldName}[/{newName}]]
-    //   by-ID:  /insight/<ext>/id/{ownerType}/{ownerId}/{insightId}[/...]
+    //   by-OID: /insight/<ext>/{insightOid}[?name={fieldName}[&new-name={newName}]]
+    //   by-ID:  /insight/<ext>/id/{ownerType}/{ownerId}/{insightId}[?...]
     // Both dispatch through the same handler; pick whichever is more
     // convenient for the caller.
+
+    // The field name goes in the query (`?name=`, rename's `&new-name=`), so
+    // it may contain `/`. Shared by every field endpoint (MCP / agent
+    // consumers may see only one endpoint at a time).
+    private static final String FIELD_NAME_ENCODING =
+        "Percent-encode it, e.g. `Billable%20Amount` for `Billable Amount`; "
+      + "a `+` in the name must be `%2B`, since `+` means a space in a query.";
 
     @POST
     @Path("/add-field/{oid}")
@@ -557,7 +564,8 @@ public class InsightResource {
               + "`Insight.fields`, with an extra `name` key).\n\n"
               + "Only `formula` and `lookup` types are allowed on insight "
               + "views; all other field types are rejected with `400`.\n\n"
-              + "Requires the `Admin` scope to invoke.",
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "A name already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
@@ -565,6 +573,7 @@ public class InsightResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — insight does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a field with this name already exists."),
         @ApiResponse(code = 402, message = "Payment Required — custom-field quota reached.")
     })
     public Response addInsightField(
@@ -584,7 +593,7 @@ public class InsightResource {
     ) { return null; }
 
     @PUT
-    @Path("/update-field/{oid}/{fieldName}")
+    @Path("/update-field/{oid}")
     @ApiOperation(
         value = "Update a custom-field definition on an insight view.",
         notes = "Updates the content of an existing custom field. "
@@ -592,24 +601,24 @@ public class InsightResource {
               + "type. Keys that are omitted leave their current values intact "
               + "(including individual flag bits — flags are merged, not replaced).\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
-              + "To rename a field, use `/insight/rename-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}/{newName}`; "
-              + "to reorder, use `/insight/move-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}`. "
+              + "To rename a field, use `/insight/rename-field/id/{ownerType}/{ownerId}/{insightId}?name={fieldName}&new-name={newName}`; "
+              + "to reorder, use `/insight/move-field/id/{ownerType}/{ownerId}/{insightId}?name={fieldName}`. "
               + "(The `/{oid}/...` URL form is also accepted.)\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
-              + "(equal to the field's name), or an empty object if the field does not exist.",
+              + "(equal to the field's name). A missing field returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
-        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — insight or field does not exist.")
     })
     public Response updateInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to update. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data,
 
@@ -624,7 +633,7 @@ public class InsightResource {
     ) { return null; }
 
     @DELETE
-    @Path("/remove-field/{oid}/{fieldName}")
+    @Path("/remove-field/{oid}")
     @ApiOperation(
         value = "Remove a custom-field definition from an insight view.",
         notes = "Removes the named custom field from the insight view.\n\n"
@@ -637,34 +646,35 @@ public class InsightResource {
     public Response removeInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to remove.", required = true)
-        @PathParam("fieldName") String fieldName
+        @ApiParam(value = "Name of the field to remove. " + FIELD_NAME_ENCODING, required = true)
+        @QueryParam("name") String name
     ) { return null; }
 
     @PUT
-    @Path("/rename-field/{oid}/{fieldName}/{newName}")
+    @Path("/rename-field/{oid}")
     @ApiOperation(
         value = "Rename a custom-field definition on an insight view.",
         notes = "Renames the field in place and returns the renamed field. "
               + "The field's content is preserved.\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
-              + "(equal to the new name), or an empty object if the source "
-              + "field is missing or the target name is already in use.",
+              + "(equal to the new name). A missing field returns `404`; "
+              + "a `new-name` already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — renamed field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
-        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — insight or field does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — `new-name` is already in use.")
     })
     public Response renameInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Current field name.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true, example = "Importance")
-        @PathParam("newName") String newName,
+        @ApiParam(value = "Current field name. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
+        @ApiParam(value = "New field name. " + FIELD_NAME_ENCODING, required = true, example = "Importance")
+        @QueryParam("new-name") String newName,
 
         @ApiParam(
             value = "(Optional) Response shape: `full` (default) for the "
@@ -677,32 +687,32 @@ public class InsightResource {
     ) { return null; }
 
     @PUT
-    @Path("/move-field/{oid}/{fieldName}")
+    @Path("/move-field/{oid}")
     @ApiOperation(
         value = "Reorder a custom-field definition on an insight view.",
         notes = "Moves the named field to a new position. By default the "
-              + "field is moved to the end; pass `?before={otherName}` to "
+              + "field is moved to the end; pass `&before={otherName}` to "
               + "place it immediately before another field.\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
-              + "(equal to the field's name), or an empty object if the field "
-              + "does not exist or `?before={otherName}` refers to a missing field.",
+              + "(equal to the field's name). A missing field, or a missing "
+              + "`&before={otherName}` field, returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — moved field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
-        @ApiResponse(code = 404, message = "Not Found — insight does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — insight, field or `before` field does not exist.")
     })
     public Response moveInsightField(
         @ApiParam(value = "Insight OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to move. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
-                  + "If omitted, the field is moved to the end.",
-            example = "before=Priority",
+                  + "If omitted, the field is moved to the end. " + FIELD_NAME_ENCODING,
+            example = "Status",
             required = false
         )
         @QueryParam("before") String before,
@@ -726,7 +736,8 @@ public class InsightResource {
         notes = "Adds a custom-field definition to an insight view, "
               + "identifying the insight by owner-type + owner ID + insight ID. "
               + "Only `formula` and `lookup` field types are allowed on "
-              + "insight views. See also `/insight/add-field/{oid}` for the OID form.",
+              + "insight views. See also `/insight/add-field/{oid}` for the OID form.\n\n"
+              + "A name already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
@@ -734,6 +745,7 @@ public class InsightResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
         @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a field with this name already exists."),
         @ApiResponse(code = 402, message = "Payment Required — custom-field quota reached.")
     })
     public Response addInsightFieldById(
@@ -762,21 +774,22 @@ public class InsightResource {
     ) { return null; }
 
     @PUT
-    @Path("/update-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}")
+    @Path("/update-field/id/{ownerType}/{ownerId}/{insightId}")
     @ApiOperation(
         value = "Update a custom-field definition on an insight view by ID.",
         notes = "Updates an existing custom-field definition on an insight "
               + "view, identifying the insight by owner-type + owner ID + "
               + "insight ID. `type` is immutable; omitted keys preserve "
-              + "current values. See also `/insight/update-field/{oid}/{fieldName}` "
-              + "for the OID form.",
+              + "current values. See also `/insight/update-field/{oid}?name={fieldName}` "
+              + "for the OID form.\n\n"
+              + "A missing field returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
-        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — insight, owner or field does not exist.")
     })
     public Response updateInsightFieldById(
         @ApiParam(
@@ -790,8 +803,8 @@ public class InsightResource {
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to update. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data,
 
@@ -806,13 +819,13 @@ public class InsightResource {
     ) { return null; }
 
     @DELETE
-    @Path("/remove-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}")
+    @Path("/remove-field/id/{ownerType}/{ownerId}/{insightId}")
     @ApiOperation(
         value = "Remove a custom-field definition from an insight view by ID.",
         notes = "Removes the named custom field from an insight view, "
               + "identifying the insight by owner-type + owner ID + insight "
               + "ID. Returns `204 No Content` regardless of whether the "
-              + "field exists. See also `/insight/remove-field/{oid}/{fieldName}` "
+              + "field exists. See also `/insight/remove-field/{oid}?name={fieldName}` "
               + "for the OID form."
     )
     @ApiResponses({
@@ -829,24 +842,26 @@ public class InsightResource {
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Insight ID.", required = true)
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Name of the field to remove.", required = true)
-        @PathParam("fieldName") String fieldName
+        @ApiParam(value = "Name of the field to remove. " + FIELD_NAME_ENCODING, required = true)
+        @QueryParam("name") String name
     ) { return null; }
 
     @PUT
-    @Path("/rename-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}/{newName}")
+    @Path("/rename-field/id/{ownerType}/{ownerId}/{insightId}")
     @ApiOperation(
         value = "Rename a custom-field definition on an insight view by ID.",
         notes = "Renames a custom-field definition on an insight view, "
               + "identifying the insight by owner-type + owner ID + insight "
               + "ID. The field's content is preserved. See also "
-              + "`/insight/rename-field/{oid}/{fieldName}/{newName}` for the OID form.",
+              + "`/insight/rename-field/{oid}?name={fieldName}&new-name={newName}` for the OID form.\n\n"
+              + "A missing field returns `404`; a `new-name` already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — renamed field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
-        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — insight, owner or field does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — `new-name` is already in use.")
     })
     public Response renameInsightFieldById(
         @ApiParam(
@@ -860,10 +875,10 @@ public class InsightResource {
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Current field name.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true, example = "Importance")
-        @PathParam("newName") String newName,
+        @ApiParam(value = "Current field name. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
+        @ApiParam(value = "New field name. " + FIELD_NAME_ENCODING, required = true, example = "Importance")
+        @QueryParam("new-name") String newName,
 
         @ApiParam(
             value = "(Optional) Response shape: `full` (default) for the "
@@ -876,20 +891,21 @@ public class InsightResource {
     ) { return null; }
 
     @PUT
-    @Path("/move-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}")
+    @Path("/move-field/id/{ownerType}/{ownerId}/{insightId}")
     @ApiOperation(
         value = "Reorder a custom-field definition on an insight view by ID.",
         notes = "Reorders a custom-field definition on an insight view, "
               + "identifying the insight by owner-type + owner ID + insight "
-              + "ID. Pass `?before={otherName}` to place the field before "
+              + "ID. Pass `&before={otherName}` to place the field before "
               + "another; omit to move it to the end. See also "
-              + "`/insight/move-field/{oid}/{fieldName}` for the OID form.",
+              + "`/insight/move-field/{oid}?name={fieldName}` for the OID form.\n\n"
+              + "A missing field, or a missing `&before={otherName}` field, returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — moved field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
-        @ApiResponse(code = 404, message = "Not Found — insight or owner does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — insight, owner, field or `before` field does not exist.")
     })
     public Response moveInsightFieldById(
         @ApiParam(
@@ -903,12 +919,12 @@ public class InsightResource {
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Insight ID.", required = true, example = "insight1")
         @PathParam("insightId") String insightId,
-        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to move. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
-                  + "If omitted, the field is moved to the end.",
-            example = "before=Priority",
+                  + "If omitted, the field is moved to the end. " + FIELD_NAME_ENCODING,
+            example = "Status",
             required = false
         )
         @QueryParam("before") String before,

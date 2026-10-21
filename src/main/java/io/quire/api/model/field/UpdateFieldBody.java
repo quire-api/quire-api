@@ -7,12 +7,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Request body for updating a custom-field definition
- * (`PUT /project/update-field/{oid}/{fieldName}` or
- * `PUT /insight/update-field/{oid}/{fieldName}`).
+ * (`PUT /project/update-field/{oid}?name={fieldName}` or
+ * `PUT /insight/update-field/{oid}?name={fieldName}`).
  *
  * All keys are optional; any key omitted preserves the existing value
  * (flag keys are merged, not replaced). Use
- * `/rename-field/{oid}/{fieldName}/{newName}` to rename.
+ * `/rename-field/{oid}?name={fieldName}&new-name={newName}` to rename.
  *
  * Enum-like string values (`type`, `resultType`, `durationFormat`,
  * `lookupType`, and `when`/`op` within `conditionFormat`) are accepted

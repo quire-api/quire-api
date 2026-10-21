@@ -364,6 +364,13 @@ public class ProjectResource {
 
     // -------- Custom fields --------
 
+    // The field name goes in the query (`?name=`, rename's `&new-name=`), so
+    // it may contain `/`. Shared by every field endpoint (MCP / agent
+    // consumers may see only one endpoint at a time).
+    private static final String FIELD_NAME_ENCODING =
+        "Percent-encode it, e.g. `Billable%20Amount` for `Billable Amount`; "
+      + "a `+` in the name must be `%2B`, since `+` means a space in a query.";
+
     @POST
     @Path("/add-field/{oid}")
     @ApiOperation(
@@ -372,7 +379,8 @@ public class ProjectResource {
               + "to the project (by OID). The response is the created field "
               + "in public form (same shape as entries in `Project.fields`, "
               + "with an extra `name` key).\n\n"
-              + "Requires the `Admin` scope to invoke.",
+              + "Requires the `Admin` scope to invoke.\n\n"
+              + "A name already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
@@ -380,6 +388,7 @@ public class ProjectResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a field with this name already exists."),
         @ApiResponse(code = 402, message = "Payment Required — plan's custom-field limit is reached.")
     })
     public Response addProjectField(
@@ -416,7 +425,8 @@ public class ProjectResource {
               + "list of supported `type` values (`text`, `number`, `money`, "
               + "`select`, `checkbox`, `date`, `duration`, `email`, `hyperlink`, "
               + "`user`, `task`, `formula`, `lookup`) and the type-specific keys "
-              + "each one accepts.",
+              + "each one accepts.\n\n"
+              + "A name already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
@@ -424,6 +434,7 @@ public class ProjectResource {
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
         @ApiResponse(code = 404, message = "Not Found — project does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a field with this name already exists."),
         @ApiResponse(code = 402, message = "Payment Required — plan's custom-field limit is reached.")
     })
     public Response addProjectFieldById(
@@ -443,7 +454,7 @@ public class ProjectResource {
     ) { return null; }
 
     @PUT
-    @Path("/update-field/{oid}/{fieldName}")
+    @Path("/update-field/{oid}")
     @ApiOperation(
         value = "Update a custom-field definition on a project.",
         notes = "Updates the content of an existing custom field. "
@@ -451,24 +462,24 @@ public class ProjectResource {
               + "type. Keys that are omitted leave their current values intact "
               + "(including individual flag bits — flags are merged, not replaced).\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
-              + "To rename a field, use `/project/rename-field/id/{projectId}/{fieldName}/{newName}`; "
-              + "to reorder, use `/project/move-field/id/{projectId}/{fieldName}`. "
+              + "To rename a field, use `/project/rename-field/id/{projectId}?name={fieldName}&new-name={newName}`; "
+              + "to reorder, use `/project/move-field/id/{projectId}?name={fieldName}`. "
               + "(The `/{oid}/...` URL form is also accepted.)\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
-              + "(equal to the field's name), or an empty object if the field does not exist.",
+              + "(equal to the field's name). A missing field returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated custom-field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — project or field does not exist.")
     })
     public Response updateProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to update. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data,
 
@@ -483,26 +494,27 @@ public class ProjectResource {
     ) { return null; }
 
     @PUT
-    @Path("/update-field/id/{id}/{fieldName}")
+    @Path("/update-field/id/{id}")
     @ApiOperation(
         value = "Update a custom-field definition on a project by ID.",
         notes = "Updates an existing custom-field definition on the project, "
               + "identifying the project by its ID. `type` is immutable; omitted "
               + "keys preserve their current values (flags are merged). See also "
-              + "`/project/update-field/{oid}/{fieldName}` for the OID form.",
+              + "`/project/update-field/{oid}?name={fieldName}` for the OID form.\n\n"
+              + "A missing field returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated custom-field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — project or field does not exist.")
     })
     public Response updateProjectFieldById(
         @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Name of the field to update.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to update. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(value = "New field content.", required = true)
         UpdateFieldBody data,
 
@@ -517,7 +529,7 @@ public class ProjectResource {
     ) { return null; }
 
     @DELETE
-    @Path("/remove-field/{oid}/{fieldName}")
+    @Path("/remove-field/{oid}")
     @ApiOperation(
         value = "Remove a custom-field definition from a project.",
         notes = "Removes the named custom field from the project.\n\n"
@@ -530,17 +542,17 @@ public class ProjectResource {
     public Response removeProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to remove.", required = true)
-        @PathParam("fieldName") String fieldName
+        @ApiParam(value = "Name of the field to remove. " + FIELD_NAME_ENCODING, required = true)
+        @QueryParam("name") String name
     ) { return null; }
 
     @DELETE
-    @Path("/remove-field/id/{id}/{fieldName}")
+    @Path("/remove-field/id/{id}")
     @ApiOperation(
         value = "Remove a custom-field definition from a project by ID.",
         notes = "Removes the named custom field from the project, identifying "
               + "the project by its ID. Returns `204 No Content` regardless of "
-              + "whether the field exists. See also `/project/remove-field/{oid}/{fieldName}` "
+              + "whether the field exists. See also `/project/remove-field/{oid}?name={fieldName}` "
               + "for the OID form."
     )
     @ApiResponses({
@@ -549,12 +561,12 @@ public class ProjectResource {
     public Response removeProjectFieldById(
         @ApiParam(value = "Project ID.", required = true)
         @PathParam("id") String id,
-        @ApiParam(value = "Name of the field to remove.", required = true)
-        @PathParam("fieldName") String fieldName
+        @ApiParam(value = "Name of the field to remove. " + FIELD_NAME_ENCODING, required = true)
+        @QueryParam("name") String name
     ) { return null; }
 
     @PUT
-    @Path("/rename-field/{oid}/{fieldName}/{newName}")
+    @Path("/rename-field/{oid}")
     @ApiOperation(
         value = "Rename a custom-field definition on a project.",
         notes = "Renames the field in place and returns the renamed field. "
@@ -562,22 +574,23 @@ public class ProjectResource {
               + "old name are migrated to the new name.\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
-              + "(equal to the new name), or an empty object if the source "
-              + "field is missing or the target name is already in use.",
+              + "(equal to the new name). A missing field returns `404`; "
+              + "a `new-name` already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — renamed custom-field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — project or field does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — `new-name` is already in use.")
     })
     public Response renameProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Current field name.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true, example = "Importance")
-        @PathParam("newName") String newName,
+        @ApiParam(value = "Current field name. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
+        @ApiParam(value = "New field name. " + FIELD_NAME_ENCODING, required = true, example = "Importance")
+        @QueryParam("new-name") String newName,
 
         @ApiParam(
             value = "(Optional) Response shape: `full` (default) for the "
@@ -590,27 +603,29 @@ public class ProjectResource {
     ) { return null; }
 
     @PUT
-    @Path("/rename-field/id/{id}/{fieldName}/{newName}")
+    @Path("/rename-field/id/{id}")
     @ApiOperation(
         value = "Rename a custom-field definition on a project by ID.",
         notes = "Renames a custom-field definition on the project, identifying "
               + "the project by its ID. The field's content is preserved; task "
               + "values under the old name are migrated to the new name. See also "
-              + "`/project/rename-field/{oid}/{fieldName}/{newName}` for the OID form.",
+              + "`/project/rename-field/{oid}?name={fieldName}&new-name={newName}` for the OID form.\n\n"
+              + "A missing field returns `404`; a `new-name` already in use returns `409`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — renamed custom-field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — project or field does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — `new-name` is already in use.")
     })
     public Response renameProjectFieldById(
         @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Current field name.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
-        @ApiParam(value = "New field name.", required = true, example = "Importance")
-        @PathParam("newName") String newName,
+        @ApiParam(value = "Current field name. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
+        @ApiParam(value = "New field name. " + FIELD_NAME_ENCODING, required = true, example = "Importance")
+        @QueryParam("new-name") String newName,
 
         @ApiParam(
             value = "(Optional) Response shape: `full` (default) for the "
@@ -623,32 +638,32 @@ public class ProjectResource {
     ) { return null; }
 
     @PUT
-    @Path("/move-field/{oid}/{fieldName}")
+    @Path("/move-field/{oid}")
     @ApiOperation(
         value = "Reorder a custom-field definition on a project.",
         notes = "Moves the named field to a new position. By default the "
-              + "field is moved to the end; pass `?before={otherName}` to "
+              + "field is moved to the end; pass `&before={otherName}` to "
               + "place it immediately before another field.\n\n"
               + "Requires the `Admin` scope to invoke.\n\n"
               + "Response body is a `FieldDefinition` with an extra `name` key "
-              + "(equal to the field's name), or an empty object if the field "
-              + "does not exist or `?before={otherName}` refers to a missing field.",
+              + "(equal to the field's name). A missing field, or a missing "
+              + "`&before={otherName}` field, returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — moved custom-field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — project, field or `before` field does not exist.")
     })
     public Response moveProjectField(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("oid") String oid,
-        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to move. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
-                  + "If omitted, the field is moved to the end.",
-            example = "before=Priority",
+                  + "If omitted, the field is moved to the end. " + FIELD_NAME_ENCODING,
+            example = "Status",
             required = false
         )
         @QueryParam("before") String before,
@@ -664,29 +679,30 @@ public class ProjectResource {
     ) { return null; }
 
     @PUT
-    @Path("/move-field/id/{id}/{fieldName}")
+    @Path("/move-field/id/{id}")
     @ApiOperation(
         value = "Reorder a custom-field definition on a project by ID.",
         notes = "Reorders a custom-field definition on the project, identifying "
-              + "the project by its ID. Pass `?before={otherName}` to place the "
+              + "the project by its ID. Pass `&before={otherName}` to place the "
               + "field before another; omit to move it to the end. See also "
-              + "`/project/move-field/{oid}/{fieldName}` for the OID form.",
+              + "`/project/move-field/{oid}?name={fieldName}` for the OID form.\n\n"
+              + "A missing field, or a missing `&before={otherName}` field, returns `404`.",
         response = FieldDefinitionWithName.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — moved custom-field definition.", response = FieldDefinitionWithName.class),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (Admin scope may be required)."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 404, message = "Not Found — project, field or `before` field does not exist.")
     })
     public Response moveProjectFieldById(
         @ApiParam(value = "Project ID.", required = true, example = "my_project")
         @PathParam("id") String id,
-        @ApiParam(value = "Name of the field to move.", required = true, example = "Priority")
-        @PathParam("fieldName") String fieldName,
+        @ApiParam(value = "Name of the field to move. " + FIELD_NAME_ENCODING, required = true, example = "Priority")
+        @QueryParam("name") String name,
         @ApiParam(
             value = "(Optional) Name of the field to insert before. "
-                  + "If omitted, the field is moved to the end.",
-            example = "before=Priority",
+                  + "If omitted, the field is moved to the end. " + FIELD_NAME_ENCODING,
+            example = "Status",
             required = false
         )
         @QueryParam("before") String before,
