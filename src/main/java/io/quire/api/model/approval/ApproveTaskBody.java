@@ -63,8 +63,10 @@ public class ApproveTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) If `true`, the comment is attributed to the "
-              + "app rather than the authorizing user (matches the "
-              + "`asUser` flag on `POST /comment`). Default: `false`.",
+              + "app rather than the authorizing user (*app-as-user*, as "
+              + "the `asUser` flag on `POST /comment`). Default: `false`. "
+              + "Either way, the authorizing user, not the app, follows "
+              + "the task, as for any comment.",
         example = "false",
         required = false
     )

@@ -9,7 +9,7 @@ public class CreateChatBody extends CreateWorkBody {
 
     @ApiModelProperty(
         value = "(Optional) Users (OID, ID, or email) who follow this chat channel. "
-              + "The current user is added to the followers automatically.\n\n"
+              + "Only those listed follow it, so include `\"me\"` for the current user to follow.\n\n"
               + "- `\"me\"` — the current user.\n"
               + "- `\"app\"` — the application follows (receives notifications).\n\n"
               + "For app followers, additional syntaxes are supported:\n"

@@ -127,7 +127,9 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         example = "true",
-        value = "(Optional) If true, marks this task as created by the app.\n"
+        value = "(Optional) If true, marks this task as created by the app. "
+              + "Read `asUser` as *app-as-user*: the app itself is the "
+              + "user, not the authorizing user.\n"
               + "Default: false (created by the authorizing user). "
               + "In `bulk-add`, each item has its own. A nested task's "
               + "`asUser` must match its top-level task's (a tree is "
@@ -138,7 +140,7 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) List of user identifiers (OID, ID, or email) who follow this task. "
-              + "The current user is added to the followers automatically.\n\n"
+              + "Only those listed follow it, so include `\"me\"` for the current user to follow.\n\n"
               + "- Use \"me\" for the current user.\n"
               + "- Use \"inherit\" to include followers of the parent task.\n"
               + "- Use \"app\" for the application itself to follow (receive notifications).\n\n"

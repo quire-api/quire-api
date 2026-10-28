@@ -20,7 +20,11 @@ public class CreateCommentBody {
 
     @ApiModelProperty(
         value = "(Optional) If true, marks this comment as created by the app. "
-              + "Default: false (created by the authorizing user).",
+              + "Read `asUser` as *app-as-user*: the app itself is the "
+              + "user, not the authorizing user. "
+              + "Default: false (created by the authorizing user). "
+              + "Either way, the authorizing user, not the app, follows "
+              + "the task or chat commented on.",
         example = "true",
         required = false
     )
