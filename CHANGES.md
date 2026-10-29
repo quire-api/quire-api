@@ -2,8 +2,9 @@
 
 ## Oct 29, 2026
 
-- **Followers of a new task, doc or chat:** only those listed in `followers` follow it. The current user is no longer added automatically; to have them follow, include `"me"` in `followers`.
+- **Followers of a new task, doc or chat:** only those listed in `followers`, and anyone @mentioned in a task's or doc's description, follow it. The current user is no longer added automatically; to have them follow, include `"me"` in `followers`.
 - **Following by commenting:** posting a comment makes the authorizing user, not the app, follow the task or chat.
+- **`start` and `due` on sublists only:** the doc listed them for docs, chats, insights and dashboards too, and on their create and update bodies. The API doesn't return them for those, and rejects them with `400` when creating or updating one. The doc now lists them only for a sublist.
 
 ## Oct 23, 2026
 
