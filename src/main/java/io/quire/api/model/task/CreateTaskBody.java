@@ -140,7 +140,8 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) List of user identifiers (OID, ID, or email) who follow this task. "
-              + "Only those listed follow it, so include `\"me\"` for the current user to follow.\n\n"
+              + "Only those listed, and anyone @mentioned in the description, follow it, "
+              + "so include `\"me\"` for the current user to follow.\n\n"
               + "- Use \"me\" for the current user.\n"
               + "- Use \"inherit\" to include followers of the parent task.\n"
               + "- Use \"app\" for the application itself to follow (receive notifications).\n\n"

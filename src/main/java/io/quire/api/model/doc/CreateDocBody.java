@@ -9,7 +9,8 @@ public class CreateDocBody extends CreateWorkBody {
 
     @ApiModelProperty(
         value = "(Optional) Users (OID, ID, or email) who follow this document. "
-              + "Only those listed follow it, so include `\"me\"` for the current user to follow.\n\n"
+              + "Only those listed, and anyone @mentioned in the description, follow it, "
+              + "so include `\"me\"` for the current user to follow.\n\n"
               + "Applies only when the owner is a project; rejected (400) for "
               + "organization, folder, or smart-folder documents.\n\n"
               + "- `\"me\"` — the current user.\n"
