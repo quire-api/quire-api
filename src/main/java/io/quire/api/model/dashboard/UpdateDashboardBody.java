@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModel;
  *
  * Inherits all fields from [UpdateWorkBody](#definition-UpdateWorkBody) —
  * {@code id}, {@code name}, {@code description}, {@code iconColor},
- * {@code image}, {@code start}, {@code due}, {@code archived}. Any field
+ * {@code image}, {@code archived}. Any field
  * omitted from the request leaves its current value unchanged.
  */
 @ApiModel(parent = UpdateWorkBody.class,
