@@ -1,5 +1,10 @@
 # Changelog
 
+## Oct 29, 2026
+
+- **Followers of a new task, doc or chat:** only those listed in `followers` follow it. The current user is no longer added automatically; to have them follow, include `"me"` in `followers`.
+- **Following by commenting:** posting a comment makes the authorizing user, not the app, follow the task or chat.
+
 ## Oct 23, 2026
 
 - **Time logs hidden from guests:** a task's `timelogs` is omitted, and a formula reading the time logs sees none, for a guest member and for a non-member of a public project when the project hides time logs from guests (its default), as in the Quire apps; the API used to return them.
