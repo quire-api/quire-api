@@ -1,5 +1,19 @@
 # Changelog
 
+## Oct 30, 2026
+
+- **Response shapes:** an attachment's `url` is absolute, also in a `file` field; an approval category's `createdBy` is a user object; a comment no longer has `ownerType` (use `owner.type`); a sublist's `start`/`due` are dates (`2026-11-02`).
+- **`402` for plan limits:** `undo-remove` beyond the task limit, a transfer beyond the target's limits or with reminders into a plan without them, and `"public": true` without public projects. An export rejected with `402` costs 1 unit.
+- **`409` for values in use:** a status value, and an `add-appv-cat` `id`. The body's `code` now equals the status for `409` and `408`.
+- **`403` first:** a caller without permission gets `403` before learning whether a record, team, member or plan limit applies.
+- **Followers:** with read access, you can follow or unfollow yourself (now also on tasks, docs and chats) but no one else; `followers` (even `["me"]`) needs edit access.
+- **Rights:** a project's `start`/`due` need an admin; a global tag needs the organization's tag right; a reminder on a task you can't see returns `404`, and its `members` must all see the task.
+- **`partner`:** must be an external team of the project, on tasks, sublists, docs, chats, insights, dashboards and reminders; otherwise `400`.
+- **Dates:** a project's `start`/`due` are dates only, like a sublist's; a time returns `400`.
+- **Select options:** rename one with `{"name": "Critical", "from": "High"}` to keep task values; an option without `color` keeps its color; `[]` clears `options` or `conditionFormat`.
+- **Other:** `"etc": null` clears the estimate; recurrence `interval` defaults to `1` and must be at least `1`, `sincelatest` to `false`; `?status=` takes `completed`, `active` or `0`..`100` (`100` = every completed status); search takes `created-by` and `source-ref`; a notification `url` with `javascript:` returns `400`; time-log responses are empty for callers who can't see time logs; `/storage/id/…` returns `404`.
+- **Doc corrections** (behavior unchanged): a task's `status` and `priority` are objects; `?dry-run` is on only for `true`, `1` or empty; a search needs a query parameter; select options are `{name, color}` objects; how to use `sourceRef`; storage values are any JSON; an access token lasts 1 hour and can be refreshed; a webhook's `secret` is the client secret, and `when` is in milliseconds.
+
 ## Oct 29, 2026
 
 - **Followers of a new task, doc or chat:** only those listed in `followers`, and anyone @mentioned in a task's or doc's description, follow it. The current user is no longer added automatically; to have them follow, include `"me"` in `followers`.
