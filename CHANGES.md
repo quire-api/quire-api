@@ -10,75 +10,70 @@
 - **Rights:** a project's `start`/`due` need an admin; a global tag needs the organization's tag right; a reminder on a task you can't see returns `404`, and its `members` must all see the task.
 - **`partner`:** must be an external team of the project, on tasks, sublists, docs, chats, insights, dashboards and reminders; otherwise `400`.
 - **Dates:** a project's `start`/`due` are dates only, like a sublist's; a time returns `400`.
-- **Select options:** rename one with `{"name": "Critical", "from": "High"}` to keep task values; an option without `color` keeps its color; `[]` clears `options` or `conditionFormat`.
-- **Other:** `"etc": null` clears the estimate; recurrence `interval` defaults to `1` and must be at least `1`, `sincelatest` to `false`; `?status=` takes `completed`, `active` or `0`..`100` (`100` = every completed status); search takes `created-by` and `source-ref`; a notification `url` with `javascript:` returns `400`; time-log responses are empty for callers who can't see time logs; `/storage/id/…` returns `404`.
-- **Doc corrections** (behavior unchanged): a task's `status` and `priority` are objects; `?dry-run` is on only for `true`, `1` or empty; a search needs a query parameter; select options are `{name, color}` objects; how to use `sourceRef`; storage values are any JSON; an access token lasts 1 hour and can be refreshed; a webhook's `secret` is the client secret, and `when` is in milliseconds.
+- **Select options:** an option renamed with [`from`](https://quire.io/dev/api/#definition-UpdateFieldOption) keeps its tasks' values; an option without `color` keeps its color; `[]` clears `options` or `conditionFormat`.
+- **Other:** `"etc": null` clears the estimate; [recurrence](https://quire.io/dev/api/#definition-Recurrence) `interval` defaults to `1`, `sincelatest` to `false`; [`?status=`](https://quire.io/dev/api/#operation--task-search-id--projectId--get) takes `0`..`100`; search takes `created-by`, `source-ref`; notification `url` rejects `javascript:`; [hidden time logs](https://quire.io/dev/api/#operation--task-add-timelog-id--projectId---taskId--post) return `[]`; `/storage/id/…` returns `404`.
+- **Doc corrections** (behavior unchanged): a task's `status` and `priority` are objects; select options are `{name, color}`; a search needs a query parameter; also [`?dry-run`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) values, [`sourceRef`](https://quire.io/dev/api/#definition-CreateTaskBody), [storage values](https://quire.io/dev/api/#definition-StorageValue), [token lifetime](https://quire.io/dev/api/#retrieve-access-token), and a [webhook](https://quire.io/dev/api/#notification-events)'s `secret` and `when`.
 
 ## Oct 29, 2026
 
 - **Followers of a new task, doc or chat:** only those listed in `followers`, and anyone @mentioned in a task's or doc's description, follow it. The current user is no longer added automatically; to have them follow, include `"me"` in `followers`.
 - **Following by commenting:** posting a comment makes the authorizing user, not the app, follow the task or chat.
-- **`start` and `due` on sublists only:** the doc listed them for docs, chats, insights and dashboards too, and on their create and update bodies. The API doesn't return them for those, and rejects them with `400` when creating or updating one. The doc now lists them only for a sublist.
+- **`start` and `due` on sublists only:** the doc also listed them for docs, chats, insights and dashboards, which don't return them and reject them with `400` on create or update. The doc now lists them only for a [sublist](https://quire.io/dev/api/#definition-Sublist).
 
 ## Oct 23, 2026
 
-- **Time logs hidden from guests:** a task's `timelogs` is omitted, and a formula reading the time logs sees none, for a guest member and for a non-member of a public project when the project hides time logs from guests (its default), as in the Quire apps; the API used to return them.
-- **Custom-field names in the query:** [`update-field`](https://quire.io/dev/api/#operation--project-update-field-id--id--put), [`rename-field`](https://quire.io/dev/api/#operation--project-rename-field-id--id--put), [`move-field`](https://quire.io/dev/api/#operation--project-move-field-id--id--put) and [`remove-field`](https://quire.io/dev/api/#operation--project-remove-field-id--id--delete), of a project or an insight, take the field's name as the query parameter `name`, and rename's new name as `new-name`, e.g. `PUT /project/update-field/id/my_project?name=Billable%20Amount`. So a name may contain `/`. Percent-encode it, and a `+` in it as `%2B`, since `+` means a space in a query. The old form, with the names in the path, keeps working but is no longer documented. It now also finds a name that needs encoding, such as `Billable%20Amount`; such a field wasn't found, so the call changed nothing yet reported success.
-- **Missing or taken custom-field names:** `update-field`, `rename-field` and `move-field` on a missing field, or with a missing `before` field, return `404`, as updating a missing task does, instead of `200` with an empty object. [`add-field`](https://quire.io/dev/api/#operation--project-add-field-id--id--post) with a name already in use, or `rename-field` to one, returns `409` instead of keeping the existing field. `remove-field` still returns `204` if the field is missing.
-- **Attachment names that need encoding:** [`POST /task/attach/id/{projectId}/{taskId}/{filename}`](https://quire.io/dev/api/#operation--task-attach-id--projectId---taskId---filename--post) and [`POST /comment/attach/{commentOid}/{filename}`](https://quire.io/dev/api/#operation--comment-attach--commentOid---filename--post) now decode `{filename}`, so `My%20Report.pdf` is saved as `My Report.pdf` instead of `My%20Report.pdf`. A file name can't contain `/` or `\`.
+- **Time logs hidden from guests:** when a project hides time logs from guests (its default), a guest or a non-member of a public project gets no `timelogs` on a task, and formulas see none, as in the Quire apps; the API used to return them.
+- **Field names in the query:** a project's or insight's [`update-field`](https://quire.io/dev/api/#operation--project-update-field-id--id--put), [`rename-field`](https://quire.io/dev/api/#operation--project-rename-field-id--id--put), [`move-field`](https://quire.io/dev/api/#operation--project-move-field-id--id--put) and [`remove-field`](https://quire.io/dev/api/#operation--project-remove-field-id--id--delete) take `?name=` and `new-name`, so a name may contain `/`. The old path form still works, undocumented, and no longer silently misses encoded names.
+- **Missing or taken field names:** `update-field`, `rename-field` and `move-field` on a missing field (or `before` field) return `404`, not `200` with `{}`. [`add-field`](https://quire.io/dev/api/#operation--project-add-field-id--id--post) or `rename-field` to a taken name returns `409`; it kept the existing field. `remove-field` stays `204`.
+- **Attachment names that need encoding:** [task](https://quire.io/dev/api/#operation--task-attach-id--projectId---taskId---filename--post) and [comment](https://quire.io/dev/api/#operation--comment-attach--commentOid---filename--post) `attach` now decode `{filename}`: `My%20Report.pdf` is saved as `My Report.pdf`, no longer as is. A file name can't contain `/` or `\`.
 
 ## Oct 19, 2026
 
-- **`asUser` in bulk calls and nested tasks:** each item of [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) and [`bulk-update`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put) now honors its own `asUser`, as documented; it was rejected with `400`. A nested task in `tasks` may carry `asUser` only if it matches its top-level task's, since a tree is created by one author; a different value is rejected with `400`.
-- **`asUser` on an approval's comment:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) with `"asUser": true` in its body now posts the comment as the app, as documented and as `POST /comment` does; it was posted as the authorizing user. The approval itself stays the user's.
+- **`asUser` in bulk calls and nested tasks:** each item of [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) and [`bulk-update`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put) now honors its own `asUser`, as documented; it was rejected with `400`. A nested task's `asUser` must match its top-level task's, or `400`.
+- **`asUser` on an approval's comment:** [`approve`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) with `"asUser": true` now posts the comment as the app, as documented and as `POST /comment` does, no longer as the user. The approval stays the user's.
 
 ## Oct 16, 2026
 
 - **Malformed nested `tasks`:** a `tasks` value that isn't a list, or an entry in it that isn't a task object, is rejected with `400` instead of failing with `500`.
 - **Personal project rate limits:** a personal project (My Tasks) now gets half of the plan's limits instead of a quarter, e.g. 25 per minute / 100 per hour on the Free plan.
-- **Bulk batch size:** a bulk call holds no more items than the plan's per-minute rate limit, and at most 300: e.g. 50 on the Free plan, or 25 in a personal project on the Free plan. A larger batch is rejected with `402` (`code` `469`); split it. See [Rate Limits](https://quire.io/dev/api/#rate-limits).
-- **Nested tasks count:** creating tasks with nested `tasks`, with [`POST /task`](https://quire.io/dev/api/#operation--task-id--projectId--post) or [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post), costs 1 rate-limit unit per task created, nested ones included, instead of 1 per top-level task. Such a call is capped like a bulk call: at most 300 tasks (`400`), and no more than the plan's per-minute limit (`402`, `code` `469`). Split a larger tree into several calls.
+- **Bulk batch size:** a bulk call holds no more items than the plan's per-minute rate limit (e.g. 50 on the Free plan), and at most 300. A larger batch is rejected with `402` (`code` `469`); split it. See [Rate Limits](https://quire.io/dev/api/#rate-limits).
+- **Nested tasks count:** [`POST /task`](https://quire.io/dev/api/#operation--task-id--projectId--post) or [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) with nested `tasks` costs 1 unit per task created, not per top-level task, and is [capped](https://quire.io/dev/api/#request-cost) like a bulk call: 300 tasks (`400`) and the per-minute limit (`402`).
 - **`createdBy` of a comment, tag or partner** is now a user object (`oid`, `id`, `name`, …), as documented and as other records return it, instead of the creator's OID. Read `createdBy.oid` for the OID.
 - **Apps in a task's user fields:** an app acting for a user (`asUser`) in a task's `createdBy`, `editedBy`, `followers` and the like is now returned as the app (`"id": "ap|<app ID>"` and the app's name), instead of a placeholder.
-- **Approval comments:** the doc now matches what the server has done since June. The comment an approval logs starts with a plain `<category>: <status>` line, no longer bold; the category name is left out for the default category, and the status is in the authorizing user's language, so don't parse it. [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) with `approve`, `reject` or `change` logs that comment even without a body, as [`POST /task/bulk-approve/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) does on each task; `request` logs one only with a body.
+- **Approval comments** (doc now matches the server since June): the comment starts with a plain `<category>: <status>` line, no longer bold, in the user's language; don't parse it. [`approve`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) logs it on `approve`, `reject` and `change` even without a body.
 
 ## Oct 15, 2026
 
-- **Private works:** a sublist, doc, chat, insight or dashboard has a boolean `private`, like a custom field's: when true, guests and the visitors of a public project or of a share link don't see it. It is a choice only for a record with `members` null and `partner` null, and it is returned only then; it defaults to false (everyone). Otherwise it is always true: a record shared with an external team, with selected members or with the admins only is hidden from them, and `false` is rejected with `400`.
+- **Private works:** a sublist, doc, chat, insight or dashboard has a boolean [`private`](https://quire.io/dev/api/#definition-CreateSublistBody): hidden from guests and visitors when true. A choice (default false), and returned, only with `members` and `partner` null; otherwise always true, and `false` returns `400`.
 - **Reminders of a public project:** the list is empty for a visitor who is not a member, as the project view is.
 - **Reminders and guests:** a guest member sees only the reminders naming them, and creates none (`403`: a reminder takes write access).
-- **Who can view and edit a custom field:** a field definition has `viewMembers` and `editMembers`, the users who can view the values, and who can edit them; an admin not named sees the definition but not the values, and can't edit them. An empty list means the admins only. A field with `viewMembers` is hidden from everyone else, so `private` is returned and accepted only without it. `locked` stops everyone from editing the values in Quire, admins included, while the API still can. The API returns only the fields and values the caller can view, and rejects a write to a field the caller can't edit with `400`. A task search doesn't match the values of a field the caller can't view, and such a field is an unknown query parameter.
+- **Who can view and edit a custom field:** a [field definition](https://quire.io/dev/api/#definition-FieldDefinition) has `viewMembers` and `editMembers` (`[]` = admins only); `locked` binds only the Quire apps. The API returns only fields and values the caller can view; writing one they can't edit returns `400`.
 - **Task search paging depth:** a task search's `cursor` reaches at most 1,000,000 rows deep; a deeper one is rejected with `400`. Narrow the search with filters instead.
 - **Task search with `?sublist=`:** the last item no longer carries a `cursor`, which was rejected with `400` when passed back. Pass a `limit` big enough (or `no`) to get every match.
-- **Comment emojis:** a [comment](https://quire.io/dev/api/#operation--comment--commentOid--get) has `emojis`, its reactions: each an `emoji` and the `users` who reacted with it. It is omitted if there is none. [`POST /comment/add-emoji/{commentOid}/{emojis}`](https://quire.io/dev/api/#operation--comment-add-emoji--commentOid---emojis--post) adds the caller's reactions and [`DELETE /comment/remove-emoji/{commentOid}/{emojis}`](https://quire.io/dev/api/#operation--comment-remove-emoji--commentOid---emojis--delete) removes them. `{emojis}` is one or more percent-encoded emojis separated by commas, at most 20. An emoji can also be given by its name, the shortcode used by GitHub and Slack, such as `+1` or `tada`; see [Emojis](https://quire.io/dev/api/#emojis). Adding accepts only the emojis Quire's reaction picker offers; one invalid emoji rejects the whole request with `400`. Both return `204`, and adding a reaction already there or removing one already absent is a no-op.
+- **Comment emojis:** a [comment](https://quire.io/dev/api/#operation--comment--commentOid--get) has `emojis`, its reactions, omitted if none. [`add-emoji`](https://quire.io/dev/api/#operation--comment-add-emoji--commentOid---emojis--post) and [`remove-emoji`](https://quire.io/dev/api/#operation--comment-remove-emoji--commentOid---emojis--delete) add and remove the caller's reactions, given as emojis or [names](https://quire.io/dev/api/#emojis); both return `204`.
 
 ## Sep 25, 2026
 
-- **Reminder list filters:** [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get) and its by-ID forms accept two optional parameters. Omitted, the list is unchanged.
-    - `?timing=standalone` lists the reminders firing at a time of their own (`when`): with no task, or on a task with neither a start nor a due date. `?timing=anchored` lists those firing from their task's date, whose `when` is null.
-    - `?status=active` lists only the reminders with a notification still to come (`all`, the default, every one). A page still holds `limit` reminders while that many remain.
-- **Reminder webhooks:** adding, editing or removing a project's reminder now notifies its webhooks: types `84`, `87` and `88` for a reminder on a task, and `192`, `193` and `194` for one without. `value` is the reminder, as [`GET /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--get) returns it, or only its `oid` once removed. See [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
+- **Reminder list filters:** [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get) and its by-ID forms accept `?timing=` (`standalone` or `anchored`) and `?status=` (`active` or `all`). Omitted, the list is unchanged.
+- **Reminder webhooks:** adding, editing or removing a project's reminder now notifies its webhooks: types `84`, `87`, `88` on a task, `192`, `193`, `194` without. `value` is the [reminder](https://quire.io/dev/api/#operation--reminder--oid--get), or only its `oid` once removed. See [Activity Types](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md).
 
 ## Sep 21, 2026
 
-- **Reminder API:** Added the [reminder](https://quire.io/dev/api/#tag--reminder) endpoints. A reminder notifies the people it names, either before a task's start or due date or at a time of its own.
+- **Reminder API:** Added the [reminder](https://quire.io/dev/api/#tag-reminder) endpoints. A reminder notifies the people it names, either before a task's start or due date or at a time of its own.
     - **Create** — [`POST /reminder/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder--ownerType---ownerOid--post), plus [`POST /reminder/id/{ownerType}/{ownerId}`](https://quire.io/dev/api/#operation--reminder-id--ownerType---ownerId--post) and, for a task, [`POST /reminder/id/task/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--reminder-id-task--projectId---taskId--post) (a task ID is unique only within its project).
-    - **Read** — [`GET /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--get) and [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get), with the by-ID forms. A project's list includes the reminders on its tasks, not only the standalone ones; narrow it with `ownerType` `task`.
+    - **Read** — [`GET /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--get) and [`GET /reminder/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--reminder-list--ownerType---ownerOid--get), with the by-ID forms. A project's list includes its tasks' reminders too; narrow it with `ownerType` `task`.
     - **Update** — [`PUT /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--put); only `when`, `recurrence`, `leads` and `name` can be changed.
     - **Delete** — [`DELETE /reminder/{oid}`](https://quire.io/dev/api/#operation--reminder--oid--delete). A reminder is not moved to the trash and cannot be restored.
-    - **`ownerType` is always required** — unlike the work endpoints, there is no implied `project`. It is one of `project`, `organization`, `folder`, `smart-folder`, or `task`. Pass `-` as the project for the caller's own inbox, i.e. a personal reminder.
-    - **What it fires from:** a reminder on a task with a start or due date fires from that date, and sending `when` or `recurrence` for one is rejected with `400`; otherwise `when` is required. `leads` gives when to notify before that time, one notification each — `{"minutes": 30}` for an absolute offset, or `{"days": 1, "at": "09:00"}` for a calendar one, which keeps its wall-clock time across a daylight-saving transition. It defaults to a single notification at the time itself.
-    - **Paging:** the list endpoints accept `?limit=` (1..1000, or `no`) and `?cursor=`, in the same shape as [`/task/list`](https://quire.io/dev/api/#operation--task-list-id--projectId--get) — the last item of a page carries a `cursor` when more remain. Reminders are ordered by `oid`: stable, but **not** chronological, so don't read it as oldest-first.
-    - **Who sees it** follows the `members` model of a work, with the same create-only rule (below): `null` for every member of the owner, `[]` for its admins, or a list of users. **The default differs:** omit `members` and the reminder is yours alone (`["me"]`), whereas a work's defaults to every member — pass `null` explicitly to share with everyone. Anything other than yourself (a `partner` included) needs the Premium plan or above (`402` otherwise). A reminder on a task in the trash is left out of the lists while it is there, but stays reachable by OID.
-- **Members when creating a work:** [sublists](https://quire.io/dev/api/#operation--sublist--ownerType---ownerOid--post), [docs](https://quire.io/dev/api/#operation--doc--ownerType---ownerOid--post), [chat channels](https://quire.io/dev/api/#operation--chat--ownerType---ownerOid--post), [insights](https://quire.io/dev/api/#operation--insight--ownerType---ownerOid--post) and [dashboards](https://quire.io/dev/api/#operation--dashboard--ownerType---ownerOid--post) now accept `members`, so a record can be created visible only to the users you choose. It was previously returned but could not be set.
-    - Omit `members` (or pass null) for every member of the owner, as before; pass an empty list for the owner's admins only; pass a list of users (OID, ID, email, or `"me"`) for just those users.
-    - Every user listed must be a member of the owner, and the list must include yourself — otherwise you could not see what you just created. A user who is not a member is rejected with `400`, rather than being dropped silently the way a task's `assignees` are.
-    - `members` cannot be combined with `partner`, which already shares the record with all members of the project and of the external team; the pair is rejected with `400`.
-    - `members` can only be set when creating a record. Changing it afterwards is not supported yet.
-- **`members` in responses:** a work's `members` is now a list of user objects (`oid`, `id`, `name`, …), matching `followers` and `mutes`, where it was previously a list of OID strings. It is `null` when every member of the owner can see the record, and an empty list when only its admins can — both are returned explicitly, so the three states can be told apart.
+    - **`ownerType` is always required**, with no implied `project`: `project`, `organization`, `folder`, `smart-folder` or `task`. Pass `-` as the project for a personal reminder.
+    - **What it fires from:** a reminder on a task with a start or due date fires from that date, and `when` or `recurrence` returns `400`; otherwise `when` is required. [`leads`](https://quire.io/dev/api/#definition-ReminderLead) sets when to notify before it.
+    - **Paging:** the lists take `?limit=` and `?cursor=`, as [`/task/list`](https://quire.io/dev/api/#operation--task-list-id--projectId--get) does. They're ordered by `oid`: stable, but **not** chronological.
+    - **Who sees it:** [`members`](https://quire.io/dev/api/#definition-CreateReminderBody) works as a work's, set only on create, but omitted means yours alone; pass `null` for every member. Anyone besides you (a `partner` too) needs Premium or above (`402`).
+- **Members when creating a work:** [sublists](https://quire.io/dev/api/#operation--sublist--ownerType---ownerOid--post), [docs](https://quire.io/dev/api/#operation--doc--ownerType---ownerOid--post), [chat channels](https://quire.io/dev/api/#operation--chat--ownerType---ownerOid--post), [insights](https://quire.io/dev/api/#operation--insight--ownerType---ownerOid--post) and [dashboards](https://quire.io/dev/api/#operation--dashboard--ownerType---ownerOid--post) accept `members` on create, so a record can be visible only to chosen users; it was read-only. It can't be changed later yet.
+    - `null` (default) is every member of the owner, `[]` its admins, or a list of users, which must include yourself. A non-member listed returns `400` (a task's `assignees` drop one silently), and so does `members` with `partner`.
+- **`members` in responses:** a work's `members` is now a list of user objects, like `followers` and `mutes`, instead of OID strings. `null` (every member) and `[]` (admins only) are both returned explicitly.
 - **Error responses:** the HTTP status now reflects the kind of failure, and `429` is reserved for rate limits.
     - **Plan limits and quotas** (task limit, custom fields, dashboard, insight, sublist, chat, doc) now return `402 Payment Required` with body `code` `469`, where they previously returned `429`.
-    - **An expired subscription** returns `402` with the new body `code` `470`, so it can be told apart from a plan limit without parsing `message`. Previously it too returned `429`, which invited clients to back off and retry a condition that only resubscribing can clear.
+    - **An expired subscription** returns `402` with the new body `code` `470`, distinct from a plan limit. It too returned `429`, though only resubscribing clears it.
     - **`429 Too Many Requests`** is now returned only for the per-minute / per-hour API rate limit, and always carries a `Retry-After` header.
     - **A temporarily blocked account** returns `403 Forbidden` with the new body `code` `471`.
     - **Validation errors** — a missing name, or a duplicate or reserved id, for example — now carry body `code` `400` instead of `469`. `469` appears only alongside `402`.
@@ -86,14 +81,14 @@
 ## Jul 31, 2026
 
 - **Comment API (removal):** Removed long-deprecated URL forms. All of them have supported replacements:
-    - `GET`/`PUT`/`DELETE` on `/comment/{projectOid}/{commentOid}` and `/comment/id/{projectId}/{commentOid}` → use [`/comment/{commentOid}`](https://quire.io/dev/api/#operation--comment--commentOid--get); a comment OID is unique on its own, so the project segment is no longer accepted. (Supersedes the Apr 27, 2021 entry.)
-    - `PUT /comment/undo-remove/id/{projectId}/{commentOid}` → use [`PUT /comment/undo-remove/{commentOid}`](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put); comment undo-remove is OID-addressed only.
-    - Chat-channel comments without the `/chat/` segment (`POST /comment/{chatOid}`, `GET /comment/list/{chatOid}`, and the `/id/` forms with a chat ID) → use [`POST /comment/chat/{chatOid}`](https://quire.io/dev/api/#operation--comment-chat--chatOid--post) and [`GET /comment/list/chat/{chatOid}`](https://quire.io/dev/api/#operation--comment-list-chat--chatOid--get) (or their `/chat/id/` forms).
+    - `GET`/`PUT`/`DELETE` on `/comment/{projectOid}/{commentOid}` and `/comment/id/{projectId}/{commentOid}` → use [`/comment/{commentOid}`](https://quire.io/dev/api/#operation--comment--commentOid--get); a comment OID is unique on its own. (Supersedes the Apr 27, 2021 entry.)
+    - `PUT /comment/undo-remove/id/{projectId}/{commentOid}` → use [`PUT /comment/undo-remove/{commentOid}`](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put).
+    - Chat-channel comments without the `/chat/` segment (`POST /comment/{chatOid}`, `GET /comment/list/{chatOid}`, and their `/id/` forms) → use [`POST /comment/chat/{chatOid}`](https://quire.io/dev/api/#operation--comment-chat--chatOid--post) and [`GET /comment/list/chat/{chatOid}`](https://quire.io/dev/api/#operation--comment-list-chat--chatOid--get) (or their `/chat/id/` forms).
     - The removed forms now return `400 Bad Request`, except the chat forms without `/chat/`, which return `404 Not Found`.
 
 ## Jul 20, 2026
 
-- **Dashboard API:** Added the [dashboard](https://quire.io/dev/api/#tag--dashboard) endpoints — dashboards are collections of widgets owned by a project, organization, or folder. Supports the standard work-item CRUD, in both OID and ID URL forms:
+- **Dashboard API:** Added the [dashboard](https://quire.io/dev/api/#tag-dashboard) endpoints — dashboards are collections of widgets owned by a project, organization, or folder. Supports the standard work-item CRUD, in both OID and ID URL forms:
     - **Create** — [`POST /dashboard/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--dashboard--ownerType---ownerOid--post) and the by-ID form.
     - **Read** — [`GET /dashboard/{oid}`](https://quire.io/dev/api/#operation--dashboard--oid--get), the by-ID form, and [`GET /dashboard/list/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--dashboard-list--ownerType---ownerOid--get) (plus its by-ID form).
     - **Update** — [`PUT /dashboard/{oid}`](https://quire.io/dev/api/#operation--dashboard--oid--put) and the by-ID form; set `archived: true` / `false` to archive or unarchive.
@@ -104,187 +99,84 @@
 ## Jun 4, 2026
 
 - **Chat & Doc API:** chat channels and documents now support follower management, matching the Task API.
-    - **Responses** now include `followers` and `mutes` (lists of users) — see [chat](https://quire.io/dev/api/#tag--chat) / [doc](https://quire.io/dev/api/#tag--doc).
-    - **Create** ([`POST /chat/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--chat--ownerType---ownerOid--post), [`POST /doc/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--doc--ownerType---ownerOid--post), and the by-ID forms) accepts an optional `followers` list — user OID, ID, or email, plus `"me"` and `"app"` (with the `app|team` / `app|/path` syntaxes). The current user is added to the followers automatically.
+    - **Responses** now include `followers` and `mutes` (lists of users) — see [chat](https://quire.io/dev/api/#tag-chat) / [doc](https://quire.io/dev/api/#tag-doc).
+    - **Create** ([`POST /chat/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--chat--ownerType---ownerOid--post), [`POST /doc/{ownerType}/{ownerOid}`](https://quire.io/dev/api/#operation--doc--ownerType---ownerOid--post), and the by-ID forms) accepts an optional [`followers`](https://quire.io/dev/api/#definition-CreateChatBody) list. The current user is added to the followers automatically.
     - **Update** ([`PUT /chat/{oid}`](https://quire.io/dev/api/#operation--chat--oid--put), [`PUT /doc/{oid}`](https://quire.io/dev/api/#operation--doc--oid--put), and the by-ID forms) accepts `followers` (replaces the whole list), `addFollowers`, and `removeFollowers`.
-    - Documents are followable only when owned by a project; sending `followers` / `addFollowers` / `removeFollowers` for an organization-, folder-, or smart-folder-owned document returns `400 Bad Request`. (Chat channels are always project-owned.)
-- **Task API:** the current user is now added to a new task's `followers` automatically on [`POST /task/{projectOid}`](https://quire.io/dev/api/#operation--task--projectOid--post) (and the by-ID form) — previously only Quire's own clients added the creator.
+    - Documents are followable only when owned by a project; the follower fields on any other document return `400 Bad Request`. (Chat channels are always project-owned.)
+- **Task API:** the current user is now added to a new task's `followers` automatically on [`POST /task/{projectOid}`](https://quire.io/dev/api/#operation--task--oid--post) (and the by-ID form) — previously only Quire's own clients added the creator.
 - **Webhook (deprecation):** Two legacy Notification Event fields are now **deprecated** and will be **removed after Dec 31, 2027**. Both continue to be sent until the sunset date.
     - `tasks` (added Jul 2023) → use `taskSummaries` (available since Feb 2026), which carries the same per-task detail.
     - `project` (the bare project OID) → use `projectSummary` (available since Feb 2026), the `{oid, id}` form.
 
 ## May 27, 2026
 
-- **Insight API:** Added [`GET /insight/run/{insightOid}`](https://quire.io/dev/api/#operation--insight-run--insightOid--get) (and the by-id form `GET /insight/run/id/project/{projectId}/{insightId}`) that runs the Insight and returns the computed result — one aggregated row per group, JSON 2D array shape `[[headers...], [row...], ...]`. Project-scoped Insights only. Query params: `?group-by=member|section` (default `member`), `?status=active|completed|all` (default `active`), both case-insensitive, `400` on unknown values. Status is applied at the SQL load layer so narrower queries cost less. Rate-limit: standard 1-unit grantLoad charge + soft post-charge of `ceil(tasksLoaded / 250) - 1` extra units. See the endpoint's docs for the formula-token limitation (#24834).
-- **Task API:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) (and the by-OID form) now accepts an **optional request body** that posts a companion comment on the task as a side effect of the approval call. Body shape mirrors [`POST /comment`](https://quire.io/dev/api/#operation--comment--taskOid--post):
-    ```
-    POST /task/approve/id/my_project/42?category=Legal&state=change
-    {"description": "Please tweak the wording."}
-    ```
-    `description` is required when the body is supplied; `pinned` and `asUser` are optional. The stored comment is auto-prefixed with `**<stream>: <status>**\n\n` so the assignee can tell which approval it belongs to — for the example above, the stored description is `**Legal: Request changes**\n\nPlease tweak the wording.` Apply the prefix on every `state` value (`request` / `approve` / `reject` / `change`) since the transition and the comment are independent server ops. Omit the body (or send an empty one) to preserve the existing transition-only behavior; the created comment is not part of the approval response — fetch it via `GET /comment/list/{taskOid}` afterward. `400 Bad Request` on unknown body fields, empty `description`, or a non-object body. `bulk-approve` is unchanged for now — its body is already a top-level task-ref array, so adding a comment there would be a breaking shape change (#24855).
-- **Task Search API:** Number, Money, and Duration custom-field filters on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get) (and the OID / search-organization / search-folder forms) now accept the same `op:value` grammar as date fields, instead of exact match only: `ge:`, `gt:`, `le:`, `lt:`, `eq:`, `ne:`, `between:<v1>,<v2>` (inclusive on both ends), `notBetween:<v1>,<v2>`, and `isNull` / `isNotNull` (operators case-insensitive). A bare value remains an exact match (same as `eq:`). Examples: `?cost=ge:100`, `?cost=between:50,150`, `?effort=between:8h,40h`, `?cost=isNull`. Invalid operands return `400 Bad Request` (#24851).
+- **Insight API:** Added [`GET /insight/run/{insightOid}`](https://quire.io/dev/api/#operation--insight-run--oid--get) (and the by-ID form) to run a project's insight and return its result, one aggregated row per group, as a 2D array. It takes `?group-by=` and `?status=`; big runs cost [extra units](https://quire.io/dev/api/#request-cost).
+- **Task API:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) (and the by-OID form) accepts an optional body, shaped as [`POST /comment`](https://quire.io/dev/api/#operation--comment--taskOid--post)'s, to also post a comment on the task, prefixed with the approval's category and status.
+- **Task Search API:** Number, Money and Duration custom-field filters on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get) and the other search forms take the operators of date fields (`ge:`, `between:`, `isNull`, …), not only an exact match. See [Custom Field Filtering](https://quire.io/dev/api/#custom-field-filtering).
 
 ## May 22, 2026
 
-- **Rate-limit API:** Renamed from `/rate_limit` to [`/rate-limit`](https://quire.io/dev/api/#tag--rate-limit). `/rate_limit` continues to work as a deprecated alias; it will be retired in a future release.
-- **Task API (bulk):** All bulk endpoints now accept an optional `?dry-run=true` query parameter that previews the call without persisting any changes. The server runs the same per-item validation and permission checks as a real call, then discards every change before responding. The response body has the same shape as a real call on success, and the same `{code, message}` (with the `items[i]:` per-item prefix) on failure — so a `200` from a dry-run is a strong signal that re-issuing the identical body without `?dry-run` will succeed (subject to concurrent edits between the two calls). Useful for "confirm before applying" UIs, scripted batches that want to validate input before committing, and AI agents that want to preview an action before asking a human to approve it. Applies to [`POST /task/bulk-add/...`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post), [`PUT /task/bulk-update/...`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put), [`DELETE /task/bulk-remove/...`](https://quire.io/dev/api/#operation--task-bulk-remove-id--projectId--delete), [`PUT /task/bulk-move/...`](https://quire.io/dev/api/#operation--task-bulk-move-id--projectId--put), [`PUT /task/bulk-transfer/...`](https://quire.io/dev/api/#operation--task-bulk-transfer-id--sourceProjectId--put), and [`POST /task/bulk-approve/...`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) (both `/id/` and OID URL forms). **`bulk-add` caveat:** the `oid` / `id` values returned by a dry-run are discarded along with everything else; a follow-up real call allocates fresh identifiers, so don't persist or reference dry-run identifiers across calls. **Rate limit:** a dry-run costs `ceil(N / 2)` units (minimum 1), where `N = items.length`; a real call costs `N` units.
+- **Rate-limit API:** Renamed from `/rate_limit` to [`/rate-limit`](https://quire.io/dev/api/#tag-rate-limit). `/rate_limit` continues to work as a deprecated alias; it will be retired in a future release.
+- **Task API (bulk):** [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post), [`bulk-update`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put), [`bulk-remove`](https://quire.io/dev/api/#operation--task-bulk-remove-id--projectId--delete), [`bulk-move`](https://quire.io/dev/api/#operation--task-bulk-move-id--projectId--put), [`bulk-transfer`](https://quire.io/dev/api/#operation--task-bulk-transfer-id--sourceProjectId--put) and [`bulk-approve`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) accept `?dry-run=true` to preview a call, with the same checks, without saving anything, at half the [cost](https://quire.io/dev/api/#request-cost). A dry-run's `oid` and `id` values are discarded.
 
 ## May 15, 2026
 
-- **Notification API:** [`POST /notification`](https://quire.io/dev/api/#operation--notification-post) accepts an optional `recipients` field to deliver to the authorizing user's colleagues, not only the authorizing user. Each entry is a user OID, ID, or email; eligibility matches `GET /user/list` — the authorizing user plus colleagues the app can see (when the user granted the app access to contacts, all colleagues; otherwise only colleagues who also authorized the same app). Entries that don't exist or aren't visible return `404 Not Found` with an identical response for every such case, so the endpoint can't be used to probe user existence. Special value `["*"]` (must be the sole entry) broadcasts to every user visible to the app; mixing `*` with other entries returns `400 Bad Request`. Rate-limit cost: every 10 delivered recipients counts as 1 unit against the caller's API rate limit (rounded up; minimum 1 unit per call) — so a 1-recipient call and a 10-recipient fan-out cost the same as a single self-only call today. Over-budget requests get `429 Too Many Requests` with no partial delivery. Omitting `recipients` preserves the existing self-only behavior (#24725).
-- **Storage API:** Rate limit is now plan-tiered and shared with the rest of the API. Storage calls (`GET`, `PUT`, `DELETE`, list) count against the organization's standard per-minute / per-hour rate-limit bucket — same path as the Task / Approval / Export APIs — instead of the previous flat **200 / minute** and **3,000 / hour** per-OApp cap. Net effect: rate scales with the installer's plan, and all OApps installed in one organization share that org's budget rather than each having their own. Callers on Free still see Free's per-org cap; paid plans get more headroom (#24728).
+- **Notification API:** [`POST /notification`](https://quire.io/dev/api/#operation--notification-post) accepts an optional `recipients`: the authorizing user's colleagues the app can see, or `["*"]` for all of them. Every 10 recipients cost 1 [unit](https://quire.io/dev/api/#request-cost). Omitted, only the authorizing user is notified.
+- **Storage API:** storage calls now count against the organization's plan-tiered [rate limit](https://quire.io/dev/api/#rate-limits), shared with the rest of the API and by all apps in it, instead of a flat 200 / minute and 3,000 / hour per app.
 
 ## May 8, 2026
 
-- **OAuth (PKCE):** PKCE-issued access tokens now last **7 days** (vs. 1 hour for confidential clients). Public clients (CLIs, single-page apps) can't authenticate the refresh-token grant, so this avoids forcing hourly re-authorization. The token response continues to omit `refresh_token` for PKCE flows; when the access token expires, run the authorization flow again. The `expires_in` field reflects the actual remaining lifetime. See [PKCE Support](https://quire.io/dev/api/#authentication).
-- **OAuth:** [Loopback redirect URIs](https://quire.io/dev/api/#authentication) (`127.0.0.1`, `[::1]`, `localhost`) now accept **any port** at request time, per [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3). Scheme, host, and path must still match the registered URI exactly. Lets installed apps (CLIs, desktop tools) bind to a free ephemeral port without pinning users to a fixed one. Non-loopback URIs are unchanged.
+- **OAuth (PKCE):** PKCE-issued access tokens now last **7 days** (vs. 1 hour for confidential clients), still with no `refresh_token`: when one expires, run the authorization flow again. `expires_in` is the actual remaining lifetime. See [PKCE Support](https://quire.io/dev/api/#pkce-support).
+- **OAuth:** [Loopback redirect URIs](https://quire.io/dev/api/#loopback-redirect-uris-native-cli-apps-) (`127.0.0.1`, `[::1]`, `localhost`) now accept **any port**, per [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3); scheme, host and path must still match. Non-loopback URIs are unchanged.
 
 ## May 2, 2026
 
-- **Task / Approval API:** Added `{oid, id}` companion fields alongside existing OID-only response fields, for ID-friendly access (#24609). Old fields stay on the wire for backward compatibility; new code should prefer the `*Refs` / `*Ref` form.
+- **Task / Approval API:** Added `{oid, id}` companion fields alongside existing OID-only response fields, for ID-friendly access. Old fields stay on the wire for backward compatibility; new code should prefer the `*Refs` / `*Ref` form.
     - `SimpleTask`: `successorRefs`, `predecessorRefs` — list of `{oid, id}` task refs (same shape as `?return=compact`).
-    - `AppvCat`: `claimerRefs`, `approverRefs` — list of `{oid, id}` user refs. Tri-state semantics match the existing `claimers` / `approvers` (omitted = anyone; `[]` = admins only; list = those specific users).
-    - `Approval`: `requesterRef`, `approverRef` — scalar `{oid, id}` user refs. `approverRef` is null while `state` is `awaiting`.
+    - [`AppvCat`](https://quire.io/dev/api/#definition-AppvCat): `claimerRefs`, `approverRefs` — list of `{oid, id}` user refs, with the tri-state of `claimers` / `approvers`.
+    - [`Approval`](https://quire.io/dev/api/#definition-Approval): `requesterRef`, `approverRef` — scalar `{oid, id}` user refs. `approverRef` is null while `state` is `awaiting`.
     - No input changes — `successors` / `claimers` / `addSuccessors` / etc. already accept OID, `#id`, integer ID, and (for users) email.
 
 ## Apr 27, 2026
 
-- **Task API:** Added the bulk-approve endpoint for applying a single approval transition (`request` / `approve` / `reject` / `change`) to N tasks in one call. Same body shape, atomic / skip-not-found / `items[i]:` error / rate-limit conventions as the bulk-add / bulk-update / bulk-remove / bulk-move / bulk-transfer endpoints.
-    - [`POST /task/bulk-approve/id/{projectId}?state=<state>[&category=<catId>]`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) — body is a top-level array of task references (OID, integer ID, or `"#<id>"` string; mixed forms allowed). The OID-form `POST /task/bulk-approve/{projectOid}` is also available.
-    - `?state=` (required) follows the single-task `POST /task/approve/id/{projectId}/{taskId}` vocabulary; `?category=` (optional) defaults to the project's default category.
-    - `?return=compact` returns `{oid, id}` per item (vs. the full task record in default mode).
-    - Per-task role checks match the single-task endpoint — any item failing the claimer/approver check rolls the whole batch back with an `items[i]: ...` error.
-- **Task API:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) (and the by-OID form) now takes `state` and `category` as **query parameters** instead of body fields — same grammar as the bulk-approve endpoint. Example: `POST /task/approve/id/my_project/42?category=Legal&state=approve`. The request body is unused and may be empty. `?return=compact` also now returns `{oid, id}` (was `{oid}` only) so it matches every other compact response.
-- **Task search:** opt-in cursor pagination via `?cursor=<token>` on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get) (and the search-organization / search-folder endpoints). With `?limit=N` and more results to come, the **last item carries `"cursor": "<token>"`** — pass it back as `?cursor=<token>` (with the same `?limit=` and any filter) for the next page. End of stream is signalled by the absence of `cursor` on the last item of a page. Same shape (bare array) on every page — no envelope. Example:
-    ```
-    GET /task/search/id/my_project?status=active&limit=30
-    GET /task/search/id/my_project?status=active&limit=30&cursor=<token-from-page-1's-last-item>
-    ```
-    - Applies to `/task/search/...`, `/task/search-organization/...`, and `/task/search-folder/...` (and all OID-form variants).
-    - Cannot be combined with `?sublist=` (returns `400`).
-- **Task search:** added `?recurring=` query parameter on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get). Boolean: `true` (or empty, i.e. `?recurring`) returns only recurring tasks (those with a recurrence configured); `false` returns only non-recurring tasks; any other value returns `400 Bad Request`. Implemented as `is [not] null` on the underlying recurrence column.
-    - Future work: a richer `?recurrence=<expression>` (filter by next-due window, frequency / interval, weekday set, until-date, etc.) is tracked separately and not part of this round.
-- **Task search:** three new query parameters on `/task/search/...`. Each accepts the `,` (AND) / `|` (OR) / `!` (NOT) grammar already used by `assignee` / `tag`.
-    - `?priority=` — filter by task priority. Values are integers (`-1`..`2`) or labels (`low`, `medium`, `high`, `urgent`, `none`; case-insensitive). Examples: `?priority=high`, `?priority=high|urgent`, `?priority=!low`.
-    - `?type=` — filter by task type: `normal` (alias `task`), `section`, `milestone`. Example: `?type=section|milestone`.
-    - `?createdBy=` — filter by the user who created the task. Each value is a user OID, ID, or email (same resolution as `assignee`). Example: `?createdBy=alice|bob`.
-- **Task API:** `/task/list/...` gained opt-in pagination via `?limit=N` and `?cursor=<token>`. Without either param, the response stays a bare full array. With `?limit=N` (1..1000) and more results to come, the **last item in the response carries `"cursor": "<token>"`** — pass it back as `?cursor=<token>` on the next call (along with `?limit=` and any filter like `?status=`) to fetch the next page; end of stream is signalled by the absence of `cursor` on the last item. `?limit=no` is the explicit "return everything". Same shape (bare array) on every page.
-    - Applies to both [`GET /task/list/id/{projectId}`](https://quire.io/dev/api/#operation--task-list-id--projectId--get) (project root tasks) and [`GET /task/list/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-list-id--projectId---taskId--get) (subtasks of a task), and to the OID-form variants.
-    - Cannot be combined with `?depth>1` (returns `400`). Composes with `?status=` filter and with `?return=compact` (which renders each item as `{oid, id, cursor?}`).
-- **Task API:** [`GET /task/list/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-list-id--projectId---taskId--get) gained an opt-in [`?depth=N`](https://quire.io/dev/api/#operation--task-list-id--projectId---taskId--get) parameter for fetching a whole subtree in one call. Omit (or `?depth=1`) for the flat single-level behavior; any positive `?depth=N` returns a multi-level subtree capped at the given depth; `?depth=full` walks every level (bounded by the per-tier total-nodes cap). Each task carries a nested `tasks` field for its walked children, recursively.
-    - **Anchor required** — `?depth>1` rejects the whole-project case (`?depth>1` without a task in the URL → `400`); use `?depth=1` (or omit) on `/task/list/id/{projectId}` for root tasks.
-    - **Plan-tier total-nodes cap** when `?depth>1`: Free → `402 Payment Required` (Professional plan or above required), Pro → **500**, Premium → **2,000**, Enterprise → unlimited (bounded only by the global response-size ceiling). When the cap is reached, the partial subtree is returned and the **last emitted sibling at the cropped level carries `"cropped": true`** — agent drills into that level via `/task/list/id/{prj}/{parentId}` to fetch the rest. (No `childCount` is included on subtree responses — the `tasks` array is the canonical signal; existing `?depth=1` and single-task responses still include `childCount`.)
-    - **`?return=compact` composes** — records are rendered as `{oid, id, tasks?, cropped?}` per node; the tree shape is unchanged.
-    - **`?status=` filter applies at every level** (all-or-nothing per branch): a child that doesn't match the filter is excluded along with its descendants. The per-tier cap counts only post-filter nodes.
-    - The response shape is **identical to the flat `?depth=1` shape** — a bare list of task maps.
-- **Task API:** Added three bulk endpoints for creating, updating, and removing many tasks in one call (up to **300 items per call**, project-scoped, atomic transaction). Body for all three is a top-level JSON array; response is a same-length array (one element per submitted item, with `null` placeholders for skipped items in `bulk-update` / `bulk-remove`). Pair with `?return=compact` for large batches.
-    - [`POST /task/bulk-add/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) — N root tasks. Body is `CreateTaskBody[]`. Items can include nested `tasks` to create subtrees in the same call (only the root of each item is echoed in the response).
-    - [`POST /task/bulk-add/id/{projectId}/{taskId}?position=…`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId---taskId--post) — N tasks anchored at `taskId`. `?position=` accepts `parent` (default), `before`, or `after`, mirroring single-task add. Submitted-order is preserved across the batch regardless of `?position=` (the server uses a sliding-chain insert internally).
-    - The OID-form `POST /task/bulk-add/{oid}` is also available, accepting either a project or task OID as the anchor.
-    - [`PUT /task/bulk-update/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put) — body is an array of items, each carrying exactly one of `oid` / `id` plus `UpdateTaskBody`-shape fields. The OID-form `PUT /task/bulk-update/{projectOid}` is also available.
-    - [`DELETE /task/bulk-remove/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-remove-id--projectId--delete) — body is an array of task references; each element is a task OID (string), an integer ID, or a `"#<id>"` string. Mixed forms allowed in the same batch. The OID-form `DELETE /task/bulk-remove/{projectOid}` is also available.
-    - **Atomic semantics for real bugs**: any per-item validation / permission / DB error rolls back the whole batch and returns `{code, message}` with `items[i]:` prefixed so the agent can pinpoint the offending row. Fix the value and retry.
-    - **Skip-not-found** (`bulk-update` / `bulk-remove` only): items whose target task can't be found (already removed, never existed, cascade-removed by an earlier item in the same batch, etc.) are silently skipped — the corresponding response slot is `null` and the rest of the batch proceeds. Shape errors (malformed ref, both / neither `oid` and `id`) still return `400` and roll back.
-    - **Rate-limit cost**: each bulk call costs `N` units against the per-minute / per-hour API quota, where `N` is the number of submitted items — the same total cost as `N` equivalent single-task calls. Charged upfront; if the cost would exceed the quota, the whole batch is rejected with `429 Too Many Requests` before any item is processed.
-    - Bulk-transfer (across projects) is tracked separately as future work.
-- **Task API:** Added the bulk-move endpoint for repositioning many tasks within a project in one call. Same body shape, atomic / skip-not-found / `items[i]:` error / sliding-chain / rate-limit conventions as the bulk-add / bulk-update / bulk-remove endpoints.
-    - [`PUT /task/bulk-move/id/{projectId}?task={ref}&position=…`](https://quire.io/dev/api/#operation--task-bulk-move-id--projectId--put) — body is a top-level array of task references (OID, integer ID, or `"#<id>"` string; mixed forms allowed). The OID-form `PUT /task/bulk-move/{projectOid}` is also available.
-    - `?task=` and `?position=` follow single-task `PUT /task/move/...` grammar — `?task=root` to promote items to project root (only with default `?position=parent`); `?task={ref}&position=before|after` to insert items as siblings of the reference.
-    - Sliding-chain insertion preserves submitted order regardless of `?position=` (so `?position=after R` with items `[A, B, C]` lands as `R, A, B, C` — not the naive reverse).
-- **Task API:** Added the bulk-transfer endpoint for moving many tasks across projects in one call. Same body shape, atomic / skip-not-found / `items[i]:` error / sliding-chain / rate-limit conventions as the other bulk endpoints, plus the per-aspect remap flags from single-task transfer.
-    - [`PUT /task/bulk-transfer/id/{sourceProjectId}?project={target}&task={ref}&position=…`](https://quire.io/dev/api/#operation--task-bulk-transfer-id--sourceProjectId--put) — body is a top-level array of task references (mixed forms allowed). The OID-form `PUT /task/bulk-transfer/{sourceProjectOid}` is also available.
-    - `?project=` (required) names the target project. Use `-` for the user's Inbox.
-    - `?task=` and `?position=` follow single-task `PUT /task/transfer/...` grammar.
-    - `?invite`, `?tag`, `?status`, `?custom-field` (all default `true`) control the auto-remap behavior — same as single-task transfer.
-    - Both source and target locks are held for the whole batch; any per-item failure rolls back both. If `?project=` resolves to the URL source project, the whole batch is rejected with `400` (use `bulk-move` for within-project reorder).
-    - OIDs are preserved across transfer; IDs are reassigned from the target project's counter.
-- **All single-item POST / PUT endpoints:** Added an optional `?return=` query parameter to control the response shape — `full` (default; same as before) returns the complete record, `compact` returns identifiers only. Compact response shape varies by entity:
-    - `{oid, id}` for tasks, projects, organizations, chats, docs, insights, sublists.
-    - `{oid}` for comments and tags (no separate `id`).
-    - `{name}` for custom-field extensions (`add-field` / `update-field` / `rename-field` / `move-field` on both project and insight).
-    - `{id}` for approval categories (`add-appv-cat` / `update-appv-cat`).
-    - `{value}` for task statuses (`POST /status` / `PUT /status`).
-    - `{oid, id}` for `POST /task/approve/...`.
-    - Any other `?return=` value returns `400 Bad Request`. `GET`, `DELETE`, list / search, and the timelog and attach endpoints don't accept `?return=` — their response shape is fixed.
-- **Task API:** Added three timelog endpoints for managing a task's [time logs](https://quire.io/dev/api/#definition-Timelog) without rewriting the whole task. Identity of a log is the triple `(user, start, end)`; sub-second precision is truncated to whole seconds.
-    - [`POST /task/add-timelog/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-add-timelog-id--projectId---taskId--post) — body carries `start` / `end` (required) and optional `user` / `billable` / `note`. `user` defaults to the caller. Returns `409 Conflict` if a log with the same triple already exists.
-    - [`PUT /task/update-timelog/id/{projectId}/{taskId}?start=…&end=…[&user=…]`](https://quire.io/dev/api/#operation--task-update-timelog-id--projectId---taskId--put) — query params identify the log; body carries new values. Omitted (or `null`) body fields preserve existing values; send empty string for `note` to clear. Returns `404 Not Found` when no log matches.
-    - [`DELETE /task/remove-timelog/id/{projectId}/{taskId}?start=…&end=…[&user=…]`](https://quire.io/dev/api/#operation--task-remove-timelog-id--projectId---taskId--delete) — removes the matching log. Returns `404 Not Found` when no log matches.
-    - All three return HTTP 200 with the task's full timelogs array (same element shape as the `timelogs` field on `GET /task/id/{projectId}/{taskId}`); empty array when no logs remain.
-    - The by-OID forms `/task/add-timelog/{taskOid}`, `/task/update-timelog/{taskOid}`, and `/task/remove-timelog/{taskOid}` are also available.
-- **Task API:** [`PUT /task/move/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-move-id--projectId---taskId--put) and [`PUT /task/transfer/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-transfer-id--projectId---taskId--put) now accept an optional `?position=` query parameter to control sibling ordering — matching the existing `add-task` grammar.
-    - `parent` (default; same as omitted) — the moved/transferred task becomes a child of `?task=`.
-    - `before` — sibling immediately before `?task=`, under `?task=`'s parent.
-    - `after` — sibling immediately after `?task=`, under `?task=`'s parent.
-    - Any other value returns `400 Bad Request`.
-    - `before` / `after` require `?task=` to refer to an existing task (not `root`, not omitted).
-    - Example (move): `PUT /task/move/id/my_project/42?task=99&position=after`.
-    - Example (transfer): `PUT /task/transfer/id/my_project/42?project=archive&task=99&position=before`.
+- **Task API:** Added [`POST /task/bulk-approve/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-approve-id--projectId--post) (and the OID form) to apply one approval transition to many tasks in one call, with the conventions of the other bulk endpoints.
+- **Task API:** [`POST /task/approve/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-approve-id--projectId---taskId--post) (and the by-OID form) takes `state` and `category` as **query parameters** instead of body fields; the body is unused. `?return=compact` returns `{oid, id}`, not just `{oid}`.
+- **Task search:** opt-in cursor paging on [`GET /task/search/id/{projectId}`](https://quire.io/dev/api/#operation--task-search-id--projectId--get), `search-organization` and `search-folder`: with `?limit=`, a page's last item carries a `cursor` to pass back. Not with `?sublist=` (`400`). See [Pagination](https://quire.io/dev/api/#pagination).
+- **Task search:** added [`?recurring=`](https://quire.io/dev/api/#operation--task-search-id--projectId--get): `true` (or empty) returns only recurring tasks, `false` only non-recurring ones; any other value returns `400`.
+- **Task search:** added `?priority=`, `?type=` and `?createdBy=` (now `created-by`) to [`/task/search/...`](https://quire.io/dev/api/#operation--task-search-id--projectId--get), each with the `,` (AND) / `|` (OR) / `!` (NOT) grammar of `assignee` / `tag`.
+- **Task API:** [`/task/list/...`](https://quire.io/dev/api/#operation--task-list-id--projectId--get) gained opt-in paging with `?limit=` and `?cursor=`, as task search has, for root tasks and [subtasks](https://quire.io/dev/api/#operation--task-list-id--projectId---taskId--get); without either, it returns every task. Not with `?depth>1` (`400`).
+- **Task API:** [`GET /task/list/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-list-id--projectId---taskId--get) takes `?depth=N` or `full` to return a subtree, each task nesting its children in `tasks`. Free gets `402`; Pro and Premium cap the nodes, marking a cropped level with `"cropped": true`.
+- **Task API:** Added [`bulk-add`](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId--post) ([under a task](https://quire.io/dev/api/#operation--task-bulk-add-id--projectId---taskId--post) too), [`bulk-update`](https://quire.io/dev/api/#operation--task-bulk-update-id--projectId--put) and [`bulk-remove`](https://quire.io/dev/api/#operation--task-bulk-remove-id--projectId--delete), and their OID forms, to create, update or remove up to 300 tasks of a project in one atomic call, at 1 rate-limit unit per item.
+- **Task API:** Added [`PUT /task/bulk-move/id/{projectId}`](https://quire.io/dev/api/#operation--task-bulk-move-id--projectId--put) (and the OID form) to reposition many tasks within a project in one call, with the conventions of the other bulk endpoints.
+- **Task API:** Added [`PUT /task/bulk-transfer/id/{sourceProjectId}`](https://quire.io/dev/api/#operation--task-bulk-transfer-id--sourceProjectId--put) (and the OID form) to move many tasks to another project in one call, with the other bulk endpoints' conventions and single-task transfer's remap flags.
+- **All single-item POST / PUT endpoints:** Added an optional `?return=`: `full` (default) for the whole record, or `compact` for identifiers only. See [Compact Responses](https://quire.io/dev/api/#compact-responses).
+- **Task API:** Added [`add-timelog`](https://quire.io/dev/api/#operation--task-add-timelog-id--projectId---taskId--post), [`update-timelog`](https://quire.io/dev/api/#operation--task-update-timelog-id--projectId---taskId--put) and [`remove-timelog`](https://quire.io/dev/api/#operation--task-remove-timelog-id--projectId---taskId--delete), and the by-OID forms, to manage a task's [time logs](https://quire.io/dev/api/#definition-Timelog) one at a time, each identified by its user, start and end.
+- **Task API:** [`PUT /task/move/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-move-id--projectId---taskId--put) and [`PUT /task/transfer/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-transfer-id--projectId---taskId--put) accept `?position=` (`parent`, `before` or `after`), as adding a task does; `before` and `after` need a `?task=`.
 
 ## Apr 24, 2026
 
-- **Insight API:** The 5 field-extension endpoints (`add-field`, `update-field`, `remove-field`, `rename-field`, `move-field`) now accept the by-ID URL form in addition to the by-OID form. The by-ID path identifies the insight by owner-type + owner ID + insight ID:
-    - `POST /insight/add-field/id/{ownerType}/{ownerId}/{insightId}`
-    - `PUT /insight/update-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}`
-    - `DELETE /insight/remove-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}`
-    - `PUT /insight/rename-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}/{newName}`
-    - `PUT /insight/move-field/id/{ownerType}/{ownerId}/{insightId}/{fieldName}[?before={otherName}]`
-    - `{ownerType}` is one of `project`, `organization`, `folder`, `smart-folder`.
-    - Both URL forms dispatch through the same handler.
-- **Task API:** `cfUser` and `cfTask` custom-field values in [`POST /task/id/{projectId}`](https://quire.io/dev/api/#operation--task-id--projectId--post) and [`PUT /task/id/{projectId}/{taskId}`](https://quire.io/dev/api/#operation--task-id--projectId---taskId--put) bodies now accept the same shorthand forms already supported for built-in fields.
-    - **cfUser**: user OID, user ID, or email. Server resolves to the user's OID.
-    - **cfTask**: task OID, integer task ID, or `#<id>` string. Server resolves to the task's OID, scoped to the task's project.
-    - Multi-value fields (`multiple: true`) accept mixed forms in one list and are de-duplicated by resolved OID: `{"Owners": ["alice", "bob@example.com"], "Depends": [42, "#99"]}`.
-    - Unknown values (user or task not found, wrong project) return `400 Bad Request`.
-- **Task Search API:** Added `assignee`, `assignor`, `follower`, and `tag` query params to the project, organization, and folder search endpoints.
-    - **User refs** (`assignee`, `assignor`, `follower`): each value is a user OID, user ID, or email — same dispatch as the `User` custom-field type.
-    - **Tags** (`tag`): value is a tag OID or tag name. Tag-name resolution is scoped to the search — project search matches the project's own tags plus its organization's global tags; organization / folder search matches any tag in the organization.
-    - **Boolean grammar** shared by all four params:
-        - `a,b,c` — all (AND)
-        - `a|b|c` — any (OR)
-        - `!a` — not (may appear inside either an AND or OR list)
-        - `a,b|c` — `(a AND b) OR c` (AND binds tighter than OR)
-    - **Quoting for tag names** with special characters: enclose in `"..."`. Inside quotes, `\"` is a literal `"` and `\\` is a literal `\`; any other `\x` is preserved as two literal characters.
-    - Examples: `?assignee=alice,!bob`, `?follower=alice|bob`, `?tag=Legal,!Draft`, `?tag="In Progress",!Done`, `?tag="Foo\"s Go"|Other`.
-    - `cfUser` custom-field search additionally accepts user email (already supported — docs updated).
-- **Task Search API:** Custom-field filtering now supports `Date` custom fields. The filter grammar matches the built-in `start` / `due` params (keyword, value, null ops; date-only or ISO 8601 timestamp operand). Timestamp operands are accepted only on fields configured with `withTime: true`. For a field named `approvedAt`, example queries: `?approvedAt=today`, `?approvedAt=ge:2026-04-01`, `?approvedAt=between:2026-04-01,2026-04-30`, `?approvedAt=isNull`. Only `Formula`, `File`, `Lookup`, and `Text` custom-field types remain unsupported for search.
-- **Task Search API:** Added `created`, `edited`, `archived`, `unarchived`, `toggled`, `start`, and `due` query params to filter by the task's date/time columns. Supported across the project, organization, and folder search endpoints.
-    - Keyword ops: `past`, `yesterday`, `today`, `tomorrow`, `upcoming`, `last7d`, `next7d`, `lastWeek`, `thisWeek`, `nextWeek`. Day boundaries resolve in the OAuth user's timezone; week start follows their locale.
-    - Value ops (token:value): `ge`, `gt`, `le`, `lt`, `eq`, `ne`, `between`, `notBetween`. Operand is an ISO 8601 timestamp (`YYYY-MM-DDTHH:MM:SSZ`). `between` / `notBetween` are inclusive on both ends.
-    - Null ops (nullable fields — `archived`, `unarchived`, `toggled`, `start`, `due`): `isNull`, `isNotNull`.
-    - `start` / `due` additionally accept a **date-only** operand (`YYYY-MM-DD`), which expands to a whole-day window in the caller's timezone. `gt:D` / `le:D` use end-of-day, `lt:D` / `ge:D` use start-of-day.
-    - `past` on simple timestamp fields (`created`, `edited`, `archived`, `unarchived`, `toggled`) is `< now()`; on `start` / `due` it is `< today 00:00` in the caller's timezone (canonical).
-    - Tokens and keywords are case-insensitive.
-- **Project API:** Added endpoints to manage [approval categories](https://quire.io/dev/api/#definition-AppvCat) on a project. The project response now includes an `approvalCategories` list.
-    - [`POST /project/add-appv-cat/{oid}`](https://quire.io/dev/api/#operation--project-add-appv-cat--oid--post) (and `/add-appv-cat/id/{id}`) to add a category.
-    - `PUT /project/update-appv-cat/{oid}/{catId}` to update a category's name / claimers / approvers (partial; omitted keys preserve current values).
-    - `DELETE /project/remove-appv-cat/{oid}/{catId}` to remove.
-    - Each category carries a `claimers` roster (may `request` approval) and an `approvers` roster (may `approve` / `reject` / `change`). `null` means "anyone"; `[]` means "admins only"; otherwise a list of user OIDs.
-- **Task API:** Added endpoints to drive a task's [approval](https://quire.io/dev/api/#definition-Approval) workflow. Task responses now include an `approval` field when set.
-    - [`POST /task/approve/{oid}`](https://quire.io/dev/api/#operation--task-approve--oid--post) (and `/approve/id/{projectId}/{taskId}`) to request (`request`), approve (`approve`), reject (`reject`), or request changes (`change`). The same endpoint handles every transition; the body's `state` token (case-insensitive) selects the action. `request` also covers rolling forward from `approved` / `rejected` / `changes` back to `awaiting`.
-    - `DELETE /task/revoke-approval/{oid}` (and `/revoke-approval/id/{projectId}/{taskId}`) to cancel. Smart-dispatch per current state: `awaiting` / `changes` → clears; `approved` / `rejected` → rolls back to `awaiting` (original requester preserved). Idempotent.
-    - `category` is optional on `POST /task/approve` — omitted / `null` / `""` resolves to the project's implicit default category (id `""`), which is always available. An unknown category id returns `404`.
-    - The original requester is preserved across `approve` / `reject` / `change` transitions; the responding user is recorded as `approver`.
+- **Insight API:** The 5 field endpoints (`add-field`, `update-field`, `remove-field`, `rename-field`, `move-field`) accept the by-ID URL form too, e.g. [`POST /insight/add-field/id/{ownerType}/{ownerId}/{insightId}`](https://quire.io/dev/api/#operation--insight-add-field-id--ownerType---ownerId---insightId--post).
+- **Task API:** `cfUser` and `cfTask` custom-field values in [create](https://quire.io/dev/api/#operation--task-id--projectId--post) and [update](https://quire.io/dev/api/#operation--task-id--projectId---taskId--put) bodies accept the shorthand of built-in fields: a user's OID, ID or email; a task's OID, ID or `#<id>`. Unknown values return `400`.
+- **Task Search API:** Added `assignee`, `assignor`, `follower` and `tag` to the project, organization and folder [searches](https://quire.io/dev/api/#operation--task-search-id--projectId--get): users by OID, ID or email, tags by OID or name, combined with `,` (AND), `|` (OR) and `!` (NOT).
+    - A `cfUser` custom-field filter also takes a user's email (already supported; doc updated).
+- **Task Search API:** Custom-field filtering supports `Date` fields, with the grammar of the built-in `start` / `due` (a timestamp needs `withTime: true`). Only `Formula`, `File`, `Lookup` and `Text` remain unsupported. See [Custom Field Filtering](https://quire.io/dev/api/#custom-field-filtering).
+- **Task Search API:** Added `created`, `edited`, `archived`, `unarchived`, `toggled`, `start` and `due` to filter the project, organization and folder [searches](https://quire.io/dev/api/#operation--task-search-id--projectId--get) by date, with keyword (`today`, …), value (`ge:`, `between:`, …) and null ops.
+- **Project API:** Added [`add-appv-cat`](https://quire.io/dev/api/#operation--project-add-appv-cat--oid--post), [`update-appv-cat`](https://quire.io/dev/api/#operation--project-update-appv-cat--oid---catId--put) and [`remove-appv-cat`](https://quire.io/dev/api/#operation--project-remove-appv-cat--oid---catId--delete) to manage a project's [approval categories](https://quire.io/dev/api/#definition-AppvCat), each with `claimers` and `approvers`. Projects now return `approvalCategories`.
+- **Task API:** Added [`POST /task/approve/{oid}`](https://quire.io/dev/api/#operation--task-approve--oid--post) (and the by-ID form) to request, approve, reject or request changes on a task's [approval](https://quire.io/dev/api/#definition-Approval), and [`DELETE /task/revoke-approval/{oid}`](https://quire.io/dev/api/#operation--task-revoke-approval--oid--delete) to cancel it. Tasks now return `approval` when set.
 
 ## Apr 22, 2026
 
-- **Project & Insight APIs:** Added endpoints to manage [custom-field definitions](https://quire.io/dev/api/#definition-FieldDefinition) one at a time. Both the project and insight responses now include a `fields` map keyed by field name.
-    - [`POST /project/add-field/{oid}`](https://quire.io/dev/api/#operation--project-add-field--oid--post) (and `/add-field/id/{id}`) to add a definition.
-    - [`PUT /project/update-field/{oid}/{fieldName}`](https://quire.io/dev/api/#operation--project-update-field--oid---fieldName--put) to update an existing field's content — flag keys that are omitted preserve their current value.
-    - `DELETE /project/remove-field/{oid}/{fieldName}` to remove.
-    - `PUT /project/rename-field/{oid}/{fieldName}/{newName}` to rename.
-    - `PUT /project/move-field/{oid}/{fieldName}[?before={otherName}]` to reorder.
-    - Equivalent [`/insight/...-field/{insightOid}/...`](https://quire.io/dev/api/#operation--insight-add-field--oid--post) endpoints are available for insight views (OID-addressed only).
-    - Field types: `text`, `number`, `money`, `date`, `duration`, `select`, `checkbox`, `user`, `task`, `hyperlink`, `email`, `formula`, `file`, `lookup`. Enum-like values (`type`, `resultType`, `durationFormat`, `lookupType`, and `when`/`op` within `conditionFormat`) are accepted case-insensitively.
+- **Project & Insight APIs:** Added [`add-field`](https://quire.io/dev/api/#operation--project-add-field--oid--post), [`update-field`](https://quire.io/dev/api/#operation--project-update-field--oid--put), `remove-field`, `rename-field` and `move-field` to manage [custom-field definitions](https://quire.io/dev/api/#definition-FieldDefinition) one at a time, also on [insights](https://quire.io/dev/api/#operation--insight-add-field--oid--post) (by OID). Both now return a `fields` map.
+    - Enum-like values (`type`, `resultType`, `durationFormat`, `lookupType`, and `when`/`op` in `conditionFormat`) are case-insensitive.
 - **Project API:** [`PUT /project/{oid}`](https://quire.io/dev/api/#operation--project--oid--put) now accepts `name`, `description`, `start`, `due`, `archived` (bool toggle), and `public` (bool toggle) in addition to follower deltas. The project response now includes `start`, `due`, `archivedAt`, and `publicAt`.
 - **Organization API:** [`PUT /organization/{oid}`](https://quire.io/dev/api/#operation--organization--oid--put) now accepts `name` and `description` in addition to follower deltas. The organization response now includes `editedAt`.
 - **Rate Limit API:** Added [`GET /rate-limit/{organizationOid}`](https://quire.io/dev/api/#operation--rate-limit--oid--get) (and `GET /rate-limit/id/{organizationId}`) to inspect current per-hour and per-minute API usage for an organization. Calls to this endpoint do not count against the rate limit.
-- **Undo-remove APIs:** Added `PUT /{entity}/undo-remove/{oid}` (and `/id/...` variants; comment's `/id/...` form was later removed — see Jul 31, 2026) to restore a previously-removed [task](https://quire.io/dev/api/#operation--task-undo-remove--oid--put), [comment](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put), [sublist](https://quire.io/dev/api/#operation--sublist-undo-remove--oid--put), [document](https://quire.io/dev/api/#operation--doc-undo-remove--oid--put), [chat channel](https://quire.io/dev/api/#operation--chat-undo-remove--oid--put), or [insight view](https://quire.io/dev/api/#operation--insight-undo-remove--oid--put). The endpoints are idempotent, and task/sublist/doc/chat/insight undo-remove is subject to the plan's per-type creation quota.
+- **Undo-remove APIs:** Added `PUT /{entity}/undo-remove/{oid}` (and `/id/...` forms) to restore a removed [task](https://quire.io/dev/api/#operation--task-undo-remove--oid--put), [comment](https://quire.io/dev/api/#operation--comment-undo-remove--commentOid--put), [sublist](https://quire.io/dev/api/#operation--sublist-undo-remove--oid--put), [document](https://quire.io/dev/api/#operation--doc-undo-remove--oid--put), [chat channel](https://quire.io/dev/api/#operation--chat-undo-remove--oid--put) or [insight view](https://quire.io/dev/api/#operation--insight-undo-remove--oid--put): idempotent, and except a comment's, subject to the plan's creation quota.
 - **Insight API:** Added the [Insight API](https://quire.io/dev/api/#tag-insight) to create, read, update, and delete insight views, matching the shape of the existing Sublist / Doc / Chat APIs. Custom-field configuration (`tableCols`, `fields`) is not yet exposed; follow-up is planned.
 
 ## Apr 20, 2026
 
-- **Task API:** The `priority` field in [create](https://quire.io/dev/api/#operation--task--projectOid--post) and [update](https://quire.io/dev/api/#operation--task--taskOid--put) task endpoints now accepts an English name (case-insensitive) — `Low`, `Medium`, `High`, or `Urgent` — in addition to the integer range `-1` to `2`.
+- **Task API:** The `priority` field in [create](https://quire.io/dev/api/#operation--task--oid--post) and [update](https://quire.io/dev/api/#operation--task--oid--put) task endpoints now accepts an English name (case-insensitive) — `Low`, `Medium`, `High`, or `Urgent` — in addition to the integer range `-1` to `2`.
 
 ## Apr 18, 2026
 
@@ -297,13 +189,12 @@
 ## Apr 13, 2026
 
 - **Task API:** Added support for [searching tasks by custom fields](https://quire.io/dev/api/#operation--task-search--projectOid--get) in project-level search. Supported field types: Number, Money, Checkbox, Select, User, Task, Email, Hyperlink, and Duration. Field names are case-insensitive.
-- **OAuth:** Added [PKCE](https://quire.io/dev/api/#oauth-pkce) (RFC 7636) support for single-page apps. Only S256 method is supported. PKCE flows do not issue refresh tokens.
+- **OAuth:** Added [PKCE](https://quire.io/dev/api/#pkce-support) (RFC 7636) support for single-page apps. Only S256 method is supported. PKCE flows do not issue refresh tokens.
 - **OAuth:** Improved error message when `grant_type` is missing from token exchange request.
 
 ## Apr 8, 2026
 
-- **Task API:** Enhanced API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post)
-    - Example: `POST /task/id/MyPrj/357?position=before`
+- **Task API:** Enhanced API for [creating a task relative to another task](https://quire.io/dev/api/#operation--task-id--projectId---taskId--post), with `?position=`.
     - *Deprecated*: `POST /task/before` and `POST /task/after`
 - **Task API:** Added support for [deleting a task by its ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--delete)
 - `DELETE` endpoints now return `204 No Content` instead of `200 OK`
@@ -311,16 +202,16 @@
 
 ## Mar 27, 2026
 
-- An additional `predecessors` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-search-id--projectId--get) APIs.
+- An additional `predecessors` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---taskId--get) and [SEARCH](https://quire.io/dev/api/#operation--task-search-id--projectId--get) APIs.
 
 ## Mar 23, 2026
 
-- **Task API:** Added support [for transferring tasks](https://quire.io/dev/api/#operation--task-transfer-id--projectId---id--put).
+- **Task API:** Added support [for transferring tasks](https://quire.io/dev/api/#operation--task-transfer-id--projectId---taskId--put).
 
 ## Mar 21, 2026
 
-- **Task API:** Added support [for moving tasks](https://quire.io/dev/api/#operation--task-move-id--projectId---id--put).
-- An additional `parent` field is included in the return value of the Task [PUT](https://quire.io/dev/api/#operation--task-move-id--projectId---id--put) too.
+- **Task API:** Added support [for moving tasks](https://quire.io/dev/api/#operation--task-move-id--projectId---taskId--put).
+- An additional `parent` field is included in the return value of the Task [PUT](https://quire.io/dev/api/#operation--task-move-id--projectId---taskId--put) too.
 
 ## Feb 28, 2026
 
@@ -329,13 +220,13 @@
 
 ## Feb 13, 2026
 
-- Addition `projectSummary` and `organizationSummary` fields are included in the data sent to a web hook. See [Notification Event](https://quire.io/dev/api/#notification-events)
+- Additional `projectSummary` and `organizationSummary` fields are included in the data sent to a web hook. See [Notification Event](https://quire.io/dev/api/#notification-events)
 - An additional `parent` field is included in the data sent to a web hook to provide parent task information. See [Notification Event](https://quire.io/dev/api/#notification-events)
-- An additional `parent` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---id--get) and [SEARCH](https://quire.io/dev/api/#operation--task-search-id--projectId--get) APIs.
+- An additional `parent` field is included in the return value of the Task [GET](https://quire.io/dev/api/#operation--task-id--projectId---taskId--get) and [SEARCH](https://quire.io/dev/api/#operation--task-search-id--projectId--get) APIs.
 
 ## Feb 12, 2026
 
-- An addition `taskSummaries` field is included in the data sent to a web hook, when applicable. See [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries) for more informaion.
+- An additional `taskSummaries` field is included in the data sent to a web hook, when applicable. See [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries) for more information.
 
 ## Jan 13, 2026
 
@@ -437,8 +328,7 @@
 - Added API to export a project to a JSON map: `GET /project/export-json`.
 
 ## Jan 17, 2022
-- **Storage API:** `GET` endpoints return `404` if not found.  
-      - _Previously returned 200 with an empty body._
+- **Storage API:** `GET` endpoints return `404` if not found; they returned `200` with an empty body.
 
 ## Apr 27, 2021
 - Changed URLs for getting, updating, or deleting a comment.  
@@ -448,10 +338,7 @@
 - Added APIs to manage sublists.
 
 ## Oct 30, 2020
-- Simplified `due` and `start` formats.  
-  - With time: `yyyy-mm-ddThh:mmZ` (e.g., `2020-10-30T09:30Z`)  
-  - Date only: `yyyy-mm-dd` (e.g., `2020-10-30`)  
-  - **Note:** All times must be UTC.
+- Simplified `due` and `start` formats: `yyyy-mm-ddThh:mmZ` with a time (e.g., `2020-10-30T09:30Z`), or `yyyy-mm-dd` for a date only. All times must be UTC.
 
 ## Oct 22, 2020
 - Responses now inline detailed information for fields like `assignees`, `tags`, etc.  
@@ -460,11 +347,7 @@
 - Webhook added field `value` to carry detailed information (e.g., an assignee’s ID, name, and URL for assignment events).
 
 ## Oct 13, 2020
-- You can search tasks by matching `name` and/or `description` with a regular expression.  
-  - Case-insensitive: prefix with `~*`  
-  - Case-sensitive: prefix with `~`  
-  - Example:  
-    `https://quire.io/api/task/search/id/your-project?name=~Foo[s]&description=~*(green|blue)`
+- You can [search](https://quire.io/dev/api/#operation--task-search-id--projectId--get) tasks by matching `name` and/or `description` with a regular expression: prefix it with `~`, or `~*` for case-insensitive.
 
 ## Oct 8, 2020
 - You can add a task to **My Tasks** by specifying `-` as the project ID:  
@@ -472,7 +355,6 @@
 - You can add a tag to **My Tasks** by specifying `-` as the project ID as well.
 
 ## May 27, 2020
-- To retrieve only the projects that the current user can add tasks to, use `add-task=true`.  
-  Example: `https://quire.io/api/project/list?add-task=true`
+- To retrieve only the projects that the current user can add tasks to, use `add-task=true` on [`GET /project/list`](https://quire.io/dev/api/#operation--project-list-get).
 - To include archived projects, use `archived=true`.  
   Unlike `add-task`, non-archived projects are included as well.
