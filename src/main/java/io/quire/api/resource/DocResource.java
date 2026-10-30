@@ -12,18 +12,64 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class DocResource {
 
+    // The read endpoints share this.
+    private static final String READ_403 =
+        "Forbidden — the user can't access it, or didn't authorize it for this app.";
+
+    // The create endpoints share this.
+    private static final String CREATE_NOTES =
+        "Adds a new document to the specified owner (`project`, `organization`, `folder`, or `smart-folder`) "
+      + "and returns it.\n\n"
+      + "Example — `POST /doc/id/project/my_project`:\n\n"
+      + "```json\n"
+      + "{\n"
+      + "  \"name\": \"Release notes\",\n"
+      + "  \"description\": \"What changed in **v2.0**.\",\n"
+      + "  \"followers\": [\"me\"]\n"
+      + "}\n"
+      + "```\n\n"
+      + "`followers` is allowed only when the owner is a project.\n\n"
+      + "Returns `402` if the plan's document limit is reached.";
+
+    // The list endpoints share this.
+    private static final String LIST_NOTES =
+        "Returns the owner's documents that the caller can see; one shown to "
+      + "selected members only is left out for the others. Archived documents "
+      + "are included (they carry `archivedAt`); removed ones are not.";
+
+    // The delete endpoints share this.
+    private static final String DELETE_NOTES =
+        "Removes the document. Restore it with "
+      + "`PUT /doc/undo-remove/id/{ownerType}/{ownerId}/{docId}` "
+      + "(or `/doc/undo-remove/{oid}`).\n\n"
+      + "Returns `204 No Content`, also when the document does not exist.";
+
+    // The by-ID get, update and delete endpoints share this.
+    private static final String OWNER_TYPE_BY_ID =
+        "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+      + "If omitted, `project` is assumed; e.g., `/id/my_project/1234` "
+      + "is equivalent to `/id/project/my_project/1234`.";
+
+    // The create, update and undo-remove endpoints share this.
+    private static final String RETURN_MODE =
+        "(Optional) Response shape: `full` (default) returns the full document "
+      + "record; `compact` returns only `{\"oid\": \"…\", \"id\": \"…\"}`, "
+      + "which is cheaper — use it when you don't need the record back. "
+      + "Any other value returns `400 Bad Request`.";
+
     // -------- Create --------
 
     @POST
     @Path("/{ownerType}/{ownerOid}")
     @ApiOperation(
         value = "Create a document by owner OID.",
-        notes = "Adds a new document to the specified owner (`project`, `organization`, `folder`, or `smart-folder`).",
+        notes = CREATE_NOTES,
         response = Doc.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created doc record.", response = Doc.class),
-        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed, for example a `partner` that isn't an external team of the project (or any, when the owner isn't a project), or none from an external team member sharing with every member."),
+        @ApiResponse(code = 402, message = "Payment Required — document quota reached."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a doc in this owner."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
@@ -31,7 +77,8 @@ public class DocResource {
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/abc123` is equivalent to `/project/abc123`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner OID.", required = true)
@@ -39,13 +86,7 @@ public class DocResource {
         @ApiParam(value = "Document to create.", required = true)
         CreateDocBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -53,12 +94,13 @@ public class DocResource {
     @Path("/id/{ownerType}/{ownerId}")
     @ApiOperation(
         value = "Create a document by owner ID.",
-        notes = "Adds a new document to the specified owner by ID (`project`, `organization`, `folder`, or `smart-folder`).",
+        notes = CREATE_NOTES,
         response = Doc.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created doc record.", response = Doc.class),
-        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed, for example a `partner` that isn't an external team of the project (or any, when the owner isn't a project), or none from an external team member sharing with every member."),
+        @ApiResponse(code = 402, message = "Payment Required — document quota reached."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a doc in this owner."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
@@ -66,21 +108,16 @@ public class DocResource {
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document to create.", required = true)
         CreateDocBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -95,6 +132,7 @@ public class DocResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — doc record.", response = Doc.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
     })
     public Response getDoc(
@@ -111,16 +149,13 @@ public class DocResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — doc record.", response = Doc.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
     })
     public Response getDocById(
-        @ApiParam(
-            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
-                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
-        )
+        @ApiParam(value = OWNER_TYPE_BY_ID, required = false, example = "project")
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId
@@ -130,19 +165,21 @@ public class DocResource {
     @Path("/list/{ownerType}/{ownerOid}")
     @ApiOperation(
         value = "List documents by owner OID.",
-        notes = "Returns all documents for the specified owner.",
+        notes = LIST_NOTES,
         response = Doc.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of doc records (may be empty).", response = Doc.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
     public Response getDocsByOwnerOid(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/list/abc123` is equivalent to `/list/project/abc123`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner OID.", required = true)
@@ -153,22 +190,24 @@ public class DocResource {
     @Path("/list/id/{ownerType}/{ownerId}")
     @ApiOperation(
         value = "List documents by owner ID.",
-        notes = "Returns all documents for the specified owner.",
+        notes = LIST_NOTES,
         response = Doc.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of doc records (may be empty).", response = Doc.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
     public Response getDocsByOwnerId(
         @ApiParam(
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/list/id/foo` is equivalent to `/list/id/project/foo`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId
     ) { return null; }
 
@@ -194,13 +233,7 @@ public class DocResource {
         @ApiParam(value = "Fields to update.", required = true)
         UpdateDocBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -219,26 +252,16 @@ public class DocResource {
         @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
     })
     public Response updateDocById(
-        @ApiParam(
-            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
-                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
-        )
+        @ApiParam(value = OWNER_TYPE_BY_ID, required = false, example = "project")
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId,
         @ApiParam(value = "Fields to update.", required = true)
         UpdateDocBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -258,6 +281,7 @@ public class DocResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — restored doc record.", response = Doc.class),
+        @ApiResponse(code = 402, message = "Payment Required — document quota reached."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this doc."),
         @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
     })
@@ -265,13 +289,7 @@ public class DocResource {
         @ApiParam(value = "OID of the document to restore.", required = true)
         @PathParam("oid") String oid,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -289,6 +307,7 @@ public class DocResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — restored doc record.", response = Doc.class),
+        @ApiResponse(code = 402, message = "Payment Required — document quota reached."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this doc."),
         @ApiResponse(code = 404, message = "Not Found — doc does not exist.")
     })
@@ -297,21 +316,16 @@ public class DocResource {
             value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
                   + "If omitted, `project` is assumed; e.g., `/undo-remove/id/foo/bar` "
                   + "is equivalent to `/undo-remove/id/project/foo/bar`.",
-            required = false
+            required = false,
+            example = "project"
         )
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -321,11 +335,11 @@ public class DocResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a document by OID.",
-        notes = "Deletes the specified document.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the doc exists."
+        notes = DELETE_NOTES
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to remove this doc.")
     })
     public Response deleteDocByOid(
         @ApiParam(value = "Document OID.", required = true)
@@ -336,20 +350,16 @@ public class DocResource {
     @Path("/id/{ownerType}/{ownerId}/{docId}")
     @ApiOperation(
         value = "Delete a document by ID.",
-        notes = "Deletes the specified document.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the doc exists."
+        notes = DELETE_NOTES
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to remove this doc.")
     })
     public Response deleteDocById(
-        @ApiParam(
-            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
-                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
-        )
+        @ApiParam(value = OWNER_TYPE_BY_ID, required = false, example = "project")
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
         @ApiParam(value = "Document ID.", required = true, example = "1234")
         @PathParam("docId") String docId

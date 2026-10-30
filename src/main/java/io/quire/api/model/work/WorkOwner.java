@@ -6,7 +6,7 @@ import io.swagger.annotations.*;
 public class WorkOwner extends SimpleIdentity {
 
     @ApiModelProperty(
-        value = "Type of the owning object (e.g., Project).",
+        value = "Type of the owner: `Project`, `Organization`, `Folder`, or `Lot` (a smart folder).",
         example = "Project"
     )
     public String getType() { return null; }

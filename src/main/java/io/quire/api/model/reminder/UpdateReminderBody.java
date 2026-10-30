@@ -43,8 +43,9 @@ public class UpdateReminderBody {
     public List<ReminderLead> getLeads() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Text to show instead of the default message "
-              + "(Markdown supported). Pass null to fall back to the default.",
+        value = "(Optional) Text to show instead of the default message. "
+              + "Pass null to fall back to the default.\n\n"
+              + CreateReminderBody.NAME_FORMAT,
         example = "Pay the **bill** today",
         position = 5
     )

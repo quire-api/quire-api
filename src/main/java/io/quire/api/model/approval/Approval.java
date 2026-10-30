@@ -42,7 +42,9 @@ public class Approval {
 
     @ApiModelProperty(
         value = "OID of the user who most recently approved / rejected / "
-              + "requested changes. Null while `state` is `awaiting`.\n\n"
+              + "requested changes — or, after a revoke rolled that "
+              + "decision back to `awaiting`, the user who revoked it. "
+              + "Omitted after a `request`.\n\n"
               + "For ID-based access, prefer `approverRef`, which "
               + "returns `{oid, id}`."
     )
@@ -58,8 +60,8 @@ public class Approval {
     @ApiModelProperty(
         value = "Approver as `{oid, id}` — same shape as "
               + "`?return=compact`. Recommended over `approver` for "
-              + "callers using ID-based access. Null while `state` is "
-              + "`awaiting`."
+              + "callers using ID-based access. Present when `approver` "
+              + "is."
     )
     public SimpleEntityWithId getApproverRef() { return null; }
 

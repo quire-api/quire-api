@@ -21,31 +21,52 @@ import java.util.List;
                 + "omitted fields preserve existing values.")
 public class UpdateDocBody extends UpdateWorkBody {
 
+    // The follower fields share these; FOLLOW_RIGHT is the same everywhere.
+    private static final String FOLLOW_RIGHT =
+        "With read access only, `addFollowers` and `removeFollowers` may "
+      + "name only yourself: `\"me\"`, or `\"app\"` to add the app on your "
+      + "behalf. Adding or removing anyone else returns `403`, even along "
+      + "with yourself. `followers` replaces every follower, so it needs "
+      + "edit access even as `[\"me\"]`.";
+
+    private static final String FOLLOW_EDITED =
+        "An update that only follows or unfollows doesn't change `editedAt`.";
+
     @ApiModelProperty(
         value = "(Optional) Followers (OID, ID, or email) to replace the current "
               + "followers. Applies only when the owner is a project; rejected "
               + "(400) for organization, folder, or smart-folder documents.\n\n"
               + "- `\"me\"` — the current user.\n"
               + "- `\"app\"` — the application follows (receives notifications).\n\n"
-              + "App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.",
+              + "App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.\n\n"
+              + FOLLOW_RIGHT + " " + FOLLOW_EDITED,
         example = "[\"me\"]"
     )
     public List<String> getFollowers() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Followers (OID, ID, or email) to add.\n\n"
+        value = "(Optional) Followers (OID, ID, or email) to add. Adding a user "
+              + "also takes them off `mutes`.\n\n"
+              + "Applies only when the owner is a project; rejected "
+              + "(400) for organization, folder, or smart-folder documents.\n\n"
               + "- `\"me\"` — the current user.\n"
               + "- `\"app\"` — the application follows.\n\n"
-              + "App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.",
+              + "App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.\n\n"
+              + FOLLOW_RIGHT + " " + FOLLOW_EDITED,
         example = "[\"me\"]"
     )
     public List<String> getAddFollowers() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Followers (OID, ID, or email) to remove.\n\n"
+        value = "(Optional) Followers (OID, ID, or email) to remove. A removed "
+              + "user who follows the project is also muted (added to `mutes`), "
+              + "so they stop getting notifications about it.\n\n"
+              + "Applies only when the owner is a project; rejected "
+              + "(400) for organization, folder, or smart-folder documents.\n\n"
               + "- `\"me\"` — the current user.\n"
               + "- `\"app\"` — the application.\n\n"
-              + "App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.",
+              + "App follower syntax: `app|team`, `app|team|channel`, or `app|/path`.\n\n"
+              + FOLLOW_RIGHT + " " + FOLLOW_EDITED,
         example = "[\"bob@example.com\"]"
     )
     public List<String> getRemoveFollowers() { return null; }

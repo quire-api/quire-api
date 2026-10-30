@@ -5,7 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class RateLimitBucket {
 
     @ApiModelProperty(
-        value = "Maximum number of calls allowed in this window. "
+        value = "Maximum number of calls allowed in this window, as "
+              + "enforced: during a trial, that of the plan before the trial. "
               + "`-1` indicates no limit.",
         example = "1250"
     )

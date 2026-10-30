@@ -7,6 +7,7 @@
 | 0 | Adds a task. | Task | All tasks being added. |
 | 1 | Removes a task. | Task | All tasks being removed. |
 | 3 | Edits a task’s details. | Task | |
+| 4 | Moves a task. | Task | |
 | 5 | Completes a task. | Task | All tasks being completed. |
 | 6 | Reopens a task. | Task | All tasks being reopened. |
 | 7 | Assigns a member to a task. | Task | |
@@ -24,6 +25,8 @@
 | 19 | Undoes peekaboo. | Task | All tasks being reshowed. |
 | 20 | Adds an attachment. | Task | |
 | 21 | Removes an attachment. | Task | |
+| 22 | Adds an attachment to a comment. | Task | |
+| 23 | Removes an attachment from a comment. | Task | |
 | 24 | Sets an external team on a task. | Task | |
 | 25 | Removes an external team from a task. | Task | |
 | 26 | Undoes comment removal. | Task | |
@@ -53,6 +56,7 @@
 | 51 | Revokes a change request for a task. | Task | |
 | [52](#transfer-task) | Transfers a task to another project. | Task | |
 | 84 | Adds a reminder to a task. | Task | |
+| 86 | Favorites a task (♥). | Task | |
 | 87 | Edits a task's reminder. | Task | |
 | 88 | Removes a task's reminder. | Task | |
 
@@ -117,6 +121,8 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 109 | Transfers a project to another organization. | Project |
 | 110 | Adds an attachment. | Project |
 | 111 | Removes an attachment. | Project |
+| 112 | Archives an insight view. | Project |
+| 113 | Unarchives an insight view. | Project |
 | 114 | Adds a new tag. | Project |
 | 115 | Removes a tag from a project. | Project |
 | 116 | Sets a project start date. | Project |
@@ -139,7 +145,10 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 139 | Adds a share link to a project. | Project |
 | 140 | Removes a share link. | Project |
 | 141 | Adds a new doc. | Project |
+| 142 | Edits a doc. | Project |
 | 143 | Removes a doc. | Project |
+| 144 | Undoes doc removal. | Project |
+| 145 | Edits a sublist. | Project |
 | 146 | Adds a new sublist. | Project |
 | 147 | Removes a sublist. | Project |
 | 148 | Adds a new status. | Project |
@@ -149,6 +158,9 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 152 | Adds a custom field. | Project |
 | 153 | Removes a custom field. | Project |
 | 154 | Adds an approval category. | Project |
+| 155 | Removes an approval category. | Project |
+| 156 | Adds an attachment to a doc. | Project |
+| 157 | Removes an attachment from a doc. | Project |
 | 158 | Undoes sublist removal. | Project |
 | 159 | Adds a chat channel. | Project |
 | 160 | Edits a chat channel. | Project |
@@ -162,6 +174,10 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 168 | Clears a sublist start date. | Project |
 | 169 | Sets a sublist due date. | Project |
 | 170 | Clears a sublist due date. | Project |
+| 171 | Adds an insight view. | Project |
+| 172 | Edits an insight view. | Project |
+| 173 | Removes an insight view. | Project |
+| 174 | Undoes insight view removal. | Project |
 | 175 | Archives a sublist. | Project |
 | 176 | Unarchives a sublist. | Project |
 | 177 | Archives a document. | Project |
@@ -171,6 +187,12 @@ The source project will receive a remove-task event (`1`), and the target projec
 | 181 | Edits a chat message. | Project |
 | 182 | Adds a field to an insight view of a project. | Project |
 | 183 | Removes a field from an insight view of a project. | Project |
+| 184 | Adds a dashboard. | Project |
+| 185 | Edits a dashboard. | Project |
+| 186 | Removes a dashboard. | Project |
+| 187 | Undoes dashboard removal. | Project |
+| 188 | Archives a dashboard. | Project |
+| 189 | Unarchives a dashboard. | Project |
 | 192 | Adds a reminder to a project. | Project |
 | 193 | Edits a project's reminder. | Project |
 | 194 | Removes a project's reminder. | Project |

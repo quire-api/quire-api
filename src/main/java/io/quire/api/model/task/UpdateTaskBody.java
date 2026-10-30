@@ -7,6 +7,17 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class UpdateTaskBody {
 
+    // The follower fields share these; FOLLOW_RIGHT is the same everywhere.
+    private static final String FOLLOW_RIGHT =
+        "With read access only, `addFollowers` and `removeFollowers` may "
+      + "name only yourself: `\"me\"`, or `\"app\"` to add the app on your "
+      + "behalf. Adding or removing anyone else returns `403`, even along "
+      + "with yourself. `followers` replaces every follower, so it needs "
+      + "edit access even as `[\"me\"]`.";
+
+    private static final String FOLLOW_EDITED =
+        "An update that only follows or unfollows doesn't change `editedAt`.";
+
     @ApiModelProperty(
         example = "New idea",
         value = "(Optional) New task name."
@@ -20,11 +31,7 @@ public class UpdateTaskBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) New priority. `-1` (lowest) through `2` (highest); "
-              + "`0` is Normal. "
-              + "(The server also accepts the case-insensitive English names "
-              + "`Low`, `Medium`, `High`, `Urgent`, but the integer form is "
-              + "recommended for typed callers.)",
+        value = "(Optional) New priority: " + CreateTaskBody.PRIORITY_VALUES,
         example = "0",
         allowableValues = "-1, 0, 1, 2",
         position = 4
@@ -32,7 +39,8 @@ public class UpdateTaskBody {
     public int getPriority() { return 0; }
 
     @ApiModelProperty(
-        value = "(Optional) New status, between 0 and 100. Specify 100 to complete the task. "
+        value = "(Optional) New status. " + CreateTaskBody.STATUS_VALUES
+              + " Specify 100 to complete the task. "
               + "Completion may be rejected (409 Conflict) when project settings require all "
               + "predecessors to be completed first, or require an approval to be granted.",
         example = "100",
@@ -41,7 +49,8 @@ public class UpdateTaskBody {
     public int getStatus() { return 0; }
 
     @ApiModelProperty(
-        value = "(Optional) Estimated time to complete, in seconds. Must be non-negative or `null`.\n"
+        value = "(Optional) Estimated time to complete, in seconds. Must be "
+              + "0 to 864,000,000 (10,000 days) or `null`.\n"
               + "Specify `null` to clear the value.",
         example = "0",
         position = 4
@@ -51,21 +60,22 @@ public class UpdateTaskBody {
     @ApiModelProperty(
         value = "(Optional) Tags to replace the current tags on this task (OID or name).\n"
               + "This replaces all existing tags. To modify incrementally, use `addTags` or `removeTags`.\n"
-              + "Tag names are case-insensitive.",
+              + "Tag names are case-insensitive. " + CreateTaskBody.TAGS_EXIST,
         example = "[\"urgent\", \"design\"]"
     )
     public List<String> getTags() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Tags to add to this task (OID or name).\n"
-              + "Tag names are case-insensitive.",
+              + "Tag names are case-insensitive. " + CreateTaskBody.TAGS_EXIST,
         example = "[\"urgent\"]"
     )
     public List<String> getAddTags() { return null; }
 
     @ApiModelProperty(
         value = "(Optional) Tags to remove from this task (OID or name).\n"
-              + "Tag names are case-insensitive.",
+              + "Tag names are case-insensitive. An unknown tag is rejected "
+              + "with `400`.",
         example = "[\"draft\"]"
     )
     public List<String> getRemoveTags() { return null; }
@@ -74,7 +84,8 @@ public class UpdateTaskBody {
         value = "(Optional) Assignees to replace the current assignees (OID, ID, or email).\n"
               + "This replaces all existing assignees. To modify incrementally, use `addAssignees` or `removeAssignees`.\n\n"
               + "Accepts the same special values as `addAssignees`: `\"me\"` "
-              + "(the current user) and `\"inherit\"` (all assignees of the parent task).",
+              + "(the current user) and `\"inherit\"` (all assignees of the parent task).\n\n"
+              + CreateTaskBody.ASSIGNEES_RULE,
         example = "[\"me\", \"alice@example.com\"]"
     )
     public List<String> getAssignees() { return null; }
@@ -83,7 +94,8 @@ public class UpdateTaskBody {
         value = "(Optional) Assignees to add (OID, ID, or email).\n"
               + "Special values:\n"
               + "- \"me\": the current user\n"
-              + "- \"inherit\": include all assignees of the parent task",
+              + "- \"inherit\": include all assignees of the parent task\n\n"
+              + CreateTaskBody.ASSIGNEES_RULE,
         example = "[\"me\"]"
     )
     public List<String> getAddAssignees() { return null; }
@@ -97,7 +109,16 @@ public class UpdateTaskBody {
     public List<String> getRemoveAssignees() { return null; }
 
     @ApiModelProperty(
-        example = "2018-12-20T00:00:00.000Z",
+        value = "(Optional) " + CreateTaskBody.PARTNER_USE + " A name or "
+              + "OID that matches no team, or a value that isn't a string, "
+              + "is rejected with `400`. The API can't remove it: `null` is "
+              + "rejected too.",
+        example = "UI design team"
+    )
+    public String getPartner() { return null; }
+
+    @ApiModelProperty(
+        example = "2026-05-01",
         value = "(Optional) Start date/time in UTC.\n\n"
               + "- With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).\n"
               + "- Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).\n\n"
@@ -109,7 +130,7 @@ public class UpdateTaskBody {
     public String getStart() { return null; }
 
     @ApiModelProperty(
-        example = "2018-12-22T00:00:00.000Z",
+        example = "2026-05-10T17:00Z",
         value = "(Optional) Due date/time in UTC.\n\n"
               + "- With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).\n"
               + "- Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).\n\n"
@@ -124,17 +145,9 @@ public class UpdateTaskBody {
     public String getDue() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Recurrence details. `null` if the task is not recurring.\n\n"
-              + "- `freq`: `daily`, `weekly`, `monthly`, `yearly`.\n"
-              + "- `interval`: Interval between occurrences. Default: 1.\n"
-              + "- `until`: End date. Default: never ends.\n"
-              + "- `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.\n"
-              + "- `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.\n"
-              + "- `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[1]`, `[0,3]`).\n"
-              + "- `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.\n"
-              + "  Note: `byweekday` and `bydayno` cannot both be specified.\n"
-              + "- `dupsubtasks`: Duplicate subtasks when the task is completed. Default: true.\n"
-              + "- `sincelatest`: Daily only. Repeat based on the last completion date. Default: false.\n\n"
+        value = "(Optional) Makes the task repeat, replacing its current "
+              + "recurrence, if any. `null` stops it repeating.\n\n"
+              + CreateTaskBody.RECURRENCE_RULES + "\n\n"
               + "A recurring task always has a `due`. If the task has none and `due` is omitted, it "
               + "is derived from the recurrence: the nearest occurrence since today. The request is "
               + "rejected if the derived due precedes `start`; specify `due` explicitly in that case."
@@ -146,20 +159,22 @@ public class UpdateTaskBody {
         value = "(Optional) Peekaboo setting. Accepts a boolean or a positive integer:\n\n"
               + "- `true`: Hide indefinitely (task and subtasks).\n"
               + "- positive integer: Number of days to hide.\n"
-              + "- `false`: Undo previous peekaboo.\n\n"
-              + "Default: false."
+              + "- `false`: Undo previous peekaboo."
     )
     public Object getPeekaboo() { return false; }
 
     @ApiModelProperty(
         example = "true",
-        value = "(Optional) Whether this task is a section. Default: false."
+        value = "(Optional) `true` makes this task a section; `false` makes "
+              + "it a normal task. If both `section` and `milestone` are "
+              + "sent, only `section` is applied."
     )
     public boolean getSection() { return false; }
 
     @ApiModelProperty(
         example = "true",
-        value = "(Optional) Whether this task is a milestone. Default: false."
+        value = "(Optional) `true` makes this task a milestone; `false` "
+              + "makes it a normal task. Ignored if `section` is sent too."
     )
     public boolean getMilestone() { return false; }
 
@@ -171,7 +186,8 @@ public class UpdateTaskBody {
               + "- `\"app\"`: the application follows (receives notifications)\n\n"
               + "App follower syntax:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).",
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).\n\n"
+              + FOLLOW_RIGHT + " " + FOLLOW_EDITED,
         example = "[\"bob@example.com\"]"
     )
     public List<String> getFollowers() { return null; }
@@ -184,7 +200,8 @@ public class UpdateTaskBody {
               + "- \"app\": the application follows (receives notifications)\n\n"
               + "App follower syntax:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).",
+              + "- `app|/path` → appended to the hook URL (e.g., `.../standard/soc1/33456/a7`).\n\n"
+              + FOLLOW_RIGHT + " " + FOLLOW_EDITED,
         example = "[\"me\"]"
     )
     public List<String> getAddFollowers() { return null; }
@@ -197,7 +214,8 @@ public class UpdateTaskBody {
               + "- `\"app\"`: the application\n\n"
               + "App follower syntax:\n"
               + "- `app|team` or `app|team|channel`\n"
-              + "- `app|/path` → appended to the hook URL.",
+              + "- `app|/path` → appended to the hook URL.\n\n"
+              + FOLLOW_RIGHT + " " + FOLLOW_EDITED,
         example = "[\"bob@example.com\"]"
     )
     public List<String> getRemoveFollowers() { return null; }
@@ -250,6 +268,9 @@ public class UpdateTaskBody {
               + "- **Task**: task OID, integer task ID, or `#<id>` string "
               + "— server resolves to the task's OID (scoped to this "
               + "project).\n"
+              + "- File: the attachment list as a task returns it (absolute "
+              + "`url` accepted); send an entry back unchanged to keep that "
+              + "file.\n"
               + "- Multi-value (fields configured with `multiple: true`): "
               + "provide a list. Pass `null` to clear the field.\n\n"
               + "A field you can't view or edit (the definition's `viewMembers` "
@@ -262,10 +283,12 @@ public class UpdateTaskBody {
     public Object getYourField() { return false; }
 
     @ApiModelProperty(
-        value = "(Optional) Arbitrary source reference data to store with the task. Available via API on retrieval.\n\n"
-              + "If the map contains `text`, its value will be displayed client-side and should be Markdown. "
-              + "Including a source link is recommended.",
-        example = "{\"text\": \"Source: [Gmail](https://gmail.com/link)\"}",
+        value = "(Optional) " + CreateTaskBody.SOURCE_REF_USE + "\n"
+              + "- It replaces the stored object as a whole: keys you leave "
+              + "out are removed, and `null` removes `sourceRef`. Another app "
+              + "may have stored its own key on the task; to keep it, read "
+              + "the task first and send that key back.",
+        example = CreateTaskBody.SOURCE_REF_EXAMPLE,
         position = 60
     )
     public Map<String, Object> getSourceRef() { return null; }

@@ -23,7 +23,9 @@ public class UpdateFieldBody {
     @ApiModelProperty(
         value = "(Optional) Field type. Immutable on update — if supplied, "
               + "must match the existing field's type. Usually omitted; "
-              + "include only to verify the stored type.",
+              + "include only to verify the stored type. "
+              + FieldDefinition.TYPES_BY_OWNER + " "
+              + FieldDefinition.KEY_FOR_TYPE,
         example = "number",
         allowableValues = "text, number, money, date, duration, select, "
                         + "checkbox, user, task, hyperlink, email, formula, "
@@ -125,7 +127,8 @@ public class UpdateFieldBody {
     public String getDurationFormat() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `formula` only) Formula expression.",
+        value = "(Optional, `formula` only) Formula expression, at most "
+              + "5,120 characters.",
         example = "SUM(Subtask.Amount)"
     )
     public String getFormula() { return null; }
@@ -138,10 +141,18 @@ public class UpdateFieldBody {
     public String getResultType() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional, `select` only) Replacement option list "
-              + "(replaces the entire set)."
+        value = "(Optional, `select` only) Replacement option list, each an "
+              + "object with `name`, an optional `color`, and an optional "
+              + "`from`. It replaces the entire set; `[]` removes every option. "
+              + "To rename an option, give its current name in `from`, e.g. "
+              + "`{\"name\": \"Critical\", \"from\": \"High\"}`; tasks set to it "
+              + "get the new name. Without `from`, nothing is treated as a "
+              + "rename: a current option that no entry names, in `name` or "
+              + "`from`, is removed, and tasks set to it lose that value. An "
+              + "entry without `color` keeps the current color of the option "
+              + "it matches (by `from`, else by `name`)."
     )
-    public List<FieldOption> getOptions() { return null; }
+    public List<UpdateFieldOption> getOptions() { return null; }
 
     @ApiModelProperty(
         value = "(Optional, `lookup` only) Map from lookup key to numeric value. "
@@ -158,8 +169,8 @@ public class UpdateFieldBody {
     public String getLookupType() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Replacement conditional-format rules "
-              + "(replaces the entire list)."
+        value = "(Optional) Replacement conditional-format rules. It "
+              + "replaces the entire list; `[]` removes every rule."
     )
     public List<FieldConditionFormat> getConditionFormat() { return null; }
 }

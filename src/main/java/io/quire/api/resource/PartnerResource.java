@@ -14,6 +14,10 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class PartnerResource {
 
+    // The external team endpoints share this.
+    private static final String READ_403 =
+        "Forbidden — the user can't access it, or didn't authorize it for this app.";
+
     @GET
     @Path("/{oid}")
     @ApiOperation(
@@ -24,6 +28,7 @@ public class PartnerResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — external team record.",
             response = Partner.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — external team does not exist.")
     })
     public Response getPartnerByOid(
@@ -42,6 +47,7 @@ public class PartnerResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of external teams (may be empty).",
             response = Partner.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getPartnersByProjectOid(
@@ -60,6 +66,7 @@ public class PartnerResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of external teams (may be empty).",
             response = Partner.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getPartnersByProjectId(

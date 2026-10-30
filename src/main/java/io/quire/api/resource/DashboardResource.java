@@ -11,12 +11,57 @@ import javax.ws.rs.core.Response;
 @Api(
     value = "dashboard",
     description = "Dashboards — a dashboard groups widgets that visualize the data of a "
-        + "project, organization, or folder. These endpoints manage the dashboard itself "
+        + "project, organization, folder, or smart folder. These endpoints manage the dashboard itself "
         + "(create, read, update, archive, remove, and restore); the widgets shown on a "
         + "dashboard are not yet manageable through the public API."
 )
 @Produces({"application/json"})
 public class DashboardResource {
+
+    // The read endpoints share this.
+    private static final String READ_403 =
+        "Forbidden — the user can't access it, or didn't authorize it for this app.";
+
+    // The create endpoints share this.
+    private static final String CREATE_NOTES =
+        "Adds a new dashboard to the specified owner (`project`, `organization`, `folder`, or `smart-folder`) "
+      + "and returns it.\n\n"
+      + "Creates the dashboard container only (name, description, icon, etc.); "
+      + "the widgets shown on the dashboard cannot be set through the API yet.\n\n"
+      + "Example — `POST /dashboard/id/project/my_project`:\n\n"
+      + "```json\n"
+      + "{\n"
+      + "  \"name\": \"Team overview\",\n"
+      + "  \"image\": \"icon-view-dashboard\"\n"
+      + "}\n"
+      + "```\n\n"
+      + "Returns `402` if the plan's dashboard limit is reached.";
+
+    // The list endpoints share this.
+    private static final String LIST_NOTES =
+        "Returns the owner's dashboards that the caller can see; one shown to "
+      + "selected members only is left out for the others. Archived dashboards "
+      + "are included (they carry `archivedAt`); removed ones are not.";
+
+    // The delete endpoints share this.
+    private static final String DELETE_NOTES =
+        "Removes the dashboard. Restore it with "
+      + "`PUT /dashboard/undo-remove/id/{ownerType}/{ownerId}/{dashboardId}` "
+      + "(or `/dashboard/undo-remove/{oid}`).\n\n"
+      + "Returns `204 No Content`, also when the dashboard does not exist.";
+
+    // The by-ID get, update and delete endpoints share this.
+    private static final String OWNER_TYPE_BY_ID =
+        "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
+      + "If omitted, `project` is assumed; e.g., `/id/my_project/dashboard1` "
+      + "is equivalent to `/id/project/my_project/dashboard1`.";
+
+    // The create, update and undo-remove endpoints share this.
+    private static final String RETURN_MODE =
+        "(Optional) Response shape: `full` (default) returns the full dashboard "
+      + "record; `compact` returns only `{\"oid\": \"…\", \"id\": \"…\"}`, "
+      + "which is cheaper — use it when you don't need the record back. "
+      + "Any other value returns `400 Bad Request`.";
 
     // -------- Create --------
 
@@ -24,15 +69,13 @@ public class DashboardResource {
     @Path("/{ownerType}/{ownerOid}")
     @ApiOperation(
         value = "Create a dashboard by owner OID.",
-        notes = "Adds a new dashboard to the specified owner (`project`, `organization`, `folder`, or `smart-folder`).\n\n"
-              + "Creates the dashboard container only (name, description, icon, etc.); "
-              + "the widgets shown on the dashboard cannot be set through the API yet.",
+        notes = CREATE_NOTES,
         response = Dashboard.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created dashboard record.", response = Dashboard.class),
-        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed, for example a `partner` that isn't an external team of the project (or any, when the owner isn't a project), or none from an external team member sharing with every member."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a dashboard under this owner."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
         @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
@@ -49,13 +92,7 @@ public class DashboardResource {
         @ApiParam(value = "Dashboard to create.", required = true)
         CreateDashboardBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -63,15 +100,13 @@ public class DashboardResource {
     @Path("/id/{ownerType}/{ownerId}")
     @ApiOperation(
         value = "Create a dashboard by owner ID.",
-        notes = "Adds a new dashboard to the specified owner by ID (`project`, `organization`, `folder`, or `smart-folder`).\n\n"
-              + "Creates the dashboard container only (name, description, icon, etc.); "
-              + "the widgets shown on the dashboard cannot be set through the API yet.",
+        notes = CREATE_NOTES,
         response = Dashboard.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — created dashboard record.", response = Dashboard.class),
-        @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 400, message = "Bad Request — body validation failed, for example a `partner` that isn't an external team of the project (or any, when the owner isn't a project), or none from an external team member sharing with every member."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to create a dashboard under this owner."),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist."),
         @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
@@ -88,13 +123,7 @@ public class DashboardResource {
         @ApiParam(value = "Dashboard to create.", required = true)
         CreateDashboardBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -109,6 +138,7 @@ public class DashboardResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — dashboard record.", response = Dashboard.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — dashboard does not exist.")
     })
     public Response getDashboard(
@@ -125,15 +155,11 @@ public class DashboardResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — dashboard record.", response = Dashboard.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — dashboard or owner does not exist.")
     })
     public Response getDashboardById(
-        @ApiParam(
-            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
-                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false,
-            example = "project"
-        )
+        @ApiParam(value = OWNER_TYPE_BY_ID, required = false, example = "project")
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
@@ -145,12 +171,13 @@ public class DashboardResource {
     @Path("/list/{ownerType}/{ownerOid}")
     @ApiOperation(
         value = "List dashboards by owner OID.",
-        notes = "Returns all dashboards for the specified owner.",
+        notes = LIST_NOTES,
         response = Dashboard.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of dashboard records (may be empty).", response = Dashboard.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
     public Response getDashboardsByOwnerOid(
@@ -169,12 +196,13 @@ public class DashboardResource {
     @Path("/list/id/{ownerType}/{ownerId}")
     @ApiOperation(
         value = "List dashboards by owner ID.",
-        notes = "Returns all dashboards for the specified owner.",
+        notes = LIST_NOTES,
         response = Dashboard.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of dashboard records (may be empty).", response = Dashboard.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — owner does not exist.")
     })
     public Response getDashboardsByOwnerId(
@@ -204,7 +232,7 @@ public class DashboardResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated dashboard record.", response = Dashboard.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this dashboard."),
         @ApiResponse(code = 404, message = "Not Found — dashboard does not exist.")
     })
     public Response updateDashboardByOid(
@@ -213,13 +241,7 @@ public class DashboardResource {
         @ApiParam(value = "Fields to update.", required = true)
         UpdateDashboardBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -236,16 +258,11 @@ public class DashboardResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated dashboard record.", response = Dashboard.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this dashboard."),
         @ApiResponse(code = 404, message = "Not Found — dashboard or owner does not exist.")
     })
     public Response updateDashboardById(
-        @ApiParam(
-            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
-                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false,
-            example = "project"
-        )
+        @ApiParam(value = OWNER_TYPE_BY_ID, required = false, example = "project")
         @PathParam("ownerType") String ownerType,
         @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
@@ -254,13 +271,7 @@ public class DashboardResource {
         @ApiParam(value = "Fields to update.", required = true)
         UpdateDashboardBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -280,7 +291,7 @@ public class DashboardResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — restored dashboard record.", response = Dashboard.class),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this dashboard."),
         @ApiResponse(code = 404, message = "Not Found — dashboard does not exist."),
         @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
@@ -288,13 +299,7 @@ public class DashboardResource {
         @ApiParam(value = "OID of the dashboard to restore.", required = true)
         @PathParam("oid") String oid,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -312,7 +317,7 @@ public class DashboardResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — restored dashboard record.", response = Dashboard.class),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission (or Admin scope required)."),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to restore this dashboard."),
         @ApiResponse(code = 404, message = "Not Found — dashboard or owner does not exist."),
         @ApiResponse(code = 402, message = "Payment Required — dashboard quota reached.")
     })
@@ -330,13 +335,7 @@ public class DashboardResource {
         @ApiParam(value = "Dashboard ID.", required = true, example = "dashboard1")
         @PathParam("dashboardId") String dashboardId,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -346,11 +345,11 @@ public class DashboardResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Delete a dashboard by OID.",
-        notes = "Deletes the specified dashboard.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the dashboard exists."
+        notes = DELETE_NOTES
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to remove this dashboard.")
     })
     public Response deleteDashboardByOid(
         @ApiParam(value = "Dashboard OID.", required = true)
@@ -361,22 +360,18 @@ public class DashboardResource {
     @Path("/id/{ownerType}/{ownerId}/{dashboardId}")
     @ApiOperation(
         value = "Delete a dashboard by ID.",
-        notes = "Deletes the specified dashboard.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the dashboard exists."
+        notes = DELETE_NOTES
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to remove this dashboard.")
     })
     public Response deleteDashboardById(
-        @ApiParam(
-            value = "Owner type. One of `project`, `organization`, `folder`, or `smart-folder`. "
-                  + "If omitted, `project` is assumed; e.g., `/id/foo` is equivalent to `/id/project/foo`.",
-            required = false
-        )
+        @ApiParam(value = OWNER_TYPE_BY_ID, required = false, example = "project")
         @PathParam("ownerType") String ownerType,
-        @ApiParam(value = "Owner ID.", required = true)
+        @ApiParam(value = "Owner ID.", required = true, example = "my_project")
         @PathParam("ownerId") String ownerId,
-        @ApiParam(value = "Dashboard ID.", required = true)
+        @ApiParam(value = "Dashboard ID.", required = true, example = "dashboard1")
         @PathParam("dashboardId") String dashboardId
     ) { return null; }
 }

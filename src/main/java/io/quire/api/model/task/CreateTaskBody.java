@@ -7,6 +7,72 @@ import java.util.*;
 
 public class CreateTaskBody {
 
+    // UpdateTaskBody shares these.
+    static final String SOURCE_REF_USE =
+        "A JSON object your app stores with the task, such as where the task "
+      + "came from. Quire keeps it as is and returns it as `sourceRef` "
+      + "whenever the task is read.\n\n"
+      + "- `text` (optional): a Markdown string Quire shows as the task's "
+      + "source line in the task details. Include a link to the source, "
+      + "e.g. `Source: [GitHub issue 42](https://github.com/acme/web/issues/42)`.\n"
+      + "- Any other key: your app's own data, not shown in Quire. Put it "
+      + "under a key named after your app, e.g. `github`, so it won't clash "
+      + "with another app's.\n"
+      + "- To find these tasks later, search with `?source-ref=github`: it "
+      + "returns the tasks whose `sourceRef` has that key, whatever its "
+      + "value.\n"
+      + "- Size: at most about 2,048 characters, keys and values together, "
+      + "and `text` must be a string; otherwise `400`.";
+    static final String SOURCE_REF_EXAMPLE =
+        "{\"github\": {\"repo\": \"acme/web\", \"issue\": 42}, "
+      + "\"text\": \"Source: [GitHub issue 42](https://github.com/acme/web/issues/42)\"}";
+
+    // UpdateTaskBody shares these too.
+    static final String PRIORITY_VALUES =
+        "`-1` Low, `0` Medium, `1` High, `2` Urgent. "
+      + "(The server also accepts the case-insensitive English names "
+      + "`Low`, `Medium`, `High`, `Urgent`, but the integer form is "
+      + "recommended for typed callers.)";
+    static final String STATUS_VALUES =
+        "Must be one of the project's status values "
+      + "(`GET /status/list/id/{projectId}` lists them); any other value "
+      + "is rejected with `400`. Every project has `0`, the initial "
+      + "status, and `100`, completed; `100` or more means completed.";
+    static final String TAGS_EXIST =
+        "Each must be an existing tag of the project, or a global tag of "
+      + "its organization; an unknown tag is rejected with `400`, not "
+      + "created.";
+    static final String ASSIGNEES_RULE =
+        "Only project members (external-team members included) can be "
+      + "assigned; anyone else is silently left out. An unknown user is "
+      + "rejected with `400`.";
+    static final String RECURRENCE_RULES =
+        "- `freq` (required): `daily`, `weekly`, `monthly`, or `yearly`.\n"
+      + "- `interval`: a positive integer; `2` with `weekly` means every "
+      + "2 weeks. Default: `1`.\n"
+      + "- `until`: end date, e.g. `2026-12-31`. Default: never ends.\n"
+      + "- `weekly` needs `byweekday`: the days of the week as a list, "
+      + "where 0 = Monday … 6 = Sunday, e.g. `[0, 3]`.\n"
+      + "- `monthly` needs `bydayno`, the day of the month (`1`–`31`, or "
+      + "`\"last\"`), or `byweekno`, the week of the month (`1`–`5`, or "
+      + "`\"last\"`), with `byweekday` as a single day in that week, e.g. "
+      + "`1` for Tuesday. If both `byweekno` and `bydayno` are given, "
+      + "`byweekno` wins.\n"
+      + "- `yearly` needs `bymonth`, the month (`1`–`12`, 1 = January), "
+      + "plus what `monthly` needs.\n"
+      + "- `dupsubtasks`: whether to duplicate subtasks when the task is "
+      + "completed. Default: `true`.\n"
+      + "- `sincelatest`: with `daily` only, whether to repeat from the "
+      + "last completion date. Default: `false`.\n\n"
+      + "A property that doesn't apply to `freq` is ignored; an invalid "
+      + "value, or a missing required one, is rejected with `400`.";
+    static final String PARTNER_USE =
+        "The external team to share this task with: the name or OID of "
+      + "one of the project's external teams (`GET /partner/list/id/{projectId}` "
+      + "lists them). The team's members then get access to the task and "
+      + "its subtasks. Setting it takes the right to assign tasks (`403` "
+      + "otherwise).";
+
     @ApiModelProperty(
         example = "Design new **logo**",
         value = "The name of the task.", 
@@ -21,11 +87,8 @@ public class CreateTaskBody {
     public String getDescription() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Task priority. `-1` (lowest) through `2` (highest); "
-              + "`0` is Normal. Default: 0. "
-              + "(The server also accepts the case-insensitive English names "
-              + "`Low`, `Medium`, `High`, `Urgent`, but the integer form is "
-              + "recommended for typed callers.)",
+        value = "(Optional) Task priority: " + PRIORITY_VALUES
+              + " Default: `0` (Medium).",
         example = "0",
         allowableValues = "-1, 0, 1, 2",
         position = 4
@@ -33,14 +96,16 @@ public class CreateTaskBody {
     public int getPriority() { return 0; }
 
     @ApiModelProperty(
-        value = "(Optional) Task status. Must be between 0 and 100. Default: 0.",
+        value = "(Optional) Task status. " + STATUS_VALUES + " Default: `0`.",
         example = "0",
         position = 4
     )
     public int getStatus() { return 0; }
 
     @ApiModelProperty(
-        value = "(Optional) Estimated time to complete, in seconds. Must be non-negative.",
+        value = "(Optional) Estimated time to complete, in seconds: an "
+              + "integer from 0 to 864,000,000 (10,000 days). `null` is the "
+              + "same as leaving it out.",
         example = "0",
         position = 4
     )
@@ -48,7 +113,7 @@ public class CreateTaskBody {
 
     @ApiModelProperty(
         value = "(Optional) A list of tag OIDs or names to be added to the new task.\n"
-              + "Tag names are case-insensitive.",
+              + "Tag names are case-insensitive. " + TAGS_EXIST,
         example = "[\"urgent\", \"design\"]"
     )
     public List<String> getTags() { return null; }
@@ -56,13 +121,22 @@ public class CreateTaskBody {
     @ApiModelProperty(
         value = "(Optional) A list of user identifiers (OID, ID, or email) to assign this task to.\n\n"
               + "- Use \"me\" to indicate the current user.\n"
-              + "- Use \"inherit\" to include all assignees of the parent task.",
+              + "- Use \"inherit\" to include all assignees of the parent task.\n\n"
+              + ASSIGNEES_RULE,
         example = "[\"me\", \"alice@example.com\"]"
     )
     public List<String> getAssignees() { return null; }
 
     @ApiModelProperty(
-        example = "2018-12-20T00:00:00.000Z",
+        value = "(Optional) " + PARTNER_USE + " A name or OID that "
+              + "matches no team, or a value that isn't a string, such as "
+              + "`null`, is rejected with `400`.",
+        example = "UI design team"
+    )
+    public String getPartner() { return null; }
+
+    @ApiModelProperty(
+        example = "2026-05-01",
         value = "(Optional) Start date/time in UTC.\n\n"
               + "- With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).\n"
               + "- Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).\n\n"
@@ -74,7 +148,7 @@ public class CreateTaskBody {
     public String getStart() { return null; }
 
     @ApiModelProperty(
-        example = "2018-12-22T00:00:00.000Z",
+        example = "2026-05-10T17:00Z",
         value = "(Optional) Due date/time in UTC.\n\n"
               + "- With time: `yyyy-MM-dd'T'HH:mmZ` (e.g., `2020-10-30T09:30Z`).\n"
               + "- Date only: `yyyy-MM-dd` (e.g., `2020-10-30`).\n\n"
@@ -86,17 +160,9 @@ public class CreateTaskBody {
     public String getDue() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Recurrence details. Null if the task is not recurring.\n\n"
-              + "- `freq`: `daily`, `weekly`, `monthly`, `yearly`.\n"
-              + "- `interval`: Interval between occurrences. Default: 1.\n"
-              + "- `until`: End date. Default: never ends.\n"
-              + "- `bymonth`: Month (1 = January). Supported only with `yearly`. Default: 1.\n"
-              + "- `byweekno`: Week number (starting from 1) or `last`. Supported with `monthly`/`yearly`.\n"
-              + "- `byweekday`: Day(s) of week (0 = Monday ... 6 = Sunday). For weekly, use a list (e.g., `[0,3]`).\n"
-              + "- `bydayno`: Day of month (1 = first day). Supported with `monthly`/`yearly`.\n"
-              + "  Note: `byweekday` and `bydayno` cannot both be specified.\n"
-              + "- `dupsubtasks`: Whether to duplicate subtasks when completed. Default: true.\n"
-              + "- `sincelatest`: For `daily` only. Whether to repeat based on last completion date. Default: false.\n\n"
+        value = "(Optional) Makes the task repeat. Omit it for a task "
+              + "that doesn't repeat.\n\n"
+              + RECURRENCE_RULES + "\n\n"
               + "A recurring task always has a `due`. If `due` is omitted, it is derived from the "
               + "recurrence: the nearest occurrence since today. The request is rejected if the "
               + "derived due precedes `start`; specify `due` explicitly in that case."
@@ -176,6 +242,8 @@ public class CreateTaskBody {
               + "- **Task**: task OID, integer task ID, or `#<id>` string "
               + "— server resolves to the task's OID (scoped to this "
               + "project).\n"
+              + "- File: the attachment list as a task returns it (absolute "
+              + "`url` accepted).\n"
               + "- Multi-value (fields configured with `multiple: true`): "
               + "provide a list.\n\n"
               + "Example body fragment: `{\"Priority\": 3, "
@@ -193,11 +261,8 @@ public class CreateTaskBody {
     public List<CreateTaskBody> getTasks() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Arbitrary source reference data to attach to the task.\n"
-              + "Available via API when retrieving the task.\n\n"
-              + "If the entry contains a key `text`, its value will be displayed client-side "
-              + "and should be formatted in Markdown. It is recommended to include a source link.\n\n",
-        example = "{\"text\": \"Source: [Gmail](https://gmail.com/link)\"}",
+        value = "(Optional) " + SOURCE_REF_USE,
+        example = SOURCE_REF_EXAMPLE,
         position = 60
     )
     public Map<String, Object> getSourceRef() { return null; }

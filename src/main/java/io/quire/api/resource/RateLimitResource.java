@@ -9,13 +9,19 @@ import javax.ws.rs.core.Response;
 @Path("/rate-limit")
 @Api(
     value = "rate-limit",
-    description =
-        "Inspect the current API rate-limit usage for an organization.\n"
-      + "Calls to this endpoint do not count against the rate limit, so "
-      + "you can query it even when you have been throttled."
+    description = "Inspect the current API rate-limit usage for an organization."
 )
 @Produces({"application/json"})
 public class RateLimitResource {
+
+    // The rate-limit endpoints share this.
+    private static final String NOTES =
+        "`plan` and the limits are those enforced. A trial doesn't change "
+      + "them: during one, they stay those of the plan before the trial.\n\n"
+      + "For organizations in a paid master group, counters are shared "
+      + "across all organizations in the group.\n\n"
+      + "This call is free: it never counts against the rate limit, so you "
+      + "can make it even while throttled.";
 
     @GET
     @Path("/id/{id}")
@@ -23,14 +29,14 @@ public class RateLimitResource {
         value = "Get rate-limit usage by organization ID.",
         notes =
             "Returns the current per-hour and per-minute API usage for the "
-          + "organization with the given ID.\n"
-          + "For organizations in a paid master group, counters are shared "
-          + "across all organizations in the group.",
+          + "organization with the given ID.\n\n"
+          + NOTES,
         response = RateLimit.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — current rate-limit counters.",
             response = RateLimit.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller can't access this organization."),
         @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
     public Response getRateLimitById(
@@ -44,14 +50,14 @@ public class RateLimitResource {
         value = "Get rate-limit usage by organization OID.",
         notes =
             "Returns the current per-hour and per-minute API usage for the "
-          + "organization with the given OID.\n"
-          + "For organizations in a paid master group, counters are shared "
-          + "across all organizations in the group.",
+          + "organization with the given OID.\n\n"
+          + NOTES,
         response = RateLimit.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — current rate-limit counters.",
             response = RateLimit.class),
+        @ApiResponse(code = 403, message = "Forbidden — caller can't access this organization."),
         @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
     public Response getRateLimitByOid(

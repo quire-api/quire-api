@@ -6,7 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class Attachment extends SimpleAttachment {
 
     @ApiModelProperty(
-        value = "Attachment source type. 1 = Google Drive, 2 = Quire storage.",
+        value = "Where the attachment is stored: `1` Google Drive, `2` Quire "
+              + "storage, `3` OneDrive, `4` Dropbox, `5` Box.",
         example = "2"
     )
     public int getType() { return 0; }

@@ -11,7 +11,10 @@ public class RateLimit {
     public String getOrganization() { return null; }
 
     @ApiModelProperty(
-        value = "Plan name: `Free`, `Professional`, `Premium`, or `Enterprise`.",
+        value = "The plan whose limits are enforced: `Free`, `Professional`, "
+              + "`Premium`, or `Enterprise`. During a trial, it is the plan "
+              + "before the trial, not the trial's: a trial doesn't change "
+              + "the rate limits.",
         example = "Enterprise"
     )
     public String getPlan() { return null; }

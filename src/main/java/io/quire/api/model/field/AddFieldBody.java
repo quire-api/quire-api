@@ -21,15 +21,16 @@ public class AddFieldBody {
 
     @ApiModelProperty(
         value = "Unique name for this field. Must be a non-empty string "
-              + "and must not contain `}`, `\"`, or `\\`.",
+              + "of at most 1,280 characters, and must not contain `}`, "
+              + "`\"`, or `\\`.",
         example = "Priority",
         required = true
     )
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "Field type. For insight views, only `formula` and `lookup` "
-              + "are accepted.",
+        value = "Field type. " + FieldDefinition.TYPES_BY_OWNER + " "
+              + FieldDefinition.KEY_FOR_TYPE,
         example = "number",
         allowableValues = "text, number, money, date, duration, select, "
                         + "checkbox, user, task, hyperlink, email, formula, "
@@ -132,7 +133,8 @@ public class AddFieldBody {
     public String getDurationFormat() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `formula`) Formula expression.",
+        value = "(Optional, `formula` only) Formula expression, at most "
+              + "5,120 characters.",
         example = "SUM(Subtask.Amount)"
     )
     public String getFormula() { return null; }
@@ -145,12 +147,14 @@ public class AddFieldBody {
     public String getResultType() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `select`) Option list."
+        value = "(Optional, `select` only) Options, each an object with "
+              + "`name` and an optional `color` — not a plain string. "
+              + "Example: `[{\"name\": \"High\", \"color\": \"13\"}, {\"name\": \"Low\"}]`."
     )
     public List<FieldOption> getOptions() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `lookup`) Map from lookup key to numeric value. "
+        value = "(Optional, `lookup` only) Map from lookup key to numeric value. "
               + "Keys are OIDs of the configured `lookupType` entity "
               + "(e.g. user OIDs when `lookupType=User`). Values are numbers."
     )

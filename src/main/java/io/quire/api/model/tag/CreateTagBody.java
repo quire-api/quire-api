@@ -21,8 +21,10 @@ public class CreateTagBody {
     public String getColor() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Whether this tag is global (available across projects). "
-              + "If omitted, the tag is not global.",
+        value = "(Optional) Whether this tag is global (available in all projects "
+              + "of the project's organization). If omitted, the tag is not global. "
+              + "`true` requires the right to manage the organization's tags; "
+              + "otherwise `403`.",
         example = "true",
         required = false
     )

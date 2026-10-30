@@ -1,5 +1,6 @@
 package io.quire.api.model.externalteam;
 
+import io.quire.api.model.SimpleIdentity;
 import io.quire.api.model.TaggingEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,4 +19,10 @@ public class Partner extends TaggingEntity {
         position = 2
     )
     public String getImage() { return null; }
+
+    @ApiModelProperty(
+        value = "The project this external team belongs to.",
+        position = 99
+    )
+    public SimpleIdentity getProject() { return null; }
 }

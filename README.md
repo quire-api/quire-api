@@ -19,12 +19,12 @@ The Quire API project compiles annotated source and documentation into a browsab
 
 ## Prerequisites
 
-- **Node.js** and **npm** (or **pnpm/yarn**) installed
-- Any additional tooling required by Spectacle (see their README)
+- A **JDK** and **Maven** installed. The build downloads Node.js and npm by itself, and Spectacle comes from `tool/vendor`.
+- **Docker**, to preview the docs website.
 
 ## Build
 
-Generate the static documentation:
+Generate the static documentation into `dist/` (it runs `git pull`, then `mvn clean compile`):
 
 ```bash
 ./tool/build
@@ -32,13 +32,13 @@ Generate the static documentation:
 
 ## Start the Docs Website
 
-Run a local web server for preview:
+Run a local web server (nginx in Docker) for preview:
 
 ```bash
 ./tool/startWebsite
 ```
 
-Then open the printed URL in your browser.
+It opens <http://localhost:5001/dev/api/> in your browser. Run `./tool/stopWebsite` to stop it.
 
 ## Contributing
 

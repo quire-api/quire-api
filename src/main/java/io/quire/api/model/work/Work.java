@@ -38,7 +38,7 @@ public class Work extends Identity {
     public String getUrl() { return null; }
 
     @ApiModelProperty(
-        value = "External team this record belongs to. Null if the record is not accessible to external-team members.",
+        value = "External team this record is shared with. Omitted if none.",
         position = 15
     )
     public SimpleTaggingEntity getPartner() { return null; }
@@ -71,14 +71,14 @@ public class Work extends Identity {
     public Boolean getPrivate() { return null; }
 
     @ApiModelProperty(
-        value = "Timestamp (UTC, ISO 8601) when this record was archived. Null if not archived.",
+        value = "Timestamp (UTC, ISO 8601) when this record was archived. Omitted if not archived.",
         example = "2020-02-22T02:06:58.158Z",
         position = 50
     )
     public String getArchivedAt() { return null; }
 
     @ApiModelProperty(
-        value = "Project this record belongs to.",
+        value = "Owner this record belongs to: a project, organization, folder, or smart folder.",
         position = 99
     )
     public WorkOwner getOwner() { return null; }

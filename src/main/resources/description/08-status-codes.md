@@ -3,17 +3,18 @@
 | Code | Meaning                | Description
 |------|------------------------|--------------------------------
 | 200  | Success                | Request successful
-| 204  | No Content             | Request successful; the endpoint has no response body to return.
+| 204  | No Content             | Request successful; the endpoint has no response body to return. A `DELETE` also returns `204` if the resource doesn't exist, except `remove-timelog`, which returns `404` when no time log matches, and any `/storage/id/…` path (`404`: storage has no ID form).
 | 400  | Bad Request            | You're using a wrong parameter, or passing incorrect data.
 | 401  | Unauthorized           | Invalid or expired token.
 | 402  | Payment required       | The organization’s subscription does not permit use of this app, the subscription has expired, or a plan quota/limit has been reached (body `code` `469` or `470` — see below).
-| 403  | Forbidden              | Not authorized to access the resource, or temporarily blocked (body `code` `471` — see below).
+| 403  | Forbidden              | Not authorized to access the resource, the `Authorization` header is missing or malformed (body `code` `100`), or temporarily blocked (body `code` `471` — see below).
 | 404  | Not Found              | The specified resource could not be found.
 | 405  | Method not allowed     | Method not allowed or supported.
-| 409  | Conflict               | There is already a resource with the same criteria.
-| 413  | Content too large      | The request's content is larger than 1MB.
+| 408  | Request Timeout        | The request took longer than 10 minutes to process. Retry later, or split it into smaller requests.
+| 409  | Conflict               | The request conflicts with the current state, such as creating something that already exists. `message` says what conflicts.
+| 413  | Content too large      | The request's content is larger than 1 MB, or a storage value is larger than 4 KiB. A file upload is limited by the plan instead (`402`).
 | 418  | Not valid JSON content | The request's content doesn't appear to be JSON.
-| 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls (and only that; carries a `Retry-After` header).
+| 429  | Too Many Requests      | Exceeded the [rate limit](#rate-limits) for API calls, or sent too many requests at once. Carries a `Retry-After` header.
 | 500  | Internal Server Error  | There is an unexpected error.
 | 503  | Service Unavailable    | Server is down for maintenance.
 
@@ -28,8 +29,9 @@ All `4xx` and `5xx` responses share a common JSON envelope, represented by the
 
 - `code` is the HTTP status code, echoed in the body — except for `402`, where it is `469`
   (a plan quota/limit has been reached) or `470` (the subscription has expired), and for
-  `403`, where it is `471` if the account is temporarily blocked. These let clients tell
-  the cases apart without parsing `message`.
+  `403`, where it is `471` if the account is temporarily blocked, or `100` if the
+  `Authorization` header is missing or malformed. These let clients tell the cases apart
+  without parsing `message`.
 - `message` is a human-readable description, typically naming the offending field and —
   for `400` — the expected format. Long submitted values are truncated.
 
@@ -38,12 +40,14 @@ the body shape is this same envelope everywhere.
 
 | Error Code | Meaning
 |-----|-----------------------
-| 100 | General authentication error.
+| 100 | General authentication error, such as a missing or malformed `Authorization` header (returned with HTTP `403`).
 | 400 | Bad request including wrong request body, wrong parameter and so on.
 | 401 | Invalid or expired token.
 | 403 | Forbidden.
 | 404 | Resource not found.
 | 405 | Method not allowed.
+| 408 | Request timeout.
+| 409 | Conflict.
 | 413 | Request too large.
 | 429 | Too many invocations (the [rate limit](#rate-limits)).
 | 469 | Quota exceeded, such as number of projects, number of members, and other plan limits. Returned with HTTP `402`.

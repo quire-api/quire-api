@@ -34,7 +34,16 @@ public class NotificationResource {
           + "`404 Not Found`. The response is identical for every such case "
           + "so the endpoint cannot be used to probe user existence or "
           + "colleague relationships.\n\n"
-          + "Rate-limit cost: see [Rate Limits](#rate-limits)."
+          + "The app needs the *Manage notifications* permission, granted "
+          + "when the user authorized it; otherwise `403`.\n\n"
+          + "Rate-limit cost: one unit per 10 recipients, rounded up (at "
+          + "least 1), counted from the resolved list — so `[\"*\"]` costs "
+          + "one unit per 10 users visible to the app. It is charged only "
+          + "once the recipients resolve, so a call rejected with `404` costs "
+          + "nothing. It is counted against the organization of the user's "
+          + "best plan (a trial doesn't count); a user in no organization has "
+          + "a bucket of their own, at the Free plan's limits.\n\n"
+          + "Returns `204 No Content`."
     )
     @ApiResponses({
         @ApiResponse(
@@ -43,7 +52,11 @@ public class NotificationResource {
         ),
         @ApiResponse(
             code = 400,
-            message = "Bad Request — `recipients` is not a list, or `*` was combined with other entries."
+            message = "Bad Request — `message` is missing or empty, `url` is a `javascript:` URL, `recipients` is not a list, or `*` was combined with other entries."
+        ),
+        @ApiResponse(
+            code = 403,
+            message = "Forbidden — the app wasn't granted the *Manage notifications* permission."
         ),
         @ApiResponse(
             code = 404,
@@ -51,7 +64,7 @@ public class NotificationResource {
         ),
         @ApiResponse(
             code = 429,
-            message = "Too Many Requests — the rate-limit cost (see [Rate Limits](#rate-limits)) would exceed the caller's per-minute or per-hour API budget. No notification is sent."
+            message = "Too Many Requests — the caller's per-minute or per-hour API budget is used up. No notification is sent."
         )
     })
     public Response createNotification(

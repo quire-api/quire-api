@@ -14,7 +14,7 @@ public class Reminder extends StampedEntity {
     public String getOid() { return null; }
 
     @ApiModelProperty(
-        value = "Task this reminder is attached to, or null if it stands on "
+        value = "Task this reminder is attached to. Omitted if it stands on "
               + "its own. A reminder cannot be moved to another task.\n\n"
               + "Only `oid`, `id`, `name` and `url` are returned here; fetch "
               + "the task itself for its dates.",
@@ -25,7 +25,7 @@ public class Reminder extends StampedEntity {
     @ApiModelProperty(
         value = "When this reminder fires, if it fires at a time of its own "
               + "(UTC, ISO 8601).\n\n"
-              + "Null whenever `task` has a start or due date: the reminder "
+              + "Omitted whenever `task` has a start or due date: the reminder "
               + "then fires from that date instead, and `leads` counts back "
               + "from it. The dates are not part of this response, so to show "
               + "when a reminder will fire, fetch its task and use its due "
@@ -36,9 +36,9 @@ public class Reminder extends StampedEntity {
     public String getWhen() { return null; }
 
     @ApiModelProperty(
-        value = "How this reminder repeats, or null if it does not. Always "
-              + "null while the reminder is anchored: it then repeats with "
-              + "its task's own schedule.",
+        value = "How this reminder repeats. Omitted if it does not repeat, "
+              + "which is always so while the reminder is anchored: it then "
+              + "repeats with its task's own schedule.",
         position = 3
     )
     public RecurrenceX getRecurrence() { return null; }
@@ -60,8 +60,9 @@ public class Reminder extends StampedEntity {
     public List<ReminderLead> getLeads() { return null; }
 
     @ApiModelProperty(
-        value = "Text shown instead of the default message (Markdown supported), "
-              + "or null to use the default.",
+        value = "Text shown instead of the default message (Markdown "
+              + "supported). Omitted when the default is used, and so are "
+              + "`nameText` and `nameHtml`.",
         example = "Pay the **bill**",
         position = 5
     )
@@ -82,8 +83,9 @@ public class Reminder extends StampedEntity {
     public String getNameHtml() { return null; }
 
     @ApiModelProperty(
-        value = "External team this reminder is shared with, or null. When "
-              + "set, it reaches every member of the project and of that team.",
+        value = "External team this reminder is shared with. Omitted if "
+              + "none. When set, it reaches every member of the project and "
+              + "of that team.",
         position = 15
     )
     public SimpleTaggingEntity getPartner() { return null; }
@@ -105,7 +107,7 @@ public class Reminder extends StampedEntity {
         value = "Project, organization, folder or smart folder this reminder "
               + "belongs to. Fixed when the reminder is created: a reminder on "
               + "a task always belongs to that task's project, and one created "
-              + "under `-` belongs to the caller's own inbox.",
+              + "under `-` belongs to its creator's My Tasks.",
         position = 99
     )
     public ReminderOwner getOwner() { return null; }

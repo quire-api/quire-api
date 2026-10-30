@@ -14,6 +14,32 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class OrganizationResource {
 
+    // The organization read endpoints share this.
+    private static final String ORG_403 =
+        "Forbidden — the user can't access the organization, or didn't authorize it for this app.";
+
+    // The organization update endpoints share these.
+    private static final String ORG_UPDATE_RIGHT =
+        "Who may change what: `name` and `description` need an admin of the "
+      + "organization, and an app with the *Manage profiles* permission. "
+      + "`followers`, `addFollowers` and `removeFollowers` need edit access "
+      + "to the organization itself (being a member of one of its projects "
+      + "isn't enough), and an app with the *Manage tasks* permission — "
+      + "even for only `\"me\"`: unlike a project, an organization can't "
+      + "be followed with read access. A body mixing them needs the rights "
+      + "of each; otherwise `403`.";
+
+    private static final String ORG_UPDATE_403 =
+        "Forbidden — the user lacks the role, or the app the permission, a "
+      + "given field needs: an admin and *Manage profiles* for `name` and "
+      + "`description`; edit access and *Manage tasks* for the followers.";
+
+    private static final String RETURN_ORG =
+        "(Optional) Response shape: `full` (default) for the full "
+      + "organization record, or `compact` for just "
+      + "`{\"oid\": …, \"id\": …}`. "
+      + "Any other value returns `400 Bad Request`.";
+
 /* Not supported yet (security concern)
     @POST
     @ApiOperation(
@@ -53,7 +79,8 @@ public class OrganizationResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — organization record with plan info.",
             response = OrganizationWithPlan.class),
-        @ApiResponse(code = 404, message = "Not Found — organization does not exist, or is not accessible to the caller.")
+        @ApiResponse(code = 403, message = ORG_403),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
     public Response getOrganizationById(
         @ApiParam(value = "Organization ID.", example = "my_org", required = true)
@@ -70,7 +97,8 @@ public class OrganizationResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — organization record with plan info.",
             response = OrganizationWithPlan.class),
-        @ApiResponse(code = 404, message = "Not Found — organization does not exist, or is not accessible to the caller.")
+        @ApiResponse(code = 403, message = ORG_403),
+        @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
     public Response getOrganizationByOid(
         @ApiParam(value = "Organization OID.", required = true)
@@ -82,14 +110,15 @@ public class OrganizationResource {
     @ApiOperation(
         value = "Update an organization by ID.",
         notes = "Updates an existing organization and returns the complete updated record. "
-              + "Omitted body fields are left unchanged.",
+              + "Omitted body fields are left unchanged.\n\n"
+              + ORG_UPDATE_RIGHT,
         response = Organization.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated organization record.",
             response = Organization.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this organization."),
+        @ApiResponse(code = 403, message = ORG_UPDATE_403),
         @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
     public Response updateOrganizationById(
@@ -99,10 +128,7 @@ public class OrganizationResource {
         UpdateOrganizationBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full organization record, or `compact` for identifiers "
-                + "only (`{\"oid\":…, \"id\":…}`). See API description for "
-                + "`?return=` semantics.",
+            value = RETURN_ORG,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -114,14 +140,15 @@ public class OrganizationResource {
     @ApiOperation(
         value = "Update an organization by OID.",
         notes = "Updates an existing organization and returns the complete updated record. "
-              + "Omitted body fields are left unchanged.",
+              + "Omitted body fields are left unchanged.\n\n"
+              + ORG_UPDATE_RIGHT,
         response = Organization.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated organization record.",
             response = Organization.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this organization."),
+        @ApiResponse(code = 403, message = ORG_UPDATE_403),
         @ApiResponse(code = 404, message = "Not Found — organization does not exist.")
     })
     public Response updateOrganizationByOid(
@@ -131,10 +158,7 @@ public class OrganizationResource {
         UpdateOrganizationBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full organization record, or `compact` for identifiers "
-                + "only (`{\"oid\":…, \"id\":…}`). See API description for "
-                + "`?return=` semantics.",
+            value = RETURN_ORG,
             example = "compact",
             allowableValues = "full, compact"
         )

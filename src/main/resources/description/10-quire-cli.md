@@ -91,7 +91,7 @@ quire project list   # first read against the API
 
 The file is encrypted at rest with AES-256-GCM. The key is derived from your username and hostname, so a copy of the file taken to another machine or another user account cannot be decrypted.
 
-Tokens are refreshed automatically; you only need to run `quire login` once per machine and per profile.
+As a public client, the CLI gets no refresh token: the access token lasts 7 days, after which you run `quire login` again.
 
 ## What you can do
 
@@ -139,7 +139,7 @@ quire task search "stale" --project my-project -q | xargs -L1 quire task complet
 Other useful global flags:
 
 * `--color-mode auto|always|never` (or `NO_COLOR=1`) controls ANSI colors.
-* `--yes` auto-confirms destructive prompts (`quire task delete`, `quire bulk-delete`, …). Required for non-interactive use.
+* `--yes` auto-confirms destructive prompts (`quire task delete`, `quire task bulk-delete`, …). Required for non-interactive use.
 * `--profile <name>` selects a credentials profile (see below).
 * `--verbose` prints debug information to stderr.
 
@@ -158,7 +158,7 @@ quire mine    --profile personal
 
 The default profile is `default`; override per shell with `QUIRE_PROFILE=...`.
 
-`quire logout [--profile <name>]` deletes the local credentials file. It does not revoke the refresh token on the Quire server — the CLI is a public OAuth client and has no client secret to authenticate a revoke call. To fully invalidate access from the server side, also visit <https://quire.io/apps> and remove the **Quire CLI** app.
+`quire logout [--profile <name>]` deletes the local credentials file. It does not revoke the CLI's access on the Quire server. To do that, also open **Account Settings > Apps** (<https://quire.io/r/setting?tab=app>) and remove the **Quire CLI** app.
 
 ## Configuration
 
@@ -167,7 +167,7 @@ The default profile is `default`; override per shell with `QUIRE_PROFILE=...`.
 | `QUIRE_PROFILE` | `default` | Profile selected when `--profile` is not passed |
 | `QUIRE_CONFIG_HOME` | `~/.config/quire/` (Unix), `%APPDATA%\quire\` (Windows) | Where credentials and other CLI state live |
 | `QUIRE_API_SERVER` | `https://quire.io/api` | Override the API base URL (advanced; the CLI prints a warning to stderr when set) |
-| `QUIRE_CLI_LOOPBACK_PORT` | `8866` | Local port the OAuth callback listens on. Must match the redirect URI registered on the Quire OAuth app |
+| `QUIRE_CLI_LOOPBACK_PORT` | `8866` | Local port the OAuth callback listens on. Any free port works, since Quire accepts any port on a loopback redirect URI |
 | `NO_COLOR` | unset | Set to any value to disable ANSI colors |
 
 ## Authorization scopes
@@ -177,7 +177,7 @@ The first time you run `quire login`, Quire shows the standard authorization scr
 * **Which organizations and projects** the CLI may access.
 * **What it may do** — the same permission scopes that apply to regular Quire OAuth apps (see [Authentication](#authentication)).
 
-You can revoke access at any time from your Quire account settings, or by visiting <https://quire.io/apps> and removing the **Quire CLI** app.
+You can revoke access at any time by removing the **Quire CLI** app in **Account Settings > Apps** (<https://quire.io/r/setting?tab=app>).
 
 ## Privacy and rate limits
 
@@ -187,9 +187,9 @@ You can revoke access at any time from your Quire account settings, or by visiti
 
 ## Troubleshooting
 
-* **`Not logged in. Run \`quire login\`.`** — credentials are missing or the refresh token has been revoked. Run `quire login` again.
+* **`Not logged in. Run \`quire login\`.`** — credentials are missing, expired, or revoked. Run `quire login` again.
 * **The browser does not open during `quire login`.** — the authorization URL is also printed to stderr. Copy and paste it into any browser; the loopback callback will still complete the flow.
-* **`Failed to bind 127.0.0.1:8866`** — another process is using the OAuth callback port. Pick a free port, set `QUIRE_CLI_LOOPBACK_PORT=<port>`, and re-run `quire login`. The same port must be registered as a redirect URI on the Quire OAuth app, otherwise the authorization screen will reject the request.
+* **`Failed to bind 127.0.0.1:8866`** — another process is using the OAuth callback port. Pick a free port, set `QUIRE_CLI_LOOPBACK_PORT=<port>`, and re-run `quire login`.
 * **`429 Too Many Requests`** — the CLI auto-retries once after the server-supplied delay. Past that, wait and re-run; the per-organization rate limit is documented at [Rate Limits](#rate-limits).
 * **`quire ... | head` prints a broken-pipe stack trace.** — you should not see this; the CLI catches `EPIPE` and exits 0. If you do see it, please report it as a bug.
 * **Output looks corrupted on Windows.** — make sure your terminal supports ANSI escape sequences (Windows Terminal, VS Code's terminal, and modern PowerShell do). Otherwise pass `--color-mode never` or set `NO_COLOR=1`.

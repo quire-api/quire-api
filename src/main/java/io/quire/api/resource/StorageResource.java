@@ -12,45 +12,69 @@ import javax.ws.rs.core.Response;
 @Api(
     value = "storage",
     description =
-        "A simple key–value storage for application-specific data.\n\n"
-      + "**Lifetime:** data is scoped to the access token that wrote it. "
-      + "It is deleted automatically when the token is revoked or expires, "
-      + "or when the owning user is deleted (whichever happens first).\n\n"
-      + "**Limits:**\n"
-      + "- **Records per access token** depend on the calling user's best plan:\n"
-      + "  - Free: **15** records.\n"
-      + "  - Professional: **100** records.\n"
-      + "  - Premium: **250** records.\n"
-      + "  - Enterprise: **1,000** records.\n"
-      + "- **Per write**: each `PUT` value is capped at **4 KiB** "
-      + "(JSON-serialized request body). Uniform across plans.\n"
-      + "- **Rate limit**: every storage call counts against the calling "
-      + "user's standard per-organization rate limit "
-      + "(see [Rate Limits](#rate-limits)) — same bucket and plan-tier as the rest "
-      + "of the API. No separate per-OApp ceiling.\n\n"
-      + "Exceeding any of these returns:\n"
-      + "- `402 Payment Required` (`ecQuotaExceeded`) — record cap reached "
-      + "for the current plan; upgrade or delete keys to free space.\n"
-      + "- `413 Payload Too Large` (`ecTooLarge`) — value exceeds 4 KiB.\n"
-      + "- `429 Too Many Requests` (with `Retry-After` header in seconds) — "
-      + "organization's per-minute or per-hour rate limit hit."
+        "A simple key–value storage for application-specific data. Each "
+      + "value is any JSON value, kept per authorization of your app. A key "
+      + "is addressed as `/storage/{name}`: unlike other resources, there "
+      + "is no `/storage/id/...` form (`404`)."
 )
 @Produces({"application/json"})
 public class StorageResource {
+
+    // The storage endpoints share these.
+    private static final String LIFETIME =
+        "Stored data belongs to the authorization — the user's grant to "
+      + "the app, behind its refresh token — not to the access token: a "
+      + "refreshed or new access token of the same authorization sees the "
+      + "same data. It is deleted when the authorization is revoked or "
+      + "expires, or when the user is deleted.";
+
+    private static final String LIMITS =
+        "Limits:\n\n"
+      + "- Keys per authorization, by the user's best plan (a trial doesn't "
+      + "count): Free 15, Professional 100, Premium 250, Enterprise 1,000. "
+      + "A `PUT` adding a key beyond that returns `402` (`code` `469`); "
+      + "delete keys or upgrade.\n"
+      + "- A value is at most 4 KiB as JSON; a larger one returns `413`.\n"
+      + "- Each call costs 1 rate-limit unit, counted against the "
+      + "organization of that best plan; a user in no organization has a "
+      + "bucket of their own, at the Free plan's limits. Over the limit, "
+      + "`429` with `Retry-After`.";
+
+    private static final String NAME =
+        "The key. Any string except `id` and `list`, and one starting with "
+      + "`:}>`.";
+
+    private static final String VALUE_EXAMPLE =
+        "Example: after `PUT /storage/latest` with the body "
+      + "`{\"project\": \"my_project\"}`, `GET /storage/latest` returns "
+      + "`{\"project\": \"my_project\"}`.";
+
+    private static final String ENTRIES =
+        "The response is one JSON object mapping each key to its value, as "
+      + "it was stored — at most 20 entries, by key ascending, and `{}` if "
+      + "none. There is no paging: with more than 20 keys, narrow the "
+      + "listing with `GET /storage/list/{prefix}`.\n\n"
+      + "Example: `{\"latest\": {\"project\": \"my_project\"}, "
+      + "\"theme\": \"dark\"}`.";
+
+    private static final String TOO_MANY_REQUESTS =
+        "Too Many Requests — rate limit reached. Honor `Retry-After`.";
 
     @GET
     @Path("/list")
     @ApiOperation(
         value = "List all stored entries.",
         notes =
-            "Returns up to 20 stored entries for the current access token, "
-          + "ordered by key ascending.",
+            "Returns the stored entries of the current authorization.\n\n"
+          + ENTRIES + "\n\n"
+          + LIFETIME + "\n\n"
+          + LIMITS,
         response = StorageList.class
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — list of stored entries (may be empty).",
+        @ApiResponse(code = 200, message = "OK — key-to-value object of the stored entries (may be `{}`).",
             response = StorageList.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = TOO_MANY_REQUESTS)
     })
     public Response getAllValues() { return null; }
 
@@ -59,20 +83,23 @@ public class StorageResource {
     @ApiOperation(
         value = "List stored entries by prefix.",
         notes =
-            "Returns up to 20 entries whose keys start with the given prefix, "
-          + "ordered by key ascending.\n"
-          + "Use this to group application-specific values by a common key prefix.",
+            "Returns the stored entries whose keys start with `prefix`. "
+          + "The prefix is matched literally: `%` and `_` are not "
+          + "wildcards. Use it to group values under a common key prefix.\n\n"
+          + ENTRIES + "\n\n"
+          + LIFETIME + "\n\n"
+          + LIMITS,
         response = StorageList.class
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — list of matching entries (may be empty).",
+        @ApiResponse(code = 200, message = "OK — key-to-value object of the matching entries (may be `{}`).",
             response = StorageList.class),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = TOO_MANY_REQUESTS)
     })
     public Response getValues(
         @ApiParam(
             value = "Key prefix to match.",
-            example = "foo",
+            example = "sync.",
             required = true
         )
         @PathParam("prefix") String prefix
@@ -83,17 +110,21 @@ public class StorageResource {
     @ApiOperation(
         value = "Get a stored value.",
         notes =
-            "Returns the application-specific value stored under the given name.\n"
-          + "Note: values are scoped per access token.",
+            "Returns the value stored under `name`, exactly as it was "
+          + "stored: any JSON value, such as an object, array, string or "
+          + "number. `404` if there is none.\n\n"
+          + VALUE_EXAMPLE + "\n\n"
+          + LIFETIME + "\n\n"
+          + LIMITS,
         response = StorageMap.class
     )
     @ApiResponses({
-        @ApiResponse(code = 200, message = "OK — stored value.", response = StorageMap.class),
-        @ApiResponse(code = 404, message = "Not Found — no value stored under this key for the current access token."),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 200, message = "OK — the stored value, as it was stored.", response = StorageMap.class),
+        @ApiResponse(code = 404, message = "Not Found — no value is stored under this key."),
+        @ApiResponse(code = 429, message = TOO_MANY_REQUESTS)
     })
     public Response getValue(
-        @ApiParam(value = "The key name.", example = "latest", required = true)
+        @ApiParam(value = NAME, example = "latest", required = true)
         @PathParam("name") String name
     ) { return null; }
 
@@ -102,23 +133,29 @@ public class StorageResource {
     @ApiOperation(
         value = "Create or update a stored value.",
         notes =
-            "Creates or replaces the value stored under the given name.\n"
-          + "If `null` is provided as the value, the key will be deleted.\n"
-          + "Note: values are scoped per access token."
+            "Stores the request body under `name`, replacing any value "
+          + "already there. The body is the value itself: any JSON value, "
+          + "such as an object, array, string or number. A body of `null`, "
+          + "or an empty one, deletes the key instead.\n\n"
+          + "Returns `204 No Content`. " + VALUE_EXAMPLE + "\n\n"
+          + LIFETIME + "\n\n"
+          + LIMITS
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content — value stored (or deleted if null)."),
-        @ApiResponse(code = 400, message = "Bad Request — malformed JSON."),
-        @ApiResponse(code = 402, message = "Payment Required — record cap reached for the current plan. Delete keys or upgrade."),
-        @ApiResponse(code = 413, message = "Payload Too Large — value exceeds the 4 KiB per-write cap."),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 204, message = "No Content — value stored (or deleted if the body is `null` or empty)."),
+        @ApiResponse(code = 400, message = "Bad Request — the key is `id` or `list`, or starts with `:}>`."),
+        @ApiResponse(code = 402, message = "Payment Required — the key limit of the plan is reached (`code` `469`). Delete keys or upgrade."),
+        @ApiResponse(code = 413, message = "Payload Too Large — the value exceeds 4 KiB as JSON."),
+        @ApiResponse(code = 418, message = "Not Valid JSON Content — the body isn't valid JSON."),
+        @ApiResponse(code = 429, message = TOO_MANY_REQUESTS)
     })
     public Response updateValue(
-        @ApiParam(value = "The key name.", example = "latest", required = true)
+        @ApiParam(value = NAME, example = "latest", required = true)
         @PathParam("name") String name,
         @ApiParam(
-            value = "The value to store. Any JSON-serializable object is accepted. "
-                  + "Send `null` to delete the key."
+            value = "The value to store: any JSON value, such as "
+                  + "`{\"project\": \"my_project\"}`. Send `null`, or no "
+                  + "body, to delete the key."
         )
         StorageMap data
     ) { return null; }
@@ -128,16 +165,17 @@ public class StorageResource {
     @ApiOperation(
         value = "Delete a stored value.",
         notes =
-            "Deletes the value stored under the given name.\n\n"
-            + "> Note: Returns `204 No Content` regardless of whether the value exists.\n"
-            + "> Also note: values are scoped per access token."
+            "Deletes the value stored under `name`.\n\n"
+          + "> Note: Returns `204 No Content` regardless of whether the value exists.\n\n"
+          + LIFETIME + "\n\n"
+          + LIMITS
     )
     @ApiResponses({
         @ApiResponse(code = 204, message = "No Content"),
-        @ApiResponse(code = 429, message = "Too Many Requests — organization rate limit reached. Honor `Retry-After`.")
+        @ApiResponse(code = 429, message = TOO_MANY_REQUESTS)
     })
     public Response deleteValue(
-        @ApiParam(value = "The key name.", example = "latest", required = true)
+        @ApiParam(value = NAME, example = "latest", required = true)
         @PathParam("name") String name
     ) { return null; }
 }

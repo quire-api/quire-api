@@ -50,27 +50,27 @@ public class Comment extends StampedEntity {
     public List<CommentEmoji> getEmojis() { return null; }
 
     @ApiModelProperty(
-        value = "Timestamp (UTC, ISO 8601) when this comment was pinned, or null if not pinned.",
+        value = "Timestamp (UTC, ISO 8601) when this comment was pinned. Omitted if not pinned.",
         example = "2018-12-22T02:06:58.158Z",
         position = 50
     )
     public String getPinAt() { return null; }
 
     @ApiModelProperty(
-        value = "User who pinned this comment, or null if not pinned.",
+        value = "User who pinned this comment. Omitted if not pinned.",
         position = 50
     )
     public SimpleIdentity getPinBy() { return null; }
 
     @ApiModelProperty(
-        value = "Timestamp (UTC, ISO 8601) when this comment was last edited, or null if not edited.",
+        value = "Timestamp (UTC, ISO 8601) when this comment was last edited. Omitted if never edited.",
         example = "2018-12-22T02:06:58.158Z",
         position = 50
     )
     public String getEditedAt() { return null; }
 
     @ApiModelProperty(
-        value = "User who last edited this comment, or null if not edited.",
+        value = "User who last edited this comment. Omitted if never edited.",
         position = 50
     )
     public SimpleIdentity getEditedBy() { return null; }
@@ -82,7 +82,7 @@ public class Comment extends StampedEntity {
     public String getUrl() { return null; }
 
     @ApiModelProperty(
-        value = "Object this comment was added to.",
+        value = "Task or chat channel this comment was added to.",
         position = 99
     )
     public CommentOwner getOwner() { return null; }

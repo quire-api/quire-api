@@ -12,7 +12,9 @@ public class SimpleAttachment {
     public String getName() { return null; }
 
     @ApiModelProperty(
-        value = "Direct URL to access this attachment.",
+        value = "Absolute URL of this attachment. A file stored in Quire "
+              + "is under `https://quire.io/att/`; a file from an external "
+              + "storage, such as Google Drive, links to that service.",
         example = "https://quire.io/att/Ta/sdcQOGgeUtyaFFzb9p0IwAgi/qfqVmUtC/image.png"
     )
     public String getUrl() { return null; }

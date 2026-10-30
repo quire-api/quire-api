@@ -18,16 +18,22 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class BulkUpdateTaskItem extends UpdateTaskBody {
 
+    // The oid and id properties share this.
+    static final String TARGET_RULE =
+        "Exactly one of `oid` / `id` must be supplied per item; both or "
+      + "neither is rejected with `400`. If it doesn't match a live task "
+      + "in the project, the item is skipped and its response slot is "
+      + "`null`.";
+
     @ApiModelProperty(
-        value = "Target task OID. Exactly one of `oid` / `id` must be "
-              + "supplied per item.",
+        value = "Target task OID. " + TARGET_RULE,
         example = "iuRRiKoyrxdBFhFTTo"
     )
     public String getOid() { return null; }
 
     @ApiModelProperty(
-        value = "Target task ID. Exactly one of `oid` / `id` must be "
-              + "supplied per item.",
+        value = "Target task ID, an integer; a `\"#42\"` string works "
+              + "too. " + TARGET_RULE,
         example = "42"
     )
     public Integer getId() { return null; }

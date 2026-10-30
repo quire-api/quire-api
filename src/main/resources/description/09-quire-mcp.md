@@ -34,7 +34,7 @@ The Quire MCP server exposes the full Quire object model as MCP tools. At a high
 | **Documents** | Create, read, update, and delete project documents |
 | **Chats & Insights** | Start chat threads, post chat comments, and manage insight reports and their fields |
 | **Dashboards** | Create, read, update, archive, and delete dashboards for a project, organization, or folder (widget contents are not yet exposed) |
-| **Partners** | List and inspect partner workspaces |
+| **External teams** | List and inspect a project's external teams (partners) |
 | **URL resolver** | Turn any pasted Quire URL (task, project, document, …) into the underlying object |
 
 For the authoritative, always-up-to-date list of tools and their parameters, run `tools/list` from your MCP client after connecting.

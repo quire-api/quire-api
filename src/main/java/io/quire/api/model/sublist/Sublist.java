@@ -14,22 +14,32 @@ public class Sublist extends Work {
 
     @Override
     @ApiModelProperty(
-        value = "Project this sublist belongs to.",
+        value = "Owner this sublist belongs to: a project, organization, folder, or smart folder.",
         position = 99
     )
     public SublistOwner getOwner() { return null; }
 
     @ApiModelProperty(
-        value = "Target start date for this record, or null if not specified.",
+        value = "Target start date for this record, `yyyy-MM-dd`. Omitted if not set.",
         example = "2024-01-02",
         position = 50
     )
     public String getStart() { return null; }
 
     @ApiModelProperty(
-        value = "Target due date for this record, or null if not specified.",
+        value = "Target due date for this record, `yyyy-MM-dd`. Omitted if not set.",
         example = "2024-05-25",
         position = 50
     )
     public String getDue() { return null; }
+
+    @ApiModelProperty(
+        value = "Whether every task belongs to this sublist by default. If "
+              + "`true`, every task of the owner is in it except the excluded "
+              + "ones (with their subtasks); if `false`, only the included tasks "
+              + "are, with their subtasks.",
+        example = "false",
+        position = 50
+    )
+    public boolean getAll() { return false; }
 }

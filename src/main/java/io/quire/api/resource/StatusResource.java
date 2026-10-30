@@ -14,20 +14,67 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class StatusResource {
 
+    // The status write endpoints share these.
+    private static final String STATUS_RIGHT =
+        "Requires a user who can manage the project's statuses, and an app "
+      + "with the *Manage statuses* permission; otherwise `403`. An external "
+      + "team's members can't.";
+
+    private static final String STATUS_403 =
+        "Forbidden — the user can't manage the project's statuses, or the app lacks the *Manage statuses* permission.";
+
+    // The status read endpoints share this.
+    private static final String READ_403 =
+        "Forbidden — the user can't access it, or didn't authorize it for this app.";
+
+    private static final String RETURN_STATUS =
+        "(Optional) Response shape: `full` (default) for the full record, "
+      + "or `compact` for just `{\"value\": …}`. "
+      + "Any other value returns `400 Bad Request`.";
+
+    private static final String DUP_NAME =
+        "A `name` already in use, ignoring case, gets a numbered suffix, "
+      + "e.g. `Doing (1)`.";
+
+    private static final String CREATE_STATUS_NOTES =
+        "Creates a new task status in the specified project and returns it. "
+      + "A `value` already in use in the project returns `409`. " + DUP_NAME + "\n\n"
+      + STATUS_RIGHT + "\n\n"
+      + "Example: `{\"name\": \"Review\", \"value\": 70, \"color\": \"35\"}`.\n\n"
+      + "A status over the plan's status limit returns `402`.";
+
+    private static final String UPDATE_STATUS_NOTES =
+        "Updates an existing status and returns the complete updated record. "
+      + "Omitted body fields are left unchanged. " + DUP_NAME + " "
+      + "The value of `0` (the initial status) and `100` (completed) can't "
+      + "change (`403`); changing `value` to one already in use returns "
+      + "`409`. With `?return=compact`, the response holds the value after "
+      + "the update.\n\n"
+      + STATUS_RIGHT;
+
+    private static final String DELETE_STATUS_NOTES =
+        "Deletes the specified status; its tasks move to the next lower "
+      + "status. `0` (the initial status) and `100` (completed) can't be "
+      + "deleted (`403`).\n\n"
+      + STATUS_RIGHT + "\n\n"
+      + "Returns `204 No Content`, also when the status doesn't exist.";
+
     // -------- Create --------
 
     @POST
     @Path("/{projectOid}")
     @ApiOperation(
         value = "Add a new task status (by project OID).",
-        notes = "Creates a new task status in the specified project.",
+        notes = CREATE_STATUS_NOTES,
         response = Status.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created status.", response = Status.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 402, message = "Payment Required — plan's status limit is reached (`code` `469`)."),
+        @ApiResponse(code = 403, message = STATUS_403),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a status with this `value` already exists.")
     })
     public Response createStatus(
         @ApiParam(value = "Project OID to add the status to.", required = true)
@@ -36,9 +83,7 @@ public class StatusResource {
         CreateStatusBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_STATUS,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -49,14 +94,16 @@ public class StatusResource {
     @Path("/id/{projectId}")
     @ApiOperation(
         value = "Add a new task status (by project ID).",
-        notes = "Creates a new task status in the specified project.",
+        notes = CREATE_STATUS_NOTES,
         response = Status.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created status.", response = Status.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
-        @ApiResponse(code = 404, message = "Not Found — project does not exist.")
+        @ApiResponse(code = 402, message = "Payment Required — plan's status limit is reached (`code` `469`)."),
+        @ApiResponse(code = 403, message = STATUS_403),
+        @ApiResponse(code = 404, message = "Not Found — project does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — a status with this `value` already exists.")
     })
     public Response createStatusToProject(
         @ApiParam(value = "Project ID to add the status to.", example = "my_project", required = true)
@@ -65,9 +112,7 @@ public class StatusResource {
         CreateStatusBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_STATUS,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -85,6 +130,7 @@ public class StatusResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — status record.", response = Status.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
     })
     public Response getStatusByProjectOid(
@@ -103,6 +149,7 @@ public class StatusResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — status record.", response = Status.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
     })
     public Response getStatusByProjectId(
@@ -125,6 +172,7 @@ public class StatusResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of statuses (may be empty).",
             response = Status.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getStatusesByProjectOid(
@@ -143,6 +191,7 @@ public class StatusResource {
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of statuses (may be empty).",
             response = Status.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getStatusesByProjectId(
@@ -156,15 +205,15 @@ public class StatusResource {
     @Path("/{projectOid}/{value}")
     @ApiOperation(
         value = "Update a task status (by project OID).",
-        notes = "Updates an existing status and returns the complete updated record. "
-              + "Omitted body fields are left unchanged.",
+        notes = UPDATE_STATUS_NOTES,
         response = Status.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated status record.", response = Status.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
-        @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
+        @ApiResponse(code = 403, message = STATUS_403),
+        @ApiResponse(code = 404, message = "Not Found — project or status does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — another status already has the new `value`.")
     })
     public Response updateStatusByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
@@ -175,9 +224,7 @@ public class StatusResource {
         UpdateStatusBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_STATUS,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -188,15 +235,15 @@ public class StatusResource {
     @Path("/id/{projectId}/{value}")
     @ApiOperation(
         value = "Update a task status (by project ID).",
-        notes = "Updates an existing status and returns the complete updated record. "
-              + "Omitted body fields are left unchanged.",
+        notes = UPDATE_STATUS_NOTES,
         response = Status.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated status record.", response = Status.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify the project."),
-        @ApiResponse(code = 404, message = "Not Found — project or status does not exist.")
+        @ApiResponse(code = 403, message = STATUS_403),
+        @ApiResponse(code = 404, message = "Not Found — project or status does not exist."),
+        @ApiResponse(code = 409, message = "Conflict — another status already has the new `value`.")
     })
     public Response updateStatusByProjectId(
         @ApiParam(value = "Project ID.", example = "my_project", required = true)
@@ -207,9 +254,7 @@ public class StatusResource {
         UpdateStatusBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_STATUS,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -222,16 +267,16 @@ public class StatusResource {
     @Path("/{projectOid}/{value}")
     @ApiOperation(
         value = "Delete a task status (by project OID).",
-        notes = "Deletes the specified status.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the status exists."
+        notes = DELETE_STATUS_NOTES
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — status deleted (or already absent)."),
+        @ApiResponse(code = 403, message = STATUS_403)
     })
     public Response deleteStatusByProjectOid(
         @ApiParam(value = "Project OID.", required = true)
         @PathParam("projectOid") String projectOid,
-        @ApiParam(value = "Status value to delete.", required = true)
+        @ApiParam(value = "Status value to delete.", example = "50", required = true)
         @PathParam("value") int value
     ) { return null; }
 
@@ -239,16 +284,16 @@ public class StatusResource {
     @Path("/id/{projectId}/{value}")
     @ApiOperation(
         value = "Delete a task status (by project ID).",
-        notes = "Deletes the specified status.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the status exists."
+        notes = DELETE_STATUS_NOTES
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — status deleted (or already absent)."),
+        @ApiResponse(code = 403, message = STATUS_403)
     })
     public Response deleteStatusByProjectId(
-        @ApiParam(value = "Project ID.", required = true)
+        @ApiParam(value = "Project ID.", example = "my_project", required = true)
         @PathParam("projectId") String projectId,
-        @ApiParam(value = "Status value to delete.", required = true)
+        @ApiParam(value = "Status value to delete.", example = "50", required = true)
         @PathParam("value") int value
     ) { return null; }
 }

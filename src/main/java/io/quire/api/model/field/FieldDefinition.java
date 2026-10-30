@@ -18,8 +18,19 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class FieldDefinition {
 
+    // The field-definition models of this package share these.
+    static final String TYPES_BY_OWNER =
+        "A project's field is one of `text`, `number`, `money`, `date`, "
+      + "`duration`, `select`, `checkbox`, `user`, `task`, `hyperlink`, "
+      + "`email`, `formula` and `file`; an insight's field is `formula` or "
+      + "`lookup`.";
+
+    static final String KEY_FOR_TYPE =
+        "A key for another type, such as `options` on a `number` field, "
+      + "returns `400`.";
+
     @ApiModelProperty(
-        value = "Field type.",
+        value = "Field type. " + TYPES_BY_OWNER,
         example = "number",
         allowableValues = "text, number, money, date, duration, select, "
                         + "checkbox, user, task, hyperlink, email, formula, "
@@ -122,7 +133,7 @@ public class FieldDefinition {
     public String getDurationFormat() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `formula`) Formula expression.",
+        value = "(`formula` only) Formula expression.",
         example = "SUM(Subtask.Amount)"
     )
     public String getFormula() { return null; }
@@ -135,12 +146,12 @@ public class FieldDefinition {
     public String getResultType() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `select`) Option list."
+        value = "(`select` only) Option list."
     )
     public List<FieldOption> getOptions() { return null; }
 
     @ApiModelProperty(
-        value = "(Required for `lookup`) Map from lookup key to numeric value. "
+        value = "(`lookup` only) Map from lookup key to numeric value. "
               + "Keys are OIDs of the configured `lookupType` entity "
               + "(e.g. user OIDs when `lookupType=User`). Values are numbers. "
               + "Example: `{\"abc123\": 1, \"def456\": 2}`."

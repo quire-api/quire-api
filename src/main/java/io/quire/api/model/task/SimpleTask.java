@@ -5,7 +5,7 @@ import io.swagger.annotations.*;
 
 import java.util.*;
 
-public class SimpleTask extends StampedEntity {
+public class SimpleTask extends Entity {
 
     @ApiModelProperty(
         value = "Task id.",
@@ -57,18 +57,20 @@ public class SimpleTask extends StampedEntity {
     public String getDescriptionHtml() { return null; }
 
     @ApiModelProperty(
-        value = "Task status, from 0 to 100. `100` indicates the task is completed.",
-        example = "0",
+        value = "Task status as `{value, name, color}`, e.g. "
+              + "`{\"value\": 0, \"name\": \"To-do\", \"color\": \"50\"}`. "
+              + "A `value` of `100` or more means the task is completed.",
         position = 4
     )
-    public int getStatus() { return 0; }
+    public Status getStatus() { return null; }
 
     @ApiModelProperty(
-        value = "Task priority, from -1 (lowest) to 2 (highest). Default: 0.",
-        example = "0",
+        value = "Task priority as `{value, name}`, e.g. "
+              + "`{\"value\": 0, \"name\": \"Medium\"}`: `-1` Low, `0` Medium, "
+              + "`1` High, `2` Urgent.",
         position = 4
     )
-    public int getPriority() { return 0; }
+    public Priority getPriority() { return null; }
 
     @ApiModelProperty(
         value = "Tags applied to this task."
@@ -76,41 +78,43 @@ public class SimpleTask extends StampedEntity {
     public List<SimpleTaggingEntity> getTags() { return null; }
 
     @ApiModelProperty(
-        value = "Start date/time in UTC.\n"
-              + "If a time component is present, milliseconds are set to `001`.\n"
-              + "If date-only, milliseconds are `000` (and hour, minute, second are also zero).",
-        example = "2018-12-20T00:00:00.000Z",
+        value = "Start date, in UTC: `yyyy-MM-dd` for a date without a "
+              + "time, or `yyyy-MM-dd'T'HH:mm'Z'` with one (e.g. "
+              + "`2026-05-01T09:30Z`). Omitted if not set.",
+        example = "2026-05-01",
         position = 4
     )
     public String getStart() { return null; }
 
     @ApiModelProperty(
-        value = "Due date/time in UTC.\n"
-              + "If a time component is present, milliseconds are set to `001`.\n"
-              + "If date-only, milliseconds are `000` (and hour, minute, second are also zero).",
-        example = "2018-12-22T00:00:00.000Z",
+        value = "Due date, in UTC: `yyyy-MM-dd` for a date without a "
+              + "time, or `yyyy-MM-dd'T'HH:mm'Z'` with one (e.g. "
+              + "`2026-05-10T17:00Z`). Omitted if not set.",
+        example = "2026-05-10",
         position = 4
     )
     public String getDue() { return null; }
 
     @ApiModelProperty(
-        value = "Users assigned to this task.",
+        value = "Users assigned to this task, each as `{oid, id, name}`.",
         position = 5
     )
-    public List<SimpleIdentity> getAssignees() { return null; }
+    public List<TaskUser> getAssignees() { return null; }
 
     @ApiModelProperty(
-        value = "IDs of tasks that depend on this task.\n\n"
+        value = "IDs of tasks that depend on this task, as `#<id>` "
+              + "strings. Omitted if none.\n\n"
               + "For ID-based access, prefer `successorRefs`, which "
               + "returns `{oid, id}` pairs.",
-        example = "['#135', '#26']"
+        example = "[\"#135\", \"#26\"]"
     )
     public List<String> getSuccessors() { return null; }
     @ApiModelProperty(
-        value = "IDs of tasks that this task depends on.\n\n"
+        value = "IDs of tasks that this task depends on, as `#<id>` "
+              + "strings. Omitted if none.\n\n"
               + "For ID-based access, prefer `predecessorRefs`, which "
               + "returns `{oid, id}` pairs.",
-        example = "['#17', '#66', '#91']"
+        example = "[\"#17\", \"#66\", \"#91\"]"
     )
     public List<String> getPredecessors() { return null; }
 
@@ -128,22 +132,22 @@ public class SimpleTask extends StampedEntity {
     public List<TaskRef> getPredecessorRefs() { return null; }
 
     @ApiModelProperty(
-        value = "Whether the task is currently peekabooed (arhived).",
+        value = "`true` if the task is archived (hidden by peekaboo); "
+              + "omitted otherwise.",
         example = "true",
         position = 50
     )
     public boolean getPeekaboo() { return false; }
-    // If you intend tri-state (true/false/unknown), change return type to Boolean and adjust description accordingly.
 
     @ApiModelProperty(
-        value = "Whether this task is a section.",
+        value = "`true` if this task is a section; omitted otherwise.",
         example = "true",
         position = 51
     )
     public boolean getSection() { return false; }
 
     @ApiModelProperty(
-        value = "Whether this task is a milestone.",
+        value = "`true` if this task is a milestone; omitted otherwise.",
         example = "true",
         position = 52
     )
@@ -157,9 +161,26 @@ public class SimpleTask extends StampedEntity {
     public String getUrl() { return null; }
 
     @ApiModelProperty(
-        value = "Source reference data stored by an app.",
-        example = "{'text': 'Source: [Gmail](https://gmail.com/link)'}",
+        value = "The JSON object an app stored with the task, as is; omitted "
+              + "if none. Its `text`, if any, is the Markdown Quire shows as "
+              + "the task's source line; other keys are the app's own data. "
+              + "Find tasks by one of its keys with the search endpoints' "
+              + "`?source-ref=<key>`.",
+        example = CreateTaskBody.SOURCE_REF_EXAMPLE,
         position = 60
     )
     public Map<String, Object> getSourceRef() { return null; }
+
+    @ApiModelProperty(
+        value = "Creation timestamp in UTC (ISO 8601).",
+        example = "2018-12-22T02:06:58.158Z",
+        position = 99
+    )
+    public String getCreatedAt() { return null; }
+
+    @ApiModelProperty(
+        value = "User who created this task, as `{oid, id, name}`.",
+        position = 99
+    )
+    public TaskUser getCreatedBy() { return null; }
 }

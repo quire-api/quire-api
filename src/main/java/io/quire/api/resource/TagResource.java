@@ -16,16 +16,51 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class TagResource {
 
+    // The tag write endpoints share these.
+    private static final String TAG_RIGHT =
+        "Requires a user who can manage the project's tags, and an app with "
+      + "the *Manage tags* permission; otherwise `403`.";
+
+    private static final String GLOBAL_TAG_RIGHT =
+        "Creating a global tag, or making a tag global, also takes the right "
+      + "to manage the organization's tags; updating or deleting a global "
+      + "tag takes only that right.";
+
+    // The tag read endpoints share this.
+    private static final String READ_403 =
+        "Forbidden — the user can't access it, or didn't authorize it for this app.";
+
+    private static final String TAG_403 =
+        "Forbidden — the user can't manage the tags, or the app lacks the *Manage tags* permission.";
+
+    private static final String RETURN_TAG =
+        "(Optional) Response shape: `full` (default) for the full record, "
+      + "or `compact` for just `{\"oid\": …}`. "
+      + "Any other value returns `400 Bad Request`.";
+
+    private static final String CREATE_TAG_NOTES =
+        "Creates a new tag in the specified project and returns it. With "
+      + "`global: true`, the tag belongs to the project's organization and "
+      + "is available in all its projects; My Tasks (`-`) can't have one "
+      + "(`403`).\n\n"
+      + TAG_RIGHT + " " + GLOBAL_TAG_RIGHT;
+
+    // The tag list endpoints share this.
+    private static final String LIST_TAG_NOTES =
+        "Returns the tags of the specified project, and the global tags of "
+      + "its organization.";
+
     @POST
     @Path("/{projectOid}")
     @ApiOperation(
         value = "Create a tag.",
-        notes = "Creates a new tag in the specified project (by OID).",
+        notes = CREATE_TAG_NOTES,
         response = Tag.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created tag.", response = Tag.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed (e.g., name missing or too long)."),
+        @ApiResponse(code = 403, message = TAG_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response createTag(
@@ -39,9 +74,7 @@ public class TagResource {
         CreateTagBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_TAG,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -52,12 +85,13 @@ public class TagResource {
     @Path("/id/{projectId}")
     @ApiOperation(
         value = "Create a tag.",
-        notes = "Creates a new tag in the specified project (by ID).",
+        notes = CREATE_TAG_NOTES,
         response = Tag.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — newly created tag.", response = Tag.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
+        @ApiResponse(code = 403, message = TAG_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response createTagToProject(
@@ -72,9 +106,7 @@ public class TagResource {
         CreateTagBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_TAG,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -90,6 +122,7 @@ public class TagResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — tag record.", response = Tag.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — tag does not exist.")
     })
     public Response getTag(
@@ -101,13 +134,14 @@ public class TagResource {
     @Path("/list/{projectOid}")
     @ApiOperation(
         value = "List tags by project OID.",
-        notes = "Returns all tags in the specified project (by OID).",
+        notes = LIST_TAG_NOTES,
         response = Tag.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of tags (may be empty).",
             response = Tag.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getTagsByProjectOid(
@@ -123,13 +157,14 @@ public class TagResource {
     @Path("/list/id/{projectId}")
     @ApiOperation(
         value = "List tags by project ID.",
-        notes = "Returns all tags in the specified project (by ID).",
+        notes = LIST_TAG_NOTES,
         response = Tag.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of tags (may be empty).",
             response = Tag.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getTagsByProjectId(
@@ -147,13 +182,14 @@ public class TagResource {
     @ApiOperation(
         value = "Update a tag.",
         notes = "Updates an existing tag and returns the complete updated record. "
-              + "Omitted body fields are left unchanged.",
+              + "Omitted body fields are left unchanged.\n\n"
+              + TAG_RIGHT + " " + GLOBAL_TAG_RIGHT,
         response = Tag.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated tag record.", response = Tag.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to update this tag."),
+        @ApiResponse(code = 403, message = TAG_403),
         @ApiResponse(code = 404, message = "Not Found — tag does not exist.")
     })
     public Response updateTag(
@@ -163,9 +199,7 @@ public class TagResource {
         UpdateTagBody data,
 
         @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
+            value = RETURN_TAG,
             example = "compact",
             allowableValues = "full, compact"
         )
@@ -177,10 +211,12 @@ public class TagResource {
     @ApiOperation(
         value = "Delete a tag.",
         notes = "Deletes the tag with the given OID.\n\n"
-              + "> Note: Returns `204 No Content` regardless of whether the tag exists."
+              + TAG_RIGHT + " " + GLOBAL_TAG_RIGHT + "\n\n"
+              + "Returns `204 No Content`, also when the tag doesn't exist."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content — tag deleted (or already absent)."),
+        @ApiResponse(code = 403, message = TAG_403)
     })
     public Response deleteTag(
         @ApiParam(value = "OID of the tag to delete.", required = true)

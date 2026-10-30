@@ -13,7 +13,9 @@ public class Status {
 
     @ApiModelProperty(
         value = "Non-negative integer indicating progress. Must be unique within its context (e.g., project). "
-              + "Values ≥ 100 are treated as completed.",
+              + "Values ≥ 100 are treated as completed. When listing or searching "
+              + "tasks, `?status=100` (or `completed`) matches every completed "
+              + "status; values above 100 can't be filtered individually.",
         example = "50"
     )
     public int getValue() { return 0; }

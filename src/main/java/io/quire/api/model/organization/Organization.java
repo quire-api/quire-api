@@ -60,7 +60,6 @@ public class Organization extends IdentityX {
 
     @ApiModelProperty(
         value = "User who created this record.",
-        example = "Dyh2YkFcu9uLgLFIeN1kB4Ld",
         position = 99
     )
     public SimpleIdentity getCreatedBy() { return null; }

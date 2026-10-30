@@ -9,7 +9,7 @@ public class ReminderOwner extends WorkOwner {
     @ApiModelProperty(
         value = "Kind of the owner: `Project`, `Organization`, `Folder` or `Lot` "
               + "(a smart folder). A personal reminder reports `Project` — it "
-              + "belongs to the owner's own inbox, which is a project.",
+              + "belongs to its creator's My Tasks, which is a project.",
         example = "Project"
     )
     public String getType() { return null; }

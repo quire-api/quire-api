@@ -7,8 +7,27 @@ import java.util.List;
 
 public class CreateWorkBody {
 
+    // The create and update bodies share this: every icon the server accepts.
+    static final String IMAGES =
+        "icon-view-list, icon-view-kanban, icon-grid, icon-view-timeline, "
+      + "icon-calendar, icon-timer, icon-briefcase-o, icon-rocket-o, "
+      + "icon-bug-o, icon-user-o, icon-colleagues-o, icon-lightbulb-o, "
+      + "icon-leaf-o, icon-clapperboard, icon-sitemap-o, icon-list, "
+      + "icon-flash-on-o, icon-piggy-bank-o, icon-graduation-cap-o, "
+      + "icon-paper-plane-o, icon-globe-o, icon-music-o, icon-detail, "
+      + "icon-beach-o, icon-paper, icon-home-o, icon-building, "
+      + "icon-database-o, icon-microscope-o, icon-hamburger-o, "
+      + "icon-trophy-o, icon-thumbs-o-up, icon-thumbs-o-down, icon-smile-o, "
+      + "icon-frown-o, icon-meh-o, icon-bullseye, icon-incomplete, "
+      + "icon-filter-o, icon-comment, icon-view-insight, "
+      + "icon-view-dashboard, icon-square-dotted-o";
+
     @ApiModelProperty(
-        value = "(Optional) ID for this record. If omitted, Quire generates one automatically. Must be unique within the project.",
+        value = "(Optional) ID for this record, unique among the owner's records "
+              + "of the same kind (e.g. a project's sublists). If omitted or "
+              + "invalid, Quire derives one from `name`; if already taken, Quire "
+              + "changes it by appending characters. Neither is an error, so read "
+              + "the `id` back from the response.",
         example = "Highlight101"
     )
     public String getId() { return null; }
@@ -35,22 +54,26 @@ public class CreateWorkBody {
     public String getIconColor() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Icon image identifier.",
+        value = "(Optional) Icon image identifier, one of the listed values.",
         example = "icon-view-kanban",
-        allowableValues = "icon-view-list, icon-view-kanban, icon-briefcase-o, "
-                        + "icon-rocket-o, icon-bug-o, icon-leaf-o, icon-clapperboard, "
-                        + "icon-sitemap-o, icon-flash-on-o, icon-piggy-bank-o, "
-                        + "icon-graduation-cap-o, icon-paper-plane-o, icon-globe-o, "
-                        + "icon-music-o, icon-detail, icon-beach-o, icon-paper, "
-                        + "icon-home-o, icon-building, icon-database-o, "
-                        + "icon-microscope-o, icon-hamburger-o, icon-trophy-o, "
-                        + "icon-thumbs-o-up, icon-thumbs-o-down, icon-smile-o, "
-                        + "icon-frown-o, icon-meh-o, icon-bullseye, icon-square-dotted-o"
+        allowableValues = IMAGES
     )
     public String getImage() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) OID of the external team this record belongs to.",
+        value = "(Optional) OID of the external team to share this record "
+              + "with; it is then shared with the members of the project and "
+              + "of that team, and is always `private`.\n\n"
+              + "Only a project's record can carry one — an organization, a "
+              + "folder or a smart folder has no external team — and it must "
+              + "be one of the project's external teams; any other value is "
+              + "`400`. It cannot be combined with `members` either (`400`).\n\n"
+              + "An external team member shares a record with every member "
+              + "only through their own team: with `members` omitted or null, "
+              + "they must set `partner` to one of their teams. Otherwise "
+              + "`400` names their teams, as it does for a team of the project "
+              + "that isn't theirs.\n\n"
+              + "Settable only when creating the record.",
         example = "rcBHBYXZSiyDRrHrWPutatfF",
         position = 15
     )
@@ -77,7 +100,8 @@ public class CreateWorkBody {
               + "see it, and so can guests and the visitors of a public project "
               + "or of a share link unless `private`. This is the default. (A "
               + "reminder differs: omitting its "
-              + "`members` means only the authenticated user.)\n"
+              + "`members` means only the authenticated user.) An external "
+              + "team member must also set `partner` to one of their teams.\n"
               + "- Pass `[]` — only the owner's admins can see it.\n"
               + "- Pass a list — only those users can see it.\n\n"
               + "Rejected with `400` when:\n"

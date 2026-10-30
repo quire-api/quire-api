@@ -38,14 +38,15 @@ public class User extends IdentityX {
     public String getUrl() { return null; }
 
     @ApiModelProperty(
-        value = "The locale of the current user, or null if the user is not the current one.",
+        value = "The locale of the current user. Omitted for other users.",
         example = "en_GB"
     )
     public String getLocale() { return null; }
 
     @ApiModelProperty(
-        value = "The time zone of the current user, or null if the user is not the current one.",
-        example = "`{'offset': 0, 'name': 'Europe/London'}`"
+        value = "The time zone of the current user: `name`, and `offset` "
+              + "from UTC in minutes. Omitted for other users.",
+        example = "{\"offset\": 480, \"name\": \"Asia/Taipei\"}"
     )
     public Map<String, Object> getTimeZone() { return null; }
 

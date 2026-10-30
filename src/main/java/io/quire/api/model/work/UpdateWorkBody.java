@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class UpdateWorkBody {
 
     @ApiModelProperty(
-        value = "(Optional) New ID for this record.",
+        value = "(Optional) New ID for this record, unique among the owner's "
+              + "records of the same kind. If invalid, Quire derives one from the "
+              + "name; if already taken, Quire changes it by appending characters. "
+              + "Neither is an error, so read the `id` back from the response.",
         example = "Highlight101"
     )
     public String getId() { return null; }
@@ -32,17 +35,9 @@ public class UpdateWorkBody {
     public String getIconColor() { return null; }
 
     @ApiModelProperty(
-        value = "(Optional) Icon image for this record.",
+        value = "(Optional) Icon image for this record, one of the listed values.",
         example = "icon-view-kanban",
-        allowableValues = "icon-view-list, icon-view-kanban, icon-briefcase-o, "
-                        + "icon-rocket-o, icon-bug-o, icon-leaf-o, icon-clapperboard, "
-                        + "icon-sitemap-o, icon-flash-on-o, icon-piggy-bank-o, "
-                        + "icon-graduation-cap-o, icon-paper-plane-o, icon-globe-o, "
-                        + "icon-music-o, icon-detail, icon-beach-o, icon-paper, "
-                        + "icon-home-o, icon-building, icon-database-o, "
-                        + "icon-microscope-o, icon-hamburger-o, icon-trophy-o, "
-                        + "icon-thumbs-o-up, icon-thumbs-o-down, icon-smile-o, "
-                        + "icon-frown-o, icon-meh-o, icon-bullseye, icon-square-dotted-o"
+        allowableValues = CreateWorkBody.IMAGES
     )
     public String getImage() { return null; }
 

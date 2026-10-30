@@ -15,6 +15,35 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class CommentResource {
 
+    // The read endpoints share this.
+    private static final String READ_403 =
+        "Forbidden — the user can't access it, or didn't authorize it for this app.";
+
+    // The create, update and undo-remove endpoints share this.
+    private static final String RETURN_MODE =
+        "(Optional) Response shape:\n"
+      + "- `full` (default): the full comment record.\n"
+      + "- `compact`: the OID only (`{\"oid\": \"…\"}`). Saves payload, "
+      + "tokens, and a server-side reload + render, so prefer it when you "
+      + "only need the OID to chain follow-up calls.\n\n"
+      + "Any other value returns `400 Bad Request`.";
+
+    // The list endpoints share this.
+    private static final String LIST_ORDER =
+        "All of them come in one response, with no paging: pinned comments "
+      + "first, most recently pinned first, then the rest, newest first. "
+      + "Deleted comments are left out.";
+
+    // The update, delete and undo-remove endpoints share this.
+    private static final String OTHERS_COMMENTS =
+        "Anyone can edit, delete or restore their own comment. Doing so to "
+      + "someone else's needs edit access to the project (with *Edit with "
+      + "limitations*, or as a guest, you can do so only to your own) and, "
+      + "if the author is a project member, the project (or chat channel) "
+      + "must allow editing comments posted by other members, which is the "
+      + "default. External team members can never do so to a project "
+      + "member's comment. Otherwise `403`.";
+
     // -------- Create --------
 
     @POST
@@ -36,13 +65,7 @@ public class CommentResource {
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -65,13 +88,7 @@ public class CommentResource {
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -96,13 +113,7 @@ public class CommentResource {
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -127,13 +138,7 @@ public class CommentResource {
         @ApiParam(value = "Comment to create.", required = true)
         CreateCommentBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -143,12 +148,14 @@ public class CommentResource {
     @Path("/list/chat/{chatOid}")
     @ApiOperation(
         value = "Get all comments of a chat channel (by chat OID).",
-        notes = "Returns all comments of the specified chat channel.",
+        notes = "Returns the comments of the specified chat channel.\n\n"
+              + LIST_ORDER,
         response = Comment.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — chat channel does not exist.")
     })
     public Response getCommentsOfChatByOid(
@@ -160,12 +167,14 @@ public class CommentResource {
     @Path("/list/{taskOid}")
     @ApiOperation(
         value = "Get all comments of a task (by task OID).",
-        notes = "Returns all comments of the specified task.",
+        notes = "Returns the comments of the specified task.\n\n"
+              + LIST_ORDER,
         response = Comment.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — task does not exist.")
     })
     public Response getCommentsOfTaskByOid(
@@ -177,12 +186,14 @@ public class CommentResource {
     @Path("/list/chat/id/{projectId}/{chatId}")
     @ApiOperation(
         value = "Get all comments of a chat channel (by project ID and chat ID).",
-        notes = "Returns all comments of the specified chat channel.",
+        notes = "Returns the comments of the specified chat channel.\n\n"
+              + LIST_ORDER,
         response = Comment.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — chat channel does not exist.")
     })
     public Response getCommentsOfChatById(
@@ -196,12 +207,14 @@ public class CommentResource {
     @Path("/list/id/{projectId}/{taskId}")
     @ApiOperation(
         value = "Get all comments of a task (by project ID and task ID).",
-        notes = "Returns all comments of the specified task.",
+        notes = "Returns the comments of the specified task.\n\n"
+              + LIST_ORDER,
         response = Comment.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of comments (may be empty).", response = Comment.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — task does not exist.")
     })
     public Response getCommentsOfTaskById(
@@ -222,6 +235,7 @@ public class CommentResource {
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — comment record.", response = Comment.class),
+        @ApiResponse(code = 403, message = READ_403),
         @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
     })
     public Response getCommentByOid(
@@ -235,13 +249,17 @@ public class CommentResource {
     @Path("/{commentOid}")
     @ApiOperation(
         value = "Update an existing comment (by comment OID).",
-        notes = "Updates an existing comment and returns the updated record.",
+        notes = "Updates an existing comment and returns the updated record.\n\n"
+              + OTHERS_COMMENTS + "\n\n"
+              + "Pinning or unpinning someone else's comment (sending `pinned` "
+              + "alone) needs only edit access to the project, whatever the "
+              + "setting.",
         response = Comment.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — updated comment record.", response = Comment.class),
         @ApiResponse(code = 400, message = "Bad Request — body validation failed."),
-        @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to modify this comment."),
+        @ApiResponse(code = 403, message = "Forbidden — caller can't edit or pin this comment."),
         @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
     })
     public Response updateCommentByOid(
@@ -250,13 +268,7 @@ public class CommentResource {
         @ApiParam(value = "Fields to update.", required = true)
         UpdateCommentBody data,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -268,12 +280,16 @@ public class CommentResource {
         value = "Upload an attachment to a comment (by comment OID).",
         notes = "Uploads an attachment to an existing comment.\n\n"
               + "Executable files (`.exe`, `.com`, `.bat`) are rejected unless the "
-              + "project has enabled uploading executable files.",
+              + "project has enabled uploading executable files.\n\n"
+              + "A file larger than the plan allows, or one that would exceed "
+              + "the organization's storage quota, is rejected with `402` "
+              + "(`code` `469`).",
         response = SimpleAttachment.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — attachment record.", response = SimpleAttachment.class),
         @ApiResponse(code = 400, message = "Bad Request — bad payload or filename, or an executable file is not allowed for this project."),
+        @ApiResponse(code = 402, message = "Payment Required — the file exceeds the plan's file-size limit or the organization's storage quota (`code` `469`)."),
         @ApiResponse(code = 403, message = "Forbidden — caller lacks permission to attach to this comment."),
         @ApiResponse(code = 404, message = "Not Found — comment does not exist.")
     })
@@ -334,7 +350,9 @@ public class CommentResource {
               + "is a no-op.\n\n"
               + "Anyone who can view the comment can react. A reaction always "
               + "belongs to the authorizing user, never to the app. The "
-              + "comment's author is notified of each reaction added.\n\n"
+              + "comment's author is notified of each reaction added, except "
+              + "one the caller already had and one on the caller's own "
+              + "comment.\n\n"
               + "Returns `204 No Content`. To see the reactions, read the "
               + "comment with `GET /comment/{commentOid}`: its `emojis` lists "
               + "each emoji with the users who reacted.\n\n"
@@ -396,7 +414,8 @@ public class CommentResource {
         value = "Undo the removal of a comment (by comment OID).",
         notes = "Restores a previously-removed comment. "
             + "Idempotent: if the comment is not currently removed, this is "
-            + "a no-op and returns the current comment record.",
+            + "a no-op and returns the current comment record.\n\n"
+            + OTHERS_COMMENTS,
         response = Comment.class
     )
     @ApiResponses({
@@ -408,13 +427,7 @@ public class CommentResource {
         @ApiParam(value = "Comment OID.", required = true)
         @PathParam("commentOid") String commentOid,
 
-        @ApiParam(
-            value = "(Optional) Response shape: `full` (default) for the "
-                + "full record, or `compact` for identifiers only. "
-                + "See API description for `?return=` semantics.",
-            example = "compact",
-            allowableValues = "full, compact"
-        )
+        @ApiParam(value = RETURN_MODE, example = "compact", allowableValues = "full, compact")
         @QueryParam("return") String returnMode
     ) { return null; }
 
@@ -424,11 +437,14 @@ public class CommentResource {
     @Path("/{commentOid}")
     @ApiOperation(
         value = "Delete an existing comment (by comment OID).",
-        notes = "Deletes an existing comment.\n\n"
+        notes = "Deletes an existing comment. Restore it with "
+              + "`PUT /comment/undo-remove/{commentOid}`.\n\n"
+              + OTHERS_COMMENTS + "\n\n"
               + "> Note: Returns `204 No Content` regardless of whether the comment exists."
     )
     @ApiResponses({
-        @ApiResponse(code = 204, message = "No Content")
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 403, message = "Forbidden — caller can't delete this comment.")
     })
     public Response deleteCommentByOid(
         @ApiParam(value = "Comment OID.", required = true)

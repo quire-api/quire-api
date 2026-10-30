@@ -8,7 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class FieldOption {
 
     @ApiModelProperty(
-        value = "Option name (unique within the field).",
+        value = "Option name, unique within the field, and at most 1,280 "
+              + "characters; otherwise `400`.",
         example = "High",
         required = true
     )

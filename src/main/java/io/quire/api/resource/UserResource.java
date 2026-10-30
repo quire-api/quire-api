@@ -14,6 +14,28 @@ import javax.ws.rs.core.Response;
 @Produces({"application/json"})
 public class UserResource {
 
+    // The single-user endpoints share these.
+    private static final String USER_VISIBILITY =
+        "A colleague (someone sharing an organization, project or external "
+      + "team with the user) who hasn't authorized this app is returned with "
+      + "only `oid`, `id` and the name fields, unless the user granted the "
+      + "app access to contacts. Anyone else returns `403`.";
+
+    private static final String USER_403 =
+        "Forbidden — the user is neither the current user nor a colleague.";
+
+    // The project-member endpoints share these.
+    private static final String PROJECT_MEMBERS_NOTES =
+        "Returns the members of the specified project, the current user "
+      + "first. External teams' members are left out, except the members of "
+      + "the current user's own external teams.\n"
+      + "A member who hasn't authorized this app is returned with only "
+      + "`oid`, `id` and the name fields, unless the user granted the app "
+      + "access to contacts.";
+
+    private static final String PROJECT_403 =
+        "Forbidden — the user can't access the project, or didn't authorize it for this app.";
+
     @GET
     @Path("/list")
     @ApiOperation(
@@ -38,16 +60,14 @@ public class UserResource {
     @Path("/list/project/id/{projectId}")
     @ApiOperation(
         value = "Get all user records of the given project (by project ID).",
-        notes =
-            "Returns all members of the specified project by project ID.\n"
-          + "If the current user did not grant the app access to contacts, only basic information is returned.\n"
-          + "The first record is always the current user.",
+        notes = PROJECT_MEMBERS_NOTES,
         response = User.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of project members.",
             response = User.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = PROJECT_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getUsersOfProjectById(
@@ -59,16 +79,14 @@ public class UserResource {
     @Path("/list/project/{oid}")
     @ApiOperation(
         value = "Get all user records of the given project (by project OID).",
-        notes =
-            "Returns all members of the specified project by project OID.\n"
-          + "If the current user did not grant the app access to contacts, only basic information is returned.\n"
-          + "The first record is always the current user.",
+        notes = PROJECT_MEMBERS_NOTES,
         response = User.class,
         responseContainer = "List"
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — list of project members.",
             response = User.class, responseContainer = "List"),
+        @ApiResponse(code = 403, message = PROJECT_403),
         @ApiResponse(code = 404, message = "Not Found — project does not exist.")
     })
     public Response getUsersOfProjectByOid(
@@ -80,12 +98,14 @@ public class UserResource {
     @Path("/id/{id}")
     @ApiOperation(
         value = "Get a user by ID or email address.",
-        notes = "Returns the full user record for the given user ID, email address, or \"me\" (the current user).",
+        notes = "Returns the full user record for the given user ID, email address, or \"me\" (the current user). "
+              + USER_VISIBILITY,
         response = User.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — user record.", response = User.class),
-        @ApiResponse(code = 404, message = "Not Found — user does not exist, or is not visible to the caller.")
+        @ApiResponse(code = 403, message = USER_403),
+        @ApiResponse(code = 404, message = "Not Found — user does not exist.")
     })
     public Response getUserById(
         @ApiParam(
@@ -100,12 +120,14 @@ public class UserResource {
     @Path("/{oid}")
     @ApiOperation(
         value = "Get a user by OID.",
-        notes = "Returns the full user record for the given OID.",
+        notes = "Returns the full user record for the given OID. "
+              + USER_VISIBILITY,
         response = User.class
     )
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK — user record.", response = User.class),
-        @ApiResponse(code = 404, message = "Not Found — user does not exist, or is not visible to the caller.")
+        @ApiResponse(code = 403, message = USER_403),
+        @ApiResponse(code = 404, message = "Not Found — user does not exist.")
     })
     public Response getUserByOid(
         @ApiParam(value = "User OID.", required = true)

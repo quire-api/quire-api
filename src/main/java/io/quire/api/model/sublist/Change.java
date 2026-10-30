@@ -5,7 +5,10 @@ import io.swagger.annotations.*;
 public class Change {
 
     @ApiModelProperty(
-        value = "OID of the task to include or exclude.",
+        value = "OID of the task to include or exclude. A task is skipped if "
+              + "it doesn't exist, if it isn't under the sublist's owner, or, "
+              + "for a sublist shared with an external team, if it isn't "
+              + "shared with that team.",
         required = true,
         example = "2MmYOpJH_ZLeehIjjytH1Rwr"
     )
@@ -19,8 +22,10 @@ public class Change {
 
     @ApiModelProperty(
         value = "Whether the operation applies only to the specified task. "
-              + "Default: false — all descendant tasks are also included or excluded. "
-              + "Note: this does not change descendants that were explicitly included or excluded in prior operations.",
+              + "Default: false — the task and all its descendants are included or "
+              + "excluded, and earlier includes or excludes of its descendants are "
+              + "cleared. With true, only the task itself changes; its subtasks "
+              + "keep their current state.",
         example = "false"
     )
     public boolean getSingle() { return false; }

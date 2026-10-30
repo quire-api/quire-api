@@ -17,7 +17,7 @@ public class Doc extends Work {
 
     @Override
     @ApiModelProperty(
-        value = "Project this document belongs to.",
+        value = "Owner this document belongs to: a project, organization, folder, or smart folder.",
         position = 99
     )
     public DocOwner getOwner() { return null; }
