@@ -140,8 +140,9 @@ public class TaskResource {
 
     private static final String SEARCH_TAG =
         "Filter by tag. Each value is a tag OID or a tag name "
-      + "(names are resolved within the search's "
-      + "organization).\n\n"
+      + "(case-sensitive). In a project search, a name matches the "
+      + "project's tags and its organization's global tags; in an "
+      + "organization or folder search, any tag in the organization.\n\n"
       + "Combine with `,` (AND), `|` (OR), `!` (NOT); AND binds "
       + "tighter than OR.\n\n"
       + "Names containing `,`, `|`, `!`, `\"`, or whitespace "
