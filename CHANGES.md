@@ -1,5 +1,9 @@
 # Changelog
 
+## Nov 2, 2026
+
+- **[`peekaboo`](https://quire.io/dev/api/#definition-UpdateTaskBody) as a time:** on task create and update alike, a positive integer up to 10000 hides the task for that many days, and a larger one is when to show it again, in milliseconds since the epoch (within the hour after). Update used to read every integer as such a time, so `7` showed the task again at once; create rejected a time with `400`.
+
 ## Oct 30, 2026
 
 - **Response shapes:** an attachment's `url` is absolute, also in a `file` field; an approval category's `createdBy` is a user object; a comment no longer has `ownerType` (use `owner.type`); a sublist's `start`/`due` are dates (`2026-11-02`).
