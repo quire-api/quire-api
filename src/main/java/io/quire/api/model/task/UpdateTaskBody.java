@@ -156,12 +156,18 @@ public class UpdateTaskBody {
 
     @ApiModelProperty(
         example = "true",
-        value = "(Optional) Peekaboo setting. Accepts a boolean or a positive integer:\n\n"
+        value = "(Optional) Peekaboo setting. Accepts a boolean, a positive integer, "
+              + "or a date/time string:\n\n"
               + "- `true`: Hide indefinitely (task and subtasks).\n"
               + "- positive integer up to 10000: Number of days to hide.\n"
-              + "- larger integer: When to show it again, in milliseconds since the epoch. "
-              + "It shows again within the hour after that time.\n"
-              + "- `false`: Undo previous peekaboo."
+              + "- larger integer: When to show it again, in milliseconds since the epoch "
+              + "(not seconds).\n"
+              + "- date/time string: When to show it again, in UTC, as "
+              + "`yyyy-MM-dd'T'HH:mmZ` (e.g., `2026-11-04T09:30Z`); date only "
+              + "(`yyyy-MM-dd`) means 6 AM that day in the user's time zone.\n"
+              + "- `false`: Undo previous peekaboo.\n\n"
+              + "When to show it again must be in the future, otherwise `400`. "
+              + "It shows again within the hour after that time."
     )
     public Object getPeekaboo() { return false; }
 

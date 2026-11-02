@@ -490,7 +490,10 @@ public class TaskResource {
       + "To archive (hide indefinitely) or snooze a task, set the `peekaboo` "
       + "field: `true` hides it indefinitely, a positive integer hides it for "
       + "that many days (above 10000: until that time, in milliseconds since "
-      + "the epoch, within the hour after), `false` unhides.";
+      + "the epoch), a date/time string such as `2026-11-04T09:30Z` hides it "
+      + "until then (date only: 6 AM that day in the user's time zone), "
+      + "`false` unhides. A time must be in the future, otherwise `400`, and "
+      + "the task shows again within the hour after it.";
 
     // The move endpoints share these.
     private static final String MOVE_NOTES =

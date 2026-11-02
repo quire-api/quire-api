@@ -72,8 +72,8 @@ public class Task extends SimpleTask {
 		position = 77)
 	public TaskUser getArchivedBy() { return null; }
 	@ApiModelProperty(value = "When an archived task shows again: set if it was hidden "
-		+ "for a number of days (`peekaboo` with a positive integer). "
-		+ "Omitted otherwise.",
+		+ "for a number of days or until a time (`peekaboo` with a positive "
+		+ "integer or a date/time string). Omitted otherwise.",
 		example = "2026-04-08T08:00:00.000Z", position = 78)
 	public String getReshowAt() { return null; }
 

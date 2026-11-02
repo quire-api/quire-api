@@ -86,6 +86,7 @@ definitions:
         anyOf:
         - type: boolean
         - type: integer
+        - type: string
   UpdateTaskBody:
     properties:
       assignees:
@@ -111,6 +112,7 @@ definitions:
         anyOf:
           - type: boolean
           - type: integer
+          - type: string
       followers:
         example:
         - tzufRLqCnud74dARyDSvjWDl
