@@ -489,7 +489,8 @@ public class TaskResource {
       + "`followers` / `successors` / etc. Mix whichever suits the intent.\n\n"
       + "To archive (hide indefinitely) or snooze a task, set the `peekaboo` "
       + "field: `true` hides it indefinitely, a positive integer hides it for "
-      + "that many days, `false` unhides.";
+      + "that many days (above 10000: until that time, in milliseconds since "
+      + "the epoch, within the hour after), `false` unhides.";
 
     // The move endpoints share these.
     private static final String MOVE_NOTES =

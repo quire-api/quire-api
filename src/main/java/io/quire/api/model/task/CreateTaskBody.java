@@ -173,7 +173,9 @@ public class CreateTaskBody {
         example = "true",
         value = "(Optional) Peekaboo setting. Accepts a boolean or a positive integer:\n\n"
               + "- `true`: Hide indefinitely.\n"
-              + "- positive integer: Number of days to hide.\n"
+              + "- positive integer up to 10000: Number of days to hide.\n"
+              + "- larger integer: When to show it again, in milliseconds since the epoch. "
+              + "It shows again within the hour after that time.\n"
               + "- `false`: Cancel previous peekaboo.\n\n"
               + "Default: false."
     )
