@@ -275,7 +275,20 @@ public class ProjectResource {
             example = "merge=true",
             required = false
         )
-        @QueryParam("merge") boolean merge
+        @QueryParam("merge") boolean merge,
+
+        @ApiParam(
+            value = "Whether to include task comments, oldest first. Each is the author's name and "
+                  + "when it was posted, in the user's locale and time zone, followed by a colon, "
+                  + "a line feed and the comment, e.g. `Tom Yeh, Nov 3, 2026 14:30:\\nLooks good`. "
+                  + "With `merge`, a task's comments are in one column, separated by a blank line; "
+                  + "otherwise, each comment is in a column of its own. "
+                  + "Comments without text (e.g., attachments only) are skipped.\n"
+                  + "Default: `false`.",
+            example = "comments=true",
+            required = false
+        )
+        @QueryParam("comments") boolean comments
     ) { return null; }
 
     @GET
@@ -308,7 +321,20 @@ public class ProjectResource {
             example = "merge=true",
             required = false
         )
-        @QueryParam("merge") boolean merge
+        @QueryParam("merge") boolean merge,
+
+        @ApiParam(
+            value = "Whether to include task comments, oldest first. Each is the author's name and "
+                  + "when it was posted, in the user's locale and time zone, followed by a colon, "
+                  + "a line feed and the comment, e.g. `Tom Yeh, Nov 3, 2026 14:30:\\nLooks good`. "
+                  + "With `merge`, a task's comments are in one column, separated by a blank line; "
+                  + "otherwise, each comment is in a column of its own. "
+                  + "Comments without text (e.g., attachments only) are skipped.\n"
+                  + "Default: `false`.",
+            example = "comments=true",
+            required = false
+        )
+        @QueryParam("comments") boolean comments
     ) { return null; }
 
     // -------- Export (JSON) --------
