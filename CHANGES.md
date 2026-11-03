@@ -1,8 +1,9 @@
 # Changelog
 
-## Nov 2, 2026
+## Nov 3, 2026
 
-- **[`peekaboo`](https://quire.io/dev/api/#definition-UpdateTaskBody) as a time:** on task create and update alike, a positive integer up to 10000 hides the task for that many days, and a larger one is when to show it again, in milliseconds since the epoch (within the hour after). Update used to read every integer as such a time, so `7` showed the task again at once; create rejected a time with `400`.
+- **Comments in CSV export:** [`export-csv`](https://quire.io/dev/api/#operation--project-export-csv-id--id--get) takes `?comments` to include task comments, each as the author's name and when it was posted, then the comment on the next line: one per column, or all of a task's in one column, separated by a blank line, with `merge`.
+- **[`peekaboo`](https://quire.io/dev/api/#definition-UpdateTaskBody) as a time:** on task create and update alike, a positive integer up to 10000 hides the task for that many days, and a larger one is when to show it again, in milliseconds since the epoch (within the hour after). It also takes a date/time string, e.g. `2026-11-04T09:30Z`, or a date only, for 6 AM that day in the user's time zone. A past time, such as one in seconds, is rejected with `400`. Update used to read every integer as such a time, so `7` showed the task again at once; create rejected a time with `400`.
 
 ## Oct 30, 2026
 
