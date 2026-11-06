@@ -71,17 +71,23 @@
 
 An additional field for activities that can affect multiple tasks -- for example, removing a task that has subtasks (`1`). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
 
+Each `map` holds some of the fields that [Get a task by ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--get) returns, in the same form: `name` comes with `nameText` and `nameHtml`, and `description` (Markdown) with `descriptionText` and `descriptionHtml`.
+
 For example, suppose there are two tasks, `A` and `B`, where `B` is a subtask of `A`. When `A` is removed, the hook will receive the following content in `taskSummaries`.
 
 ```
 [
   {
     "id": 1,
-    "name": "A",
+    "name": "**A**",
+    "nameText": "A",
+    "nameHtml": "<strong>A</strong>",
     "tasks": [
       {
         "id": 2,
         "name": "B",
+        "nameText": "B",
+        "nameHtml": "B",
         "due": "2026-05-25"
       }
     ]

@@ -111,7 +111,7 @@ A notification is the information about an update (aka., an activity). Here is a
 
 * The `projectSummary` and `organizationSummary` fields provide information about the project and organization where the event occurred.
 
-* There is an additional field, `taskSummaries`, for activities that can affect multiple tasks (for example, removing a task that has subtasks). This field is a list of `map` instances. Each `map` represents a task that was changed. If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
+* There is an additional field, `taskSummaries`, for activities that can affect multiple tasks (for example, removing a task that has subtasks). This field is a list of `map` instances. Each `map` represents a task that was changed, with some of the fields that [Get a task by ID](#operation--task-id--projectId---taskId--get) returns, in the same form (e.g., `nameText` and `nameHtml` along with `name`). If any of that task's subtasks were also changed, they are included in the map’s `tasks` field.
     - Please refer to [Activity Types | taskSummaries](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries).
 
 ## Registration for Notifications
