@@ -1,5 +1,9 @@
 # Changelog
 
+## Nov 6, 2026
+
+- **Formatted names in webhooks' `taskSummaries`:** each task in a webhook's [`taskSummaries`](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries) now has `nameText` and `nameHtml` along with `name`, and `descriptionText` and `descriptionHtml` along with `description`, as [Get a task by ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--get) returns them. `description` is always Markdown, as elsewhere in the API.
+
 ## Nov 3, 2026
 
 - **Comments in CSV export:** [`export-csv`](https://quire.io/dev/api/#operation--project-export-csv-id--id--get) takes `?comments` to include task comments, each as the author's name and when it was posted, then the comment on the next line: one per column, or all of a task's in one column, separated by a blank line, with `merge`.
