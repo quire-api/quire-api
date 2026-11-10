@@ -30,7 +30,8 @@ public class UpdateTagBody {
 
     @ApiModelProperty(
         value = "(Optional) Project OID that this tag is limited to. "
-              + "Used only when `global` is explicitly set to false; ignored otherwise.",
+              + "Required when `global` is false, and ignored when it is true. "
+              + "Without `global`, specifying `project` returns `400`.",
         example = "Dyh2YkFcu9uLgLFIeN1kB4Ld",
         required = false
     )
