@@ -1,5 +1,10 @@
 # Changelog
 
+## Nov 13, 2026
+
+- **Tag `project`:** on [tag update](https://quire.io/dev/api/#definition-UpdateTagBody), `project` is taken only with `"global": false`; without `global` it returns `400`. With `"global": false` in an organization, the project must belong to the tag's organization, else `404`.
+- **Task `createdAt` and `createdBy`:** can't be changed on update; they return `400`.
+
 ## Nov 6, 2026
 
 - **Formatted names in webhooks' `taskSummaries`:** each task in a webhook's [`taskSummaries`](https://github.com/quire-api/quire-api/blob/master/docs/activity_types.md#tasksummaries) now has `nameText` and `nameHtml` along with `name`, and `descriptionText` and `descriptionHtml` along with `description`, as [Get a task by ID](https://quire.io/dev/api/#operation--task-id--projectId---taskId--get) returns them. `description` is always Markdown, as elsewhere in the API.
