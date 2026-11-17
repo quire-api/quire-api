@@ -98,6 +98,20 @@ public class FieldDefinition {
     public Boolean getLocked() { return null; }
 
     @ApiModelProperty(
+        value = "Whether you can set this field's values through the API, on "
+              + "the tasks you can edit (changing the definition needs an "
+              + "admin). `false` for a `formula` field, when you can't edit "
+              + "tasks in the project (a guest, or an app not granted editing "
+              + "tasks), and for a field whose `viewMembers` or `editMembers` "
+              + "leaves you out (an empty list admits only the admins). "
+              + "`locked` doesn't count, since the API ignores "
+              + "it. A project's fields only, and not in webhooks; ignored "
+              + "when adding or updating a field.",
+        example = "true"
+    )
+    public Boolean getValueEditable() { return null; }
+
+    @ApiModelProperty(
         value = "(Optional, `date` only) Include time-of-day in addition to the date.",
         example = "false"
     )
