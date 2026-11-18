@@ -1,5 +1,9 @@
 # Changelog
 
+## Nov 18, 2026
+
+- **Field `valueEditable`:** each of a project's [field definitions](https://quire.io/dev/api/#definition-FieldDefinition) tells whether you can set its values through the API: `false` for a formula, when you can't edit tasks in the project (a guest, or an app not granted editing tasks), and when `viewMembers` or `editMembers` leaves you out.
+
 ## Nov 13, 2026
 
 - **Tag `project`:** on [tag update](https://quire.io/dev/api/#definition-UpdateTagBody), `project` is taken only with `"global": false`; without `global` it returns `400`. With `"global": false` in an organization, the project must belong to the tag's organization, else `404`.
